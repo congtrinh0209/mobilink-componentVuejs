@@ -64,23 +64,23 @@
                                     <v-flex xs12 sm8>
                                         <v-select class="selectBoder pt-3"
                                         placeholder="Chọn đơn vị/nhóm"
-                                        :items="itemsSelect2"
-                                        v-model="select2"
-                                        item-value="value"
+                                        :items="hostingIdItems"
+                                        v-model="hostingId"
+                                        item-value="workingUnitId"
                                         item-text="name"
                                         return-object
-                                        :clearable="true"
+                                        
                                         ></v-select>
                                     </v-flex>
                                     <toggle-button class="mx-1 mt-4"
-                                    :value="false"
+                                    
                                     v-model="presenterAddGroup"
                                     title_checked = "Thành viên"
                                     title_unchecked = "Theo dõi"
                                     :labels="{checked: 'TV', unchecked: 'TD'}"
                                     :color="{checked: '#7DCE94', unchecked: '#82C7EB'}"
                                     :width="50"/>
-                                    <v-btn small outline color="primary" class="mx-0 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
+                                    <v-btn small outline color="primary" @click.stop="postInvitation" class="mx-0 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
                                         Mời
                                     </v-btn>
 
@@ -289,7 +289,7 @@
                                                             
                                                             <v-flex xs12 sm6>
                                                                 <div class="right">
-                                                                    <v-btn icon class="text-white mx-0 my-0" :title="bindTitle(item.userNote)" @click.stop="showAddNote(item.activityInvitationId,item.userNote,item)">
+                                                                    <v-btn icon class="text-white mx-0 my-0" @click.stop="showAddNote(item.activityInvitationId,item.userNote,item)">
                                                                         <v-icon class="iconCmm" >comment</v-icon>
                                                                     </v-btn>
                                                                     <span style="color:green" v-html="bindAvailableText(item.available)"></span>
@@ -363,47 +363,49 @@
                 availableCount:'',
                 dataUpdateInvitation: new URLSearchParams(),
                 /**/ 
-
-
-
+                hostingIdItems:[],
+                hostingId:'',
+                // 
                 itemsSelect1: [
                     { name: 'Trịnh Công Trình', value: 1},
                     { name: 'Nguyễn Văn Thành', value: 2},
                     { name: 'Lê Tiến Hoàn', value: 3},
                 ],
                 select1: '',
-                itemsSelect2:[
-                    { name: 'Phòng Tài nguyên-Môi trường', value: 1},
-                    { name: 'Bộ chỉ huy quân sự', value: 2},
-                    { name: 'Phòng tư pháp', value: 3},
-                ],
-                select2: '',
+
                 itemsSelect3: [
                     { name: 'Trịnh Công Trình', value: 1},
                     { name: 'Nguyễn Văn Thành', value: 2},
                     { name: 'Lê Tiến Hoàn', value: 3},
                 ],
                 select3: '',
-
             }
         },
         methods: {
-            initAddActivity: function(){
+            initInvitation: function(){
                 var vm = this;
+                vm.presenterAddGroup = false;
                 vm.itemInvGroup = [];
                 vm.itemInvContact = [];
                 /** */
-                var paramsGetActivity = {
+                vm.getWorkingUnit();
+                vm.getInvitation();
+                console.log(vm)
+            },
+            /* Load data invitation */
+            getInvitation: function(){
+                var vm = this;
+                var paramsGetInvitation = {
                     
                 };
-                const configGetActivity = {
-                    params: paramsGetActivity,
+                const configGetInvitation = {
+                    params: paramsGetInvitation,
                     headers: {
                         'groupId': vm.group_id
                     }
                 };
-                /* Load data invitation */
-                axios.get( vm.end_point + 'activities/' + vm.class_pk + '/invitations', configGetActivity)
+                
+                axios.get( vm.end_point + 'activities/' + vm.class_pk + '/invitations', configGetInvitation)
                 .then(function (response) {
                     var serializable = response.data
                     if (serializable.hasOwnProperty('data')) {
@@ -443,8 +445,50 @@
                     console.log(error)
                 })
                 /** */
-                console.log(vm)
             },
+            /**Xử lý hiển thị các trạng thái invitation */
+            bindPresenter: function (item){
+                if(item == 0){
+                    return true
+                } else {return false}
+            },
+
+            bindAvailableText: function(item){
+                if(item == 0) {
+                    return "Chưa xác nhận"
+                } else if(item == 1){return "Sẵn sàng"}
+                else {return "Bận"}
+            },
+            /**get workingUnit */
+            getWorkingUnit: function(){
+                var vm = this;
+                var paramsGetWorkingUnit = {
+                    
+                };
+                const configGetWorkingUnit = {
+                    params: paramsGetWorkingUnit,
+                    headers: {
+                        'groupId': vm.group_id
+                    }
+                };
+                axios.get( vm.end_point + 'workingunits', configGetWorkingUnit)
+                .then(function (response) {
+                    var serializable = response.data
+                    if (serializable.hasOwnProperty('data')) {
+                        for (var key in serializable.data) {
+                            vm.hostingIdItems.push(
+                                serializable.data[key]
+                            )
+                            
+                        }
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error)
+                })
+
+            },
+            
             /**Xử lý cập nhật  invitation của group và user */
             updateInvitation: function(type,invId,index,items){
                 var vm = this;
@@ -483,22 +527,43 @@
                     });
                 }
             },
-            /**Xử lý hiển thị các trạng thái invitation */
-            bindPresenter: function (item){
-                if(item == 0){
-                    return true
-                } else {return false}
+            
+            /**POST invitation */
+            postInvitation: function(){
+                var vm = this;
+                var presenterPostGroup;
+                if(vm.presenterAddGroup == true){
+                    presenterPostGroup = 1
+                } else {presenterPostGroup = 0}
+                var dataPostInvitation  =new URLSearchParams();
+                dataPostInvitation.append('invitationType', 0);
+                dataPostInvitation.append('roleId', vm.hostingId.roleId);
+                dataPostInvitation.append('toUserId', '');
+                dataPostInvitation.append('fullName', vm.hostingId.name);
+                dataPostInvitation.append('email', vm.hostingId.email);
+                dataPostInvitation.append('telNo', vm.hostingId.telNo);
+                dataPostInvitation.append('presenter', presenterPostGroup);
+                
+                var urlUpdate = vm.end_point + "activities/"+vm.class_pk+"/invitations";
+                var paramsPostInvitation = {
+                    
+                };
+                const configPostInvitation = {
+                    params: paramsPostInvitation,
+                    headers: {
+                        'groupId': vm.group_id
+                    }
+                };
+                axios.post(urlUpdate, dataPostInvitation, configPostInvitation)
+                .then(function (response) {
+                    
+                    alert("Thêm mới giấy mời thành công!");
+                })
+                .catch(function (error) {
+                    
+                    alert("Thêm mới giấy mời thất bại!")
+                })
             },
-            bindTitle: function(item){
-                return item
-            },
-            bindAvailableText: function(item){
-                if(item == 0) {
-                    return "Chưa xác nhận"
-                } else if(item == 1){return "Sẵn sàng"}
-                else {return "Bận"}
-            },
-
             /**Phần cập nhật noteUser của cá nhân */
             showAddNote: function(invId,noteText,items){
                 var vm =this;
