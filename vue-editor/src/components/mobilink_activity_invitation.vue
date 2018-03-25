@@ -42,7 +42,7 @@
                         <v-card-actions>
                             <v-spacer></v-spacer>
                             <v-btn color="blue darken-1" flat @click.native="dialog_add_note = false">Hủy</v-btn>
-                            <v-btn color="blue darken-1" flat @click.native="submitAddNote('PUT',idAddNote,note_text,itemsNote)">Lưu</v-btn>
+                            <v-btn color="blue darken-1" flat @click.native="submitAddNote(idAddNote,note_text,itemsNote)">Lưu</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
@@ -151,9 +151,9 @@
                                                             <v-flex xs12 sm6 class="pt-1">
                                                                 <v-list-tile-title>
                                                                     <toggle-button class="mr-1 mt-2" 
-                                                                    @change="changePresenter($event)"
+                                                                    @change="updatePresenterUserGroup($event,subItem.activityInvitationId,subItem)"
                                                                     :value="bindPresenter(subItem.presenter)"
-                                                                    
+                                                                     
                                                                     title_checked = "Thành viên"
                                                                     title_unchecked = "Theo dõi"
                                                                     :labels="{checked: 'TV', unchecked: 'TD'}"
@@ -277,7 +277,7 @@
                                                                 <v-list-tile-title>
                                                                     <toggle-button class="mr-1 mt-2"
                                                                     :value="bindPresenter(item.presenter)"
-                                                                    @change="changePresenter($event)"
+                                                                    @change="updatePresenterUserGroup($event,item.activityInvitationId,item)"
                                                                     title_checked = "Thành viên"
                                                                     title_unchecked = "Theo dõi"
                                                                     :labels="{checked: 'TV', unchecked: 'TD'}"
@@ -500,9 +500,6 @@
             },
 
             /**Phần cập nhật noteUser của cá nhân */
-            bindModelNote : function(invId){
-                return "userNote"+invId
-            },
             showAddNote: function(invId,noteText,items){
                 var vm =this;
                 vm.dialog_add_note = true;
@@ -511,7 +508,7 @@
                 vm.itemsNote = items;
 
             },
-            submitAddNote: function(type,invId,note,itemsNote){
+            submitAddNote: function(invId,note,itemsNote){
                 var vm = this;
                 var dataUpdateInvitation  =new URLSearchParams();
                 dataUpdateInvitation.append('userNote', note);
@@ -536,9 +533,37 @@
                 })
             },
             /**Phần cập nhật presenter */
-            changePresenter: function(event){
-                console.log("run");
-                if(event)console.log(event)
+            updatePresenterUserGroup: function(event,invId,items){
+                var vm = this;
+                var presenterChange;
+                if(event.value == true){
+                    presenterChange = 1
+                }else {presenterChange = 0}
+                vm.submitUpdatePresenter(invId,presenterChange,items)
+            },
+            submitUpdatePresenter: function(invId,presenter,items){
+                var vm = this;
+                var dataUpdateInvitation  =new URLSearchParams();
+                dataUpdateInvitation.append('presenter', presenter);
+                var urlUpdate = vm.end_point + "activities/"+vm.class_pk+"/invitations/"+invId;
+                var paramsPutInvitation = {
+                    
+                };
+                const configPutInvitation = {
+                    params: paramsPutInvitation,
+                    headers: {
+                        'groupId': vm.group_id
+                    }
+                };
+                axios.put(urlUpdate, dataUpdateInvitation, configPutInvitation)
+                .then(function (response) {
+                    
+                    alert("Cập nhật dữ liệu thành công!");
+                })
+                .catch(function (error) {
+                    
+                    alert("Cập nhật dữ liệu thất bại!")
+                })
             },
             /** */
             showAddCot: function(){
