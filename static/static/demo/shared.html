@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>vuejx</title>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
+  <link href="../css/main.css" rel="stylesheet">
+  <!-- vuejs -->
+  <script type="text/javascript" src="../js/axios.min.js"></script>
+  <script type="text/javascript" src="../js/vue.min.js"></script>
+  <script type="text/javascript" src="../js/vue-jx-lib.js?t=12"></script>
+  <script type="text/javascript" src="../js/vuejx.min.js"></script>
+  <script type="text/javascript" src="../js/vuejx_dev.js"></script>
+  <script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.js"></script>
+
+  <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+
+</head>
+
+<body>
+
+  <div id="rating_form_template">
+  </div>
+
+  <div id="ratingForm">
+    <v-app>
+        
+      <v-btn v-on:click.native="abc = !abc">fsfd</v-btn>
+      <jx-mobilink-share 
+        visibilities_api="http://localhost:8080//o/v2/mobilink/visibilities"
+        resourceworkspace_get_api="http://localhost:8080/o/v2/mobilink/resourceworkspaces"
+        resourceroles_get_api="http://dev.mobilink.vn/o/v2/mobilink/resourceroles"
+        resourceusers_get_api="http://dev.mobilink.vn/o/v2/mobilink/resourceusers"
+        changelogs_get_api="http://dev.mobilink.vn/o/v2/mobilink/changelogs"
+        class_name="org.mobilink.backend.document.model.DocFile"
+        class_pk="2202"
+        group_id="20143"
+      ></jx-mobilink-share>
+      <v-layout row wrap>
+          <v-flex sm12  v-if="!abc">
+gfdgd
+          </v-flex>
+          <v-slide-y-transition>
+          <v-flex sm12>
+              
+              <v-toolbar dark color="primary" v-if="abc" scroll-off-screen >
+                  <v-btn icon v-on:click.native="abc = !abc">
+                    <v-icon>arrow_back</v-icon>
+                  </v-btn>
+                  <v-text-field
+                  name="input-1"
+                  label="Label Text"
+                  id="testing"
+                  solo
+                  prepend-icon="search"
+                ></v-text-field>
+                </v-toolbar>
+                        </v-flex>
+                      </v-slide-y-transition>
+      </v-layout>
+      
+    </v-app>
+  </div>
+
+  <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function (event) {
+      
+      new Vue({
+        el: '#ratingForm',
+        data () {
+          return {
+            abc: false
+          }
+        }
+      })
+
+    });
+    /*
+    var params = new URLSearchParams();
+    params.append('email', 123123);
+params.append('email2', 123123);
+params.append('email3', 123123);
+      axios
+      .post('http://localhost:8080/o/v2/mobilink/resourceusers/org.mobilink.backend.document.model.DocFile/5701',
+        params,
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Accept': 'application/json',
+
+          }
+        }
+      )
+      */
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>vuejx</title>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
+  <link href="/static/css/main.css" rel="stylesheet">
+  <!-- vuejs -->
+  <script type="text/javascript" src="/static/js/axios.min.js"></script>
+  <script type="text/javascript" src="/static/js/vue.min.js"></script>
+  <script type="text/javascript" src="/static/js/vue-uploader.js"></script>
+  <script type="text/javascript" src="/static/js/vuejx.min.js"></script>
+  <script type="text/javascript" src="/static/js/vue-tree-list.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.js"></script>
+
+  <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+
+</head>
+
+<body>
+
+  <div id="rating_form_template">
+  </div>
+
+  <div id="ratingForm">
+
+  </div>
+
+  <div id="treeViewJX">
+      
+    <vue-tree-list :model="data" @tree-view-add="callSOS" ></vue-tree-list>
+
+  </div>
+  
+
+  <script type="text/javascript">
+
+    new Vue({
+      el: '#treeViewJX',
+      components: {
+        'VueTreeList': VueTreeList.VueTreeList
+      },
+      data () {
+        return {
+          record: null,
+          newTree: {},
+          data: new VueTreeList.Tree([
+            {
+              name: 'Node 1',
+              id: 1,
+              pid: 0,
+              children: [
+                {
+                  name: 'Node 1-2',
+                  id: 2,
+                  isLeaf: true,
+                  pid: 1
+                }
+              ]
+            },
+            {
+              name: 'Node 2',
+              id: 3,
+              pid: 0
+            },
+            {
+              name: 'Node 3',
+              id: 4,
+              pid: 0
+            }
+          ])
+        }
+      },
+      methods: {
+        callSOS: function (value) {
+          console.log(11111)
+          console.log(value)
+        }
+      }
+    });
+    document.addEventListener('DOMContentLoaded', function (event) {
+      
+      console.log('DOM fully loaded and parsed');
+      var formInputSlider1 = new VueJX({
+        el: 'ratingForm',
+        jxtemplate: 'rating_form_template',
+        pk: 1,
+        groupid: 20143,
+        data: {
+          
+        },
+        schema: {
+          'inputRating1' : {
+            'id': 'inputRating1',
+            'name': 'inputRating1',
+            "type": "rating",
+            "ratings": "ratingsInput1",
+            "label": "Priority: ",
+            "onLoad": "_initRatingInput1",
+            'updateapi': 'https://jsonplaceholder.typicode.com/posts',
+            'success_msg': 'Cập nhật trường text này thành công',
+            'error_msg': 'Cập nhật trường text này thất bại',
+            'call_back_success': 'mySuccesssnackbarCall',
+            'call_back_error': 'mySuccesssnackbarCall',
+            "events": {
+              _initRatingInput1: function () {
+                this.ratingsInput1 = ['oops', 'disappointed', 'normal', 'good', 'a', 'v', 'd', 'e', 'f', 'ad', 'ưew', 'fdfd', 'great'];
+              },
+              mySuccesssnackbarCall: function (value) {
+                this.inputRating1 = value.value;
+                this.snackbarratingForm = value.snackbar
+                console.log("------> value: "+this.inputRating1);
+              }
+            }
+          }
+        }
+      });
+
+      formInputSlider1._builder('formInputSlider1');
+
+    });
+
+  </script>
+
+<style>
+
+
+.star-rating.rating_process{
+    opacity: 0.2;
+    pointer-events: none;
+  }
+</style>
+ <style>
+   .tree-node{
+    background-color: #ecf0f1;
+   }
+   .tree-node .operation{
+    position: absolute;
+    right: 15px;
+    margin-left: 0px !important;
+    border-left: 5px solid #fff;
+    min-width: 180px;
+    text-align: right;
+   }
+   
+   .tree-parent{
+    position: relative;
+  }
+  .tree-parent::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -20px;
+    width: 1px;
+    background-color: #ccc;
+  }
+  .tree-parent .tree-node {
+    position: relative;
+  }
+  .tree-parent .tree-node::before{
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -20px;
+    height: 1px;
+    width: 20px;
+    background-color: #ccc;
+  }
+
+  .caret-flat .btn{
+    height: 20px !important;
+    width: 20px !important;
+    margin: 0px;
+    margin-right: 5px;
+  }
+  .caret-flat .btn i.material-icons{
+    font-size: 25px;
+  }
+  html .tree-parent:first-child{
+    display: block !important;
+  }
+
+
+  .container {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
+    padding: 1.25rem;
+    max-width: 1024px !important;
+    background-color: #fff;
+    margin: 1rem auto 0 auto;
+  }
+
+  .wrapper {
+      min-height: 100vh;
+      padding: 0 0.5rem;
+  }
+
+  @media screen and (min-width: 768px) {
+      .control:not(:last-child) {
+          margin-bottom: 0.2rem;
+      }
+
+      .is-full {
+          flex: 1;
+      }
+
+      .is-horizontal {
+          display: flex;
+          align-items: center;
+      }
+
+      .label {
+          margin-right: 1rem;
+      }
+  }
+
+
+
+  @media all and (max-width: 375px) {
+      .calendar-wrapper {
+          width: 120%;
+          max-width: 120%;
+          left: 50%;
+          transform: translateX(-50%);
+      }
+  }
+
+</style>
+</body>
+
+</html>

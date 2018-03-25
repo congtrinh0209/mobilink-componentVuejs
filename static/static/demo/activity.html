@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>vuejx</title>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
+  <link href="/static/css/main.css" rel="stylesheet">
+  <!-- vuejs -->
+  <script type="text/javascript" src="/static/js/axios.min.js"></script>
+  <script type="text/javascript" src="/static/js/vue.min.js"></script>
+  <script type="text/javascript" src="/static/js/vue-uploader.js"></script>
+  <script type="text/javascript" src="/static/js/vuejx_dev.js"></script>
+  <script type="text/javascript" src="/static/js/vue-tree-list.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.js"></script>
+
+  <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+
+</head>
+
+<body>
+
+  <div class="application theme--light">
+
+    <div id="activityJX">
+      <v-app>
+      <v-layout wrap>
+        
+          <v-navigation-drawer hide-overlay dark v-model="drawerLeftMenu" >
+              
+            <v-list>
+
+              <v-list-group v-for="item in items" :value="item.active" v-bind:key="item.title">
+                <v-list-tile slot="item" @click="navSelected(0)">
+                  <v-list-tile-action> <v-icon>{{ item.action }}</v-icon> </v-list-tile-action>
+                  <v-list-tile-content> <v-list-tile-title>{{ item.title }}</v-list-tile-title> </v-list-tile-content>
+                  <v-list-tile-action v-if="item.items"> <v-icon>keyboard_arrow_down</v-icon> </v-list-tile-action>
+                </v-list-tile>
+                
+                <v-list-tile v-for="subItem in item.items"  @click="navSelected(subItem.id)">
+                  <v-list-tile-action> <v-icon>{{ subItem.action }}</v-icon> </v-list-tile-action>
+                  <v-list-tile-content> <v-list-tile-title> {{ subItem.title }} </v-list-tile-title> </v-list-tile-content>
+                  <v-list-tile-action> <v-icon v-if="subItem.id == selected">done</v-icon> </v-list-tile-action>
+                </v-list-tile>
+                
+              </v-list-group>
+            </v-list>
+        
+          </v-navigation-drawer>
+        
+          <v-layout class="jx-content">
+            <v-fab-transition>
+              <v-btn @click.stop="drawerLeftMenu = !drawerLeftMenu" v-show="!drawerLeftMenu" dark fixed top right fab>
+                <v-icon>menu</v-icon>
+              </v-btn>
+            </v-fab-transition>
+            <transition name="slide-x-transition">
+                    <v-card>
+                        <v-expansion-panel expand >
+                            <v-expansion-panel-content v-for="(item,i) in 5" :key="i" v-bind:value="true">
+                              <div slot="header">Item</div>
+                              <v-card>
+                                <v-card-text class="grey lighten-3">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</v-card-text>
+                              </v-card>
+                            </v-expansion-panel-content>
+                          </v-expansion-panel>
+                        </v-card>
+                
+            </transition>
+        
+          </v-layout>
+        
+        </v-layout>
+      </v-app>
+    </div>
+
+  </div>
+
+  <script type="text/javascript">
+
+    new Vue({
+      el: '#activityJX',
+      data () {
+        return {
+          drawerLeftMenu: true,
+          selected: 0,
+          items: [
+            {
+              action: 'notifications_active',
+              title: 'Hoạt động mới',
+              active: true
+            },
+            {
+              action: 'event_note',
+              title: 'Lịch tuần'
+            },
+            {
+              action: 'event_available',
+              title: 'Lịch tháng'
+            },
+            {
+              action: 'group',
+              title: 'Sự kiện',
+              items: [
+                {
+                  id: 1,
+                  title: 'Các loại sự kiện'
+                },
+                {
+                  id: 2,
+                  title: 'Các công việc nội bộ'
+                }
+              ]
+            },
+            {
+              action: 'settings_input_component',
+              title: 'Quy trình'
+            },
+            {
+              action: 'store',
+              title: 'Hoạt động mẫu'
+            }
+          ]
+        }
+      },
+      watch: {
+        drawerLeftMenu(v) {
+          console.log(v)
+        }
+      },   
+      methods: {
+        navSelected(index) {
+          this.selected = index
+        }
+      }
+    });
+
+  </script>
+
+  <style>
+  html .application .list--group .list__tile {
+    padding-left: 17px;
+  }
+  html .application .navigation-drawer {
+    height: 100vh !important;
+  }
+  </style>
+
+</body>
+
+</html>

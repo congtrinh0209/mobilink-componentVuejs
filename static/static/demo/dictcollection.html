@@ -1,0 +1,1554 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1.0">
+	<title>Danh mục dữ liệu</title>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
+  <link href="../css/vuetify017.css" rel="stylesheet">
+	<link href="../css/main.css" rel="stylesheet">
+	<!-- vuejs -->
+	<script type="text/javascript" src="../js/axios.min.js"></script>
+	<script type="text/javascript" src="../js/vue.min.js"></script>
+	<script type="text/javascript" src="../js/vue-jx-lib.js?t=12"></script>
+	<script type="text/javascript" src="../js/vuejx.min.js"></script>
+	<script type="text/javascript" src="../js/vuejx_dev.js"></script>
+	<script type="text/javascript" src="../js/moment-with-locales.min.js"></script>
+	<script type="text/javascript" src="../js/moment.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.js"></script>
+  <script type="text/javascript" src="../js/vuetify017.js"></script>
+	<!-- <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet"> -->
+	<!-- <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script> -->
+
+</head>
+
+<body>
+
+	<!--Template navigation -->
+	<div id="menu_template" class="hidden">
+		<div class="layout row wrap">
+			<div class="flex xs12">
+				<v-menu
+					transition="slide-x-transition"
+					full-width
+					>
+					<v-btn slot="activator" block color="primary" @click="showPopupAddDictcollection()">
+						Tổng số {{dictcollectionTotal}} Nhóm danh mục &nbsp;&nbsp;
+						<v-icon dark>add_circle_outline</v-icon>
+					</v-btn>
+					
+        </v-menu>
+        <div class="flex px-0 mt-3 mb-3" jx-bind="keywordsSearch"></div>
+			</div>
+			<div class="flex xs12 pl-3" jx-bind="dictCollectionFilter"></div>
+
+		</div>
+
+	</div>
+
+	<div id="dictcollectionViewJX_form_template" class="hidden">
+
+		<div class="jx-content-wrap" v-if="!listDictcollectionPage">
+			<div class="row-header">
+				<!-- <div class="background-triangle-big"> upload </div>  -->
+				<div class="layout row wrap header_tools row-blue">
+					<div class="flex w-100-xs"></div>
+					<v-btn icon v-on:click.native="listDictcollectionPage = !listDictcollectionPage">
+						<v-icon>undo</v-icon>
+					</v-btn>
+				</div>
+			</div>
+			
+		</div>
+		
+		<div class="jx-content-wrap" v-if="listDictcollectionPage">
+			<div class="layout wrap">
+				<div class="row-header flex-break" v-if="!keywordsSearchable" >
+					<div class=""> 
+						<v-breadcrumbs class="py-2">
+							<v-icon slot="divider">forward</v-icon>
+							<v-breadcrumbs-item  v-for="item in dictcollectionTree" :key="item.title">
+								{{ item.title }}
+							</v-breadcrumbs-item>
+						</v-breadcrumbs>
+          </div>
+          <v-btn icon v-on:click.native="_removeDictCollection()" class="ml-0">
+						<v-icon>delete</v-icon>
+					</v-btn>
+					<!-- <div class="flex w-100-xs"></div>
+					<v-btn icon v-on:click.native="keywordsSearchable = !keywordsSearchable">
+						<v-icon>search</v-icon>
+					</v-btn> -->
+					
+				</div>
+
+				<v-slide-y-transition>
+					<div class="row-header flex-break my-0" v-if="keywordsSearchable" >
+						<v-toolbar scroll-off-screen class="my-0 row-header">
+							<v-btn icon v-on:click.native="keywordsSearchable = !keywordsSearchable" class="my-0">
+								<v-icon>arrow_back</v-icon>
+							</v-btn>
+							<!-- <div v-if="keywordsSearchable" class="flex pr-3 w-100-xs" jx-bind="keywordsSearch" 
+								style="display: flex;display: -webkit-flex;">
+							</div> -->
+			
+						</v-toolbar>
+							
+					</div>
+				</v-slide-y-transition>
+				
+				<v-slide-x-transition>
+					<div class="layout wrap">
+						<v-tabs :scrollable="false" v-model="active">
+							<v-tabs-bar>
+								<v-tabs-item :href="'#tab-dossier-detail-1'">
+									Thông tin chi tiết
+								</v-tabs-item>
+								<v-tabs-item :href="'#tab-dossier-detail-2'" @click="_inidictItemList()">
+									Danh sách dữ liệu danh mục
+								</v-tabs-item>
+								<v-tabs-item :href="'#tab-dossier-detail-3'" @click="_loadDataForm()">
+									Mẫu form
+								</v-tabs-item>
+								<v-tabs-slider color="primary"></v-tabs-slider>
+							</v-tabs-bar>
+
+							<v-tabs-items>
+								<!-- Tab dictGroup -->
+								<v-tabs-content :id="'tab-dossier-detail-1'" reverse-transition="slide-y-transition" transition="slide-y-transition">
+									
+									<!-- Content dictcollection -->
+									<div class="layout wrap mt-3">
+										<div class="flex xs12" jx-bind="inputEditCollectionName"></div>
+										<div class="flex xs12" jx-bind="inputEditCollectionNameEN"></div>
+										<div class="flex xs12" jx-bind="inputEditCollectionCode"></div>
+                    <div class="flex xs12" jx-bind="inputEditCollectionDescription"></div>
+                    <div class="flex xs12" jx-bind="selectDictItemGroup"></div>
+									</div>
+									<div class="layout wrap mt-3 pl-3">
+										<v-btn class="flex xs2" slot="activator" block color="primary" @click="createDictGroup()">
+											Thêm nhóm &nbsp;&nbsp;
+											<v-icon dark>add_circle_outline</v-icon>
+										</v-btn>
+										<div class="flex pr-3 w-100-xs" jx-bind="keywordsSearchdictgroups"></div>
+									</div>
+
+									<!-- List dictGroup -->
+									<div class="layout wrap mt-4" jx-bind="dictgroupsList"></div>
+
+								</v-tabs-content>
+
+								<!-- Tab dictItem -->
+								<v-tabs-content :id="'tab-dossier-detail-2'" reverse-transition="slide-y-transition" transition="slide-y-transition">
+									<div class="layout wrap mt-4 pl-3">
+										<v-btn class="flex xs2" slot="activator" block color="primary" @click="createDictItem()">
+											Thêm mục &nbsp;&nbsp;
+											<v-icon dark>add_circle_outline</v-icon>
+										</v-btn>
+
+										<div class="flex w-100-xs" jx-bind="keywordsSearchdictItems">
+										</div>
+									</div>
+									<div class="layout wrap mt-4" jx-bind="dictItemList"></div>
+								</v-tabs-content>
+
+								<!-- Tab dictFormScript -->
+								<v-tabs-content :id="'tab-dossier-detail-3'" reverse-transition="slide-y-transition" transition="slide-y-transition">
+									<div class="layout wrap mt-3">
+										<v-tabs :scrollable="false" v-model="activeSubtab">
+											<v-tabs-bar class="pl-3">
+												<v-tabs-item :href="'#subtab-dossier-detail-1'">
+													Script
+												</v-tabs-item>
+	
+												<v-tabs-item :href="'#subtab-dossier-detail-2'">
+													View html
+												</v-tabs-item>
+	
+												<v-tabs-slider color="primary"></v-tabs-slider>
+											</v-tabs-bar>
+					
+											<v-tabs-items class="mt-3">
+												<v-tabs-content :id="'subtab-dossier-detail-1'" reverse-transition="slide-y-transition" transition="slide-y-transition">
+													<div class="flex xs12 pl-3" jx-bind="inputFormScript" ></div>
+	
+													<v-btn class="flex xs2 ml-3"  block color="primary" @click="_updateDataForm()">
+														<v-icon dark>done</v-icon>&nbsp;&nbsp;
+														Cập nhật thay đổi
+													</v-btn>
+												</v-tabs-content>
+					
+												<v-tabs-content :id="'subtab-dossier-detail-2'" reverse-transition="slide-y-transition" transition="slide-y-transition">
+													<div class="flex xs12 pl-3" jx-bind="" ></div>
+	
+													<v-btn class="flex xs2 ml-3"  block color="primary" @click="">
+														<v-icon dark>done</v-icon>&nbsp;&nbsp;
+														Cập nhật thay đổi
+													</v-btn>
+												</v-tabs-content>
+					
+											</v-tabs-items>
+										</v-tabs>
+									</div>
+																		
+								</v-tabs-content>
+							</v-tabs-items>
+						</v-tabs>
+					</div>
+				</v-slide-x-transition>
+			
+			</div>
+		</div>
+	</div>
+	
+	<!-- Template dictgroups_list -->
+	<div id="dictgroups_list_template">
+		<template slot="items" slot-scope="props">
+			
+			<td class="text-xs-left" style="padding-top: 7px;">
+				{{ props.index+1 }}
+			</td>
+			<td class="text-xs-left" style="padding-top: 7px;">
+				{{ props.item.groupCode}}
+			</td>
+			<td class="text-xs-left" style="padding-top: 7px;">
+				{{ props.item.groupName}}
+			</td>
+			<td class="text-xs-left" style="padding-top: 7px;">
+				{{ props.item.groupNameEN}}	
+			</td>
+			<td class="text-xs-left">
+
+        <v-menu offset-x>
+          <v-btn icon slot="activator" class="mx-0 my-0" @click.native="_selectDictItemData(props.item, props.index)">
+            <v-icon>keyboard_arrow_down</v-icon>
+          </v-btn>
+
+        </v-menu>
+
+				<v-btn icon @click.native="_editGroupItem(props.item, props.index)" class="mx-0 my-0" >
+					<v-icon>mode_edit</v-icon>
+				</v-btn>
+				<v-btn icon @click.native="_removeGroupItem(props.item, props.index)" class="mx-0 my-0" >
+					<v-icon>clear</v-icon>
+				</v-btn>
+      </td>
+
+		</template>
+	</div>
+
+	<!-- Template dictItem_list -->
+	<div id="dictItem_list_template">
+		<template slot="items" slot-scope="props">
+			
+			<td class="text-xs-left" style="padding-top: 7px;">
+				{{ props.index+1 }}
+			</td>
+			<td class="text-xs-left" style="padding-top: 7px;">
+				{{ props.item.itemCode}}
+			</td>
+			<td class="text-xs-left" style="padding-top: 7px;">
+				{{ props.item.itemName}}
+			</td>
+
+			<td class="text-xs-left">
+				<v-btn icon v-on:click.native="_editDictItem(props.item, props.index)" class="mx-0 my-0" >
+					<v-icon>mode_edit</v-icon>
+				</v-btn>
+				<v-btn icon v-on:click.native="_removeDictItem(props.item, props.index)" class="mx-0 my-0" >
+					<v-icon>clear</v-icon>
+				</v-btn>
+			</td>
+		</template>
+	</div>
+	
+	<!-- Template popup ADD DictCOLLECTION -->
+	<div id="popUpAddDictcollectionTemplate">
+		<div class="layout wrap flex xs12 text-center">
+			<div class="flex xs12 pl-3" jx-bind="inputCollectionCode" ></div>
+			<div class="flex xs12 pl-3" jx-bind="inputCollectionName" ></div>
+			<div class="flex xs12 pl-3" jx-bind="inputCollectionNameEN" ></div>
+			<div class="flex xs12 pl-3" jx-bind="inputCollectionDescription" ></div>
+			<v-alert outline color="error" icon="warning" v-if="stateAddCollection === 0">
+				Yêu cầu thực hiện không thành công!
+			</v-alert>
+			<v-alert outline color="success" icon="check_circle" :value="stateAddCollection === 1">
+				Yêu cầu của bạn được thực hiện thành công!
+			</v-alert>
+		</div>
+	</div>
+
+	<!-- Template popup ADD DictGROUP -->
+	<div id="popUpAddDictGroupTemplate">
+		<div class="layout wrap flex xs12 text-center">
+			<div class="flex xs12 pl-3" jx-bind="inputGroupCode" ></div>
+			<div class="flex xs12 pl-3" jx-bind="inputGroupName" ></div>
+			<div class="flex xs12 pl-3" jx-bind="inputGroupNameEN" ></div>
+			<div class="flex xs12 pl-3" jx-bind="inputGroupDescription" ></div>
+			
+			<v-alert outline color="error" icon="warning" v-if="stateAddDictGroup === 0">
+				Yêu cầu thực hiện không thành công!
+			</v-alert>
+			<v-alert outline color="success" icon="check_circle" :value="stateAddDictGroup === 1">
+				Yêu cầu của bạn được thực hiện thành công!
+			</v-alert>
+		</div>
+	</div>
+
+	<!-- Template popup ADD DictITEMS -->
+	<div id="popUpAddDictItemTemplate">
+		<div class="layout wrap flex xs12 text-center">
+
+			<div class="flex sm6" jx-bind="inputItemCode" ></div>
+			<div class="flex sm6 pl-3" jx-bind="selectParentItemCode" ></div>
+			<div class="flex sm6" jx-bind="inputItemName" ></div>
+			<div class="flex sm6 pl-3" jx-bind="inputItemNameEN" ></div>
+			<div class="flex sm6" jx-bind="selectGroupCode" ></div>
+			<div class="flex sm6 pl-3" jx-bind="inputItemSibling" ></div>
+			<div class="flex sm12" jx-bind="inputItemDescription" ></div>
+			
+			<v-alert outline color="error" icon="warning" v-if="stateAddDictItem === 0">
+				Yêu cầu thực hiện không thành công!
+			</v-alert>
+			<v-alert outline color="success" icon="check_circle" :value="stateAddDictItem === 1">
+				Yêu cầu của bạn được thực hiện thành công!
+			</v-alert>
+		</div>
+	</div>
+
+	<div id="dictcollectionViewJX"></div>
+
+	<script type="text/javascript">
+		document.addEventListener('DOMContentLoaded', function (event) {
+			var config = {
+				headers: {
+					'groupId': 42942 /*themeDisplay.getScopeGroupId()*/
+				}
+				
+			};
+			var dictcollectionViewJX = new VueJX({
+				el: 'dictcollectionViewJX',
+				pk: 1,
+				groupid: 42942,
+				data: {
+					detailModel:{
+						createdDate: 'default',
+						modifiedDate: 'default',
+						fullname: 'default',
+						email: 'default',
+						fileName: 'default',
+						fileType: 'default',
+						fileSize: 0,
+						version: 'default',
+						source :'default',
+						sourceUrl:	'default',
+						collectionCode: 'default',
+						collectionName: 'default',
+						collectionNameEN: 'default',
+						description:'default',
+            groupCode: 'default',
+						accessible: false,
+						action: 'folder',
+						action_active: 'folder_open',
+						id: 0,
+						title: 'default',
+						active: true,
+            urlDictGroupUpdate: '',
+            urlDictItemUpdate: ''
+          },
+          headers: { groupId: 42942 },
+					stateAddCollection: 0,
+					stateAddDictGroup: 0,
+					stateAddDictItem: 0,
+					stateActionDictGroup: '',
+					stateActionDictItem: '',
+					tabs: ['tab-dossier-detail-1', 'tab-dossier-detail-2', 'tab-dossier-detail-3'],
+					subtabs: ['subtab-dossier-detail-1', 'subtab-dossier-detail-2'],
+					active: null,
+					activeSubtab:null,
+					dictcollectionTotal: 0,
+					keywordsSearchable: false,
+					currentIndex: -1,
+					// kho_title_table: 'Danh sach',
+					dictcollectionTree:[],
+					valid: false,
+					dataForm: '',
+					listDictcollectionPage: true,
+					endPoint: 'http://congtrinh0209-pc:8081/api/'
+
+				},
+				schema: {
+					/** TODO menu filter */
+					'navigationFilter': {
+						'id': 'navigationFilter',
+						'name': 'navigationFilter',
+						'type': 'navigation',
+						'template': 'menu_template',
+						'template_content': 'dictcollectionViewJX_form_template',
+						'events': {
+							
+							showPopupAddDictcollection: function () {
+                var vm = this;
+								vm.popUpAddDictcollection = true;
+                
+							},
+							// Show popup Add DictGroup
+							createDictGroup: function () {
+								var vm = this;
+								vm.popUpAddDictGroup = true;
+								vm.stateActionDictGroup = 'POST'
+							},
+							// Show popup Add DictItems
+							createDictItem: function () {
+								var vm = this;
+								this.popUpAddDictItem = true;
+                vm.stateActionDictItem = "POST";
+								vm._selectParentItemCodeData();
+								vm._selectGroupCodeData()
+							}
+						}
+					},
+					// SEARCH
+					// search dictcollection
+					'keywordsSearch': {
+						'id': 'keywordsSearch',
+						'name': 'keywordsSearch',
+						'type': 'text',
+						'placeholder': 'Tên, mã nhóm danh mục',
+						'solo': true,
+						'append_icon': 'search',
+						'onKeyup': 'searchDictCollection',
+						'events': {
+							searchDictCollection: function (event) {
+								var vm = this;
+								if (event.keyCode === 13 || vm.keywordsSearch.length > 3 || vm.keywordsSearch.length === 0) {
+									vm._initdictCollectionFilter();
+								}
+
+							}
+						}
+					},
+					// search dictGroup
+					'keywordsSearchdictgroups': {
+						'id': 'keywordsSearchdictgroups',
+						'name': 'keywordsSearchdictgroups',
+						'type': 'text',
+						'placeholder': 'Tên, mã nhóm',
+						'solo': true,
+						'append_icon': 'search',
+						'onKeyup': 'searchDictGroup',
+						'events': {
+							searchDictGroup: function (event) {
+								var vm = this;
+								if (event.keyCode === 13 || vm.keywordsSearchdictgroups.length > 3 || vm.keywordsSearchdictgroups.length === 0) {
+									vm._inidictgroupsList(vm.detailModel);
+								}
+
+							}
+						}
+					},
+					// search dictItems
+					'keywordsSearchdictItems': {
+						'id': 'keywordsSearchdictItems',
+						'name': 'keywordsSearchdictItems',
+						'type': 'text',
+						'placeholder': 'Tên, mã loại danh mục',
+						'solo': true,
+						'append_icon': 'search',
+						'onKeyup': 'searchDictItems',
+						'events': {
+							searchDictItems: function (event) {
+								var vm = this;
+								if (event.keyCode === 13 || vm.keywordsSearchdictItems.length > 3 || vm.keywordsSearchdictItems.length === 0) {
+									vm._inidictItemList(null);
+								}
+
+							}
+						}
+					},
+
+					'dictCollectionFilter': {
+						'id': 'dictCollectionFilter',
+						'name': 'dictCollectionFilter',
+						'type': 'listgroup',
+						'child_items': 'items',
+						'data_title': 'title',
+						'data_value': 'id',
+						'onLoad': '_initdictCollectionFilter',
+						'onClick': 'filterChange',
+						'events': {
+							onScroll(e) {
+							},
+														
+							_bindInfoDictcollection: function(item){
+								var vm =this;
+								vm.inputEditCollectionName = item.collectionName;
+								vm.inputEditCollectionNameEN = item.collectionNameEN;
+								vm.inputEditCollectionCode = item.collectionCode;
+								vm.inputEditCollectionDescription = item.description;
+							},
+							
+
+							filterChange: function (item) {
+								var vm = this;
+								vm.detailModel = item;
+								vm.dictcollectionTree = [vm.detailModel];
+								vm._bindInfoDictcollection(item);
+								vm._inidictgroupsList(item);
+								// set active tab
+								vm.active = vm.tabs[0];
+								vm.activeSubtab = vm.subtabs[0];
+								// 
+                vm.dictCollectionFilterselected = vm.detailModel.id;
+                // set api update input edit
+
+							},
+							
+							/** thuoc tinh cua modelDetail */
+							_mapModelDetail: function(model, active){
+								var vm = this;
+								for(var key in this.detailModel) { 
+									
+									switch (key) {
+										case "action":
+											model[key] = "folder";
+											break;
+										case "action_active":
+											model[key] = "folder_open";
+											break;
+										case "id":
+											model[key] = model["collectionCode"];
+											break;
+										case "title":
+											model[key] = model["collectionName"];
+											break;
+										case "active":
+											model[key] = active;
+											break;
+										default: 
+											model[key] = model[key]
+											break;
+									}
+									
+								}
+								
+								if (model.collectionCode == undefined) {
+									model.name = model.subject;
+								}
+								
+								return model;
+							},
+							/** danh sach breadCrumb - dictCollectionFilter */
+							_mapListModelDetail: function(models){
+								var vm = this;
+								var result = [];
+								var active = false;
+								for (let i = 0; i < models.length; i++) {
+									active = i==0 ? true:false;
+									
+									var m = vm._mapModelDetail(models[i], active);
+									result.push(m);
+								};
+								return result;
+							},
+							_initdictCollectionFilter: function () {
+								
+								var vm = this;
+								var paramsDictCollection = {
+                  keyword: vm.keywordsSearch,
+                  sorts: 'collectionName',
+                };
+                
+                const configDictCollection = {
+                  params: paramsDictCollection,
+                  headers: vm.headers
+                };
+								var url = vm.endPoint + 'dictcollections';
+
+								axios.get(url, configDictCollection).then(function (response) {
+									{
+										let serializable = response.data;
+										let active = true;
+
+										if (serializable.hasOwnProperty('data')) {
+											vm.dictCollectionFilterItems = vm._mapListModelDetail(serializable.data);
+                      vm.dictcollectionTotal = serializable.total;
+
+										};
+										vm.detailModel = vm.dictCollectionFilterItems[0];
+
+										vm.dictcollectionTree = [vm.detailModel];
+										vm._bindInfoDictcollection(vm.detailModel);
+										vm._inidictgroupsList(vm.detailModel);
+									};
+								})
+								.catch(function (error) {
+									console.log(error);
+									// vm._inidictgroupsList = [];
+								});
+
+							},
+              _removeDictCollection: function() {
+                var vm = this;
+								console.log(vm.detailModel);
+								var url = vm.endPoint + 'dictcollections/' + vm.detailModel.collectionCode;
+
+                vm.$dialog.confirm('Bạn có muốn xóa nhóm danh mục?', {
+                  html: true,
+                  loader: true,
+                  okText: 'Xác nhận',
+                  cancelText: 'Quay lại',
+                  animation: 'fade'
+                })
+                .then((dialog) => {
+                  axios.delete(url, config).then(function (response) {
+                    vm.snackbartextdictcollectionViewJX = "Xoá dữ liệu thành công!";
+                    vm._initdictCollectionFilter();
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+                    vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thất bại!";
+                  });
+                  
+                  dialog.close();
+                  return false; 
+                })
+                .catch((e) => {
+                  console.log(e)
+                })
+              },
+							_loadDataForm: function(){
+								var vm = this;
+								
+								var url = vm.endPoint + 'dictcollections/' +vm.detailModel.collectionCode+ '/dataforms';
+
+								axios.get(url, config).then(function (response) {
+									{
+										let serializable = response.data;
+										vm.inputFormScript = serializable.description
+									};
+								})
+								.catch(function (error) {
+									console.log(error);
+
+								});
+              },
+              _updateDataForm: function(){
+                var vm = this;
+								var updateDataForm = {
+									description: vm.inputFormScript
+									
+								}
+								var url = vm.endPoint + 'dictcollections/' +vm.detailModel.collectionCode+ '/dataforms';
+
+								axios.put(url, updateDataForm, config).then(function (response) {
+									{
+										
+									};
+								})
+								.catch(function (error) {
+									console.log(error);
+
+								});
+              }
+						}
+					},
+					// table list
+					'dictgroupsList': {
+						'id': 'dictgroupsList',
+						'name': 'dictgroupsList',
+						'type': 'table',
+						'item_key': 'id',
+						'headers': 'headers',
+						'template': 'dictgroups_list_template',
+						'pagging': '_dictgroupsListTable',
+						// 'onLoad': '_inidictgroupsList',
+						'onClick': '',
+						'events': {
+							
+							_dictgroupsListTable: function () {
+								this._inidictgroupsList(null);
+							},
+							_inidictgroupsList: function (item) {
+								var vm = this;
+								vm.dictgroupsListheaders = [
+									{
+										text: 'STT',
+										align: 'left',
+										sortable: false,
+										value: 'name'
+									},
+									{
+										text: 'Mã nhóm',
+										align: 'left',
+										sortable: true,
+										value: 'name'
+									},
+									{
+										text: 'Tên nhóm',
+										align: 'left',
+										sortable: true,
+										value: 'name'
+									},
+									{
+										text: 'Tên tiếng anh',
+										align: 'left',
+										sortable: true,
+										value: 'name'
+									},
+									{
+										text: 'Tổng số nhóm',
+										align: 'left',
+										sortable: false
+									}
+                ];
+                var paramsDictCollection = {
+                  keyword: vm.keywordsSearchdictgroups,
+                  sorts: 'sibling',
+                };
+                
+                const configDictGroup = {
+                  params: paramsDictCollection,
+                  headers: vm.headers
+                };
+								var url = vm.endPoint + 'dictcollections/'+ item.collectionCode +'/dictgroups';
+								vm.dictgroupsListItems =[];
+								axios.get(url, configDictGroup)
+								.then(function (response) {
+									{
+										let serializable = response.data;
+
+										if (serializable.hasOwnProperty('data')) {
+											vm.dictgroupsListItems = vm._mapListModelDetail(serializable.data);
+											vm.dictgroupsListheaders[4].text = 'Tổng số '+ serializable.total + ' nhóm';
+										}
+										
+									};
+								})
+								.catch(function (error) {
+									console.log(error);
+									// vm._inidictgroupsList = [];
+								});
+							},
+
+							_editGroupItem: function(item, index){
+								var vm = this;
+                vm.urlDictGroupUpdate = vm.endPoint + 'dictcollections/' + vm.detailModel.collectionCode + '/dictgroups/' + item.groupCode;
+								vm.stateActionDictGroup = 'PUT';
+								vm.popUpAddDictGroup = true;
+								vm.inputGroupCode = item.groupCode;
+								vm.inputGroupName = item.groupName;
+								vm.inputGroupNameEN = item.groupNameEN;
+								vm.inputGroupDescription = item.groupDescription;
+
+							},
+              _removeGroupItem: function (item,index) {
+                var vm = this;
+                vm.urlDictGroupUpdate = vm.endPoint + 'dictcollections/' + vm.detailModel.collectionCode + '/dictgroups/' + item.groupCode;
+                vm.$dialog.confirm('Bạn có muốn xóa nhóm?', {
+                  html: true,
+                  loader: true,
+                  okText: 'Xác nhận',
+                  cancelText: 'Quay lại',
+                  animation: 'fade'
+                })
+                .then((dialog) => {
+                  axios.delete(vm.urlDictGroupUpdate, config).then(function (response) {
+                    vm.snackbartextdictcollectionViewJX = "Xoá dữ liệu thành công!";
+                    vm._inidictgroupsList(vm.detailModel);
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+                    vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thất bại!";
+                  });
+                  
+                  dialog.close();
+                  return false; 
+                })
+                .catch((e) => {
+                  console.log(e)
+                })
+
+              }
+              
+						}
+					},
+					'dictItemList': {
+						'id': 'dictItemList',
+						'name': 'dictItemList',
+						'type': 'table',
+						'item_key': 'id',
+						'headers': 'headers',
+						'template': 'dictItem_list_template',
+						'pagging': '_dictItemListTable',
+						// 'onLoad': '_inidictItemList',
+						'onClick': '',
+						'events': {
+							_dictItemListTable: function () {
+								this._inidictItemList(null);
+							},
+							_inidictItemList: function () {
+                var vm = this;
+                var paramsDictItem = {
+                  keyword: vm.keywordsSearchdictItems,
+                  sorts: 'sibling',
+                };
+                
+                const configDictItem = {
+                  params: paramsDictItem,
+                  headers: vm.headers
+                };
+								vm.dictItemListheaders = [
+									{
+										text: 'STT',
+										align: 'left',
+										sortable: false,
+										value: 'name'
+									},
+									{
+										text: 'Mã danh mục',
+										align: 'left',
+										sortable: true,
+										value: 'name'
+									},
+									{
+										text: 'Tên danh mục',
+										align: 'left',
+										sortable: true,
+										value: 'name'
+									},
+									{
+										text: 'Tổng số',
+										align: 'left',
+										sortable: false
+									}
+								];
+								var url = vm.endPoint + 'dictcollections/'+ vm.detailModel.collectionCode +'/dictitems';
+								vm.dictItemListItems =[];
+								axios.get(url , configDictItem)
+								.then(function (response) {
+									{
+										let serializable = response.data;
+
+										if (serializable.hasOwnProperty('data')) {
+											vm.dictItemListItems = vm._mapListModelDetail(serializable.data);
+											vm.dictItemListheaders[3].text = 'Tổng số '+ serializable.total
+										}
+										
+									};
+								})
+								.catch(function (error) {
+									console.log(error);
+									// vm._inidictgroupsList = [];
+								});
+							},
+              _editDictItem: function(item, index){
+								var vm = this;
+                vm.urlDictItemUpdate = vm.endPoint + 'dictcollections/' + vm.detailModel.collectionCode + '/dictitems/' + item.itemCode;
+								vm.stateActionDictItem = 'PUT';
+
+								vm.popUpAddDictItem = true;
+                vm._selectParentItemCodeData();
+								vm._selectGroupCodeData();
+                
+								vm.inputItemCode = item.itemCode;
+								vm.inputItemName = item.itemName;
+								vm.inputItemNameEN = item.itemNameEN;
+                vm.selectParentItemCode.itemCode = item.parentItemCode.itemCode;
+                vm.selectGroupCode = item.groups;
+								vm.inputItemDescription = item.itemDescription;
+                vm.inputItemSibling = item.sibling;
+
+							},
+              _removeDictItem: function (item,index) {
+                var vm = this;
+                vm.urlDictItemUpdate = vm.endPoint + 'dictcollections/' + vm.detailModel.collectionCode + '/dictitems/' + item.itemCode;
+                vm.$dialog.confirm('Bạn có muốn xóa thành phần dữ liệu?', {
+                  html: true,
+                  loader: true,
+                  okText: 'Xác nhận',
+                  cancelText: 'Quay lại',
+                  animation: 'fade'
+                })
+                .then((dialog) => {
+                  axios.delete(vm.urlDictItemUpdate, config).then(function (response) {
+                    vm.snackbartextdictcollectionViewJX = "Xoá dữ liệu thành công!";
+                    vm._inidictItemList();
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+                    vm._inidictItemList();
+                    vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thất bại!";
+                  });
+                  
+                  dialog.close();
+                  return false; 
+                })
+                .catch((e) => {
+                  console.log(e);
+                  
+                })
+
+              }
+						}
+					},
+					
+					// PopUp Add dictcollection
+					'popUpAddDictcollection' : {
+						'id': 'popUpAddDictcollection',
+						'name': 'popUpAddDictcollection',
+						"type": "dialogsm",
+						"type_dialog": "fullScreen",
+						'icon_save': 'undo',
+						'label_save': 'Quay lại',
+						"color": "primary",
+						"template": "popUpAddDictcollectionTemplate",
+						"events": {
+							popUpAddDictcollectionClose: function () {
+								/** TODO: Clear form*/
+								var vm = this;
+								this.popUpAddDictcollection = false;
+							},
+							popUpAddDictcollectionSave: function () {
+								console.log("submit add dictgroup");
+
+								var vm = this;
+								vm.popUpAddDictcollection_hidden_loading = true;
+								setTimeout(
+									function(){ 
+										vm.popUpAddDictcollection_hidden_loading = false;
+									}, 
+								500);
+								/** TODO: Save form*/
+								var url = vm.endPoint + "dictcollections";
+
+								var postData = {
+									collectionName: vm.inputCollectionName,
+									collectionCode: vm.inputCollectionCode,
+									collectionNameEN: vm.inputCollectionNameEN,
+									description: vm.inputCollectionDescription
+									
+								}
+													
+								axios.post(url, postData, config)
+								.then(function (response) {
+									console.log('success');
+									var serializable = vm._mapModelDetail(response.data, false);
+									vm._initdictCollectionFilter();
+									vm.stateAddCollection = 1;
+									setTimeout(	function(){ 
+										vm.stateAddCollection = 0;
+										vm.popUpAddDictcollection = false;
+									},3000);
+									vm.dictItemListItems.unshift(serializable);
+
+								})
+								.catch(function (error) {
+									console.log(error);
+
+								});
+								
+							}
+						}
+					},
+					'inputCollectionCode' : { 
+						'id': 'inputCollectionCode', 
+						'name': 'inputCollectionCode', 
+						'type': "text", 
+						'label': 'Mã nhóm danh mục',
+						'placeholder': '',
+						'required': true
+					},
+					'inputCollectionName' : { 
+						'id': 'inputCollectionName', 
+						'name': 'inputCollectionName', 
+						'type': "text", 
+						'label': 'Tên nhóm danh mục',
+						'placeholder': '',
+						'required': true 
+					},
+					'inputCollectionNameEN' : { 
+						'id': 'inputCollectionNameEN', 
+						'name': 'inputCollectionNameEN', 
+						'type': "text", 
+						'label': 'Tên tiếng anh',
+						'placeholder': ''
+					},
+					'inputCollectionDescription' : { 
+						'id': 'inputCollectionDescription', 
+						'name': 'inputCollectionDescription', 
+						'type': "text",
+						'multi_line': true,
+						'label': 'Mô tả chi tiết',
+						'placeholder': ''
+					},
+					// popup Add dictGroup
+					'popUpAddDictGroup' : {
+						'id': 'popUpAddDictGroup',
+						'name': 'popUpAddDictGroup',
+						"type": "dialogsm",
+						"type_dialog": "fullScreen",
+						'icon_save': 'undo',
+						'label_save': 'Quay lại',
+						"color": "primary",
+						"template": "popUpAddDictGroupTemplate",
+						"events": {
+							popUpAddDictGroupClose: function () {
+								/** TODO: Clear form*/
+								var vm = this;
+								this.popUpAddDictGroup = false;
+							},
+							popUpAddDictGroupSave: function () {
+								console.log("save popup");
+								var vm = this;
+								vm.popUpAddDictGroup_hidden_loading = true;
+								setTimeout(
+									function(){ 
+										vm.popUpAddDictGroup_hidden_loading = false;
+									}, 
+								500);
+								/** TODO: Save form*/
+								var url = vm.endPoint+ 'dictcollections/' + vm.detailModel.collectionCode + '/dictgroups'
+								let postData = {
+									groupName: vm.inputGroupName,
+									groupCode: vm.inputGroupCode,
+									groupNameEN: vm.inputGroupNameEN,
+									groupDescription: vm.inputGroupDescription
+									
+								}
+								if(vm.stateActionDictGroup === 'POST')	{
+									axios.post(url, postData, config)
+									.then(function (response) {
+										console.log('success');
+										
+										vm._inidictgroupsList(vm.detailModel);
+										var serializable = vm._mapModelDetail(response.data, false);
+										vm.dictItemListItems.unshift(serializable);
+
+										vm.stateAddDictGroup = 1;
+										setTimeout(	function(){ 
+											vm.stateAddDictGroup = 0;
+											vm.popUpAddDictGroup = false;
+										},3000);
+										
+									})
+									.catch(function (error) {
+										console.log(error);
+
+									});
+								} else if (vm.stateActionDictGroup === 'PUT') {
+									axios.put(vm.urlDictGroupUpdate, postData, config)
+									.then(function (response) {
+										console.log('success');
+										
+										vm._inidictgroupsList(vm.detailModel);
+										var serializable = vm._mapModelDetail(response.data, false);
+										vm.dictItemListItems.unshift(serializable);
+
+										vm.stateAddDictGroup = 1;
+										setTimeout(	function(){ 
+											vm.stateAddDictGroup = 0;
+											vm.popUpAddDictGroup = false;
+										},3000);
+										
+									})
+									.catch(function (error) {
+										console.log(error);
+
+									});
+								}
+								
+							}
+						}
+					},
+					'inputGroupCode' : {
+						'id': 'inputGroupCode',
+						'name': 'inputGroupCode',
+						'type': "text",
+						'label': 'Mã nhóm',
+						'placeholder': '',
+						'required': true
+					},
+					'inputGroupName' : { 
+						'id': 'inputGroupName', 
+						'name': 'inputGroupName', 
+						'type': "text", 
+						'label': 'Tên nhóm',
+						'placeholder': '',
+						'required': true 
+					},
+					'inputGroupNameEN' : { 
+						'id': 'inputGroupNameEN', 
+						'name': 'inputGroupNameEN', 
+						'type': "text", 
+						'label': 'Tên tiếng anh',
+						'placeholder': ''
+					},
+					'inputGroupDescription' : { 
+						'id': 'inputGroupDescription', 
+						'name': 'inputGroupDescription', 
+						'type': "text",
+						'multi_line': true,
+						'label': 'Mô tả chi tiết',
+						'placeholder': ''
+					},
+          "selectDictItemGroup": {
+						'id': 'selectDictItemGroup',
+						'name': 'selectDictItemGroup',
+						"type": "select",
+						'label': 'Danh sách mục dữ liệu',
+						"item_text": "itemName",
+						"item_value": "itemCode",
+						"single_line": true,
+						"hide_selected": true,
+            "multiple": true,
+            "tags": false,
+						"chips": true,
+            "deletable_chips": true,
+            "loading": false,
+            "return-object": true,
+						"no_data_text": "Lua chon selected",
+            // "onLoad": "_initDocumentCatFilterData",
+            "onChange": "changeDictItem",
+            "onRemove": "changeDictItem",
+            "onClick": "changeDictItem",
+						"items": [],
+						"events": {
+							_selectDictItemData: function(item, index){
+								var vm = this;
+								var url = vm.endPoint + 'dictcollections/'+ vm.detailModel.collectionCode +'/dictgroups/' + item.groupCode + '/dictitems?sort=sibling&full=true';
+								
+								axios.get(url, config).then(function (response) {
+									var serializable = response.data;
+									if (serializable.hasOwnProperty('data')){
+										vm.selectDictItemGroupItems = serializable.data;
+										vm.selectDictItemGroup = serializable.data.filter(function(item){
+                        return item.selected===true
+                    });
+									}
+								})
+								.catch(function (error) {
+									console.log(error);
+									
+								});
+								
+              },
+              changeDictItem: function(){
+                var vm = this;
+                console.log(vm.selectDictItemGroup)
+              }
+
+						}
+					},
+					// popup Add dictItem
+					'popUpAddDictItem' : {
+						'id': 'popUpAddDictItem',
+						'name': 'popUpAddDictItem',
+						"type": "dialogsm",
+						"type_dialog": "fullScreen",
+						'icon_save': 'undo',
+						'label_save': 'Quay lại',
+						"color": "primary",
+						"template": "popUpAddDictItemTemplate",
+						"events": {
+							popUpAddDictItemClose: function () {
+								/** TODO: Clear form*/
+								var vm = this;
+								this.popUpAddDictItem = false;
+							},
+							popUpAddDictItemSave: function () {
+                console.log("save popup");
+                var vm = this;
+								vm.popUpAddDictItem_hidden_loading = true;
+								setTimeout(
+									function(){ 
+										vm.popUpAddDictItem_hidden_loading = false;
+									}, 
+								500);
+								/** TODO: Save form*/
+								let url = vm.endPoint+ 'dictcollections/' + vm.detailModel.collectionCode + '/dictitems'
+
+								let postData = {
+									itemName: vm.inputItemName,
+									itemCode: vm.inputItemCode,
+									itemNameEN: vm.inputItemNameEN,
+									itemDescription: vm.inputItemDescription,
+									parentItemCode: vm.selectParentItemCode.itemCode,
+									sibling: vm.inputItemSibling,
+									groupCode: vm.selectGroupCode.map(function(arr) {return arr.groupCode}).toString()
+									
+								}
+
+                if(vm.stateActionDictItem === 'POST')	{
+									axios.post(url, postData, config)
+                  .then(function (response) {
+                    console.log('success');
+                    var serializable = vm._mapModelDetail(response.data, false);
+                    vm._inidictItemList();
+                    vm.stateAddDictItem = 1;
+                    setTimeout(	function(){ 
+                      vm.stateAddDictItem = 0;
+                      vm.popUpAddDictItem = false;
+                    },2000);
+                    
+                  })
+                  .catch(function (error) {
+                    console.log(error);
+
+                  });
+								} else if (vm.stateActionDictItem === 'PUT') {
+									axios.put(vm.urlDictItemUpdate, postData, config)
+									.then(function (response) {
+										console.log('success');
+										
+										vm._inidictItemList();
+										var serializable = vm._mapModelDetail(response.data, false);
+										vm.dictItemListItems.unshift(serializable);
+                    vm._inidictItemList();
+										vm.stateAddDictItem = 1;
+										setTimeout(	function(){ 
+											vm.stateAddDictGroup = 0;
+											vm.popUpAddDictGroup = false;
+										},3000);
+										
+									})
+									.catch(function (error) {
+										console.log(error);
+
+									});
+								}
+								
+							}
+						}
+					},
+					'inputItemCode' : { 
+						'id': 'inputItemCode', 
+						'name': 'inputItemCode', 
+						'type': "text", 
+						'label': 'Mã danh mục',
+						'placeholder': '',
+						'required': true
+					},
+					"selectParentItemCode": {
+            
+						'id': 'selectParentItemCode',
+						'name': 'selectParentItemCode',
+						"type": "select",
+						'label': 'Mã danh mục cha',
+						"item_text": "itemName",
+						"item_value": "itemCode",
+						"single_line": false,
+						"hide_selected": true,
+						"chips": false,
+            "deletable_chips": false,
+            "multiple": false,
+						"loading": false,
+            "tags": false,
+						"no_data_text": "Lua chon selected",
+						"items": [],
+						"events": {
+							_selectParentItemCodeData: function(){
+								var vm = this;
+								var url = vm.endPoint + 'dictcollections/'+ vm.detailModel.collectionCode +'/dictitems?sort=sibling&level=0';
+								
+								axios.get(url, config).then(function (response) {
+									var serializable = response.data;
+									if (serializable.hasOwnProperty('data')){
+										vm.popUpAddDictGroup = false;
+										vm.selectParentItemCodeItems = serializable.data;
+										// vm.selectParentItemCodeItems.unshift({
+										// 	'workspaceId': 0,
+										// 	'name': 'Thư mục gốc'
+										// });
+									}
+								})
+								.catch(function (error) {
+									console.log(error);
+									
+								});
+								
+							}
+						}
+					},
+					'inputItemName' : { 
+						'id': 'inputItemName', 
+						'name': 'inputItemName', 
+						'type': "text", 
+						'label': 'Tên danh mục',
+						'placeholder': '',
+						'required': true 
+					},
+					'inputItemNameEN' : { 
+						'id': 'inputItemNameEN', 
+						'name': 'inputItemNameEN', 
+						'type': "text", 
+						'label': 'Tên tiếng anh',
+						'placeholder': ''
+					},
+					"selectGroupCode": {
+						'id': 'selectGroupCode',
+						'name': 'selectGroupCode',
+						"type": "select",
+						'label': 'Chọn nhóm danh mục',
+						"item_text": "groupName",
+						"item_value": "groupCode",
+						"single_line": true,
+						"hide_selected": true,
+            "multiple": true,
+            "tags": false,
+						"chips": true,
+            "deletable_chips": true,
+						"loading": false,
+						"no_data_text": "Lua chon selected",
+            // "onLoad": "_initDocumentCatFilterData",
+            // "onChange": "changeGroupCode",
+            // "onRemove": "filterTableDocCatOnRemove",
+						"items": [],
+						"events": {
+							_selectGroupCodeData: function(){
+								var vm = this;
+								var url = vm.endPoint + 'dictcollections/'+ vm.detailModel.collectionCode +'/dictgroups?sort=groupName&level=0';
+								
+								axios.get(url, config).then(function (response) {
+									var serializable = response.data;
+									if (serializable.hasOwnProperty('data')){
+										vm.selectGroupCodeItems = serializable.data;
+
+									}
+								})
+								.catch(function (error) {
+									console.log(error);
+									
+								});
+								
+              },
+
+						}
+					},
+					'inputItemSibling' : { 
+						'id': 'inputItemSibling', 
+						'name': 'inputItemSibling', 
+						'type': "text", 
+						'label': 'Số thứ tự cùng cấp',
+						'placeholder': ''
+					},
+					'inputItemDescription' : { 
+						'id': 'inputItemDescription', 
+						'name': 'inputItemDescription', 
+						'type': "text",
+						'multi_line': true,
+						'label': 'Mô tả chi tiết',
+						'placeholder': 'Mô tả chi tiết'
+					},
+          
+
+					// tab-bar dictcollection group
+					'inputEditCollectionName' : { 
+						'id': 'inputEditCollectionName', 
+						'name': 'inputEditCollectionName', 
+						'type': "text", 
+						'label': 'Tên danh mục: ',
+						'placeholder': 'Nhập dữ liệu',
+						'mode': 'editable', 
+						'labelClass': 'text-bold', 
+						'updateapi': 'http://congtrinh0209-pc:8081/api/dictcollections', 
+						'success_msg': 'Cập nhật tên danh mục thành công', 
+						'error_msg': 'Cập nhật tên danh mục thất bại', 
+						'call_back_success': 'mySuccesssnackbarCall', 
+						'call_back_error': 'mySuccesssnackbarCall', 
+						'events': { 
+							mySuccesssnackbarCall: function (value) { 
+								console.log(value); 
+							} 
+						}
+					},
+					'inputEditCollectionNameEN' : { 
+						'id': 'inputEditCollectionNameEN', 
+						'name': 'inputEditCollectionNameEN', 
+						'type': "text", 
+						'label': 'Tên tiếng anh: ',
+						'placeholder': 'Nhập dữ liệu',
+						'mode': 'editable', 
+						'labelClass': 'text-bold', 
+						'updateapi': 'http://congtrinh0209-pc:8081/api/dictcollections', 
+						'success_msg': 'Cập nhật tên tiếng anh thành công', 
+						'error_msg': 'Cập nhật tên tiếng anh thất bại', 
+						'call_back_success': 'mySuccesssnackbarCall', 
+						'call_back_error': 'mySuccesssnackbarCall', 
+						'events': { 
+							mySuccesssnackbarCall: function (value) { 
+							console.log(value); 
+							} 
+						}
+					},
+					'inputEditCollectionCode' : { 
+						'id': 'inputEditCollectionCode', 
+						'name': 'inputEditCollectionCode', 
+						'type': "text", 
+						'label': 'Mã danh mục: ',
+						'placeholder': 'Nhập dữ liệu',
+						'mode': 'editable', 
+						'labelClass': 'text-bold', 
+						'updateapi': 'http://congtrinh0209-pc:8081/api/dictcollections', 
+						'success_msg': 'Cập nhật mã danh mục thành công', 
+						'error_msg': 'Cập nhật mã danh mục thất bại', 
+						'call_back_success': 'mySuccesssnackbarCall', 
+						'call_back_error': 'mySuccesssnackbarCall', 
+						'events': { 
+							mySuccesssnackbarCall: function (value) { 
+								console.log(value); 
+							} 
+						}
+					},
+					'inputEditCollectionDescription' : { 
+						'id': 'inputEditCollectionDescription', 
+						'name': 'inputEditCollectionDescription', 
+						'type': "text", 
+						'label': 'Mô tả chi tiết: ',
+						'placeholder': 'Nhập dữ liệu',
+						'mode': 'editable', 
+						'labelClass': 'text-bold', 
+						'updateapi': 'http://congtrinh0209-pc:8081/api/dictcollections', 
+						'success_msg': 'Cập nhật mô tả thành công', 
+						'error_msg': 'Cập nhật mô tả thất bại', 
+						'call_back_success': 'mySuccesssnackbarCall', 
+						'call_back_error': 'mySuccesssnackbarCall', 
+						'events': { 
+							mySuccesssnackbarCall: function (value) { 
+								console.log(value); 
+							} 
+						}
+					},
+					// tab-bar dictcollection FormScript
+					'inputFormScript' : { 
+						'id': 'inputFormScript', 
+						'name': 'inputFormScript', 
+						'type': "text",
+						'multi_line': true,
+						'placeholder': ''
+					},
+				}
+			});
+
+			dictcollectionViewJX._builder('dictcollectionViewJX');
+
+		});
+	</script>
+
+	<style type="text/css" media="screen">
+
+		.header_tools.row-blue {
+			background: #e1e2e1;
+		}
+
+		.row-blue {
+			background-color: #dbebf0;
+			padding-right: 15px;
+			font-family: 'Roboto-Bold';
+			align-items: center;
+		}
+		.row-blue .order-number {
+			float: left;
+			padding: 7px 10px;
+			background-color: #aad0de;
+			color: white;
+			margin-right: 15px;
+		}
+		.row-blue .order-number-detail {
+			align-items: center;
+			padding: 7px 10px;
+		}
+		.row-blue .order-number-detail > span:first-child {
+			color: red;
+		}
+		.row-blue .label-info {
+			color: white;
+			margin-right: 15px;
+		}
+
+		.background-triangle-small, .background-triangle-big {
+			background-color: #0b72ba;
+			display: inline-block;
+			padding: 3px;
+			width: 25px;
+			text-align: right;
+			color: white;
+			position: relative;
+			margin-right: 20px;
+			text-transform: uppercase;
+		}
+		.background-triangle-small:before, .background-triangle-big:before {
+			content: "";
+			position: absolute;
+			top: 1px;
+			-webkit-transform: rotate(45deg);
+			transform: rotate(45deg);
+			right: -4px;
+			border-top: 28px solid #0b72ba;
+			border-left: 28px solid transparent;
+			border-bottom: 28px solid transparent;
+		}
+		.background-triangle-small + div.header_tools, .background-triangle-big + div.header_tools {
+			width: -webkit-calc( 100% - 100% );
+			width: calc(100% - 100% );
+		}
+		.background-triangle-small + div.header_tools .switch-control, .background-triangle-big + div.header_tools .switch-control {
+			margin: 3px 0px 0 20px;
+		}
+		.background-triangle-small i.setting_action_all, .background-triangle-big i.setting_action_all {
+			font-size: 16px;
+			padding: 0 3px 0 9px;
+			cursor: pointer;
+		}
+
+		.background-triangle-big {
+			padding: 10px 5px 10px 15px;
+			width: auto;
+			margin-right: 30px;
+		}
+		.background-triangle-big + div .input-group {
+			min-height: inherit;
+		}
+		.background-triangle-big + div .input-group .input-group__input {
+			padding: 0 16px;
+		}
+		.background-triangle-big + div button {
+			margin-top: 0;
+			margin-bottom: 0;
+			margin-right: 0;
+		}
+
+		.row-blue + .panel {
+			border-radius: 0;
+			margin-bottom: 0;
+		}
+
+		.card {
+			width: 100%;
+			box-shadow: none;
+			border-color: #e1e2e1;
+			margin: 0;
+		}
+
+		.jx-content {
+			width: -webkit-calc(100% - 300px);
+			width: calc(100% - 300px);
+		}
+		.jx-content .jx-content-wrap {
+			width: 100%;
+		}
+		.jx-content .jx-content-wrap .row-header {
+			background-color: #e1e2e1;
+			overflow: hidden;
+			display: -webkit-flex;
+			display: flex;
+			align-items: center;
+			width: 100%;
+		}
+		
+	</style>
+
+</body>
+
+</html>

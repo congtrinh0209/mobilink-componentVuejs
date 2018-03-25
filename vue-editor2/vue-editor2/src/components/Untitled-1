@@ -1,0 +1,7 @@
+for(let key in thisDayEvents[thisDayEvents.length-1]) {
+                  if (key === 'cellIndex') {
+                    thisDayEvents[i].beSeted = true
+                    continue
+                  }
+                  thisDayEvents[i][key] = thisDayEvents[eventLim][key]
+                }

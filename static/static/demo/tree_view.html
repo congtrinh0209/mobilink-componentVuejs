@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>vuejx</title>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
+  <link href="/static/css/main.css" rel="stylesheet">
+  <!-- vuejs -->
+  <script type="text/javascript" src="/static/js/axios.min.js"></script>
+  <script type="text/javascript" src="/static/js/vue.min.js"></script>
+  <script type="text/javascript" src="/static/js/vue-uploader.js"></script>
+  <script type="text/javascript" src="/static/js/vuejx.min.js"></script>
+  <script type="text/javascript" src="/static/js/vue-tree-list.min.js"></script>
+  <script type="text/javascript" src="../js/vue-jx-lib.js?t=12"></script>
+  <script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.js"></script>
+
+  <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+
+</head>
+
+<body>
+
+  <div id="treeview_form_template">
+    <div class="layout row wrap">
+      <div class="flex xs12 sm2"> 
+        <div class="layout row wrap">
+          <div  class="flex xs12 " jx-bind="selectFilterCollection">
+
+          </div>
+        </div>
+      </div>
+      <div class="flex xs12 sm10">
+        <div class="layout row wrap">
+          <div class="flex xs12 sm2" jx-bind="addDictCollectionBTN">
+            
+          </div>
+          <div class="flex xs12 sm4" jx-bind="switchSearch">
+            
+          </div>
+          <div class="flex xs12 sm6" jx-bind="inputSearch">
+            
+          </div>
+        </div>
+        <div class="flex xs12" jx-bind="treeviewForm"> </div>
+      </div>
+    </div>
+  </div>
+  <div id="popUpAddTemplate">
+    <div class="layout row wrap">
+      <div class="flex xs12" jx-bind="groupName"> </div>
+      <div class="flex xs12" jx-bind="groupCode"> </div>
+      <div class="flex xs12" jx-bind="groupNameEN"> </div>
+      <div class="flex xs12" jx-bind="groupDescription"> </div>
+    </div>
+  </div>
+  <div id="popUpAddLeafTemplate">
+    <div class="layout row wrap">
+      <div class="flex xs12 sm6" jx-bind="itemCode"> </div>
+      <div class="flex xs12 sm6" jx-bind="parentItemId"> </div>
+      <div class="flex xs12 sm6" jx-bind="itemName"> </div>
+      <div class="flex xs12 sm6" jx-bind="itemNameEN"> </div>
+      <div class="flex xs12" jx-bind="itemDescription"> </div>
+    </div>
+  </div>
+  <div id="popUpAddCollectionTemplate">
+    <div class="layout row wrap">
+      <div class="flex xs12" jx-bind="collectionCode"> </div>
+      <div class="flex xs12" jx-bind="collectionName"> </div>
+      <div class="flex xs12" jx-bind="collectionNameEN"> </div>
+      <div class="flex xs12" jx-bind="description"> </div>
+    </div>
+  </div>
+  <div id="popUpAddItemGroupTemplate">
+    <div class="layout row wrap">
+      <div class="flex xs12" jx-bind="selectItemGroups"> </div>
+    </div>
+  </div>
+  
+
+  <div id="treeviewForm" class="theme--light">
+      
+  </div>
+  
+
+  <script type="text/javascript">
+
+    document.addEventListener('DOMContentLoaded', function (event) {
+      
+      console.log('DOM fully loaded and parsed');
+      var formInputSlider1 = new VueJX({
+        el: 'treeviewForm',
+        jxtemplate: 'treeview_form_template',
+        pk: 1,
+        groupid: 20143,
+        data: {
+          
+        },
+        schema: {
+          'command': {
+            'id': 'command',
+            'name': 'command',
+            "type": "hidden",
+          },
+          'popUpAdd' : {
+            'id': 'popUpAdd',
+            'name': 'popUpAdd',
+            "type": "dialog",
+            "type_dialog": "fullScreen",
+            "color": "primary",
+            "template": "popUpAddTemplate",
+            "events": {
+              popUpAddClose: function () {
+                console.log("close popup");
+                this.popUpAdd = false;
+              },
+              popUpAddSave: function () {
+                console.log("save popup");
+                var vm = this;
+
+                vm.popUpAdd_hidden_loading = true;
+
+                const config = {};
+                var dataUpdate = {
+                  params: {
+                    groupCode: vm.groupCode,
+                    groupName: vm.groupName,
+                    groupNameEN: vm.groupNameEN,
+                    groupDescription: vm.groupDescription,
+                    dictCollectionId: vm.newdatatree.id
+                  }
+                };
+
+                
+                var url = "http://dev.mobilink.vn/o/vuejx-api-rest/treeview/dictgroup/addnew";
+                if (vm.command === 'update'){
+                  url = "http://dev.mobilink.vn/o/vuejx-api-rest/treeview/dictgroup/updatenew/" + vm.newdatatree.id;
+                }
+
+                axios.get(url, dataUpdate, config).then(function (response) {
+                  var serializable = response.data;
+                  console.log('---> response detail ');
+                  
+                  vm._initTreeView();
+                  if (vm.command === 'add'){
+                    vm.snackbartexttreeviewForm = "Thêm mới nhóm danh mục thành công!";
+                  } else {
+                    vm.snackbartexttreeviewForm = "Cập nhật nhóm danh mục thành công!";
+                  }
+                  
+                  vm.snackbartreeviewForm = true;
+
+                  vm.popUpAdd = false;
+                  vm.popUpAdd_hidden_loading = false;
+                })
+                .catch(function (error) {
+                  console.log(error);
+                  if (vm.command === 'add'){
+                    vm.snackbartexttreeviewForm = "Thêm mới nhóm danh mục thất bại!";
+                  } else {
+                    vm.snackbartexttreeviewForm = "Cập nhật nhóm danh mục thất bại!";
+                  }
+                  
+                  vm.snackbarerortreeviewForm = true;
+                  vm.popUpAdd_hidden_loading = false;
+                })
+
+              }
+            }
+          },
+          'popUpAddLeaf' : {
+            'id': 'popUpAddLeaf',
+            'name': 'popUpAddLeaf',
+            "type": "dialog",
+            "type_dialog": "fullscreen",
+            "color": "primary",
+            "template": "popUpAddLeafTemplate",
+            "events": {
+              popUpAddLeafClose: function () {
+                console.log("close popup");
+                this.popUpAddLeaf = false;
+              },
+              popUpAddLeafSave: function () {
+                var vm = this;
+                vm.popUpAddLeaf_hidden_loading = true;
+                // init editable form call API get detail
+                var paId = 0;
+                if(vm.parentItemId != null && vm.parentItemId.id > 0){
+                  paId =vm.parentItemId.id;
+                }
+                const config = {};
+                var dataUpdate = {
+                  params: {
+                    itemCode: vm.itemCode,
+                    itemName: vm.itemName,
+                    itemNameEN: vm.itemNameEN,
+                    parentItemId: paId,
+                    itemDescription: vm.itemDescription
+                  }
+                };
+
+
+                if(vm.command === 'addroot'){
+                  dataUpdate.params["dictCollectionId"] = vm.newdatatree.id;
+                }
+
+                var url = "http://dev.mobilink.vn/o/vuejx-api-rest/treeview/dictitem/add";
+                if (vm.command === 'update'){
+                  url = "http://dev.mobilink.vn/o/vuejx-api-rest/treeview/dictitem/update/" + vm.newdatatree.id;
+                }
+
+                axios.get(url, dataUpdate, config).then(function (response) {
+                  var serializable = response.data;
+                  console.log('---> response detail ');
+                  
+                  vm._initTreeView();
+                  if (vm.command === 'add'){
+                    vm.snackbartexttreeviewForm = "Thêm mới dữ liệu danh mục thành công!";
+                  } else {
+                    vm.snackbartexttreeviewForm = "Cập nhật dữ liệu danh mục thành công!";
+                  }
+                  
+                  vm.snackbartreeviewForm = true;
+
+                  vm.popUpAddLeaf = false;
+                  vm.popUpAddLeaf_hidden_loading = false;
+                })
+                .catch(function (error) {
+                  console.log(error);
+                  if (vm.command === 'add'){
+                    vm.snackbartexttreeviewForm = "Thêm mới dữ liệu danh mục thất bại!";
+                  } else {
+                    vm.snackbartexttreeviewForm = "Cập nhật dữ liệu danh mục thất bại!";
+                  }
+                  
+                  vm.snackbarerortreeviewForm = true;
+                  vm.popUpAddLeaf_hidden_loading = false;
+                })
+               
+              }
+            }
+          },
+          'popUpAddCollection' : {
+            'id': 'popUpAddCollection',
+            'name': 'popUpAddCollection',
+            "type": "dialog",
+            "type_dialog": "fullscreen",
+            "color": "primary",
+            "template": "popUpAddCollectionTemplate",
+            "events": {
+              popUpAddCollectionClose: function () {
+                console.log("close popup");
+                this.popUpAddCollection = false;
+              },
+              popUpAddCollectionSave: function () {
+                console.log("save popup");
+                var vm = this;
+                vm.popUpAddCollection_hidden_loading = true;
+                const config = {};
+                var dataUpdate = {
+                  params: {
+                    collectionCode: vm.collectionCode,
+                    collectionName: vm.collectionName,
+                    collectionNameEN: vm.collectionNameEN,
+                    description: vm.description
+                  }
+                };
+
+                var url = "http://dev.mobilink.vn/o/vuejx-api-rest/treeview/dictcollection/addnew";
+                if (vm.command === 'update'){
+                  url = "http://dev.mobilink.vn/o/vuejx-api-rest/treeview/dictcollection/updatenew/" + vm.newdatatree.id;
+                }
+                
+                axios.get(url, dataUpdate, config).then(function (response) {
+                  var serializable = response.data;
+                  console.log('---> response detail ');
+                  
+                  vm._initTreeView();
+                  if (vm.command === 'add'){
+                    vm.snackbartexttreeviewForm = "Thêm mới nhóm danh mục thành công!";
+                  } else {
+                    vm.snackbartexttreeviewForm = "Cập nhật nhóm danh mục thành công!";
+                  }
+                  
+                  vm.snackbartreeviewForm = true;
+
+                  vm.popUpAddCollection = false;
+                  vm.popUpAddCollection_hidden_loading = false;
+                })
+                .catch(function (error) {
+                  console.log(error);
+                  vm.snackbartexttreeviewForm = "Thêm nhóm danh mục thất bại!";
+                  
+                  vm.snackbarerortreeviewForm = true;
+                  vm.popUpAddCollection_hidden_loading = false;
+                })
+              }
+            }
+          },
+          'popUpAddItemGroup' : {
+            'id': 'popUpAddItemGroup',
+            'name': 'popUpAddItemGroup',
+            "type": "dialogsm",
+            "color": "primary",
+            "template": "popUpAddItemGroupTemplate",
+            "events": {
+              popUpAddItemGroupClose: function () {
+                console.log("close popup");
+                this.popUpAddItemGroup = false;
+              },
+              popUpAddItemGroupSave: function () {
+                console.log("save popup");
+                var vm = this;
+                vm.popUpAddItemGroup_hidden_loading = true;
+                // init editable form call API get detail
+
+                var ids = [];
+                for(var key in vm.selectItemGroups){
+                  ids.push(vm.selectItemGroups[key].id);
+                }
+                
+                const config = {};
+                var dataUpdate = {
+                  params: {
+                    ids: ids.toString()
+                  }
+                };
+
+                var url = "http://dev.mobilink.vn/o/vuejx-api-rest/treeview/collection/items/dictgroup/" + vm.newdatatree.id;
+                axios.get(url, dataUpdate, config).then(function (response) {
+                  var serializable = response.data;
+                  console.log('---> response detail ');
+                  
+                  vm._initTreeView();
+                  vm.snackbartexttreeviewForm = "Thêm danh mục vào nhóm thành công!";
+                  
+                  vm.snackbartreeviewForm = true;
+
+                  vm.popUpAddItemGroup = false;
+                  vm.popUpAddItemGroup_hidden_loading = false;
+                })
+                .catch(function (error) {
+                  console.log(error);
+                  vm.snackbartexttreeviewForm = "Thêm danh mục vào nhóm thất bại!";
+                  
+                  vm.snackbarerortreeviewForm = true;
+                  vm.popUpAddItemGroup_hidden_loading = false;
+                })
+                
+              }
+            }
+          },
+          "collectionCode": {
+            'id': 'collectionCode',
+            'name': 'collectionCode',
+            "type": "text",
+            'label': 'Mã nhóm danh mục: ',
+            'required': true 
+          },
+          "collectionName": {
+            'id': 'collectionName',
+            'name': 'collectionName',
+            "type": "text",
+            'label': 'Tên nhóm danh mục: ',
+            'required': true 
+          },
+          "collectionNameEN": {
+            'id': 'collectionNameEN',
+            'name': 'collectionNameEN',
+            "type": "text",
+            'label': 'Tên Tên tiếng anh: '
+          },
+          "description": {
+            'id': 'description',
+            'name': 'description',
+            "type": "text",
+            'label': 'Mô tả chi tiết: ', 
+             'multi_line': true, 
+          },
+          "groupName": {
+            'id': 'groupName',
+            'name': 'groupName',
+            "type": "text",
+            'label': 'Tên nhóm: ',
+            'required': true 
+          },
+          "groupCode": {
+            'id': 'groupCode',
+            'name': 'groupCode',
+            "type": "text",
+            'label': 'Mã nhóm: ',
+            'required': true 
+          },
+          "groupNameEN": {
+            'id': 'groupNameEN',
+            'name': 'groupNameEN',
+            "type": "text",
+            'label': 'Tên tiếng anh: '
+          },
+          "groupDescription": {
+            'id': 'groupDescription',
+            'name': 'groupDescription',
+            "type": "text",
+            'label': 'Mô tả chi tiết: ', 
+             'multi_line': true, 
+          },
+          "itemCode": {
+            'id': 'itemCode',
+            'name': 'itemCode',
+            "type": "text",
+            'label': 'Mã danh mục: ',
+            'required': true 
+          },
+          "itemName": {
+            'id': 'itemName',
+            'name': 'itemName',
+            "type": "text",
+            'label': 'Tên danh mục: ',
+            'required': true 
+          },
+          "itemNameEN": {
+            'id': 'itemNameEN',
+            'name': 'itemNameEN',
+            "type": "text",
+            'label': 'Tên tiếng anh: '
+          },
+          "itemDescription": {
+            'id': 'itemDescription',
+            'name': 'itemDescription',
+            "type": "text",
+            'label': 'Mô tả chi tiết: ',
+            'multi_line': true
+          },
+          "parentItemId": {
+            'id': 'parentItemId',
+            'name': 'parentItemId',
+            "type": "select",
+            'label': 'Mã danh mục cha: ',
+            "append_icon":"map",
+            "item_text": "name",
+            "item_value": "id",
+            "no-data-text": "Lua chon selected",
+            "items": [],
+            "onLoad": "_initParentItemId",
+            "events": {
+              _initParentItemId: function(){
+                  this.parentItemIdItems = [ ];
+              }
+            }
+          },
+          "selectItemGroups": {
+            'id': 'selectItemGroups',
+            'name': 'selectItemGroups',
+            "type": "select",
+            'label': 'Lựa chọn dữ liệu danh mục gán vào nhóm: ',
+            "append_icon":"map",
+            "item_text": "name",
+            "item_value": "id",
+            "multiple": true,
+            "tags": false, //custom input not avaliable in select
+            "chips": true,
+            "deletable_chips": true,
+            "hide_selected": true,
+            "loading": false,
+            "no-data-text": "Lua chon selected",
+            "items": [],
+            "onLoad": "_initselectItemGroups",
+            "events": {
+              _initselectItemGroups: function(){
+                  this.selectItemGroupsItems = [];
+                  this.selectItemGroups = [];
+              }
+            }
+          },
+          
+          'treeviewForm' : {
+            'id': 'treeviewForm',
+            'name': 'treeviewForm',
+            "type": "treeview",
+            "newdatatree": "newdatatree",
+            "datatree": "datatree",
+            "onLoad": "_initTreeView",
+            "tree_view_add": "callAddFunc",
+            "tree_view_add_root_leaf": "callAddRootLeafFunc",
+            "tree_view_add_leaf": "callAddLeafFunc",
+            "tree_view_edit_root": "callEditRoot",
+            "tree_view_edit_leaf": "callEditLeafFunc",
+            "tree_view_edit_group": "callEditGroupFunc",
+            "tree_view_pick_leaf": "callPickLeafFunc",
+            "tree_view_remove_leaf": "callRemoveLeaf",
+            "tree_view_remove_root": "callRemoveRoot",
+            "tree_view_remove_group": "callRemoveGroup",
+            "tree_view_remove_item_group": "callRemoveItemGroup",
+            "tree_view_drap_inbox": "callDrapInbox",
+            "events": {
+              callAddFunc: function (value){
+                console.log(value);
+                var vm = this;
+                vm.treeviewFormTitle = "Thêm mới nhóm";
+                vm.newdatatree = value;
+                vm.command = 'add';
+                vm.groupCode = '';
+                vm.groupName = '';
+                vm.groupNameEN = '';
+                vm.groupDescription = '';
+
+                vm.popUpAdd = true;
+
+              },
+              callAddRootLeafFunc: function (value) {
+                var vm = this;
+                vm.treeviewFormTitle = "Thêm dữ liệu danh mục";
+                vm.newdatatree = value;
+                vm.command = 'addroot';
+                vm.itemCode = '';
+                vm.itemName = '';
+                vm.itemNameEN = '';
+                vm.itemDescription = '';
+
+                // init editable form call API get detail
+                const config = {}
+                var url = "http://dev.mobilink.vn/o/vuejx-api-rest/treeview/collection/items/" + value.id;
+                axios.get(url, {}, config).then(function (response) {
+                  var serializable = response.data;
+                  vm.parentItemIdItems = serializable;
+                    
+                })
+                .catch(function (error) {
+                  console.log(error);
+                })
+                
+                vm.popUpAddLeaf = true;
+              },
+              callAddLeafFunc: function (value){
+                var vm = this;
+                vm.command = 'add';
+                vm.newdatatree = value;
+                // init parentItemIdItems
+                vm.parentItemIdItems = [];
+                vm.parentItemIdItems.push({name: value.name, id: value.id});
+                vm.parentItemId = {name: value.name, id: value.id};
+
+                vm.itemCode = "";
+                vm.itemName = "";
+                vm.itemNameEN = "";
+                vm.itemDescription = "";
+                
+                this.treeviewFormTitle = "Thêm mới dữ liệu danh mục";
+                this.popUpAddLeaf = true;
+              },
+              callEditRoot: function (value){
+                console.log(value);
+                var vm = this;
+                vm.newdatatree = value;
+                vm.command = 'update';
+
+                // init editable form call API get detail
+                const config = {}
+                var url = "http://dev.mobilink.vn/o/vuejx-api-rest/treeview/dictcollection/detail/" + value.id;
+                axios.get(url, {}, config).then(function (response) {
+                  var serializable = response.data;
+                  vm.collectionCode = serializable.collectionCode;
+                  vm.collectionName = serializable.collectionName;
+                  vm.collectionNameEN = serializable.collectionNameEN;
+                  vm.description = serializable.description;
+                  
+                })
+                .catch(function (error) {
+                  console.log(error);
+                })
+
+                this.treeviewFormTitle = "Cập nhật thông tin nhóm danh mục";
+                this.popUpAddCollection = true;
+              },
+              callEditGroupFunc: function (value){
+                console.log(value);
+                var vm = this;
+                vm.newdatatree = value;
+                vm.command = 'update';
+
+                // init editable form call API get detail
+                const config = {}
+                var url = "http://dev.mobilink.vn/o/vuejx-api-rest/treeview/dictgroup/detail/" + value.id;
+                axios.get(url, {}, config).then(function (response) {
+                  var serializable = response.data;
+                  vm.groupCode = serializable.groupCode;
+                  vm.groupName = serializable.groupName;
+                  vm.groupNameEN = serializable.groupNameEN;
+                  vm.groupDescription = serializable.groupDescription;
+                  
+                })
+                .catch(function (error) {
+                  console.log(error);
+                })
+
+                vm.treeviewFormTitle = "Cập nhật thông tin nhóm";
+                vm.popUpAdd = true;
+              },
+              callPickLeafFunc: function (value){
+                console.log(value);
+
+                var vm = this;
+                vm.newdatatree = value;
+                vm.selectItemGroups = [];
+                for(var key in vm.newdatatree.children){
+                  vm.selectItemGroups.push({
+                    id: vm.newdatatree.children[key].id,
+                    name: vm.newdatatree.children[key].name
+                  });
+                }
+                // init editable form call API get detail
+                const config = {}
+                var url = "http://dev.mobilink.vn/o/vuejx-api-rest/treeview/collection/items/" + value.pid;
+                axios.get(url, {}, config).then(function (response) {
+                  var serializable = response.data;
+                  vm.selectItemGroupsItems = serializable;
+                    
+                })
+                .catch(function (error) {
+                  console.log(error);
+                })
+
+                this.treeviewFormTitle = "Chọn dữ liệu danh mục vào nhóm";
+                this.popUpAddItemGroup = true;
+              },
+              callDrapInbox: function (value){
+                var vm = this;
+                console.log(value);
+                const config = {};
+                var dataUpdate = {
+                  params: {
+                    dictItemId: value.idFrom
+                  }
+                };
+
+                var url = "http://dev.mobilink.vn/o/vuejx-api-rest/treeview/dictgroup/add/" + value.id;
+
+                axios.get(url, dataUpdate, config).then(function (response) {
+                  var serializable = response.data;
+                  console.log('---> response detail ');
+                  
+                  vm._initTreeView();
+                  vm.snackbartexttreeviewForm = "Thêm danh mục vào nhóm thành công!";
+                  
+                  vm.snackbartreeviewForm = true;
+
+                  vm.popUpAddLeaf = false;
+                })
+                .catch(function (error) {
+                  console.log(error);
+                  vm.snackbartexttreeviewForm = "Thêm danh mục vào nhóm thất bại!";
+                  
+                  vm.snackbarerortreeviewForm = true;
+                })
+              },
+              callEditLeafFunc: function (value){
+                var vm = this;
+                vm.command = 'update';
+                vm.newdatatree = value;
+                // init parentItemIdItems
+                vm.parentItemIdItems = [];
+                var parentChilds = [];
+                parentChilds = value.parent.children;
+                
+                for (var key in parentChilds){
+                  
+                  if(parentChilds[key].ptype > 1 && parentChilds[key].id !== value.id){
+                    vm.parentItemIdItems.push({
+                      name: parentChilds[key].name,
+                      id: parentChilds[key].id
+                    });
+                  }
+
+                }
+                // init editable form call API get detail
+                const config = {}
+                var url = "http://dev.mobilink.vn/o/vuejx-api-rest/treeview/dictitem/" + value.id;
+                axios.get(url, {}, config).then(function (response) {
+                  var serializable = response.data;
+                  vm.itemCode = serializable.itemCode;
+                  vm.itemName = serializable.itemName;
+                  vm.itemNameEN = serializable.itemNameEN;
+                  vm.itemDescription = serializable.itemDescription;
+                  
+                  vm.parentItemIdItems.push({name: "No parent selected", id: 0});
+                  if(serializable.parentItem != null){
+                    vm.parentItemIdItems.push(serializable.parentItem);
+                  }
+                  
+                  vm.parentItemId = serializable.parentItem;
+                  
+                })
+                .catch(function (error) {
+                  console.log(error);
+                })
+
+                vm.treeviewFormTitle = "Cập nhật thông tin danh mục";
+                vm.popUpAddLeaf = true;
+              },
+              callRemoveLeaf: function (value){
+                var vm = this;
+                vm.$dialog.confirm('Bạn có muôn xoá danh mục '+ value.name +' này?.', {
+                  loader: true,
+                  okText: 'Đồng ý',
+                  cancelText: 'Quay lại',
+                  animation: 'fade'
+                })
+                .then((dialog) => {
+                    const config = { }
+                    var url ="http://dev.mobilink.vn/o/vuejx-api-rest/treeview/item/"+value.id;
+                    axios.get(url, { }, config).then(function (response) {
+                      console.log('---> response delete ');
+                      value.remove();
+                      vm.snackbartexttreeviewForm = "Xoá danh mục " + value.name + " thành công!";
+                      vm.snackbartreeviewForm = true;
+                      dialog.close();
+                    })
+                    .catch(function (error) {
+                      console.log(error);
+                      vm.snackbartexttreeviewForm = "Xoá danh mục " + value.name + " thất bại!";
+                      vm.snackbarerortreeviewForm = true;
+                      dialog.close();
+                    })
+                })
+                .catch(() => {
+                  console.log('Delete aborted')
+                })
+              },
+              callRemoveRoot: function (value){
+                var vm = this;
+                vm.$dialog.confirm('Bạn có muôn xoá nhóm danh mục '+ value.name +' này?.', {
+                  loader: true,
+                  okText: 'Đồng ý',
+                  cancelText: 'Quay lại',
+                  animation: 'fade'
+                })
+                .then((dialog) => {
+                    const config = { }
+                    var url ="http://dev.mobilink.vn/o/vuejx-api-rest/treeview/collection/"+value.id;
+                    axios.get(url, { }, config).then(function (response) {
+                      console.log('---> response delete ');
+                      value.remove();
+                      vm.snackbartexttreeviewForm = "Xoá nhóm danh mục " + value.name + " thành công!";
+                      vm.snackbartreeviewForm = true;
+                      dialog.close();
+                    })
+                    .catch(function (error) {
+                      console.log(error);
+                      vm.snackbartexttreeviewForm = "Xoá nhóm danh mục " + value.name + " thất bại!";
+                      vm.snackbarerortreeviewForm = true;
+                      dialog.close();
+                    })
+                })
+                .catch(() => {
+                  console.log('Delete aborted')
+                })
+              },
+              callRemoveGroup: function (value){
+                var vm = this;
+                vm.$dialog.confirm('Bạn có muôn xoá nhóm '+ value.name +' này?.', {
+                  loader: true,
+                  okText: 'Đồng ý',
+                  cancelText: 'Quay lại',
+                  animation: 'fade'
+                })
+                .then((dialog) => {
+                    const config = { }
+                    var url ="http://dev.mobilink.vn/o/vuejx-api-rest/treeview/group/"+value.id;
+                    axios.get(url, { }, config).then(function (response) {
+                      console.log('---> response delete ');
+                      value.remove();
+                      vm.snackbartexttreeviewForm = "Xoá nhóm " + value.name + " thành công!";
+                      vm.snackbartreeviewForm = true;
+                      dialog.close();
+                    })
+                    .catch(function (error) {
+                      console.log(error);
+                      vm.snackbartexttreeviewForm = "Xoá nhóm " + value.name + " thất bại!";
+                      vm.snackbarerortreeviewForm = true;
+                      dialog.close();
+                    })
+                })
+                .catch(() => {
+                  console.log('Delete aborted')
+                })
+              },
+              callRemoveItemGroup: function (value){
+                var vm = this;
+                vm.$dialog.confirm('Bạn có muôn xoá danh mục '+ value.name +' trong nhóm này?.', {
+                  loader: true,
+                  okText: 'Đồng ý',
+                  cancelText: 'Quay lại',
+                  animation: 'fade'
+                })
+                .then((dialog) => {
+                    const config = { }
+                    var url ="http://dev.mobilink.vn/o/vuejx-api-rest/treeview/dictgroup/item/"+value.id+"/"+value.pid;
+                    axios.get(url, { }, config).then(function (response) {
+                      console.log('---> response delete ');
+                      value.remove();
+                      vm.snackbartexttreeviewForm = "Xoá danh mục trong nhóm " + value.name + " thành công!";
+                      vm.snackbartreeviewForm = true;
+                      dialog.close();
+                    })
+                    .catch(function (error) {
+                      console.log(error);
+                      vm.snackbartexttreeviewForm = "Xoá danh mục trong nhóm " + value.name + " thất bại!";
+                      vm.snackbarerortreeviewForm = true;
+                      dialog.close();
+                    })
+                })
+                .catch(() => {
+                  console.log('Delete aborted')
+                })
+              },
+              _initTreeView: function () {
+                this.newdatatree = {};
+                const config = { };
+
+                var type = [];
+                for(var key in this.switchSearch){
+                  type.push(this.switchSearch[key]);
+                }
+                
+                var dataQuery = {
+                  params: {
+                    type: type.toString()
+                  }
+                };
+
+                var url ="http://dev.mobilink.vn/o/vuejx-api-rest/treeview/tree";
+                axios.get(url, dataQuery, config).then((response) => {
+                  this.datatree = new VueTreeList.Tree(response.data);
+                }).catch(error => { console.log(error); });
+
+              }
+            }
+          },
+          "switchSearch": { //search 
+            "id": "switchSearch",
+            "name": "switchSearch",
+            "type": "switch",
+            "label": "feel good !: ",
+            "labelClass": "xs1 hidden",
+            "controlClass": "xs12 my-2",
+            "switch_inline": true,
+            "tabindex": 0,
+            "items": [
+              {
+                "label": "Nhóm ",
+                "color": "green darken-2",
+                "value": "0",
+              },
+              {
+                "label": "Danh mục",
+                "color": "blue darken-2",
+                "value": "1",
+              }
+            ],
+            "onLoad": "_initswitchSearch",
+            "onChange": "changeswitchSearch",
+            "events": {
+              _initswitchSearch: function(){
+                
+                  this.switchSearch = [ "0", "1" ];
+
+              },
+              changeswitchSearch: function(){
+                var vm = this;
+                vm._initTreeView();
+              }
+            }
+          },
+          'inputSearch' : { 
+             'id': 'inputSearch', 
+             'name': 'inputSearch', 
+             'type': "text", 
+             'placeholder': 'Tìm kiếm theo từ khoá...',
+             'solo': true,
+             "append_icon": "search" 
+          },
+          'addDictCollectionBTN' : { 
+             'id': 'addDictCollectionBTN', 
+             'name': 'addDictCollectionBTN', 
+             'type': "button",
+             'label': "Collection",
+             'onClick': "addDictCollectionFnc",
+             'color': "green darken-2",
+             "cssClass": "white--text mx-0",
+             "right_icon": "add_circle",
+             "events": {
+              addDictCollectionFnc: function () {
+                var vm = this;
+                vm.command = 'add';
+
+                vm.collectionCode = '';
+                vm.collectionName = '';
+                vm.collectionNameEN = '';
+                vm.description = '';
+
+                this.treeviewFormTitle = "Thêm mới nhóm danh mục";
+                this.popUpAddCollection = true;
+              }
+             }
+          },
+          "selectFilterCollection": {
+            'id': 'selectFilterCollection',
+            'name': 'selectFilterCollection',
+            "type": "select",
+            "item_text": "name",
+            "item_value": "id",
+            "multiple": true,
+            "chips": true,
+            "deletable_chips": true,
+            "hide_selected": true,
+            "loading": false,
+            "items": [],
+            "filter": true,
+            "onLoad": "_initselectItemGroups",
+            "events": {
+              _initselectItemGroups: function(){
+                  var vm = this;
+
+                  var url ="http://dev.mobilink.vn/o/vuejx-api-rest/treeview/collectios";
+                  axios.get(url).then((response) => {
+                    console.log(response.data);
+                    vm.selectFilterCollectionItems = response.data;
+                    vm.selectFilterCollection = response.data;
+                  }).catch(error => { console.log(error); });
+                  
+                  console.log(vm.selectFilterCollection);
+              }
+            }
+          },
+          
+        }
+      });
+
+      formInputSlider1._builder('treeviewForm123');
+
+    });
+
+  </script>
+
+<style>
+
+.primary {
+    background-color: #1976D2 !important;
+    border-color: #1976D2 !important;
+}
+.dialog .theme--dark .toolbar__title {
+  color: #fff;
+  font-weight: bold;
+}
+.primary{background-color:#1976D2 !important;border-color:#1976D2 !important;}.primary--text{color:#1976D2 !important;}.secondary{background-color:#424242 !important;border-color:#424242 !important;}.secondary--text{color:#424242 !important;}.accent{background-color:#82B1FF !important;border-color:#82B1FF !important;}.accent--text{color:#82B1FF !important;}.error{background-color:#FF5252 !important;border-color:#FF5252 !important;}.error--text{color:#FF5252 !important;}.info{background-color:#2196F3 !important;border-color:#2196F3 !important;}.info--text{color:#2196F3 !important;}.success{background-color:#4CAF50 !important;border-color:#4CAF50 !important;}.success--text{color:#4CAF50 !important;}.warning{background-color:#FFC107 !important;border-color:#FFC107 !important;}.warning--text{color:#FFC107 !important;}.application a{color: #1976D2;}
+html .flex {
+    padding: 0 15px;
+}
+
+html .input-group.input-group--solo {
+    background: transparent !important;
+    box-shadow: none !important;
+}
+.editable-wrap-filter{
+    min-width: 200px;
+}
+.editable-wrap-filter .input-group--select__autocomplete{
+    display: none !important;
+    pointer-events: none;
+}
+.editable-wrap-filter .input-group__input i.icon{
+    display: none !important;
+    pointer-events: none;
+}
+.editable-wrap-filter {
+    pointer-events: none;
+}
+.editable-wrap-filter .chip {
+    padding-right: 5px;
+}
+.editable-wrap-filter .input-group__details{
+    display: none;
+}
+
+
+
+.star-rating.rating_process{
+    opacity: 0.2;
+    pointer-events: none;
+  }
+</style>
+ <style>
+   .tree-node{
+    background-color: #ecf0f1;
+   }
+   .tree-node .operation{
+    position: absolute;
+    right: 15px;
+    margin-left: 0px !important;
+    border-left: 5px solid #fff;
+    min-width: 180px;
+    text-align: right;
+   }
+   
+   .tree-parent{
+    position: relative;
+  }
+  .tree-parent::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -20px;
+    width: 1px;
+    background-color: #ccc;
+  }
+  .tree-parent .tree-node {
+    position: relative;
+  }
+  .tree-parent .tree-node::before{
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -20px;
+    height: 1px;
+    width: 20px;
+    background-color: #ccc;
+  }
+
+  .caret-flat .btn{
+    height: 20px !important;
+    width: 20px !important;
+    margin: 0px;
+    margin-right: 5px;
+  }
+  .caret-flat .btn i.material-icons{
+    font-size: 25px;
+  }
+  html .tree-parent:first-child{
+    display: block !important;
+  }
+
+
+  .container {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 3px rgba(10,10,10,.1), 0 0 0 1px rgba(10,10,10,.1);
+    padding: 1.25rem;
+    max-width: 1024px !important;
+    background-color: #fff;
+    margin: 1rem auto 0 auto;
+  }
+
+  .wrapper {
+      min-height: 100vh;
+      padding: 0 0.5rem;
+  }
+
+  @media screen and (min-width: 768px) {
+      .control:not(:last-child) {
+          margin-bottom: 0.2rem;
+      }
+
+      .is-full {
+          flex: 1;
+      }
+
+      .is-horizontal {
+          display: flex;
+          align-items: center;
+      }
+
+      .label {
+          margin-right: 1rem;
+      }
+  }
+
+
+
+  @media all and (max-width: 375px) {
+      .calendar-wrapper {
+          width: 120%;
+          max-width: 120%;
+          left: 50%;
+          transform: translateX(-50%);
+      }
+  }
+
+  .hidden {
+  display: none !important;
+}
+
+</style>
+</body>
+
+</html>

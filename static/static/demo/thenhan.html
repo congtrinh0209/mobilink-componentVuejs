@@ -1,0 +1,543 @@
+
+
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Thẻ nhãn</title>
+        <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
+        <link href="../css/main.css" rel="stylesheet">
+        <!-- vuejs -->
+        <script type="text/javascript" src="../js/axios.min.js"></script>
+        <script type="text/javascript" src="../js/vue.min.js"></script>
+        <script type="text/javascript" src="../js/vue-jx-lib.js?t=12"></script>
+        <script type="text/javascript" src="../js/vuejx.min.js"></script>
+        <script type="text/javascript" src="../js/vuejx_dev.js"></script>
+        <script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.js"></script>
+        <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
+        <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+
+    <body>
+
+        <!-- TODO Template Xây dựng navigation -->
+        <div id="label_template" class="hidden">
+            <div class="layout row wrap">
+                <!-- <div class="flex xs12"> -->
+                    <v-btn class="flex xs12" color="default" v-on:click.native="label_add_new(labelId)"><v-icon>local_offer</v-icon>Tổng số {{length}} nhãn <v-icon>add_circle</v-icon></v-btn>
+                <!-- </div> -->
+                <div class="flex xs12" jx-bind="label_search"></div>
+                <div class="flex xs12">
+                    <div jx-bind="label_list" id="label_list"></div>
+                </div>
+                
+            </div>
+
+        </div>
+
+        <!-- TODO paymentViewJX template one page -->
+        <div id="label_detail_template" class="hidden">
+
+            <div class="jx-content-wrap" style="background: #fff">
+
+                    <v-slide-x-transition>
+                        <div>
+                            <div class="flex xs12">
+                                <h2><b>CHI TIẾT THẺ NHÃN</b></h2>
+                                <br>
+                            </div>
+                            
+                            <v-layout row wrap>
+                                <v-flex xs3>
+                                    <b>Tên thẻ nhãn: </b>
+                                </v-flex>
+                                <v-flex xs9>
+                                    <div jx-bind="label_input_name"></div>
+                                </v-flex>
+                                <div class="hr-line-dashed flex xs12"></div>
+                                <v-flex xs3>
+                                    <b>Phạm vi: </b>
+                                </v-flex>
+                                <v-flex xs9>
+                                   <select v-model="scope" class="form-control">
+                                        <option v-for="option in options" v-bind:value="option.value">
+                                            {{ option.text }}
+                                        </option>
+                                    </select>
+                                </v-flex>
+                                <div class="hr-line-dashed flex xs12"></div>
+                                <v-flex xs3>
+                                    <b>Màu sắc: </b>
+                                </v-flex>
+                                <v-flex xs9>
+                                    <jx-mobilink-color v-model="color"></jx-mobilink-color>
+                                </v-flex>
+                            </v-layout>
+                            <div class="flex xs12" style="margin-top: 10px;">
+                                <v-btn color="info" class="right" v-on:click.native="toUpdate(labelId)"><v-icon>check_circle</v-icon> Xác nhận</v-btn>
+                            </div>
+                        </div>
+                    </v-slide-x-transition>
+
+            </div>
+        </div>
+
+        <div id="label_list_template" class="hidden">
+            <template slot="items" slot-scope="props">
+                <tr v-on:click.prevent.stop="toDetailLabel(props.item,props.index)" v-bind:class="{'active': select===props.item.labelId}">
+                    <td>
+                        <v-icon style="font-size: 40px">local_offer</v-icon>
+                    </td>
+                    <td v-bind:style="{background: color===props.item.color}" style="padding-top: 10px;padding-right: 0px;padding-left: 0px;">
+                        <p style="margin-bottom: 10px!important;text-overflow: ellipsis;"><b>{{ props.item.name }}</b> </p>
+                        <p v-bind:style="{background: props.item.color}" style="margin-bottom: 10px!important;text-overflow: ellipsis;border-radius: 20px;padding: 5px 15px;width: 95px;"><b>{{ props.item.color }}</b> </p>
+                    </td>
+                    <td>
+                        <v-icon v-if="label_icon_check==props.index" color="black" style="font-weight: 600;line-height: 30px">check</v-icon>
+                        <v-dialog v-model="dialog" persistent max-width="290">
+                            <v-icon color="red" style="font-weight: 600" slot="activator">clear</v-icon>
+                            <v-card>
+                                <v-card-title class="headline">
+                                    Cảnh báo
+                                    <hr>
+                                </v-card-title>
+                                <v-card-text>
+                                    Bạn có chắc xóa bản ghi này?
+                                </v-card-text>
+                                <v-card-actions>
+                                    <v-spacer></v-spacer>
+                                    <v-btn color="green darken-1" flat v-on:click.native="dialog = false">Bỏ qua</v-btn>
+                                    <v-btn color="green darken-1" flat v-on:click.native="toDelete(labelId)">Đồng ý</v-btn>
+                                </v-card-actions>
+                            </v-card>
+                        </v-dialog>
+                    </td>
+                </tr>
+                
+            </template>
+            
+        </div>
+
+        <div id="khoTuLieuViewJX"></div>
+
+        <script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function (event) {
+
+    var khoTuLieuViewJX = new VueJX({
+        el: 'khoTuLieuViewJX',
+        pk: 1,
+        groupid: 20147,
+        data: {
+            detailModel: {
+                labelId:'',
+                createDate:'',
+                modifiedDate:'',
+                name:'',
+                color:'',
+                scope:'',
+            },
+            keywordsSearchable: false,
+            test: false,
+            showContact: false,
+            showDate: false,
+            currentIndex: -1,
+            kho_title_table: 'Danh sach',
+            workspaceTree: [],
+            valid: false,
+            currentDetailPage: 0,
+            className: 'workspace_classssssss',
+            endPoint: 'http://127.0.0.1:8081/api/',
+            emailBody:'',
+            updateIndex:'default',
+            select:'',
+            options: [
+                { text: 'Tất cả', value: '' },
+                { text: 'Hoạt động', value: 'activity' },
+                { text: 'Hồ sơ', value: 'document' }
+            ],
+            scope:'',
+            search_test:'APPLICANT-01',
+            color:'',
+            length:'',
+            label_icon_check:'',
+            dialog: false,
+            labelId:'',
+        },
+        schema: {
+            /** TODO menu filter */
+            'navigationFilter': {
+                'id': 'navigationFilter',
+                'name': 'navigationFilter',
+                'type': 'navigation',
+                'template': 'label_template',
+                'template_content': 'label_detail_template'          
+            },
+
+            'label_search':{
+                'id': 'label_search',
+                'name': 'label_search',
+                'type': 'text',
+                // 'item_key': 'notificationType',
+                // 'headers': 'headers',
+                // 'pagging': '_paggingDanhSachHoSo',
+                // 'next': '_nextDanhSachHoSo',
+                'cssClass': 'pt-1',
+                'placeholder': 'Tên nhãn',
+                'solo': true,
+                // 'onLoad':'_initNotificationList',
+                'append_icon': 'search',
+                'onKeyup': 'filterTableKeywords($event)',
+                'events': {
+                    filterTableKeywords: function (event) {
+                        var vm = this;
+                        if (event.keyCode === 13 || vm.notification_search.length > 3 || vm.notification_search.length === 0) {
+                            vm._initNotificationList(false);
+                        }
+                    }
+                }
+            },
+            'label_list':{
+                'id': 'label_list',
+                'name': 'label_list',
+                'type': 'table',
+                'child_items': 'items',
+                'cssClass': 'table_history_style',
+                'hide_headers': true,
+                'table_search': 'label_search',
+                // 'select_all': true,
+                'headers':'headers',
+                'item_key': 'labelId',
+                'template': 'label_list_template',
+                'pagging': '_paggingNotification_list',
+                'next': '_nextNotification_list',
+                'previous': '_previousNotification_list',
+                'onLoad': '_initNotificationList',
+                'events':{
+                    _initNotificationList:function(append){
+                        var vm = this;
+                        this.label_listheaders= [
+                            {
+                                text: 'icon',
+                                align: 'left',
+                                sortable: false,
+                                value: 'icon'
+                            },
+                            {
+                                text: 'name',
+                                align: 'left',
+                                // sortable: true,
+                                value: 'name'
+                            }
+                        ];
+                        var paramsDocFileBuilder = {
+                            // keyword: 'APPLICANT-01',
+                            // notificationType: vm.notificationTypeFilter,
+                            // start: vm.notification_listpage * 6 - 6,
+                            // end: vm.notification_listpage * 6,
+                            // owner:vm.notificationType
+                        };
+
+                        const configDocFile = {
+                            params: paramsDocFileBuilder,
+                            headers: {}
+                        };
+                        var url = 'http://desktop-1guao2r:8081/api/' + 'labels';
+                        axios.get(url, configDocFile).then(function (response) {
+                            var serializable = response.data;
+                            vm.label_listItems = serializable.data;
+                            vm.select=vm.label_listItems[0].labelId;
+                            vm.label_input_name=vm.label_listItems[0].name;
+                            vm.color=vm.label_listItems[0].color;
+                            vm.length=vm.label_listItems.length;
+                            vm.scope=vm.label_listItems[0].scope;
+                            vm.labelId=vm.label_listItems[0].labelId;
+                            // console.log("aaaaa",vm.id);
+                        })
+                                .catch(function (error) {
+                                    vm.label_listItems=[];
+                                });
+                        return false;
+                    },
+                    toDetailLabel:function(item,index)
+                    {
+                        console.log('a',item);
+                        var vm=this;
+                        vm.label_icon_check=index;
+                        vm.detailModel=item;
+                        vm.label_input_name=item.name;
+                        vm.select=item.labelId;
+                        vm.color=item.color;
+                        vm.scope=item.scope;
+                        vm.labelId=item.labelId;
+
+                        // console.log("aaaaa",vm.id+1);
+                    },
+                    toDelete:function(labelId)
+                    {
+                        var vm=this;
+                        // console.log("aa",index);
+                        var url = 'http://desktop-1guao2r:8081/api/' + "labels/" + vm.labelId;
+                        axios.delete(url, {headers: {groupId: 20147}}).then(function (response) {
+                            vm.label_listItems.splice(index, 1);
+                            vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thành công!";
+                            vm.snackbarkhoTuLieuViewJX = true;
+                            vm.loadingkhoTuLieuViewJX = false;
+                            vm.dialog = false;
+                        })
+                        .catch(function (error) {
+                            vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thất bại!";
+                            vm.snackbarkhoTuLieuViewJX = true;
+                            vm.loadingkhoTuLieuViewJX = false;
+                            vm.dialog = false;
+                        });
+
+                        dialog.close();
+                        return false;
+                    },
+                    label_add_new:function(label_input_name)
+                    {
+                        var vm=this;
+                        vm.label_input_name='';
+                        vm.scope='';
+                        vm.color='';
+                        vm.select='';
+                        vm.labelId='';
+                    },
+                    toUpdate:function(labelId)
+                    {
+
+                        var vm=this;
+                        const config = {headers: {
+                                groupId: 20147
+                        }};
+                        
+                        var postData = new URLSearchParams();
+
+                        postData.append('name', vm.label_input_name);
+                        postData.append('color', vm.color.hex);
+                        postData.append('scope', vm.scope);
+                        
+
+                        if(labelId)
+                        {
+                            url = "http://desktop-1guao2r:8081/api" + "/labels/" + vm.labelId;
+                            axios.put(url, postData, config).then(function (response) {
+                            var serializable = response.data;
+                            vm.snackbartextkhoTuLieuViewJX = "Cập nhật dữ liệu thành công!";
+                            vm.snackbarkhoTuLieuViewJX = true;
+                            vm.loadingkhoTuLieuViewJX = false;
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                                vm.snackbartextkhoTuLieuViewJX = "Cập nhật dữ liệu thất bại!";
+                                vm.snackbarerorkhoTuLieuViewJX = true;
+                            });
+                        } else {
+                            url = "http://desktop-1guao2r:8081/api" + "/labels";
+                            axios.post(url, postData, config).then(function (response) {
+                            var serializable = response.data;
+                            vm.snackbartextkhoTuLieuViewJX = "Cập nhật dữ liệu thành công!";
+                            vm.snackbarkhoTuLieuViewJX = true;
+                            vm.loadingkhoTuLieuViewJX = false;
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                                vm.snackbartextkhoTuLieuViewJX = "Cập nhật dữ liệu thất bại!";
+                                vm.snackbarerorkhoTuLieuViewJX = true;
+                            });
+                        }
+                        
+                        
+                        
+                    },
+                    _paggingNotification_list: function() {
+                        this._initNotificationList(false);
+                    },
+                    _nextNotification_list: function() {
+                        
+                    },
+                    _previousNotification_list: function() {
+                        
+                    }
+                }
+            },
+            // "notificationTypeFilter": {
+            //     'id': 'notificationTypeFilter',
+            //     'name': 'notificationTypeFilter',
+            //     "type": "text",
+            //     'label': 'Nhập mã tiếp nhận ',
+            //     "onChange": "_filterDanhSachHoSoOnchange3",
+            //     "events": {
+            //         _filterDanhSachHoSoOnchange3: function(){
+            //             var vm = this;
+            //             vm._initNotificationList(false);
+            //         }
+            //     }
+            // },
+            'label_input_name':{
+                'id': 'label_input_name',
+                'name': 'label_input_name',
+                'type': 'text',
+                // 'required': true,
+                'placeholder': 'Tên thẻ nhãn'
+            },
+        }
+    });
+
+    khoTuLieuViewJX._builder('khoTuLieuViewJX');
+
+});
+        </script>
+
+
+        <style type="text/css" media="screen">
+            /*#notification_list>.table>td
+            {
+                background: #red!important;
+            }*/
+            /*.haha:nth-child(1) {
+                background: #eee;
+            }*/
+            .hr-line-dashed
+            {
+                margin: 10px 0 15px;
+                border-top: 1px dashed #e7eaec;
+                clear: both;
+            }
+            .form-control
+            {
+                width: 100%;
+                height: 34px;
+                padding: 6px 12px;
+                font-size: 14px;
+                line-height: 1.42857;
+                color: #555555;
+                background-color: #fff;
+                background-image: none;
+                border: 1px solid #ccc;
+                border-width: 1px 1px 1px 1px;
+                border-radius: 0px;
+            }
+            .active
+            {
+                background: #eee;
+            }
+            .header_tools.row-blue {
+                background: #e1e2e1;
+            }
+
+            .row-blue {
+                background-color: #dbebf0;
+                padding-right: 15px;
+                font-family: 'Roboto-Bold';
+                align-items: center;
+            }
+            .row-blue .order-number {
+                float: left;
+                padding: 7px 10px;
+                background-color: #aad0de;
+                color: white;
+                margin-right: 15px;
+            }
+            .row-blue .order-number-detail {
+                align-items: center;
+                padding: 7px 10px;
+            }
+            .row-blue .order-number-detail > span:first-child {
+                color: red;
+            }
+            .row-blue .label-info {
+                color: white;
+                margin-right: 15px;
+            }
+
+            .background-triangle-small, .background-triangle-big {
+                background-color: #0b72ba;
+                display: inline-block;
+                padding: 3px;
+                width: 25px;
+                text-align: right;
+                color: white;
+                position: relative;
+                margin-right: 20px;
+                text-transform: uppercase;
+            }
+            .background-triangle-small:before, .background-triangle-big:before {
+                content: "";
+                position: absolute;
+                top: 1px;
+                -webkit-transform: rotate(45deg);
+                transform: rotate(45deg);
+                right: -4px;
+                border-top: 28px solid #0b72ba;
+                border-left: 28px solid transparent;
+                border-bottom: 28px solid transparent;
+            }
+            .background-triangle-small + div.header_tools, .background-triangle-big + div.header_tools {
+                width: -webkit-calc( 100% - 100% );
+                width: calc(100% - 100% );
+            }
+            .background-triangle-small + div.header_tools .switch-control, .background-triangle-big + div.header_tools .switch-control {
+                margin: 3px 0px 0 20px;
+            }
+            .background-triangle-small i.setting_action_all, .background-triangle-big i.setting_action_all {
+                font-size: 16px;
+                padding: 0 3px 0 9px;
+                cursor: pointer;
+            }
+
+            .background-triangle-big {
+                padding: 10px 5px 10px 15px;
+                width: auto;
+                margin-right: 30px;
+            }
+            .background-triangle-big + div .input-group {
+                min-height: inherit;
+            }
+            .background-triangle-big + div .input-group .input-group__input {
+                padding: 0 16px;
+            }
+            .background-triangle-big + div button {
+                margin-top: 0;
+                margin-bottom: 0;
+                margin-right: 0;
+            }
+
+            .row-blue + .panel {
+                border-radius: 0;
+                margin-bottom: 0;
+            }
+
+            .card {
+                width: 100%;
+                box-shadow: none;
+                border-color: #e1e2e1;
+                margin: 0;
+            }
+
+            .jx-content {
+                width: -webkit-calc(100% - 300px);
+                width: calc(100% - 300px);
+            }
+            .jx-content .jx-content-wrap {
+                width: 100%;
+            }
+            .jx-content .jx-content-wrap .row-header {
+                background-color: #e1e2e1;
+                overflow: hidden;
+                display: -webkit-flex;
+                display: flex;
+                align-items: center;
+                width: 100%;
+            }
+
+        </style>
+
+    </body>
+
+</html>

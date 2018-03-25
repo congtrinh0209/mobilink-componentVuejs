@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>Activities</title>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
+  
+  <!-- vuejs -->
+  <script type="text/javascript" src="../js/axios.min.js"></script>
+  <script type="text/javascript" src="../js/vue.min.js"></script>
+  <script type="text/javascript" src="../../../vue-editor/dist/vue-jx-lib.js?"></script>
+  <script type="text/javascript" src="../js/vuejx.min.js"></script>
+  <script type="text/javascript" src="../js/vuejx_dev.js"></script>
+  <script type="text/javascript" src="../js/moment-with-locales.min.js"></script>
+  <script type="text/javascript" src="../js/moment.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.js"></script>
+  
+  <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
+  <link href="../css/main.css" rel="stylesheet">
+  <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+  
+
+</head>
+
+<body>
+
+
+  <div id="activityAdd">
+    <v-app>
+        <jx-mobilink-activity-add ref="activityAddRef"
+        group_id="20147"
+        id='1'
+        type_activity="events"
+        end_point= "http://127.0.0.1:8081/api/"
+        @call-back-add = "dataForm = $event"
+        ></jx-mobilink-activity-add>
+        <!--  -->
+        <v-button @click= "runApi">Run Api</v-button>
+        <v-button @click= "getData">Submit Form</v-button>
+        <v-button @click= "testGetData">Console Data Response</v-button>
+        <v-button @click= "clearDataForm">Clear</v-button>
+    </v-app>
+  </div>
+
+  <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function (event) {
+      
+      new Vue({
+        el: '#activityAdd',
+        data () {
+          return {
+            dataForm: '',
+            typeActivity: ''
+          }
+        },
+        methods: {
+          runApi: function(){
+            var vm = this;
+            vm.$refs.activityAddRef.initGetData()
+          },
+          getData: function(){
+            var vm = this;
+            vm.$refs.activityAddRef.submitAdd()
+          },
+          testGetData: function (){
+            var vm = this;
+            console.log(vm.dataForm);
+            console.log(vm)
+          },
+          clearDataForm: function(){
+            var vm = this;
+            vm.$refs.activityAddRef.clearDataForm()
+          }
+        }
+      })
+
+    });
+
+  </script>
+  <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDdp0lrPBh6kCWCnGbZcYImyjzKEVCFXeQ&libraries&libraries=places&callback=autocompleteMap" async defer></script>
+  <script type="text/javascript"> 
+    function autocompleteMap() {	
+    
+      var input = document.getElementById('view');
+      var placeEvent = new google.maps.places.Autocomplete(input);
+      placeEvent.addListener('place_changed', function() {
+    
+      var locationEvent = placeEvent.getPlace();
+      
+      if (!locationEvent.geometry) {
+        window.alert("No details available for input: '" + locationEvent.name + "'");
+        return;
+      }
+      
+      var lat = locationEvent.geometry.location.lat();
+      var lon = locationEvent.geometry.location.lng();  			
+      console.log(lat);
+      console.log(lon);	
+      });
+    }
+  </script>-->
+</body>
+
+</html>

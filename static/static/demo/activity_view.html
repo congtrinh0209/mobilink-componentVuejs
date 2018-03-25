@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>vuejx</title>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
+  <link href="/static/css/main.css" rel="stylesheet">
+  <!-- vuejs -->
+  <script type="text/javascript" src="/static/js/axios.min.js"></script>
+  <script type="text/javascript" src="/static/js/vue.min.js"></script>
+  <script type="text/javascript" src="/static/js/vue-uploader.js"></script>
+  <script type="text/javascript" src="/static/js/vuejx_dev.js"></script>
+  <script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.js"></script>
+
+  <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+
+</head>
+
+<body>
+
+  <div class="application theme--light">
+
+    <div id="activityViewJX_form_template"></div>
+    <div id="activityViewJX" style="width: 100%;">
+      
+    </div>
+
+    <!-- TODO Template Xây dựng navigation -->
+    <div id="menu_template">
+      <div class="layout row wrap">
+        <div class="flex xs12 ">
+          <div jx-bind="addActivityBTN"></div>
+          <div jx-bind="addActivityTemplateBTN"></div>
+        </div>
+        <div class="flex xs12 mb-3 px-0" jx-bind="listgroupFilter"></div>
+        <div class="flex xs12 " jx-bind="vungLamViecFilter"></div>
+        <div class="flex xs12 " jx-bind="duAnFilter"></div>
+        <div class="layout row wrap">
+            <div class="flex xs6 " jx-bind="yearFilter"></div>
+            <div class="flex xs6 " jx-bind="monthFilter"></div>
+        </div>
+        <div class="flex xs12 " jx-bind="statusFilter"></div>
+        <div class="flex xs12 " jx-bind="nguoiQuanLyFilter"></div>
+        <div class="flex xs12 " jx-bind="labelFilter"></div>
+        <div class="flex xs12 " jx-bind="toiThamGia"></div>
+      </div>
+    </div>
+    <!-- TODO Template Xây dựng content -->
+    <div id="detail_template"> 
+      <div class="jx-content-wrap">
+          <div class="layout row wrap">
+              <div class="flex xs12 sm8 mb-3 no-padding-up" jx-bind="activityListExpansion"></div>
+              <div class="flex xs12 sm4 px-0">
+                  <div class="layout row wrap">
+                      <div class="flex xs12 mb-3" jx-bind="activityFutureExpansion"></div>
+                      <div class="flex xs12" jx-bind="activityOverDueExpansion"></div>
+                  </div>
+              </div>
+          </div>
+      </div>
+    </div>
+    <!-- TODO Template list expand -->
+    <div id="activity_expand_list_template">
+        <div slot="header">
+          <div class="layout row wrap">
+            <div class="flex xs12 sm8 pl-0 activity-border-header-leaf">{{item.id}}</div>
+            <div class="flex xs12 sm4 pl-4 activity-border-header">{{item.name}}</div>
+          </div>
+        </div>
+        <v-card>
+          <v-card-text>
+              <div class="layout row wrap">
+                  <div class="flex xs12 sm8 pl-2 activity-border-content-left order-xs2 order-sm1">
+                    <div>
+                        {{item.id}}
+                    </div>
+                    <div>
+                        {{item.id}}
+                    </div>
+                    
+                  </div>
+                  <div class="flex xs12 sm4 pl-2 activity-border-content order-xs1 order-sm2">
+                      <div>
+                          {{item.name}}
+                      </div>
+                      <div>
+                          {{item.name}}
+                      </div>
+                  </div>
+                  <div class="flex xs12 sm8 pl-2 order-xs4 order-sm3">
+                      
+                      <div class="activity-tool-bar">
+                          <v-btn>
+                            <v-icon>send</v-icon>
+                            Xem chi tiết
+                          </v-btn>
+                          <v-btn>
+                            <v-icon>clear</v-icon>
+                            Xoá
+                          </v-btn>
+                      </div>
+                    </div>
+                    <div class="flex xs12 sm4 pl-0 activity-border-content order-xs3 order-sm4">
+                        <v-btn>
+                            <v-icon>clear</v-icon>
+                            Xoá
+                          </v-btn>
+                    </div>
+                </div>
+          </v-card-text>
+        </v-card>
+      </div>
+      <!-- TODO template list future -->
+      <div id="activity_expand_list_future_template">
+        <div class="layout row wrap list_future_ul">
+          <div class="flex xs12 mt-3 text-bold">
+              {{item.name}}
+          </div>
+          <div class="flex xs12 py-1">
+              <v-icon fab flat>access_time</v-icon> {{item.name}}
+          </div>
+          <div class="flex xs12 py-1">
+              <v-icon fab flat>location_on</v-icon> {{item.name}}
+          </div>
+        </div>
+      </div>
+      <!-- TODO template list overdue -->
+      <div id="activity_expand_list_overdue_template">
+        <div class="layout row wrap list_future_ul">
+          <div class="flex xs12 mt-3">
+            {{item.name}}
+          </div>
+          <div class="flex xs12 py-1">
+            <span class="text-bold">Người quản lý: </span> {{item.name}}
+          </div>
+          <div class="flex xs12 py-1">
+              <i class="text-danger">- quá hạn: {{item.name}}</i>
+            </div>
+        </div>
+      </div>
+  </div>
+
+  <script type="text/javascript">
+    
+    document.addEventListener('DOMContentLoaded', function (event) {
+      
+      console.log('DOM fully loaded and parsed');
+      var activityViewJX = new VueJX({
+        el: 'activityViewJX',
+        jxtemplate: 'activityViewJX_form_template',
+        pk: 1,
+        groupid: 20143,
+        data: {
+          
+        },
+        schema: {
+          'navigationFilter': {
+            'id': 'navigationFilter',
+            'name': 'navigationFilter',
+            "type": "navigation",
+            "template": "menu_template",
+            "template_content": "detail_template"
+          },
+          // TODO navigation
+          'addActivityBTN' : { 
+             'id': 'addActivityBTN', 
+             'name': 'addActivityBTN', 
+             'type': "button",
+             'show': true,
+             'label': "Thêm mới hoạt động",
+             'onClick': "addActivityBTNFnc",
+             'color': "green darken-2",
+             "cssClass": "white--text mx-0",
+             "right_icon": "add_circle",
+             "events": {
+                addActivityBTNFnc: function () {
+                  var vm = this;
+                }
+              }
+          },
+          'addActivityTemplateBTN' : { 
+             'id': 'addActivityTemplateBTN', 
+             'name': 'addActivityTemplateBTN', 
+             'type': "button",
+             'show': false,
+             'label': "Thêm mới hoạt động",
+             'onClick': "addActivityTemplateBTNFnc",
+             'color': "green darken-2",
+             "cssClass": "white--text mx-0",
+             "right_icon": "add_circle",
+             "events": {
+                addActivityTemplateBTN: function () {
+                  var vm = this;
+                }
+              }
+          },
+          'listgroupFilter': {
+            'id': 'listgroupFilter',
+            'name': 'listgroupFilter',
+            "type": "listgroup",
+            "child_items": "items",
+            "data_title": "title",
+            "data_value": "id",
+            "onLoad": "_initlistgroupFilter",
+            "onClick": "filterChange",
+            "events": {
+              filterChange: function(value){
+                console.log(value);
+                this.listgroupFilterselected = value;
+              },
+              _initlistgroupFilter: function(){
+                this.listgroupFilterItems = [
+                  {
+                    action: 'notifications_active',
+                    id: 'activity_new',
+                    title: 'Hoạt động mới',
+                    active: true
+                  },
+                  {
+                    action: 'event_note',
+                    id: 'calendar_week',
+                    title: 'Lịch tuần'
+                  },
+                  {
+                    action: 'event_available',
+                    id: 'calendar_month',
+                    title: 'Lịch tháng'
+                  },
+                  {
+                    action: 'group',
+                    title: 'Sự kiện',
+                    items: [
+                      {
+                        id: 1,
+                        title: 'Các loại sự kiện'
+                      },
+                      {
+                        id: 2,
+                        title: 'Các công việc nội bộ'
+                      }
+                    ]
+                  },
+                  {
+                    action: 'settings_input_component',
+                    id: 'activity_process',
+                    title: 'Quy trình'
+                  },
+                  {
+                    action: 'store',
+                    id: 'activity_template',
+                    title: 'Hoạt động mẫu'
+                  }
+                ];
+                
+              }
+            }
+          },
+          "vungLamViecFilter": {
+            'id': 'vungLamViecFilter',
+            'name': 'vungLamViecFilter',
+            "type": "select",
+            'label': 'Vùng làm việc ',
+            "item_text": "name",
+            "item_value": "id",
+            "single_line": true,
+            "loading": false,
+            "onLoad": "_initvungLamViecFilter",
+            "events": {
+              _initvungLamViecFilter: function(){
+                  this.vungLamViecFilterItems = [];
+                  this.vungLamViecFilter = [];
+              }
+            }
+          },
+          "duAnFilter": {
+            'id': 'duAnFilter',
+            'name': 'duAnFilter',
+            "type": "select",
+            'label': 'Dự án ',
+            "item_text": "name",
+            "item_value": "id",
+            "single_line": true,
+            "loading": false,
+            "onLoad": "_initduAnFilter",
+            "events": {
+              _initduAnFilter: function(){
+                  this.duAnFilterItems = [];
+                  this.duAnFilter = [];
+              }
+            }
+          },
+          "yearFilter": {
+            'id': 'yearFilter',
+            'name': 'yearFilter',
+            "type": "select",
+            'label': 'Năm',
+            "item_text": "name",
+            "item_value": "id",
+            "single_line": true,
+            "loading": false,
+            "onLoad": "_inityearFilter",
+            "events": {
+              _inityearFilter: function(){
+                  this.yearFilterItems = [];
+                  this.yearFilter = [];
+              }
+            }
+          },
+          "monthFilter": {
+            'id': 'monthFilter',
+            'name': 'monthFilter',
+            "type": "select",
+            'label': 'Tháng',
+            "item_text": "name",
+            "item_value": "id",
+            "single_line": true,
+            "loading": false,
+            "onLoad": "_initmonthFilter",
+            "events": {
+              _initmonthFilter: function(){
+                  this.monthFilterItems = [];
+                  this.monthFilter = [];
+              }
+            }
+          },
+          "statusFilter": {
+            'id': 'statusFilter',
+            'name': 'statusFilter',
+            "type": "select",
+            'label': 'Trạng thái',
+            "item_text": "name",
+            "item_value": "id",
+            "single_line": true,
+            "loading": false,
+            "onLoad": "_initstatusFilter",
+            "events": {
+              _initstatusFilter: function(){
+                  this.statusFilterItems = [];
+                  this.statusFilter = [];
+              }
+            }
+          },
+          "nguoiQuanLyFilter": {
+            'id': 'nguoiQuanLyFilter',
+            'name': 'nguoiQuanLyFilter',
+            "type": "select",
+            'label': 'Người quản lý',
+            "item_text": "name",
+            "item_value": "id",
+            "single_line": true,
+            "loading": false,
+            "onLoad": "_initnguoiQuanLyFilter",
+            "events": {
+              _initnguoiQuanLyFilter: function(){
+                  this.nguoiQuanLyFilterItems = [];
+                  this.nguoiQuanLyFilter = [];
+              }
+            }
+          },
+          "labelFilter": {
+            'id': 'labelFilter',
+            'name': 'labelFilter',
+            "type": "select",
+            'label': 'Thẻ nhãn',
+            "item_text": "name",
+            "item_value": "id",
+            "single_line": true,
+            "loading": false,
+            "onLoad": "_initlabelFilter",
+            "events": {
+              _initlabelFilter: function(){
+                  this.labelFilterItems = [];
+                  this.labelFilter = [];
+              }
+            }
+          },
+          "toiThamGia": {
+            "id": "toiThamGia",
+            "name": "toiThamGia",
+            "type": "switch",
+            "label": "feel good !: ",
+            "labelClass": "xs1 hidden",
+            "controlClass": "xs12 my-2",
+            "switch_inline": true,
+            "tabindex": 0,
+            "items": [
+              {
+                "label": "Tôi tham gia ",
+                "color": "green darken-2",
+                "value": "1",
+              },
+            ],
+            "onLoad": "_inittoiThamGia",
+            "onChange": "changetoiThamGia",
+            "events": {
+              _inittoiThamGia: function(){
+                
+                  this.toiThamGia = [ "0" ];
+
+              },
+              changetoiThamGia: function(){
+                var vm = this;
+              }
+            }
+          },
+          // TODO content
+          'activityListExpansion': {
+            'id': 'activityListExpansion',
+            'name': 'activityListExpansion',
+            "type": "expansion",
+            "expand": true,
+            "template": "activity_expand_list_template",
+            "onLoad": "_iniactivityListExpansion",
+            "events": {
+              _iniactivityListExpansion: function(){
+                  this.activityListExpansionItems = [{
+                    id: 1,
+                    name: "dsfsdfsdfsdfs"
+                  },
+                  {
+                    id: 2,
+                    name: "2222222222222222"
+                  }];
+              }
+            }
+          },
+          // TODO Future list
+          'activityFutureExpansion': {
+            'id': 'activityFutureExpansion',
+            'name': 'activityFutureExpansion',
+            'label': 'Sự kiện sắp diễn ra',
+            'cssClass': '',
+            "type": "expansionpanel",
+            "expand": true,
+            "template": "activity_expand_list_future_template",
+            "onLoad": "_iniactivityFutureExpansion",
+            "events": {
+              _iniactivityFutureExpansion: function(){
+                  this.activityFutureExpansionItems = [{
+                    id: 1,
+                    name: "dsfsdfsdfsdfs"
+                  },
+                  {
+                    id: 2,
+                    name: "2222222222222222"
+                  }];
+              }
+            }
+          },
+          // TODO Overdue list
+          'activityOverDueExpansion': {
+            'id': 'activityOverDueExpansion',
+            'name': 'activityOverDueExpansion',
+            "type": "expansionpanel",
+            'label': 'Nhiệm vụ đang quá hạn',
+            "expand": true,
+            "template": "activity_expand_list_overdue_template",
+            "onLoad": "_iniactivityOverDueExpansion",
+            "events": {
+              _iniactivityOverDueExpansion: function(){
+                  this.activityOverDueExpansionItems = [{
+                    id: 1,
+                    name: "dsfsdfsdfsdfs"
+                  },
+                  {
+                    id: 2,
+                    name: "2222222222222222"
+                  }];
+              }
+            }
+          },
+        }
+      });
+
+      activityViewJX._builder('activityViewJX');
+
+    });
+
+  </script>
+
+  <style>
+  html .application .list--group .list__tile {
+    padding-left: 17px;
+  }
+ 
+  .navigation-drawer button{
+    width: 100%;
+  }
+  html .input-group {
+    height: 50px;
+  }
+  html .hidden{
+    display: none !important;
+  }
+  html .navigation-drawer .input-group--switch_inline .input-group.input-group--selection-controls.switch label {
+    padding-top: 5px;
+  }
+  .jx-content-wrap {
+    width: 100%;
+  }
+  .activity-tool-bar{
+    margin-left: -8px;
+  }
+  .expansion-panel__header {
+    border-bottom: 2px solid #c8e6c9;
+  }
+  .activity-border-header{
+    border-left: 1px solid lightgray;
+  }
+  .activity-border-content{
+    position: relative;
+  }
+  .activity-border-content::before{
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: -19px;
+    width: 1px;
+    height: 100%;
+    background: lightgray;
+  }
+  .activity-border-header-leaf::before{
+    content: "#";
+    position: absolute;
+    left: 8px;
+    color: #a94442;
+    font-weight: bold;
+  }
+  .list_future_ul{
+    border-bottom: 1px solid lightgray;
+    padding-bottom: 10px !important;
+  }
+  .jx-panel .expansion-panel__header{
+    padding-left: 14px;
+  }
+  .text-danger{
+    color: #a94442;
+  }
+
+  no-padding-up
+
+  @media only screen and (min-width: 599px), only screen and (min-device-width: 599px) {
+    .no-padding-up{
+      padding-left: 0px !important;
+    }
+  }
+
+  @media only screen and (max-width: 599px), only screen and (max-device-width: 599px) {
+ 
+    .activity-border-header{
+      border-left: 0px;
+      padding-left: 0px !important;
+    }
+    .activity-border-content::before{
+      width: 0px !important;
+    }
+    .activity-border-content{
+      border-bottom: 1px dashed lightgray;
+      padding-bottom: 5px !important;
+    }
+    .activity-border-content-left{
+      padding-top: 5px !important;
+    }
+  }
+  </style>
+
+</body>
+
+</html>

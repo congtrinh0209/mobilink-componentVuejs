@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>vuejx</title>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
+  <link href="../css/main.css" rel="stylesheet">
+<link href="../css/fullcalendar.min.css" rel="stylesheet">
+  <!-- vuejs -->
+	<script type="text/javascript" src="../js/jquery-3.2.1.min.js"></script>
+  <script type="text/javascript" src="../js/axios.min.js"></script>
+  <script type="text/javascript" src="../js/vue.min.js"></script>
+  <script type="text/javascript" src="../js/vue-jx-lib.js?t=112"></script>
+  <script type="text/javascript" src="../js/build.js?t=112"></script>
+  <script type="text/javascript" src="../js/vuejx.min.js"></script>
+  <script type="text/javascript" src="../js/vuejx_dev.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.js"></script>
+
+  <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+	<script type="text/javascript" src="../js/moment.min.js?111"></script>
+	<script type="text/javascript" src="../js/moment-with-locales.min.js?111"></script>
+</head>
+
+<body>
+
+
+  <div id="calendar">
+    
+    <v-app>
+  
+<div>
+    <jx-mobilink-full-calendar ref="foo" class="test-fc" :events="fcEvents" 
+      first-day='1' locale="vi"
+      @changeMonth="changeMonth"
+      @eventClick="eventClick"
+      @dayClick="dayClick"
+      @moreClick="moreClick">
+        <template slot="fc-event-card" scope="p">
+            <p><i class="fa">{{ p.event.cellIndex }}</i> {{ p.event.subject }}</p>
+        </template>
+    </jx-mobilink-full-calendar>
+<button @click="test">HHHHHHHH</button>
+<button @click="test2">NNNNNNN</button>
+</div>
+      
+      
+    </v-app>
+  </div>
+
+  <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function (event) {
+      var demoEvents = [
+    {
+      title    : 'Sunny 725-727',
+      start    : '2018-02-25',
+      end      : '2018-02-27',
+      cssClass : 'family'
+    },
+    {
+      title : 'Rain 726-727',
+      start : '2018-02-26',
+      end : '2018-02-27',
+      cssClass : ['home', 'work']
+    },
+    {
+      title : 'kaka 2/27-2/28',
+      start : '2018-02-27',
+      end : '2018-02-28'
+    },
+    {
+        title : 'bebee 1 2/27-2/28',
+        start : '2018-02-27',
+        end : '2018-02-28'
+    },
+    {
+        title : 'ceece 2 2/27-2/28',
+        start : '2018-02-27',
+        end : '2018-02-28'
+    },
+    {
+        title : 'rereere 3 2/26-3/05',
+        start : '2018-02-26',
+        end : '2018-03-05'
+    },
+    {
+        title : 'gtgtttg 1/27-1/28',
+        start : '2018-01-27',
+        end : '2018-01-28'
+    },
+    {
+        title : 'Lunfel 1/27-2/2',
+        start : '2018-01-27',
+        end : '2018-02-02'
+    },
+    {
+        title : 'qssqsqs 3/27-3/28',
+        start : '2018-03-27',
+        end : '2018-03-28'
+    },
+  ];
+      new Vue({
+        el: '#calendar',
+        data () {
+          return {
+            fcEvents : []
+          }
+        },
+	mounted() {
+		var vm = this
+		const config = {
+			headers: {
+				'groupId': 20141
+			}
+		}
+		axios.get('http://localhost:8081/api/activities?template=true', config)
+		.then(function (response) {
+		  var serializable = response.data
+		  if (serializable.hasOwnProperty('data')) {
+		    vm.fcEvents = serializable.data.concat([{
+					activtyId:101,
+userId:2001,
+userName	:"useradmin",
+createDate	:"2018-02-16T12:10:42.742Z",
+modifiedDate	:"2018-02-16T12:10:42.742Z",
+activityType	:"TASK",
+activityCat	:"TASK_FDS",
+categoryName	:"Nhóm hoạt động công việc FDS",
+activityNo	:"A_TASK101",
+subject	:"Họp triển khai dự án Mobilink cho DELCO",
+hosting	:"Trần Kim Dũng",
+location	:"Số 3 Tôn Thất Thuyết, Tòa nhà VAPA",
+geolocation	:"21.028509, 105.780758",
+startDate	:"2018-02-01T12:10:42.742Z",
+endDate	:"2018-02-28T12:10:42.742Z",
+dueDate	:"2018-02-28T12:10:42.742Z",
+openingState	:1,
+activityStatus	:"Hoạt động đang diễn ra",
+onCalendar	:true,
+personal	:false,
+isTemplate	:0,
+isNew	:true,
+overdue	:0,
+permission	:"0",
+participantStatus	:"",
+participantsCount	:10,
+documentsCount	:5,
+commentsCount	:20,
+checklistsCount	:3,
+finishedCount	:1,
+votingsCount	:10				
+				}])
+		  }
+		})
+		.catch(function (error) {
+		  console.log(error)
+		})
+	},
+        methods: {
+'test':function(){var vm = this; vm.$refs.foo.goPrev();},
+'test2':function(){var vm = this; vm.$refs.foo.goNext();},
+
+           'changeMonth': function (start, end, current) {
+      console.log('changeMonth', start.format(), end.format(), current.format())
+    },
+    'eventClick': function (event, jsEvent, pos) {
+       console.log('eventClick', event, jsEvent, pos)
+    },
+    'dayClick': function (day, jsEvent) {
+      console.log('dayClick', day, jsEvent)
+    },
+    'moreClick': function (day, events, jsEvent) {
+      console.log('moreCLick', day, events, jsEvent)
+    }
+        }
+      })
+
+    });
+
+  </script>
+
+</body>
+
+</html>

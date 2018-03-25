@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>vuejx</title>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
+  <link href="../css/main.css" rel="stylesheet">
+  <!-- vuejs -->
+  <script type="text/javascript" src="../js/axios.min.js"></script>
+  <script type="text/javascript" src="../js/vue.min.js"></script>
+  <script type="text/javascript" src="../js/vue-jx-lib.js?t=12"></script>
+  <script type="text/javascript" src="../js/vuejx.min.js"></script>
+  <script type="text/javascript" src="../js/vuejx_dev.js"></script>
+  <script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.js"></script>
+
+  <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
+  <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+
+</head>
+
+<body>
+
+
+  <div id="testtesttest">
+    <v-app>
+
+<jx-mobilink-test-parent-com></jx-mobilink-test-parent-com>
+
+      
+      
+    </v-app>
+  </div>
+
+  <script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function (event) {
+      
+      new Vue({
+        el: '#testtesttest',
+        data () {
+          return {
+            statusItems: [
+              {
+                'value': 0,
+                'text': 'Không phải xử lý'
+              },
+              {
+                'value': 1,
+                'text': 'Đang xử lý'
+              },
+              {
+                'value': 2,
+                'text': 'Hoàn thành xử lý'
+              }
+            ]
+          }
+        },
+        methods: {
+          dsfdf: function () {
+            item['show'] = !item.show
+          }
+        }
+      })
+
+    });
+    /*
+    var params = new URLSearchParams();
+    params.append('email', 123123);
+params.append('email2', 123123);
+params.append('email3', 123123);
+      axios
+      .post('http://localhost:8080/o/v2/mobilink/resourceusers/org.mobilink.backend.document.model.DocFile/5701',
+        params,
+        {
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'Accept': 'application/json',
+
+          }
+        }
+      )
+      */
+  </script>
+
+</body>
+
+</html>

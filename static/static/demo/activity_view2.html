@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>vuejx</title>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
+  <link href="/static/css/main.css" rel="stylesheet">
+  <!-- vuejs -->
+  <script type="text/javascript" src="/static/js/axios.min.js"></script>
+  <script type="text/javascript" src="/static/js/vue.min.js"></script>
+  <script type="text/javascript" src="/static/js/vue-uploader.js"></script>
+  <script type="text/javascript" src="/static/js/vuejx_dev.js"></script>
+  <script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.js"></script>
+  
+  <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+
+</head>
+
+<body>
+  <div class="application theme--light">
+  
+    <div id="activityViewJX_form_template"></div>
+    <div id="activityViewJX" style="width: 100%;">
+  
+    </div>
+  
+    <!-- TODO Template Xây dựng navigation -->
+    <div id="menu_template">
+      <div class="layout row wrap">
+        <div class="flex xs12 " jx-bind="vungLamViecFilter"></div>
+        <div class="flex xs12 mb-3 px-0" jx-bind="listgroupFilter"></div>
+      </div>
+    </div>
+    <!-- TODO Template Xây dựng content -->
+    <div id="detail_template">
+      <div class="jx-content-wrap">
+        <div class="layout row wrap">
+          
+          <div class="flex xs12 sm12 mb-3 no-padding-up" jx-bind="activityListExpansion"></div>
+        </div>
+      </div>
+    </div>
+    <!-- TODO Template list expand -->
+    <div id="activity_expand_list_template">
+      <template slot="items" slot-scope="table">
+          <td> <v-checkbox primary hide-details v-model="table.selected" ></v-checkbox> </td>
+          <td>{{ table.item.name }}</td>
+          <td class="text-xs-right">{{ table.item.calories }}</td>
+          <td class="text-xs-right">{{ table.item.fat }}</td>
+          <td class="text-xs-right">{{ table.item.carbs }}</td>
+          <td class="text-xs-right">{{ table.item.protein }}</td>
+          <td class="text-xs-right">{{ table.item.sodium }}</td>
+          <td class="text-xs-right">{{ table.item.calcium }}</td>
+          <td class="text-xs-right">{{ table.item.iron }}</td>
+      </template>
+      
+    </div>
+  
+  </div>
+
+  <script type="text/javascript">
+    
+    document.addEventListener('DOMContentLoaded', function (event) {
+      
+      console.log('DOM fully loaded and parsed');
+      var activityViewJX = new VueJX({
+        el: 'activityViewJX',
+        jxtemplate: 'detail_template',
+        pk: 1,
+        groupid: 20143,
+        data: {
+        },
+        schema: {
+          'navigationFilter': {
+            'id': 'navigationFilter',
+            'name': 'navigationFilter',
+            "type": "navigation",
+            "template": "menu_template",
+            "template_content": "detail_template"
+          },
+          'listgroupFilter': {
+            'id': 'listgroupFilter',
+            'name': 'listgroupFilter',
+            "type": "listgroup",
+            "child_items": "items",
+            "data_title": "title",
+            "data_value": "id",
+            "onLoad": "_initlistgroupFilter",
+            "onClick": "filterChange",
+            "events": {
+              filterChange: function(value){
+                console.log(value);
+                this.listgroupFilterselected = value;
+              },
+              _initlistgroupFilter: function(){
+                this.listgroupFilterItems = [
+                  {
+                    action: 'notifications_active',
+                    id: 'activity_new',
+                    title: 'Hoạt động mới',
+                    active: true
+                  },
+                  {
+                    action: 'event_note',
+                    id: 'calendar_week',
+                    title: 'Lịch tuần'
+                  },
+                  {
+                    action: 'event_available',
+                    id: 'calendar_month',
+                    title: 'Lịch tháng'
+                  },
+                  {
+                    action: 'group',
+                    title: 'Sự kiện',
+                    items: [
+                      {
+                        id: 1,
+                        title: 'Các loại sự kiện'
+                      },
+                      {
+                        id: 2,
+                        title: 'Các công việc nội bộ'
+                      }
+                    ]
+                  },
+                  {
+                    action: 'settings_input_component',
+                    id: 'activity_process',
+                    title: 'Quy trình'
+                  },
+                  {
+                    action: 'store',
+                    id: 'activity_template',
+                    title: 'Hoạt động mẫu'
+                  }
+                ];
+                
+              }
+            }
+          },
+          "vungLamViecFilter": {
+            'id': 'vungLamViecFilter',
+            'name': 'vungLamViecFilter',
+            "type": "select",
+            'label': 'Vùng làm việc ',
+            "item_text": "name",
+            "item_value": "id",
+            "single_line": true,
+            "loading": false,
+            "onLoad": "_initvungLamViecFilter",
+            "events": {
+              _initvungLamViecFilter: function(){
+                  this.vungLamViecFilterItems = [];
+                  this.vungLamViecFilter = [];
+              }
+            }
+          },
+          // TODO content
+          'activityListExpansion': {
+            'id': 'activityListExpansion',
+            'name': 'activityListExpansion',
+            "type": "table",
+            "select_all": true,
+            "item_key": "name",
+            "headers": "headers",
+            "template": "activity_expand_list_template",
+            "onLoad": "_iniactivityListExpansion",
+            "events": {
+              _iniactivityListExpansion: function(){
+                  this.activityListExpansionheaders = [
+                    {
+                      text: 'Dessert (100g serving)',
+                      align: 'left',
+                      sortable: false,
+                      value: 'name'
+                    },
+                    { text: 'Calories', value: 'calories' },
+                    { text: 'Fat (g)', value: 'fat' },
+                    { text: 'Carbs (g)', value: 'carbs' },
+                    { text: 'Protein (g)', value: 'protein' },
+                    { text: 'Sodium (mg)', value: 'sodium' },
+                    { text: 'Calcium (%)', value: 'calcium' },
+                    { text: 'Iron (%)', value: 'iron' }
+                  ];
+                  this.activityListExpansionItems = [
+                    {
+                      value: false,
+                      name: 'Frozen Yogurt',
+                      calories: 159,
+                      fat: 6.0,
+                      carbs: 24,
+                      protein: 4.0,
+                      sodium: 87,
+                      calcium: '14%',
+                      iron: '1%'
+                    },
+                    {
+                      value: false,
+                      name: 'Ice cream sandwich',
+                      calories: 237,
+                      fat: 9.0,
+                      carbs: 37,
+                      protein: 4.3,
+                      sodium: 129,
+                      calcium: '8%',
+                      iron: '1%'
+                    },
+                    {
+                      value: false,
+                      name: 'Eclair',
+                      calories: 262,
+                      fat: 16.0,
+                      carbs: 23,
+                      protein: 6.0,
+                      sodium: 337,
+                      calcium: '6%',
+                      iron: '7%'
+                    },
+                    {
+                      value: false,
+                      name: 'Cupcake',
+                      calories: 305,
+                      fat: 3.7,
+                      carbs: 67,
+                      protein: 4.3,
+                      sodium: 413,
+                      calcium: '3%',
+                      iron: '8%'
+                    },
+                    {
+                      value: false,
+                      name: 'Gingerbread',
+                      calories: 356,
+                      fat: 16.0,
+                      carbs: 49,
+                      protein: 3.9,
+                      sodium: 327,
+                      calcium: '7%',
+                      iron: '16%'
+                    },
+                    {
+                      value: false,
+                      name: 'Jelly bean',
+                      calories: 375,
+                      fat: 0.0,
+                      carbs: 94,
+                      protein: 0.0,
+                      sodium: 50,
+                      calcium: '0%',
+                      iron: '0%'
+                    },
+                    {
+                      value: false,
+                      name: 'Lollipop',
+                      calories: 392,
+                      fat: 0.2,
+                      carbs: 98,
+                      protein: 0,
+                      sodium: 38,
+                      calcium: '0%',
+                      iron: '2%'
+                    },
+                    {
+                      value: false,
+                      name: 'Honeycomb',
+                      calories: 408,
+                      fat: 3.2,
+                      carbs: 87,
+                      protein: 6.5,
+                      sodium: 562,
+                      calcium: '0%',
+                      iron: '45%'
+                    },
+                    {
+                      value: false,
+                      name: 'Donut',
+                      calories: 452,
+                      fat: 25.0,
+                      carbs: 51,
+                      protein: 4.9,
+                      sodium: 326,
+                      calcium: '2%',
+                      iron: '22%'
+                    },
+                    {
+                      value: false,
+                      name: 'KitKat',
+                      calories: 518,
+                      fat: 26.0,
+                      carbs: 65,
+                      protein: 7,
+                      sodium: 54,
+                      calcium: '12%',
+                      iron: '6%'
+                    }
+                  ];
+              }
+            }
+          }
+        }
+      });
+
+      activityViewJX._builder('activityViewJX');
+
+    });
+
+  </script>
+
+  <style>
+  html .application .list--group .list__tile {
+    padding-left: 17px;
+  }
+ 
+  .navigation-drawer button{
+    width: 100%;
+  }
+  html .input-group {
+    height: 50px;
+  }
+  html .hidden{
+    display: none !important;
+  }
+  html .navigation-drawer .input-group--switch_inline .input-group.input-group--selection-controls.switch label {
+    padding-top: 5px;
+  }
+  .jx-content-wrap {
+    width: 100%;
+  }
+  .activity-tool-bar{
+    margin-left: -8px;
+  }
+  .expansion-panel__header {
+    border-bottom: 2px solid #c8e6c9;
+  }
+  .activity-border-header{
+    border-left: 1px solid lightgray;
+  }
+  .activity-border-content{
+    position: relative;
+  }
+  .activity-border-content::before{
+    content: "";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: -19px;
+    width: 1px;
+    height: 100%;
+    background: lightgray;
+  }
+  .activity-border-header-leaf::before{
+    content: "#";
+    position: absolute;
+    left: 8px;
+    color: #a94442;
+    font-weight: bold;
+  }
+  .list_future_ul{
+    border-bottom: 1px solid lightgray;
+    padding-bottom: 10px !important;
+  }
+  .jx-panel .expansion-panel__header{
+    padding-left: 14px;
+  }
+  .text-danger{
+    color: #a94442;
+  }
+
+  no-padding-up
+
+  @media only screen and (min-width: 599px), only screen and (min-device-width: 599px) {
+    .no-padding-up{
+      padding-left: 0px !important;
+    }
+  }
+
+  @media only screen and (max-width: 599px), only screen and (max-device-width: 599px) {
+ 
+    .activity-border-header{
+      border-left: 0px;
+      padding-left: 0px !important;
+    }
+    .activity-border-content::before{
+      width: 0px !important;
+    }
+    .activity-border-content{
+      border-bottom: 1px dashed lightgray;
+      padding-bottom: 5px !important;
+    }
+    .activity-border-content-left{
+      padding-top: 5px !important;
+    }
+  }
+  </style>
+
+</body>
+
+</html>

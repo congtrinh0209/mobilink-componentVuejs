@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width,initial-scale=1.0">
+        <title>Chi tiết</title>
+        <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
+        <link href="../css/main.css" rel="stylesheet">
+        <!-- vuejs -->
+        <script type="text/javascript" src="../js/axios.min.js"></script>
+        <script type="text/javascript" src="../js/vue.min.js"></script>
+        <script type="text/javascript" src="../js/vue-jx-lib.js?t=12"></script>
+        <script type="text/javascript" src="../js/vuejx.min.js"></script>
+        <script type="text/javascript" src="../js/vuejx_dev.js"></script>
+        <script type="text/javascript" src="../js/moment.min.js"></script>
+        <script type="text/javascript" src="../js/moment-with-locales.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.js"></script>
+        <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
+        <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
+        <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment-with-locales.min.js"></script>
+</head>
+
+<body>
+
+
+<!-- TODO Template Xây dựng navigation -->
+<div id="activities_template" class="hidden">
+    <div class="layout row wrap">
+        <v-btn class="flex xs12 text-xs-center" color="primary" v-on:click.native="toAddActivities">Thêm mới</v-btn>
+        <div class="flex xs12" jx-bind="label_search"></div>
+        <v-flex xs12>
+            <div jx-bind="input_du_an"></div>
+        </v-flex>
+        <v-flex xs12>
+            <div jx-bind="select_don_vi_to_chuc"></div>
+        </v-flex>
+        <v-flex xs12>
+            <div jx-bind="select_ng_quan_ly"></div>
+        </v-flex>
+        <v-flex xs12>
+            <div jx-bind="select_trang_thai"></div>
+        </v-flex>
+        <v-flex xs12>
+            <div jx-bind="select_the_nhan"></div>
+        </v-flex>
+        <div class="flex xs12 pl-3 nav__btn__custom">
+            <v-btn block flat class="flex xs12 mx-0 my-0 px-0">
+                <v-icon>person</v-icon> Của tôi</v-btn>
+        </div>
+        <div class="flex xs12 pl-3 nav__btn__custom">
+            <v-btn block flat class="flex xs12 mx-0 my-0 px-0">
+                <v-icon>check_box</v-icon> Tôi tham gia</v-btn>
+        </div>
+    </div>
+
+</div>
+
+<!-- TODO paymentViewJX template one page -->
+<div id="activities_detail_template" class="hidden">
+
+    <div class="jx-content-wrap" style="background: #fff;width: 100%">
+        <v-slide-x-transition>
+            <div>
+
+                <div class="xs12 week__view">
+                    <v-toolbar dark color="primary">
+                        <v-flex xs6 sm2 v-if="activityListTypeModel == 1">
+                            <div class="text-xs-center">Tuần</div>
+                            <v-select v-bind:items="selectWeek" v-model="selectWeekModel" 
+                                label="Select" single-line bottom item-text="text"
+                                item-value="id" @change="getWeekEventList">
+                            </v-select>
+                        </v-flex>
+                        <v-flex xs6 sm2 v-if="activityListTypeModel == 1">
+                            <div class="text-xs-center">Năm</div>
+                            <v-select v-bind:items="selectYear" v-model="selectYearModel"
+                                label="Select" single-line bottom item-text="text"
+                                item-value="id" @change="getWeekEventList">
+                            </v-select>
+                        </v-flex>
+                        <v-flex xs6 sm4 v-if="activityListTypeModel == 2">
+                            <v-btn icon @click.stop="goPrev">
+                                <v-icon>fast_rewind</v-icon>
+                            </v-btn>
+                            <span class="title">{{monthListTitle}}</span>
+                            <v-btn icon @click.stop="goNext">
+                                <v-icon>fast_forward</v-icon>
+                            </v-btn>
+                        </v-flex>
+                        <v-flex xs6 sm4 v-if="activityListTypeModel == 3">
+                            <v-btn icon @click.stop="goPrev1">
+                                <v-icon>fast_rewind</v-icon>
+                            </v-btn>
+                            <span class="title">{{ yearList }}</span>
+                            <v-btn icon @click.stop="goNext1">
+                                <v-icon>fast_forward</v-icon>
+                            </v-btn>
+                        </v-flex>
+                        <v-flex xs12 sm6>
+                            <v-layout row wrap>
+                                <v-flex xs2 v-if="keywordsSearchable" class="text-xs-left">
+                                    <v-btn icon v-on:click.native="keywordsSearchable = !keywordsSearchable">
+                                        <v-icon>arrow_back</v-icon>
+                                    </v-btn>
+                                </v-flex>
+                                <v-flex xs10>
+                                    <div v-if="keywordsSearchable" jx-bind="keywordsSearch"></div>
+                                </v-flex>
+                            </v-layout>
+                            <div class="row-header flex-break text-xs-right" v-if="!keywordsSearchable" >
+                                <v-btn icon v-on:click.native="keywordsSearchable = !keywordsSearchable">
+                                    <v-icon>search</v-icon>
+                                </v-btn>
+                            </div>
+                        </v-flex>
+                        <v-flex xs12 sm2>
+                            <v-select v-bind:items="activityListTypeItems" v-model="activityListTypeModel" label="Select" single-line bottom item-text="text" item-value="id"></v-select>
+                        </v-flex>
+                    </v-toolbar>
+                </div>
+                <div class="xs12 week__view" v-if="activityListTypeModel == 2">
+
+                    <jx-mobilink-full-calendar ref="monthEventRef"
+                         @changeMonth="changeMonth"
+                         class="test-fc" :events="monthEventItems" first-day='1' locale="vi">
+                        <template slot="fc-event-card" scope="p">
+                            <p>
+                                <i class="fa">{{ p.event.cellIndex }}</i> {{ p.event.subject }} test</p>
+                        </template>
+                    </jx-mobilink-full-calendar>
+                </div>
+
+                <div class="xs12 week__view" v-if="activityListTypeModel == 3">
+                    <div v-if="activityDetailPage">
+                        ghghgh
+                    </div>
+                    <div v-if="!activityDetailPage">
+                        <div class="xs12">
+                            <div jx-bind="activities_list" id="activities_list"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="xs12 week__view" v-if="activityListTypeModel == 1">
+                    <v-expansion-panel expand>
+                        <v-expansion-panel-content v-for="(item,index) in daysOfWeek" :key="item.id" v-bind:value="item.obj.length>0" class="light-blue lighten-3">
+                            <div slot="header">
+                                {{ item.day }}&nbsp;&nbsp;&nbsp;
+                                <span style="color:#fff">{{ item.date }}</span>
+                            </div>
+                            <v-card>
+                                <v-card-text>
+                                    <div v-for="(items,indexs) in item.obj" v-if="items.activtyId">
+                                        <div class="layout row wrap">
+
+                                            <v-flex xs6>{{indexs+1}}. {{ items.subject }} | </v-flex>
+                                            <v-flex xs6>
+                                                <v-select v-bind:items="openingState1" v-model="items.openingState" label="Select" single-line bottom item-text="text" item-value="openingState"></v-select>
+                                            </v-flex>
+
+                                        </div>
+                                        <div>
+                                            <v-icon>schedule</v-icon> {{ items.startDate|datetime }} - {{ items.endDate|datetime
+                                            }}
+                                        </div>
+                                        <div>
+                                            <v-icon>person</v-icon> Host: {{ items.hosting }} - Manager: {{ items.managerName }}
+                                        </div>
+                                        <div>
+                                            <v-icon>place</v-icon> {{ items.location }}
+                                        </div>
+                                        <hr v-if="indexs+1 < item.obj.length" class="divider">
+                                    </div>
+                                </v-card-text>
+                            </v-card>
+                        </v-expansion-panel-content>
+                    </v-expansion-panel>
+                </div>
+            </div>
+        </v-slide-x-transition>
+    </div>
+</div>
+
+<div id="activities_list_template" class="hidden">
+    <template slot="items" slot-scope="props">
+        <tr v-bind:class="{'active': props.index%2==1}">
+            <td class="text-xs-center">
+                {{ props.index+1 }}
+            </td>
+            <td>
+                {{ props.item.startDate|date }}
+            </td>
+            <td>
+                <a href="javascript:;" @click.stop.prevent="toDetailActivities(props.item.activtyId)">
+                    {{ props.item.subject }}
+                </a>
+            </td>
+            <td>
+                {{ props.item.hosting }}
+            </td>
+            <td>
+                {{ props.item.hosting }}
+            </td>
+            <td>
+                {{ props.item.managerName }}
+            </td>
+            <td>
+                {{ props.item.location }}
+            </td>
+            <td>
+                <a href="javascript:;" v-on:click.stop.prevent="toDelete(props.item,props.index)">
+                    <v-icon color="red">clear</v-icon>
+                </a>
+
+            </td>
+        </tr>
+
+    </template>
+
+</div>
+<div id="add_new_sample_template" class="hidden" v-if="!test">
+    <div class="layout wrap flex xs12">
+        <div class="layout wrap flex xs6">
+            <div class="flex xs4">
+                Mẫu số hiệu
+            </div>
+            <div class="flex xs8">
+                <div jx-bind="new_mau_so_hieu" ></div>
+            </div>
+        </div>
+        <div class="layout wrap flex xs6 hidden">
+            
+        </div>
+        <div class="layout wrap flex xs6">
+            <div class="flex xs4">
+                Loại hoạt động
+            </div>
+            <div class="flex xs8">
+                <div jx-bind="new_loai_hd1" ></div>
+            </div>
+        </div>
+        <div class="layout wrap flex xs6">
+            <div class="flex xs4">
+                Kiểu hoạt động
+            </div>
+            <div class="flex xs8">
+                <div jx-bind="new_kieu_hd1" ></div>
+            </div>
+        </div>
+        <div class="layout wrap flex xs12">
+            <div class="flex xs2">
+                Chủ đề
+            </div>
+            <div class="flex xs10">
+                <div jx-bind="new_subject1" ></div>
+            </div>
+        </div>
+        <div class="layout wrap flex xs6">
+            <div class="flex xs4">
+                Chủ trì
+            </div>
+            <div class="flex xs8">
+                <div jx-bind="new_hosting1" ></div>
+            </div>
+        </div>
+        <div class="layout wrap flex xs6">
+            <v-checkbox v-model="check" label="Có ghi lịch" drak></v-checkbox>
+        </div>
+        <div class="layout wrap flex xs12">
+            <div class="flex xs2">
+                Nội dung
+            </div>
+            <div class="flex xs10">
+                <div jx-bind="new_content1" ></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="add_new_list_template" class="hidden" v-if="test">
+    <div class="layout wrap flex xs12">
+        <div class="layout wrap flex xs6">
+            <div class="flex xs4">
+                Loại hoạt động
+            </div>
+            <div class="flex xs8">
+                <div jx-bind="new_loai_hd" ></div>
+            </div>
+        </div>
+        <div class="layout wrap flex xs6">
+            <div class="flex xs4">
+                Kiểu hoạt động
+            </div>
+            <div class="flex xs8">
+                <div jx-bind="new_kieu_hd" ></div>
+            </div>
+        </div>
+        <div class="layout wrap flex xs6">
+            <div class="flex xs4">
+                Hoạt động mẫu
+            </div>
+            <div class="flex xs8">
+                <div jx-bind="new_hd_mau" ></div>
+            </div>
+        </div>
+        <div class="layout wrap flex xs6">
+            <div class="flex xs4">
+                Dự án
+            </div>
+            <div class="flex xs8">
+                <div jx-bind="new_project" ></div>
+            </div>
+        </div>
+        <div class="layout wrap flex xs12">
+            <div class="flex xs2">
+                Chủ đề
+            </div>
+            <div class="flex xs10">
+                <div jx-bind="new_subject" ></div>
+            </div>
+        </div>
+        <div class="layout wrap flex xs6">
+            <div class="flex xs4">
+                Chủ trì
+            </div>
+            <div class="flex xs8">
+                <div jx-bind="new_hosting" ></div>
+            </div>
+        </div>
+        <div class="layout wrap flex xs6">
+            <div class="flex xs4">
+                Người quản lý
+            </div>
+            <div class="flex xs8">
+                <div jx-bind="new_employees" ></div>
+            </div>
+        </div>
+        <div class="layout wrap flex xs6">
+            <div class="flex xs4">
+                Thời gian bắt đầu
+            </div>
+            <div class="flex xs8">
+                <div jx-bind="new_startDate" ></div>
+            </div>
+        </div>
+        <div class="layout wrap flex xs6">
+            <div class="flex xs4">
+                Thời gian kết thúc
+            </div>
+            <div class="flex xs8">
+                <div jx-bind="new_endDate" ></div>
+            </div>
+        </div>
+        <div class="layout wrap flex xs12">
+            <div class="flex xs2 hidden">
+            </div>
+            <div class="flex xs10">
+                <v-checkbox v-model="check" label="Có ghi lịch" drak></v-checkbox>
+            </div>
+        </div>
+        <div class="layout wrap flex xs12">
+            <div class="flex xs2">
+                Địa chỉ
+            </div>
+            <div class="flex xs10">
+                <div jx-bind="new_location" ></div>
+            </div>
+        </div>
+        <div class="layout wrap flex xs12">
+            <div class="flex xs2">
+                Nội dung
+            </div>
+            <div class="flex xs10">
+                <div jx-bind="new_content" ></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="khoTuLieuViewJX"></div>
+
+<script type="text/javascript">
+    document.addEventListener('DOMContentLoaded', function (event) {
+        var config = {
+            headers: {
+                'groupId': 20141
+            }
+        };
+        var khoTuLieuViewJX = new VueJX({
+            el: 'khoTuLieuViewJX',
+            pk: 1,
+            groupid: 20147,
+            data: {
+                endPoint: 'http://congtrinh0209-pc:8081/api/',
+                activityDetailPage: false,
+                openingState1: [
+                    { openingState: 1, text: "Chưa bắt đầu" },
+                    { openingState: 2, text: "Đang thực hiện" },
+                    { openingState: 3, text: "Đã kết thúc" },
+                    { openingState: 4, text: "Đã hủy" }
+                ],
+                activityListTypeModel: 1,
+                activityListTypeItems: [
+                    { id: 1, text: 'week' },
+                    { id: 2, text: 'month' },
+                    { id: 3, text: 'list' },
+                ],
+                selectYear: [],
+                selectYearModel: 0,
+                selectWeek: [],
+                selectWeekModel: 0,
+                daysOfWeek: [],
+                weekEventItems: [],
+                monthEventItems: [],
+                monthListTitle: '',
+                yearList:'',
+                listActivities:[],
+                keywordsSearchable:false,
+                className: 'a',
+                check:true,
+                level:0,
+                test:false
+            },
+            schema: {
+                /** TODO menu filter */
+                'navigationFilter': {
+                    'id': 'navigationFilter',
+                    'name': 'navigationFilter',
+                    'type': 'navigation',
+                    'template': 'activities_template',
+                    'template_content': 'activities_detail_template',
+                    'onLoad': 'initActivityList_constructor',
+                    'events': {
+                        getEventsOfMonth: function () {
+                            var vm = this;
+                            var paramsBuilder = {
+                                keyword: vm.keywordsSearch,  
+                                project: vm.input_du_an, 
+                                hosting: vm.select_don_vi_to_chuc.workingUnitId, 
+                                manager: vm.select_ng_quan_ly.employeeId, 
+                                category: vm.select_trang_thai.openingState, 
+                                label: vm.select_the_nhan.labelId,
+                                month:vm.monthListTitle
+                            };
+                            const config = {
+                                params: paramsBuilder,
+                                headers: {
+                                    'groupId': 20147
+                                }
+
+                            };
+
+                            axios.get('http://localhost:8081/api/activities?template=true', config)
+                                .then(function (response) {
+                                    var serializable = response.data
+                                    if (serializable.hasOwnProperty('data')) {
+                                        vm.monthEventItems = serializable.data;
+                                    }
+                                })
+                                .catch(function (error) {
+                                    console.log(error)
+                                })
+
+                        },
+                        changeMonth: function (start, end, current) {
+                            console.log('changeMonth', start.format(), end.format(), current.format());
+                            var vm = this;
+                            vm.monthListTitle = current.format('MMMM YYYY');
+                            vm.getEventsOfMonth();
+                        },
+                        goPrev: function () { var vm = this; vm.$refs.monthEventRef.goPrev(); },
+                        goNext: function () { var vm = this; vm.$refs.monthEventRef.goNext(); },
+                        initActivityList_constructor: function () {
+                            var vm = this;
+                            var arrTemp = [];
+                            vm.selectWeekModel = moment().weeks();
+                            for (var i = 1; i<=53; i++) {
+                                arrTemp.push({
+                                    id : i,
+                                    text : i.toString().padStart(2, '0')
+                                });
+                            }
+                            vm.selectWeek = arrTemp;
+                            arrTemp = [];
+                            vm.selectYearModel = moment().year();
+                            for (var i = vm.selectYearModel; i >= vm.selectYearModel - 10; i--) {
+                                arrTemp.push({
+                                    id: i,
+                                    text: i.toString().padStart(2, '0')
+                                });
+                            }
+                            vm.selectYear = arrTemp;
+                            vm.getWeekEventList();
+                        },
+                        getWeekEventList: function(item){
+                            var vm = this;
+                            var w = vm.selectWeekModel;
+                            var y = vm.selectYearModel;
+                            if (item < 54) {
+                                w = item;
+                            } else if (item > 54) {
+                                y = item;
+                            }
+                            var formatDate = 'DD/MM/YYYY';
+                            var paramsDocFileBuilder = {
+                                keyword: vm.keywordsSearch,  
+                                project: vm.input_du_an, 
+                                hosting: vm.select_don_vi_to_chuc.workingUnitId, 
+                                manager: vm.select_ng_quan_ly.employeeId, 
+                                category: vm.select_trang_thai.openingState, 
+                                label: vm.select_the_nhan.labelId,
+                                week:w,
+                                year:y
+                            };
+
+                            var configDocFile = {
+                                params: paramsDocFileBuilder,
+                                headers: {
+                                    'groupId': 20147
+                                }
+                            };
+                            var url = vm.endPoint + 'activities';
+                            axios.get(url, configDocFile).then(function (response) {
+                                var serializable = response.data;
+                                if ( serializable.hasOwnProperty('data')) {
+                                    vm.weekEventItems = serializable.data;
+                                } else {
+                                    vm.weekEventItems = [];
+                                }
+                                vm.daysOfWeek = [];
+                                for (var key in moment.weekdays(true)) {
+                                    console.log(moment.locale('vi-gb'));
+                                    vm.daysOfWeek.push({
+                                        day: moment.weekdays(true)[key],
+                                        date:
+                                            moment().day(moment.weekdays(true)[key]).week(w).year(y).format(formatDate),
+                                        obj: vm.weekEventItems.filter(item => {
+                                            return moment(item.startDate.substring(0, 10)).format(formatDate) == moment().day(moment.weekdays(true)[key]).week(w).year(y).format(formatDate)
+                                        })
+                                    });
+                                }
+
+                            })
+                            .catch(function (error) {
+                            });
+                        },
+                        toAddActivities:function(){
+                            var vm = this;
+                            if(vm.test==true){
+                                vm.add_new_sample = !vm.add_new_sample ;
+                            }
+                            else{
+                                vm.add_new_list = !vm.add_new_list ;
+                            }
+                        }
+
+                    }
+                },
+                
+                'activities_list': {
+                    'id': 'activities_list',
+                    'name': 'activities_list',
+                    'type': 'table',
+                    'child_items': 'items',
+                    'cssClass': 'table_history_style',
+                    'headers': 'headers',
+                    'item_key': 'activtyId',
+                    'template': 'activities_list_template',
+                    'pagging': '_paggingActivities_list',
+                    'onLoad': '_initActivities_list',
+                    'events': {
+
+                        _initActivities_list: function (item) {
+                            var vm = this;
+                            this.activities_listheaders = [
+                                {
+                                    text: 'STT',
+                                    align: 'left',
+                                    sortable: true,
+                                    value: 'stt'
+                                },
+                                {
+                                    text: 'Thời gian',
+                                    align: 'left',
+                                    sortable: true,
+                                    value: 'startDate'
+                                },
+                                {
+                                    text: 'Nội dung',
+                                    align: 'left',
+                                    sortable: true,
+                                    value: 'subject'
+                                },
+                                {
+                                    text: 'Đơn vị chuẩn bị',
+                                    align: 'left',
+                                    sortable: true,
+                                    value: 'hosting'
+                                },
+                                {
+                                    text: 'Thành phần',
+                                    align: 'left',
+                                    sortable: true,
+                                    value: 'activityCat'
+                                },
+                                {
+                                    text: 'Chủ trì',
+                                    align: 'left',
+                                    sortable: true,
+                                    value: 'managerName'
+                                },
+                                {
+                                    text: 'Địa điểm',
+                                    align: 'left',
+                                    sortable: true,
+                                    value: 'location'
+                                },
+                                {
+                                    text: '',
+                                    align: 'left',
+                                    sortable: false,
+                                    value: 'icon'
+                                }
+                            ];
+                            var d =new Date();
+                                vm.yearList=d.getFullYear();
+                            vm._initActivities_support();
+                        },
+                        _initActivities_support: function () {
+                            var vm = this;
+                            var paramsDocFileBuilder = {
+                                keyword: vm.keywordsSearch,  
+                                project: vm.input_du_an, 
+                                start: vm.activities_listpage * 2 - 2,
+                                end: vm.activities_listpage * 2,
+                                hosting: vm.select_don_vi_to_chuc.workingUnitId, 
+                                manager: vm.select_ng_quan_ly.employeeId, 
+                                category: vm.select_trang_thai.openingState, 
+                                label: vm.select_the_nhan.labelId,
+                                year:vm.yearList,
+                            };
+
+                            var configDocFile = {
+                                params: paramsDocFileBuilder,
+                                headers: {
+                                    'groupId': 20147
+                                }
+                            };
+                            var url = vm.endPoint + 'activities';
+                            axios.get(url, configDocFile).then(function (response) {
+                                var serializable = response.data;
+                                vm.activities_listItems=serializable.data;
+                                vm.activities_listTotal = Math.ceil(serializable.total / 2);
+                            })
+                                .catch(function (error) {
+                                    vm.activities_listItems = [];
+                                })
+
+                        },
+                        goPrev1:function(){
+                            var vm = this;
+                            vm.yearList=vm.yearList-1;
+                            vm._initActivities_support();
+
+                        },
+                        goNext1:function(){
+                            var vm = this;
+                            vm.yearList=vm.yearList+1;
+                            vm._initActivities_support();
+                        },
+                        toDelete: function (item, index) {
+                            var vm = this;
+
+                            vm.$dialog.confirm('Bạn muốn xóa dữ liệu?', {
+                                html: true,
+                                loader: true,
+                                okText: 'Xác nhận',
+                                cancelText: 'Quay lại',
+                                animation: 'fade'
+                            })
+                                .then(function (dialog) {
+                                    var url = vm.endPoint + 'activities/' + item.activtyId;
+
+                                    axios.delete(url, { headers: { groupId: 20147 } }).then(function (response) {
+                                        vm.activities_listItems.splice(index, 1);
+                                        vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thành công!";
+                                        vm.snackbarkhoTuLieuViewJX = true;
+                                        vm.loadingkhoTuLieuViewJX = false;
+                                        dialog = false;
+                                    })
+                                        .catch(function (error) {
+                                            vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thất bại!";
+                                            vm.snackbarerorkhoTuLieuViewJX = true;
+                                            vm.loadingkhoTuLieuViewJX = false;
+                                            dialog = false;
+                                        })
+                                    dialog.close();
+                                    return false;
+                                })
+                                .catch(function (e) { console.log(e); })
+
+                        },
+                        toDetailActivities: function (id) {
+                            var vm = this;
+                            if (id > 0) {
+                                vm.class_pk = id;
+                                vm.activityDetailPage = true;
+
+                                var url = vm.endPoint + "activities/" + 1;
+                                axios.get(url, config).then(function (response) {
+                                    vm.activitiesDetail = response.data;
+
+                                })
+                                    .catch(function (error) {
+                                        console.log(error);
+                                    })
+                            }
+                        },
+                        _paggingActivities_list: function () {
+                            this._initActivities_support(null);
+                        }
+                    }
+                },
+                "keywordsSearch": {
+                    'id': 'keywordsSearch',
+                    'name': 'keywordsSearch',
+                    'type': 'text',
+                    'placeholder': 'Tìm kiếm theo từ khoá...',
+                    'solo': true,
+                    'append_icon': 'search',
+                    'onKeyup': 'filterTableKeywords',
+                    'onLoad': '_initActivities_list',
+                    'events': {
+                        filterTableKeywords: function (event) {
+                            var vm = this;
+                            if (event.keyCode === 13 || vm.keywordsSearch.length > 3 || vm.keywordsSearch.length === 0) {
+                                vm._initActivities_list(false);
+                            }
+                        }
+                    }
+                },
+                'add_new_list': {
+                    'id': 'add_new_list',
+                    'name': 'add_new_list',
+                    "type": "dialogsm",
+                    "type_dialog": "fullScreen",
+                    'icon_save': 'undo',
+                    'label_save': 'Quay lại',
+                    "color": "primary",
+                    "template": "add_new_list_template",
+                    "events": {
+                        add_new_listClose: function () {
+                            // console.log("close popup");
+                            /** TODO: Clear form*/
+
+                            this.add_new_list = false;
+                        },
+                        add_new_listSave: function () {
+                            // console.log("save popup");
+
+                            var vm = this;
+                            /** TODO: Save form*/
+                            
+                        }
+                    }
+                },
+                'add_new_sample': {
+                    'id': 'add_new_sample',
+                    'name': 'add_new_sample',
+                    "type": "dialogsm",
+                    "type_dialog": "fullScreen",
+                    'icon_save': 'undo',
+                    'label_save': 'Quay lại',
+                    "color": "primary",
+                    "template": "add_new_sample_template",
+                    "events": {
+                        add_new_sampleClose: function () {
+                            // console.log("close popup");
+                            /** TODO: Clear form*/
+
+                            this.add_new_sample = false;
+                        },
+                        add_new_sampleSave: function () {
+                            // console.log("save popup");
+
+                            var vm = this;
+                            /** TODO: Save form*/
+                            
+                        }
+                    }
+                },
+                "new_loai_hd": {
+                    'id': 'new_loai_hd',
+                    'name': 'new_loai_hd',
+                    "type": "select",
+                    'label': 'Chọn loại hoạt động',
+                    "item_text": "itemName",
+                    "item_value": "itemCode",
+                    "single_line": true,
+                    "hide_selected": true,
+                    "multiple": false,
+                    "tags": false,
+                    "chips": true,
+                    "loading": false,
+                    "no_data_text": "Lua chon selected",
+                    "items": [],
+                    "onLoad": "_initNew_loai_hd",
+                    "onRemove": 'filterNew_loai_hdOnRemove',
+                    'onClick': 'filterNew_loai_hdOnClear',
+                    "events": {
+                        _initNew_loai_hd: function () {
+                            var vm = this;
+
+                            var url = vm.endPoint + 'dictcollections/ACTIVITY_TYPE/dictitems';
+                            var paramsBuilder = {
+                                level: 0
+                            };
+                            const config = {
+                                params: paramsBuilder,
+                                headers: {
+                                    'groupId': 20147
+                                }
+
+                            };
+                            axios.get(url, config).then(function (response) {
+                                var serializable = response.data;
+                                if (serializable.hasOwnProperty('data')) {
+                                    vm.new_loai_hdItems = serializable.data;
+                                }
+                            })
+                                .catch(function (error) {
+                                    console.log(error);
+                                });
+                        },
+                        filterNew_loai_hdOnRemove: function () {
+                            var vm = this;
+                            vm.new_loai_hd = [];
+                        },
+                        filterNew_loai_hdOnClear: function () {
+                            this.new_loai_hd = [];
+                        }
+                    }
+                },
+                "new_loai_hd1": {
+                    'id': 'new_loai_hd1',
+                    'name': 'new_loai_hd1',
+                    "type": "select",
+                    'label': 'Chọn loại hoạt động',
+                    "item_text": "itemName",
+                    "item_value": "itemCode",
+                    "single_line": true,
+                    "hide_selected": true,
+                    "multiple": false,
+                    "tags": false,
+                    "chips": true,
+                    "loading": false,
+                    "no_data_text": "Lua chon selected",
+                    "items": [],
+                    "onLoad": "_initNew_loai_hd1",
+                    "onRemove": 'filterNew_loai_hd1OnRemove',
+                    'onClick': 'filterNew_loai_hd1OnClear',
+                    "events": {
+                        _initNew_loai_hd1: function () {
+                            var vm = this;
+
+                            var url = vm.endPoint + 'dictcollections/ACTIVITY_TYPE/dictitems';
+                            var paramsBuilder = {
+                                level: 0
+                            };
+                            const config = {
+                                params: paramsBuilder,
+                                headers: {
+                                    'groupId': 20147
+                                }
+
+                            };
+                            axios.get(url, config).then(function (response) {
+                                var serializable = response.data;
+                                if (serializable.hasOwnProperty('data')) {
+                                    vm.new_loai_hd1Items = serializable.data;
+                                }
+                            })
+                            .catch(function (error) {
+                                console.log(error);
+                            });
+                        },
+                        filterNew_loai_hd1OnRemove: function () {
+                            var vm = this;
+                            vm.new_loai_hd1 = [];
+                        },
+                        filterNew_loai_hd1OnClear: function () {
+                            this.new_loai_hd1 = [];
+                        }
+                    }
+                },
+                "new_kieu_hd": {
+                    'id': 'new_kieu_hd',
+                    'name': 'new_kieu_hd',
+                    "type": "select",
+                    'label': 'Chọn kiểu hoạt động',
+                    "item_text": "itemName",
+                    "item_value": "itemCode",
+                    "single_line": true,
+                    "hide_selected": true,
+                    "multiple": false,
+                    "tags": false,
+                    "chips": true,
+                    "loading": false,
+                    "no_data_text": "Lua chon selected",
+                    "items": [],
+                    "onLoad": "_initNew_kieu_hd",
+                    "onRemove": 'filterNew_kieu_hdOnRemove',
+                    'onClick': 'filterNew_kieu_hdOnClear',
+                    "events": {
+                        _initNew_kieu_hd: function () {
+                            var vm = this;
+
+                            var url = vm.endPoint + 'dictcollections/ACTIVITY_TYPE/dictitems';
+                            var config = {
+                                headers: {
+                                    'groupId': 20147
+                                }
+
+                            };
+                            axios.get(url, config).then(function (response) {
+                                var serializable = response.data;
+                                if (serializable.hasOwnProperty('data')) {
+                                    vm.new_kieu_hdItems = serializable.data;
+                                }
+                            })
+                                .catch(function (error) {
+                                    console.log(error);
+                                });
+                        },
+                        filterNew_kieu_hdOnRemove: function () {
+                            var vm = this;
+                            vm.new_kieu_hd = [];
+                        },
+                        filterNew_kieu_hdOnClear: function () {
+                            this.new_kieu_hd = [];
+                        }
+                    }
+                },
+                "new_kieu_hd1": {
+                    'id': 'new_kieu_hd1',
+                    'name': 'new_kieu_hd1',
+                    "type": "select",
+                    'label': 'Chọn kiểu hoạt động',
+                    "item_text": "itemName",
+                    "item_value": "itemCode",
+                    "single_line": true,
+                    "hide_selected": true,
+                    "multiple": false,
+                    "tags": false,
+                    "chips": true,
+                    "loading": false,
+                    "no_data_text": "Lua chon selected",
+                    "items": [],
+                    "onLoad": "_initNew_kieu_hd1",
+                    "onRemove": 'filterNew_kieu_hd1OnRemove',
+                    'onClick': 'filterNew_kieu_hd1OnClear',
+                    "events": {
+                        _initNew_kieu_hd1: function () {
+                            var vm = this;
+
+                            var url = vm.endPoint + 'dictcollections/ACTIVITY_TYPE/dictitems';
+                            var config = {
+                                headers: {
+                                    'groupId': 20147
+                                }
+
+                            };
+                            axios.get(url, config).then(function (response) {
+                                var serializable = response.data;
+                                if (serializable.hasOwnProperty('data')) {
+                                    vm.new_kieu_hd1Items = serializable.data;
+                                }
+                            })
+                                .catch(function (error) {
+                                    console.log(error);
+                                });
+                        },
+                        filterNew_kieu_hd1OnRemove: function () {
+                            var vm = this;
+                            vm.new_kieu_hd1 = [];
+                        },
+                        filterNew_kieu_hd1OnClear: function () {
+                            this.new_kieu_hd1 = [];
+                        }
+                    }
+                },
+                "new_hd_mau": {
+                    'id': 'new_hd_mau',
+                    'name': 'new_hd_mau',
+                    "type": "select",
+                    'label': 'Chọn hoạt động mẫu',
+                    "item_text": "userName",
+                    "item_value": "activtyId",
+                    "single_line": true,
+                    "hide_selected": true,
+                    "multiple": false,
+                    "tags": false,
+                    "chips": true,
+                    "loading": false,
+                    "no_data_text": "Lua chon selected",
+                    "items": [],
+                    "onLoad": "_initNew_hd_mau",
+                    "onRemove": 'filterNew_hd_mauOnRemove',
+                    'onClick': 'filterNew_hd_mauOnClear',
+                    "events": {
+                        _initNew_hd_mau: function () {
+                            var vm = this;
+
+                            var url = vm.endPoint + 'activities';
+                            var paramsBuilder = {
+                                template:true
+                            };
+                            const config = {
+                                params: paramsBuilder,
+                                headers: {
+                                    'groupId': 20147
+                                }
+
+                            };
+                            axios.get(url, config).then(function (response) {
+                                var serializable = response.data;
+                                if (serializable.hasOwnProperty('data')) {
+                                    vm.new_hd_mauItems = serializable.data;
+                                }
+                            })
+                                .catch(function (error) {
+                                    console.log(error);
+                                });
+                        },
+                        filterNew_hd_mauOnRemove: function () {
+                            var vm = this;
+                            vm.new_hd_mau = [];
+                        },
+                        filterNew_hd_mauOnClear: function () {
+                            this.new_hd_mau = [];
+                        }
+                    }
+                },
+                "new_project":{
+                    'id': 'new_project',
+                    'name': 'new_project',
+                    "type": "text",
+                },
+                "new_subject":{
+                    'id': 'new_subject',
+                    'name': 'new_subject',
+                    "type": "text",
+                },
+                "new_subject1":{
+                    'id': 'new_subject1',
+                    'name': 'new_subject1',
+                    "type": "text",
+                },
+                "new_hosting":{
+                    'id': 'new_hosting',
+                    'name': 'new_hosting',
+                    "type": "text",
+                },
+                "new_hosting1":{
+                    'id': 'new_hosting1',
+                    'name': 'new_hosting1',
+                    "type": "text",
+                },
+                "new_employees": {
+                    'id': 'new_employees',
+                    'name': 'new_employees',
+                    "type": "select",
+                    'label': '',
+                    "item_text": "fullName",
+                    "item_value": "employeeId",
+                    "single_line": true,
+                    "hide_selected": true,
+                    "multiple": false,
+                    "tags": false,
+                    "chips": true,
+                    "loading": false,
+                    "no_data_text": "Lua chon selected",
+                    "items": [],
+                    "onLoad": "_initNew_employees",
+                    "onRemove": 'filterNew_employees',
+                    'onClick': 'filterNew_employees',
+                    "events": {
+                        _initNew_employees: function () {
+                            var vm = this;
+
+                            var url = vm.endPoint + 'employees';
+                            var config = {
+                                headers: {
+                                    'groupId': 20147
+                                }
+
+                            };
+                            axios.get(url, config).then(function (response) {
+                                var serializable = response.data;
+                                if (serializable.hasOwnProperty('data')) {
+                                    vm.new_employeesItems = serializable.data;
+                                }
+                            })
+                                .catch(function (error) {
+                                    console.log(error);
+                                });
+                        },
+                        filterNew_employees: function () {
+                            var vm = this;
+                            vm.new_employees = [];
+                        },
+                        filterNew_employees: function () {
+                            this.new_employees = [];
+                        }
+                    }
+                },
+                "new_startDate":{
+                    'id': 'new_startDate',
+                    'name': 'new_startDate',
+                    "type": "text",
+                },
+                "new_endDate":{
+                    'id': 'new_endDate',
+                    'name': 'new_endDate',
+                    "type": "text",
+                },
+                "new_location":{
+                    'id': 'new_location',
+                    'name': 'new_location',
+                    "type": "text",
+                },
+                "new_content":{
+                    'id': 'new_content',
+                    'name': 'new_content',
+                    "type": "text",
+                },
+                "new_content1":{
+                    'id': 'new_content1',
+                    'name': 'new_content1',
+                    "type": "text",
+                },
+                "new_mau_so_hieu":{
+                    'id': 'new_mau_so_hieu',
+                    'name': 'new_mau_so_hieu',
+                    "type": "text",
+                },
+                "input_du_an": {
+                    'id': 'input_du_an',
+                    'name': 'input_du_an',
+                    "type": "text",
+                    'placeholder': 'Dự án',
+                    'solo': true,
+                    "onLoad": "_initActivities_list",
+                    'onKeyup': 'filterDu_an',
+                    "events": {
+                        filterDu_an: function (event) {
+                            var vm = this;
+                            if (event.keyCode === 13 || vm.input_du_an.length > 3 || vm.input_du_an.length === 0) {
+                                vm._initActivities_list(false);
+                            }
+
+                        }
+                    }
+                },
+                "select_don_vi_to_chuc": {
+                    'id': 'select_don_vi_to_chuc',
+                    'name': 'select_don_vi_to_chuc',
+                    "type": "select",
+                    'label': 'Đơn vị tổ chức',
+                    "item_text": "name",
+                    "item_value": "workingUnitId",
+                    "single_line": true,
+                    "hide_selected": true,
+                    "multiple": false,
+                    "tags": false,
+                    "chips": true,
+                    "loading": false,
+                    "no_data_text": "Lua chon selected",
+                    "items": [],
+                    "onLoad": "_initDon_vi_to_chuc",
+                    'onChange': 'filterDon_vi_to_chuc($event)',
+                    "onRemove": 'filterDon_vi_to_chucOnRemove',
+                    'onClick': 'filterDon_vi_to_chucOnClear',
+                    "events": {
+                        _initDon_vi_to_chuc: function () {
+                            var vm = this;
+
+                            var url = vm.endPoint + 'workingunits';
+                            var config = {
+                                headers: {
+                                    'groupId': 20147
+                                }
+
+                            };
+                            axios.get(url, config).then(function (response) {
+                                var serializable = response.data;
+                                if (serializable.hasOwnProperty('data')) {
+                                    vm.select_don_vi_to_chucItems = serializable.data;
+                                }
+                            })
+                                .catch(function (error) {
+                                    console.log(error);
+                                });
+                        },
+                        filterDon_vi_to_chuc: function (data) {
+                            var vm = this;
+                            vm.select_don_vi_to_chuc = data;
+                            vm._initActivities_list(null);
+                        },
+                        filterDon_vi_to_chucOnRemove: function () {
+                            var vm = this;
+                            vm.select_don_vi_to_chuc = [];
+                            vm._initActivities_list(null);
+                        },
+                        filterDon_vi_to_chucOnClear: function () {
+                            this.select_don_vi_to_chuc = [];
+                        }
+                    }
+                },
+                "select_ng_quan_ly": {
+                    'id': 'select_ng_quan_ly',
+                    'name': 'select_ng_quan_ly',
+                    "type": "select",
+                    'label': 'Người quản lý',
+                    "item_text": "fullName",
+                    "item_value": "employeeId",
+                    "single_line": true,
+                    "hide_selected": true,
+                    "multiple": false,
+                    "tags": false,
+                    "chips": true,
+                    "loading": false,
+                    "no_data_text": "Lua chon selected",
+                    "items": [],
+                    "onLoad": "_initNguoi_quan_ly",
+                    'onChange': 'filterNguoi_quan_ly($event)',
+                    "onRemove": 'filterNguoi_quan_lyOnRemove',
+                    'onClick': 'filterNguoi_quan_lyOnClear',
+                    "events": {
+                        _initNguoi_quan_ly: function () {
+                            var vm = this;
+
+                            var url = vm.endPoint + 'employees';
+                            var config = {
+                                headers: {
+                                    'groupId': 20147
+                                }
+
+                            };
+                            axios.get(url, config).then(function (response) {
+                                var serializable = response.data;
+                                if (serializable.hasOwnProperty('data')) {
+                                    vm.select_ng_quan_lyItems = serializable.data;
+                                }
+                            })
+                                .catch(function (error) {
+                                    console.log(error);
+                                });
+                        },
+                        filterNguoi_quan_ly: function (data) {
+                            var vm = this;
+                            vm.select_ng_quan_ly = data;
+                            vm._initActivities_list(null);
+                        },
+                        filterNguoi_quan_lyOnRemove: function () {
+                            var vm = this;
+                            vm.select_ng_quan_ly = [];
+                            vm._initActivities_list(null);
+                        },
+                        filterNguoi_quan_lyOnClear: function () {
+                            this.select_ng_quan_ly = [];
+                        }
+                    }
+                },
+                "select_trang_thai": {
+                    'id': 'select_trang_thai',
+                    'name': 'select_trang_thai',
+                    "type": "select",
+                    'label': 'Trạng thái',
+                    "item_text": "activityStatus",
+                    "item_value": "openingState",
+                    "single_line": true,
+                    "hide_selected": true,
+                    "multiple": false,
+                    "tags": false,
+                    "chips": true,
+                    "loading": false,
+                    "no_data_text": "Lua chon selected",
+                    "items": [],
+                    "onLoad": "_initTrang_thai",
+                    'onChange': 'filterTrang_thai($event)',
+                    "onRemove": 'filterTrang_thaiOnRemove',
+                    'onClick': 'filterTrang_thaiOnClear',
+                    "events": {
+                        _initTrang_thai: function () {
+                            var vm = this;
+
+                            var url = vm.endPoint + 'activities';
+                            var config = {
+                                headers: {
+                                    'groupId': 20147
+                                }
+
+                            };
+                            axios.get(url, config).then(function (response) {
+                                var serializable = response.data;
+                                if (serializable.hasOwnProperty('data')) {
+                                    vm.select_trang_thaiItems = serializable.data;
+                                }
+                            })
+                                .catch(function (error) {
+                                    console.log(error);
+                                });
+                        },
+                        filterTrang_thai: function (data) {
+                            var vm = this;
+                            vm.select_trang_thai = data;
+                            vm._initActivities_list(null);
+                        },
+                        filterTrang_thaiOnRemove: function () {
+                            var vm = this;
+                            vm.select_trang_thai = [];
+                            vm._initActivities_list(null);
+                        },
+                        filterTrang_thaiOnClear: function () {
+                            this.select_trang_thai = [];
+                        }
+                    }
+                },
+                "select_the_nhan": {
+                    'id': 'select_the_nhan',
+                    'name': 'select_the_nhan',
+                    "type": "select",
+                    'label': 'Thẻ nhãn',
+                    "item_text": "name",
+                    "item_value": "labelId",
+                    "single_line": true,
+                    "hide_selected": true,
+                    "multiple": false,
+                    "tags": false,
+                    "chips": true,
+                    "loading": false,
+                    "no_data_text": "Lua chon selected",
+                    "items": [],
+                    "onLoad": "_initThe_nhan",
+                    'onChange': 'filterThe_nhan($event)',
+                    "onRemove": 'filterThe_nhanOnRemove',
+                    'onClick': 'filterThe_nhanOnClear',
+                    "events": {
+                        _initThe_nhan: function () {
+                            var vm = this;
+
+                            var url = vm.endPoint + 'labels';
+                            var config = {
+                                headers: {
+                                    'groupId': 20147
+                                }
+
+                            };
+                            axios.get(url, config).then(function (response) {
+                                var serializable = response.data;
+                                if (serializable.hasOwnProperty('data')) {
+                                    vm.select_the_nhanItems = serializable.data;
+                                }
+                            })
+                                .catch(function (error) {
+                                    console.log(error);
+                                });
+                        },
+                        filterThe_nhan: function (data) {
+                            var vm = this;
+                            vm.select_the_nhan = data;
+                            vm._initActivities_list(null);
+                        },
+                        filterThe_nhanOnRemove: function () {
+                            var vm = this;
+                            vm.select_the_nhan = [];
+                            vm._initActivities_list(null);
+                        },
+                        filterThe_nhanOnClear: function () {
+                            this.select_the_nhan = [];
+                        }
+                    }
+                },
+            }
+        });
+
+        khoTuLieuViewJX._builder('khoTuLieuViewJX');
+
+    });
+</script>
+
+<style type="text/css" media="screen">
+    a {
+        text-decoration: none;
+    }
+    input{
+        color: rgba(0,0,0,.87)!important;
+    }
+    thead {
+        background: #1976D2
+    }
+
+    .active {
+        background: #eee;
+    }
+    .dialog .card__text{
+        padding-top: 49px;
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+    .week__view .input-group--select,.card__text .input-group--select ,.card__text .input-group--text-field{
+        padding: 0;
+    }
+
+    .week__view .input-group--select .input-group__details,.card__text .input-group--select .input-group__details,.card__text .input-group--text-field .input-group__details,.card__text .input-group--selection-controls .input-group__details{
+        display: none;
+    }
+
+    .expansion-panel__header {
+        border-bottom: 2px solid white;
+    }
+
+    .nav_drawn_width_none aside {
+        width: 0px !important;
+    }
+
+    .max-width {
+        width: 100% !important;
+        max-width: 100% !important;
+    }
+
+    .no-width {
+        width: 0px !important;
+        max-width: 0px !important;
+    }
+
+    .max-width146 .labelClass {
+        max-width: 146px;
+    }
+
+    .detail_show_more {
+        margin: 0;
+    }
+
+    .detail_show_more .btn__content {
+        padding: 0;
+        text-transform: none;
+        color: #939393;
+    }
+
+    body .danhSachPaymentTable__class table.table th:nth-child(1) {
+        width: 15%;
+    }
+
+    body .danhSachPaymentTable__class table.table th:nth-child(2) {
+        width: 10%;
+    }
+
+    body .danhSachPaymentTable__class table.table th:nth-child(3) {
+        width: 70%;
+    }
+
+    .btn__nopadding {
+        padding: 0px;
+    }
+
+    .nav__btn__custom .btn__content {
+        justify-content: left;
+        padding: 0;
+        align-items: flex-end;
+        text-transform: none;
+    }
+
+    .nav__btn__custom .btn__content .material-icons {
+        padding-right: 5px;
+    }
+</style>
+
+</body>
+
+</html>

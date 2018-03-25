@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Activity Invitation</title>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
+    <!-- vuejs -->
+    <script type="text/javascript" src="../js/axios.min.js"></script>
+    <script type="text/javascript" src="../js/vue.min.js"></script>
+    <script type="text/javascript" src="../js/vuejx.min.js"></script>
+    <script type="text/javascript" src="../js/vuejx_dev.js"></script>
+    <script type="text/javascript" src="../js/moment-with-locales.min.js"></script>
+    <script type="text/javascript" src="../js/moment.min.js"></script>
+    <script type="text/javascript" src="../../../vue-editor/dist/vue-jx-lib.js?"></script>
+    <script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.js"></script>
+    <!-- <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script> -->
+    <script type="text/javascript" src="../js/vuetify017.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/js/jquery-comments.js"></script>
+    <script type="text/javascript" src="../js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="../js/locales/bootstrap-datetimepicker.fr.js"></script>
+    
+    <!-- <link href="../css/vuetify017.css" rel="stylesheet"> -->
+    <link href="http://dhtn.longbien.gov.vn/o/mentions-web/css/mentions.css" rel="stylesheet" type="text/css">
+    <link href="http://dhtn.longbien.gov.vn/o/dynamic-data-mapping-form-renderer/css/main.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/aui.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/frontend-css-web/main.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/orgin.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/page/dist/page.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/page/dist/nav.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/component/dist/list_header.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/component/dist/input.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/component/dist/button.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/component/dist/select.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/component/dist/table.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/component/dist/tabmenu.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/component/dist/navigation_drawer.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/component/dist/mycomponent.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/jquery-comments.css" rel="stylesheet">
+    
+    <!-- <link href="../css/th.css" rel="stylesheet"> -->
+    
+    </head>
+
+<body>
+
+    <div id="activityInvitationTest" class="ml-5 mt-2" >
+        <v-app class="flex">
+            <div class="layout wrap">
+                <jx-mobilink-activity-invitation class="mr-5 ml-5"
+                    group_id = "20147"
+                    class_pk = "1"
+                    class_name = "org.mobilink.activitymgt.model.Activity"
+                    end_point= "http://127.0.0.1:8081/api/"
+                    permission_prop= "manager"
+                    opening_state_prop = 0
+                    ref="activity_invitation_ref" 
+                    style="width: 425px" 
+                >
+                </jx-mobilink-activity-invitation>
+    
+                <jx-mobilink-activity-invitation-task class="ml-3"
+                    group_id = "20147"
+                    class_pk = ""
+                    class_name = "org.mobilink.activitymgt.model.Activity"
+                    end_point= "http://127.0.0.1:8081/api/"
+                    ref="activity_invitation_task_ref" style="width: 425px" 
+                >
+                </jx-mobilink-activity-invitation-task>
+    
+                <!-- <jx-mobilink-activity-contact 
+                    ref="activity_contact_ref"
+                    group_id="20147"
+                    end_point= "http://127.0.0.1:8081/api/" 
+                    style="width: 700px"
+                >
+                </jx-mobilink-activity-contact> -->
+            </div>
+            
+
+        </v-app>
+        <!-- <v-button @click='addContact'>addContact</v-button> -->
+        <v-button @click='getInvitation'>GetInvitation</v-button>
+    </div>
+
+    <script type="text/javascript">
+        document.addEventListener('DOMContentLoaded', function (event) {
+            
+            new Vue({
+                el: '#activityInvitationTest',
+                data () {
+                    return {
+                    
+                    }
+                },
+                methods: {
+                    // addContact: function(){
+                    //     var vm =this;
+                    //     vm.$refs.activity_contact_ref.submitAddContact()
+                    // },
+                    getInvitation: function(){
+                        var vm =this;
+                        vm.$refs.activity_invitation_ref.initAddActivity()
+                    }
+                    
+                }
+            })
+
+        });
+
+    </script>
+
+    <style>
+
+
+    </style>
+</body>
+
+</html>
