@@ -120,7 +120,8 @@
                                                             </v-flex>
                                                             
                                                         </v-flex>
-                                                        <v-divider xs12 class="mt-0"></v-divider>
+                                                        <v-divider xs12 class="my-0"></v-divider>
+                                                        
                                                     </v-list-tile-content>
                                                     
                                                 </v-list-tile>
@@ -128,7 +129,7 @@
                                                 <!-- end -->
 
                                                 <!-- Phần thêm cá nhân trong tổ chức/ đơn vị -->
-                                                <div v-if="item.role.invitationType == 0" class="layout wrap mx-0 mb-2">
+                                                <div v-if="item.role.invitationType == 0 && item.user_leader == userId" class="layout wrap mx-0 mb-2">
                                                     <toggle-button class="mr-1 mt-4"
                                                     :value="false"
                                                     v-model="presenterAddUserGroup"
@@ -164,7 +165,7 @@
                                                                     <toggle-button class="mr-1 mt-2" 
                                                                     @change="updatePresenterUserGroup($event,subItem.activityInvitationId,subItem)"
                                                                     :value="bindPresenter(subItem.presenter)"
-                                                                     
+                                                                    :disabled="false?item.role.invitationType == 0 && item.user_leader == userId:true"
                                                                     title_checked = "Thành viên"
                                                                     title_unchecked = "Theo dõi"
                                                                     :labels="{checked: 'TV', unchecked: 'TD'}"
@@ -187,7 +188,7 @@
 
                                                                     <span style="color:green" v-html="bindAvailableText(subItem.available)"></span>
                                                                 
-                                                                    <v-btn icon title="Xóa" class="mx-0 ml-2" @click.stop="updateInvitation('DELETE',subItem.activityInvitationId,index,item.items)">
+                                                                    <v-btn v-if="item.user_leader == userId" icon title="Xóa" class="mx-0 ml-2" @click.stop="updateInvitation('DELETE',subItem.activityInvitationId,index,item.items)">
                                                                         <v-icon color="red darken-3">clear</v-icon>
                                                                     </v-btn>
                                                                 </div> 
@@ -366,7 +367,7 @@
         
         data () {
             return {
-                /** userId: themeDisplay.getUserId(),*/
+                userId: 109,/**themeDisplay.getUserId() */
                 invitationUserId:'',
                 mineInv: false,
                 userIdNote:'',
@@ -488,7 +489,7 @@
                                 if(item.roleId==itemGroups.roleId&&item.invitationType==4 ){
                                     vm.itemInvGroup[keys].user_leader = item.userId
                                 } else{
-                                    vm.itemInvGroup[keys].user_leader = ''
+                                    
                                 }
                             }
                         }
