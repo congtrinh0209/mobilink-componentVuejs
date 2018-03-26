@@ -236,7 +236,7 @@
                                         ></v-select>
                                     </v-flex>
                                     <toggle-button class="mx-1 mt-4"
-                                    :value="true"
+                                    
                                     v-model="presenterAddUser"
                                     title_checked = "Thành viên"
                                     title_unchecked = "Theo dõi"
@@ -425,6 +425,7 @@
             getInvitation: function(){
                 var vm = this;
                 vm.presenterAddGroup = false;
+                vm.presenterAddUser = false;
                 vm.itemInvGroup = [];
                 vm.itemInvContact = [];
 
@@ -631,7 +632,7 @@
             postInvitation: function(type){
                 var vm = this;
                 var dataPostInvitation  =new URLSearchParams();
-                if(type = 'GROUP'){
+                if(type == 'GROUP'){
                     var presenterPostGroup;
                     if(vm.presenterAddGroup == true){
                         presenterPostGroup = 1
@@ -644,9 +645,9 @@
                     dataPostInvitation.append('email', vm.hostingId.email);
                     dataPostInvitation.append('telNo', vm.hostingId.telNo);
                     dataPostInvitation.append('presenter', presenterPostGroup);
-                } else if(type = 'UserContact'){
+                } else if(type == 'UserContact'){
                     var presenterPostUser;
-                    if(vm.presenterAddGroup == true){
+                    if(vm.presenterAddUser == true){
                         presenterPostUser = 1
                     } else {presenterPostUser = 0}
                     dataPostInvitation.append('invitationType', 2);
