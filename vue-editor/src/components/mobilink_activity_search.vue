@@ -636,7 +636,7 @@
                         vm.tableListTotal = serializable.total;
                     } else if (typeof (serializable.data) == 'object') {
                         vm.tableListItems = [serializable.data];
-                        vm.tableListTotal = 1;
+                        /* vm.tableListTotal = 1;*/
                     } else {
                         vm.tableListItems = [];
                     }

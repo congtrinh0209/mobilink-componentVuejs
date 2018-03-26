@@ -18,14 +18,19 @@
                             <span :v-model="userIdNote">{{userIdNote}}</span>
                         </v-tooltip>
                         
-                        <v-btn class="mx-0" small color="success" v-on:click.stop="checkin('ready')" style="padding-left: 6px;padding-right: 6px">
-                            <v-icon style="color: white" v-if="typeCheckin == 1" >check</v-icon>
+                        <v-btn v-if="opening_state_prop == 0" class="mx-0" small color="success" v-on:click.stop="checkAvailable('ready')" style="padding-left: 6px;padding-right: 6px">
+                            <v-icon style="color: white" v-if="typeAvailable == 1" >check</v-icon>
                             Sẵn sàng
                         </v-btn>
-                        <v-btn small class="text-white mx-1" v-on:click.stop="checkin('busy')" color="error">
-                            <v-icon style="color: white" v-if="typeCheckin == 2" >check</v-icon>
+                        <v-btn v-if="opening_state_prop == 0" small class="text-white mx-1" v-on:click.stop="checkAvailable('busy')" color="error">
+                            <v-icon style="color: white" v-if="typeAvailable == 2" >check</v-icon>
                             Tôi bận
                         </v-btn>
+                        <v-btn v-if="opening_state_prop == 1" small class="text-white mx-1" v-on:click.stop="checkin()" color="success">
+                            <v-icon style="color: white" v-if="typeCheckin" >check</v-icon>
+                            Tôi có mặt
+                        </v-btn>
+                        
                     </div>
                     
                 </v-flex>
@@ -56,7 +61,7 @@
                 <v-expansion-panel-content value="true">
                     <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0">
                         <div><b>Đơn vị/ Nhóm trong cơ quan</b></div>
-                        <v-btn fab small grey lighten-3 class="btn-add mx-0 my-0" v-on:click.stop="show_Add1">
+                        <v-btn fab small grey lighten-3 class="btn-add mx-0 my-0" v-on:click.stop="show_Add1" v-if="permission_prop == 'manager'|| permission_prop == 'owner'">
                             <v-icon grey darken-4>add</v-icon>
                         </v-btn>
                     </div>
@@ -106,7 +111,7 @@
                                                             <v-flex xs6 sm3>
                                                                 <div class="right">
                                                                     <v-chip label outline color="primary" class="mr-2 mt-2">{{item.role.statistic.available}}/{{item.role.statistic.invitation}}</v-chip>
-                                                                    <v-btn icon title="Xóa" class="mx-0" @click.stop="updateInvitation('DELETE',item.role.activityInvitationId,index,itemInvGroup)">
+                                                                    <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager' || permission_prop == 'owner'" @click.stop="updateInvitation('DELETE',item.role.activityInvitationId,index,itemInvGroup)">
                                                                         <v-icon color="red darken-3">clear</v-icon>
                                                                     </v-btn> 
                                                                 </div>
@@ -120,32 +125,32 @@
                                                 
                                                 <!-- end -->
 
-                                                    <!-- Phần thêm cá nhân trong tổ chức/ đơn vị -->
-                                                    <div class="layout wrap mx-0 mb-2">
-                                                        <toggle-button class="mr-1 mt-4"
-                                                        :value="false"
-                                                        v-model="presenterAddUserGroup"
-                                                        title_checked = "Thành viên"
-                                                        title_unchecked = "Theo dõi"
-                                                        :labels="{checked: 'TV', unchecked: 'TD'}"
-                                                        :color="{checked: '#7DCE94', unchecked: '#82C7EB'}"
-                                                        :width="50"/>
-                                                        <v-flex xs12 sm8>
-                                                            <v-select class="selectBoder pt-3"
-                                                            placeholder="Cá nhân trong đơn vị/nhóm"
-                                                            :items="itemsSelect1"
-                                                            item-text="name"
-                                                            item-value="value"
-                                                            v-model="select1"
-                                                            return-object
-                                                            :clearable="true"
-                                                            ></v-select>
-                                                        </v-flex>
-                                                        <v-btn small outline color="primary" class="mx-0 ml-1 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
-                                                            Mời
-                                                        </v-btn>
-                                                    </div>
-                                                    <!-- end -->
+                                                <!-- Phần thêm cá nhân trong tổ chức/ đơn vị -->
+                                                <div class="layout wrap mx-0 mb-2">
+                                                    <toggle-button class="mr-1 mt-4"
+                                                    :value="false"
+                                                    v-model="presenterAddUserGroup"
+                                                    title_checked = "Thành viên"
+                                                    title_unchecked = "Theo dõi"
+                                                    :labels="{checked: 'TV', unchecked: 'TD'}"
+                                                    :color="{checked: '#7DCE94', unchecked: '#82C7EB'}"
+                                                    :width="50"/>
+                                                    <v-flex xs12 sm8>
+                                                        <v-select class="selectBoder pt-3"
+                                                        placeholder="Cá nhân trong đơn vị/nhóm"
+                                                        :items="itemsSelect1"
+                                                        item-text="name"
+                                                        item-value="value"
+                                                        v-model="select1"
+                                                        return-object
+                                                        :clearable="true"
+                                                        ></v-select>
+                                                    </v-flex>
+                                                    <v-btn small outline color="primary" class="mx-0 ml-1 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
+                                                        Mời
+                                                    </v-btn>
+                                                </div>
+                                                <!-- end -->
 
                                                 <!-- Phần danh sách cá nhân trong tổ chức/ đơn vị -->
                                                 <v-list-tile v-for="subItem in item.items" v-bind:key="subItem.activityInvitationId">
@@ -209,7 +214,7 @@
                 <v-expansion-panel-content value="true">
                     <div slot="header" class="custome-panel-heading-with-icon pl-0 mr-2">
                         <div><b>Cá nhân/ Tổ chức theo danh bạ</b></div>
-                        <v-btn fab small grey lighten-3 class="btn-add mx-0 my-0" v-on:click.stop="show_Add2">
+                        <v-btn fab small grey lighten-3 class="btn-add mx-0 my-0" v-on:click.stop="show_Add2" v-if="permission_prop == 'manager'|| permission_prop == 'owner'">
                             <v-icon grey darken-4>add</v-icon>
                         </v-btn>
                     </div>
@@ -280,6 +285,7 @@
                                                             <v-flex xs12 sm6 class="pt-1">
                                                                 <v-list-tile-title>
                                                                     <toggle-button class="mr-1 mt-2"
+                                                                    :disabled="disUserMail"
                                                                     :value="bindPresenter(item.presenter)"
                                                                     @change="updatePresenterUserGroup($event,item.activityInvitationId,item)"
                                                                     title_checked = "Thành viên"
@@ -293,11 +299,21 @@
                                                             
                                                             <v-flex xs12 sm6>
                                                                 <div class="right">
-                                                                    <v-btn icon class="text-white mx-0 my-0" >
-                                                                        <v-icon class="iconCmm" >comment</v-icon>
+                                                                    <v-tooltip top>
+                                                                        <v-btn icon slot="activator" class="text-white mx-0 my-0" >
+                                                                            <v-icon class="iconCmm" >comment</v-icon>
+                                                                        </v-btn>
+                                                                        <span>{{item.userNote}}</span>
+                                                                    </v-tooltip>
+                                                                    
+                                                                    <span v-if="opening_state_prop == 0" style="color:green" v-html="bindAvailableText(item.available)"></span>
+
+                                                                    <v-btn v-if="opening_state_prop == 1 && item.available==1" small class="text-white mx-1" v-on:click.stop="checkin()" color="success">
+                                                                        <v-icon style="color: white" v-if="item.checkin==true" >check</v-icon>
+                                                                        Tôi có mặt
                                                                     </v-btn>
-                                                                    <span style="color:green" v-html="bindAvailableText(item.available)"></span>
-                                                                    <v-btn icon title="Xóa" class="mx-0 ml-2" @click.stop="updateInvitation('DELETE',item.activityInvitationId,index,itemInvContact)">
+
+                                                                    <v-btn icon title="Xóa" class="mx-0 ml-2" v-if="permission_prop == 'manager'|| permission_prop == 'owner'" @click.stop="updateInvitation('DELETE',item.activityInvitationId,index,itemInvContact)">
                                                                         <v-icon color="red darken-3">clear</v-icon>
                                                                     </v-btn> 
                                                                 </div>
@@ -351,9 +367,12 @@
                 invitationUserId:'',
                 mineInv: false,
                 userIdNote:'',
+                userCheck:'',
+                typeAvailable: '',
+                typeCheckin: false,
                 /** */
                 switch1: true,
-                typeCheckin: '',
+                
                 presenterAddUser:'',
                 presenterAddUserGroup:'',
                 presenterAddGroup:'',
@@ -365,12 +384,13 @@
                 dialog_add_contact: false,
                 showAdd1: false,
                 showAdd2: false,
+                disUserMail: false,
                 /**/ 
                 invitationItems:[],
                 itemInvGroup:[],
                 itemInvContact:[],
-                invitationCount: '',
-                availableCount:'',
+                invitationCount: 0,
+                availableCount: 0,
                 dataUpdateInvitation: new URLSearchParams(),
                 /**/ 
                 hostingIdItems:[],
@@ -394,7 +414,9 @@
         methods: {
             initInvitation: function(){
                 var vm = this;
-                
+                if(vm.permission_prop!='manager' || vm.permission_prop!='owner'){
+                    vm.disUserMail = true
+                }
                 /** */
                 vm.getWorkingUnit();
                 vm.getInvitation();
@@ -433,7 +455,8 @@
                                 vm.mineInv = true;
                                 vm.userIdNote = item.userNote;
                                 vm.invitationUserId = item.activityInvitationId;
-                                vm.typeCheckin = item.available
+                                vm.typeAvailable = item.available;
+                                vm.typeCheckin = item.checkin
                             }
                             /** */
                             if(item.invitationType == 0 ||item.invitationType == 1) {
@@ -698,16 +721,16 @@
                 }
                 
             },
-            checkin: function(typeCheck){
+            checkAvailable: function(typeCheck){
                 var vm =this;
                 if(typeCheck == 'ready'){
-                    vm.typeCheckin = 1
+                    vm.typeAvailable = 1
                 } else if(typeCheck == 'busy'){
-                    vm.typeCheckin = 2
+                    vm.typeAvailable = 2
                 };
-                var vm = this;
+
                 var dataUpdateAvailable  =new URLSearchParams();
-                dataUpdateAvailable.append('available', vm.typeCheckin);
+                dataUpdateAvailable.append('available', vm.typeAvailable);
                 var urlUpdate = vm.end_point + "activities/"+vm.class_pk+"/invitations/"+vm.invitationUserId;
                 var paramsPutInvitation = {
                     
@@ -724,10 +747,36 @@
                     alert("Cập nhật dữ liệu thành công!");
                 })
                 .catch(function (error) {
-                    vm.typeCheckin = vm.typeCheckin;
+                    vm.typeAvailable = vm.typeAvailable;
                     alert("Cập nhật dữ liệu thất bại!")
                 })
                 
+            },
+            checkin: function(){
+                var vm =this;
+                vm.typeCheckin=!vm.typeCheckin;
+
+                var dataUpdateAvailable  =new URLSearchParams();
+                dataUpdateAvailable.append('checkin', vm.typeCheckin);
+                var urlUpdate = vm.end_point + "activities/"+vm.class_pk+"/invitations/"+vm.invitationUserId;
+                var paramsPutInvitation = {
+                    
+                };
+                const configPutInvitation = {
+                    params: paramsPutInvitation,
+                    headers: {
+                        'groupId': vm.group_id
+                    }
+                };
+                axios.put(urlUpdate, dataUpdateAvailable, configPutInvitation)
+                .then(function (response) {
+
+                    alert("Cập nhật dữ liệu thành công!");
+                })
+                .catch(function (error) {
+                    vm.typeCheckin=!vm.typeCheckin;
+                    alert("Cập nhật dữ liệu thất bại!")
+                })
             },
             show_Add1: function(){
                 var vm =this;
