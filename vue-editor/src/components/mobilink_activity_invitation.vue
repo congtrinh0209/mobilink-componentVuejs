@@ -479,6 +479,17 @@
                                 }
                             }
                         }
+                        for(var keys in vm.itemInvGroup){
+                            for (var key in vm.invitationItems) {
+                                let item = vm.invitationItems[key];
+                                let itemGroups = vm.itemInvGroup[keys].role;
+                                if(item.roleId==itemGroups.roleId&&item.invitationType==4 ){
+                                    vm.itemInvGroup[keys].user_leader = item.userId
+                                } else{
+                                    vm.itemInvGroup[keys].user_leader = ''
+                                }
+                            }
+                        }
                         
                     } else {
                         vm.invitationItems = []
