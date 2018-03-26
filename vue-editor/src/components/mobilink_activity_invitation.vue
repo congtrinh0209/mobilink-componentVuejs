@@ -5,12 +5,13 @@
                 absolute
                 color="teal lighten-3"
                 dark
-            >
+            >   
                 <div class="ml-2" v-if="opening_state_prop == 0">Giấy mời: {{invitationCount}} ({{availableCount}} sẵn sàng)</div>
                 <div class="ml-2" v-if="opening_state_prop == 1">Giấy mời: {{invitationCount}} ({{checkinCount}} có mặt)</div>
+                <div class="ml-2" v-if="opening_state_prop == 2 || opening_state_prop == 3">Giấy mời: {{invitationCount}} ({{checkinCount}} có mặt)</div>
                 <v-spacer></v-spacer>
                 
-                <v-flex v-if="mineInv"><!-- v-if="permission_prop!='manager'&&permission_prop!='owner'" -->
+                <v-flex v-if="mineInv">
                     <div class="right">
                         <v-tooltip top>
                             <v-btn icon slot="activator" class="text-white mx-0 my-0"  @click.stop="showAddNote(invitationUserId,userIdNote)">
@@ -232,6 +233,7 @@
                                         item-text="fullName"
                                         item-value="contactId"
                                         return-object
+                                        autocomplete
                                         :clearable="true"
                                         ></v-select>
                                     </v-flex>
