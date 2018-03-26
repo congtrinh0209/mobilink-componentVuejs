@@ -15,14 +15,14 @@
                             <v-btn icon slot="activator" class="text-white mx-0 my-0"  @click.stop="showAddNote(invitationUserId,userIdNote)">
                                 <v-icon class="iconCmm" >comment</v-icon>
                             </v-btn>
-                            <span :v-model="userIdNote"></span>
+                            <span :v-model="userIdNote">{{userIdNote}}</span>
                         </v-tooltip>
                         
-                        <v-btn class="mx-0" small color="success" v-on:click.stop="checkin" style="padding-left: 6px;padding-right: 6px">
+                        <v-btn class="mx-0" small color="success" v-on:click.stop="checkin('ready')" style="padding-left: 6px;padding-right: 6px">
                             <v-icon style="color: white" v-if="typeCheckin == 1" >check</v-icon>
                             Sẵn sàng
                         </v-btn>
-                        <v-btn small class="text-white mx-1" v-on:click.stop="checkin" color="error">
+                        <v-btn small class="text-white mx-1" v-on:click.stop="checkin('busy')" color="error">
                             <v-icon style="color: white" v-if="typeCheckin == 2" >check</v-icon>
                             Tôi bận
                         </v-btn>
@@ -698,9 +698,36 @@
                 }
                 
             },
-            checkin: function(){
+            checkin: function(typeCheck){
                 var vm =this;
-                vm.typeCheckin = !vm.typeCheckin;
+                if(typeCheck == 'ready'){
+                    vm.typeCheckin = 1
+                } else if(typeCheck == 'busy'){
+                    vm.typeCheckin = 2
+                };
+                var vm = this;
+                var dataUpdateAvailable  =new URLSearchParams();
+                dataUpdateAvailable.append('available', vm.typeCheckin);
+                var urlUpdate = vm.end_point + "activities/"+vm.class_pk+"/invitations/"+vm.invitationUserId;
+                var paramsPutInvitation = {
+                    
+                };
+                const configPutInvitation = {
+                    params: paramsPutInvitation,
+                    headers: {
+                        'groupId': vm.group_id
+                    }
+                };
+                axios.put(urlUpdate, dataUpdateAvailable, configPutInvitation)
+                .then(function (response) {
+
+                    alert("Cập nhật dữ liệu thành công!");
+                })
+                .catch(function (error) {
+                    vm.typeCheckin = vm.typeCheckin;
+                    alert("Cập nhật dữ liệu thất bại!")
+                })
+                
             },
             show_Add1: function(){
                 var vm =this;
