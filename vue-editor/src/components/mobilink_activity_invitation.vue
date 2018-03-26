@@ -9,17 +9,21 @@
                 <div class="ml-2">Giấy mời: {{invitationCount}} ({{availableCount}} sẵn sàng)</div>
                 <v-spacer></v-spacer>
                 
-                <v-flex v-if="permission_prop!='manager'&&permission_prop!='owner'">
+                <v-flex v-if="mineInv"><!-- v-if="permission_prop!='manager'&&permission_prop!='owner'" -->
                     <div class="right">
-                        <v-btn icon @click="showAddNote" class="text-white mx-0">
-                            <v-icon class="iconCmm">comment</v-icon>
-                        </v-btn>
+                        <v-tooltip top>
+                            <v-btn icon slot="activator" class="text-white mx-0 my-0"  @click.stop="showAddNote(invitationUserId,userIdNote)">
+                                <v-icon class="iconCmm" >comment</v-icon>
+                            </v-btn>
+                            <span :v-model="userIdNote"></span>
+                        </v-tooltip>
+                        
                         <v-btn class="mx-0" small color="success" v-on:click.stop="checkin" style="padding-left: 6px;padding-right: 6px">
-                            <v-icon style="color: white" v-if="typeCheckin" >check</v-icon>
+                            <v-icon style="color: white" v-if="typeCheckin == 1" >check</v-icon>
                             Sẵn sàng
                         </v-btn>
                         <v-btn small class="text-white mx-1" v-on:click.stop="checkin" color="error">
-                            <v-icon style="color: white" v-if="!typeCheckin" >check</v-icon>
+                            <v-icon style="color: white" v-if="typeCheckin == 2" >check</v-icon>
                             Tôi bận
                         </v-btn>
                     </div>
@@ -167,7 +171,7 @@
                                                             <v-flex xs12 sm6 >
                                                                 <div class="right">
                                                                     <v-tooltip top>
-                                                                        <v-btn icon slot="activator" class="text-white mx-0 my-0"  @click.stop="showAddNote(subItem.activityInvitationId,subItem.userNote,subItem)">
+                                                                        <v-btn icon slot="activator" class="text-white mx-0 my-0" >
                                                                             <v-icon class="iconCmm" >comment</v-icon>
                                                                         </v-btn>
                                                                         <span>{{subItem.userNote}}</span>
@@ -289,7 +293,7 @@
                                                             
                                                             <v-flex xs12 sm6>
                                                                 <div class="right">
-                                                                    <v-btn icon class="text-white mx-0 my-0" @click.stop="showAddNote(item.activityInvitationId,item.userNote,item)">
+                                                                    <v-btn icon class="text-white mx-0 my-0" >
                                                                         <v-icon class="iconCmm" >comment</v-icon>
                                                                     </v-btn>
                                                                     <span style="color:green" v-html="bindAvailableText(item.available)"></span>
@@ -333,7 +337,8 @@
             class_name: null,
             group_id: null,
             end_point: null,
-            permission_prop: null
+            permission_prop: null,
+            opening_state_prop: null
         },
 
         created () {
@@ -342,8 +347,13 @@
         
         data () {
             return {
+                /** userId: themeDisplay.getUserId(),*/
+                invitationUserId:'',
+                mineInv: false,
+                userIdNote:'',
+                /** */
                 switch1: true,
-                typeCheckin: true,
+                typeCheckin: '',
                 presenterAddUser:'',
                 presenterAddUserGroup:'',
                 presenterAddGroup:'',
@@ -365,7 +375,7 @@
                 /**/ 
                 hostingIdItems:[],
                 hostingId:'',
-                // 
+                
                 itemsSelect1: [
                     { name: 'Trịnh Công Trình', value: 1},
                     { name: 'Nguyễn Văn Thành', value: 2},
@@ -384,9 +394,7 @@
         methods: {
             initInvitation: function(){
                 var vm = this;
-                vm.presenterAddGroup = false;
-                vm.itemInvGroup = [];
-                vm.itemInvContact = [];
+                
                 /** */
                 vm.getWorkingUnit();
                 vm.getInvitation();
@@ -395,6 +403,10 @@
             /* Load data invitation */
             getInvitation: function(){
                 var vm = this;
+                vm.presenterAddGroup = false;
+                vm.itemInvGroup = [];
+                vm.itemInvContact = [];
+
                 var paramsGetInvitation = {
                     
                 };
@@ -416,6 +428,14 @@
                         for (var key in vm.invitationItems) {
                             
                             let item = vm.invitationItems[key];
+                            /**check mine */
+                            if(item.mine == true){
+                                vm.mineInv = true;
+                                vm.userIdNote = item.userNote;
+                                vm.invitationUserId = item.activityInvitationId;
+                                vm.typeCheckin = item.available
+                            }
+                            /** */
                             if(item.invitationType == 0 ||item.invitationType == 1) {
                                 vm.itemInvGroup.push(
                                     {
@@ -446,6 +466,34 @@
                 })
                 /** */
             },
+            /* Load data invitation toUserId*/
+            /*getInvitationUserId: function(){
+                var vm = this;
+                var paramsGetInvitationUserId = {
+                    toUserId : vm.userId
+				
+                };
+                const configGetInvitation = {
+                    params: paramsGetInvitationUserId,
+                    headers: {
+                        'groupId': vm.group_id
+                    }
+                };
+                
+                axios.get( vm.end_point + 'activities/' + vm.class_pk + '/invitations', configGetInvitation)
+                .then(function (response) {
+                    vm.mineInv = true;
+                    var serializable = response.data;
+                    if (serializable.hasOwnProperty('data')) {
+                        vm.userIdNote = serializable.data.userNote;
+                        vm.invitationUserId = serializable.data.activityInvitationId
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error)
+                })
+                
+            },*/
             /**Xử lý hiển thị các trạng thái invitation */
             bindPresenter: function (item){
                 if(item == 0){
@@ -556,7 +604,7 @@
                 };
                 axios.post(urlUpdate, dataPostInvitation, configPostInvitation)
                 .then(function (response) {
-                    
+                    vm.getInvitation();
                     alert("Thêm mới giấy mời thành công!");
                 })
                 .catch(function (error) {
@@ -570,8 +618,7 @@
                 vm.dialog_add_note = true;
                 vm.note_text = noteText;
                 vm.idAddNote = invId;
-                vm.itemsNote = items;
-
+                
             },
             submitAddNote: function(invId,note,itemsNote){
                 var vm = this;
@@ -590,7 +637,8 @@
                 axios.put(urlUpdate, dataUpdateInvitation, configPutInvitation)
                 .then(function (response) {
                     vm.dialog_add_note = false;
-                    itemsNote.userNote = response.data.userNote;
+                    vm.userIdNote = response.data.userNote;
+                    
                     alert("Cập nhật dữ liệu thành công!");
                 })
                 .catch(function (error) {
