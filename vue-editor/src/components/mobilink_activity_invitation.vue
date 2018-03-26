@@ -6,7 +6,8 @@
                 color="teal lighten-3"
                 dark
             >
-                <div class="ml-2">Giấy mời: {{invitationCount}} ({{availableCount}} sẵn sàng)</div>
+                <div class="ml-2" v-if="opening_state_prop == 0">Giấy mời: {{invitationCount}} ({{availableCount}} sẵn sàng)</div>
+                <div class="ml-2" v-if="opening_state_prop == 1">Giấy mời: {{invitationCount}} ({{checkinCount}} có mặt)</div>
                 <v-spacer></v-spacer>
                 
                 <v-flex v-if="mineInv"><!-- v-if="permission_prop!='manager'&&permission_prop!='owner'" -->
@@ -26,7 +27,7 @@
                             <v-icon style="color: white" v-if="typeAvailable == 2" >check</v-icon>
                             Tôi bận
                         </v-btn>
-                        <v-btn v-if="opening_state_prop == 1" small class="text-white mx-1" v-on:click.stop="checkin()" color="success">
+                        <v-btn v-if="opening_state_prop == 1" small class="text-white mx-1" v-on:click.stop="checkin()" color="indigo">
                             <v-icon style="color: white" v-if="typeCheckin" >check</v-icon>
                             Tôi có mặt
                         </v-btn>
@@ -89,7 +90,7 @@
                                     :labels="{checked: 'TV', unchecked: 'TD'}"
                                     :color="{checked: '#7DCE94', unchecked: '#82C7EB'}"
                                     :width="50"/>
-                                    <v-btn small outline color="primary" @click.stop="postInvitation" class="mx-0 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
+                                    <v-btn small outline color="primary" @click.stop="postInvitation('GROUP')" class="mx-0 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
                                         Mời
                                     </v-btn>
 
@@ -126,7 +127,7 @@
                                                 <!-- end -->
 
                                                 <!-- Phần thêm cá nhân trong tổ chức/ đơn vị -->
-                                                <div class="layout wrap mx-0 mb-2">
+                                                <div v-if="item.role.invitationType == 0" class="layout wrap mx-0 mb-2">
                                                     <toggle-button class="mr-1 mt-4"
                                                     :value="false"
                                                     v-model="presenterAddUserGroup"
@@ -226,10 +227,10 @@
                                     <v-flex xs12 sm8>
                                         <v-select class="selectBoder pt-3"
                                         placeholder="Cá nhân/ tổ chức theo danh bạ"
-                                        :items="itemsSelect3"
-                                        v-model="select3"
-                                        item-text="name"
-                                        item-value="value"
+                                        :items="contactItems"
+                                        v-model="contact"
+                                        item-text="fullName"
+                                        item-value="contactId"
                                         return-object
                                         :clearable="true"
                                         ></v-select>
@@ -243,7 +244,7 @@
                                     :color="{checked: '#7DCE94', unchecked: '#82C7EB'}"
                                     :width="50"/>
 
-                                    <v-btn small outline color="primary" @click="showAddCot" class="mx-0 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
+                                    <v-btn small outline color="primary" @click="postInvitation('UserContact')" class="mx-0 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
                                         Mời
                                     </v-btn>
 
@@ -257,8 +258,8 @@
                                             <v-card-text>
                                                 <jx-mobilink-activity-contact
                                                 ref="activity_contact_ref"
-                                                group_id="20147"
-                                                end_point= "http://127.0.0.1:8081/api/" 
+                                                :group_id="group_id"
+                                                :end_point= "end_point" 
                                                 @add-contact = 'addContact'
                                                 ></jx-mobilink-activity-contact>
                                             </v-card-text>
@@ -308,8 +309,8 @@
                                                                     
                                                                     <span v-if="opening_state_prop == 0" style="color:green" v-html="bindAvailableText(item.available)"></span>
 
-                                                                    <v-btn v-if="opening_state_prop == 1 && item.available==1" small class="text-white mx-1" v-on:click.stop="checkin()" color="success">
-                                                                        <v-icon style="color: white" v-if="item.checkin==true" >check</v-icon>
+                                                                    <v-btn v-if="opening_state_prop == 1 && item.available==1" v-on:click.stop="managerCheckin(item)" outline small class="text-white mx-1" color="indigo">
+                                                                        <v-icon color="indigo" v-if="item.checkin" >check</v-icon>
                                                                         Tôi có mặt
                                                                     </v-btn>
 
@@ -389,8 +390,11 @@
                 invitationItems:[],
                 itemInvGroup:[],
                 itemInvContact:[],
+                contactItems:[],
+                contact:'',
                 invitationCount: 0,
                 availableCount: 0,
+                checkinCount:0,
                 dataUpdateInvitation: new URLSearchParams(),
                 /**/ 
                 hostingIdItems:[],
@@ -402,23 +406,18 @@
                     { name: 'Lê Tiến Hoàn', value: 3},
                 ],
                 select1: '',
-
-                itemsSelect3: [
-                    { name: 'Trịnh Công Trình', value: 1},
-                    { name: 'Nguyễn Văn Thành', value: 2},
-                    { name: 'Lê Tiến Hoàn', value: 3},
-                ],
-                select3: '',
             }
         },
         methods: {
             initInvitation: function(){
                 var vm = this;
+                
                 if(vm.permission_prop!='manager' || vm.permission_prop!='owner'){
                     vm.disUserMail = true
                 }
                 /** */
                 vm.getWorkingUnit();
+                vm.getUserContact();
                 vm.getInvitation();
                 console.log(vm)
             },
@@ -466,7 +465,7 @@
                                         items: []
                                     }
                                 )
-                            } else if(item.invitationType == 2 ||item.invitationType == 4){
+                            } else if(item.invitationType == 2){
                                 vm.itemInvContact.push(item)
                             }
                         };
@@ -474,7 +473,7 @@
                             for (var key in vm.invitationItems) {
                                 let item = vm.invitationItems[key];
                                 let itemGroups = vm.itemInvGroup[keys].role;
-                                if(item.roleId==itemGroups.roleId&&item.invitationType==3 || item.roleId==itemGroups.roleId&&item.invitationType==5){
+                                if(item.roleId==itemGroups.roleId&&item.invitationType==3 || item.roleId==itemGroups.roleId&&item.invitationType==5 || item.roleId==itemGroups.roleId&&item.invitationType==4){
                                     vm.itemInvGroup[keys].items.push(item)
                                 }
                             }
@@ -559,6 +558,35 @@
                 })
 
             },
+            /**get contact */
+            getUserContact: function(){
+                var vm = this;
+                var paramsGetUserContact = {
+                    
+                };
+                const configGetWorkingUnit = {
+                    params: paramsGetUserContact,
+                    headers: {
+                        'groupId': vm.group_id
+                    }
+                };
+                axios.get( vm.end_point + 'contacts', configGetWorkingUnit)
+                .then(function (response) {
+                    var serializable = response.data
+                    if (serializable.hasOwnProperty('data')) {
+                        for (var key in serializable.data) {
+                            vm.contactItems.push(
+                                serializable.data[key]
+                            )
+                            
+                        }
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error)
+                })
+
+            },
             
             /**Xử lý cập nhật  invitation của group và user */
             updateInvitation: function(type,invId,index,items){
@@ -600,20 +628,34 @@
             },
             
             /**POST invitation */
-            postInvitation: function(){
+            postInvitation: function(type){
                 var vm = this;
-                var presenterPostGroup;
-                if(vm.presenterAddGroup == true){
-                    presenterPostGroup = 1
-                } else {presenterPostGroup = 0}
                 var dataPostInvitation  =new URLSearchParams();
-                dataPostInvitation.append('invitationType', 0);
-                dataPostInvitation.append('roleId', vm.hostingId.roleId);
-                dataPostInvitation.append('toUserId', '');
-                dataPostInvitation.append('fullName', vm.hostingId.name);
-                dataPostInvitation.append('email', vm.hostingId.email);
-                dataPostInvitation.append('telNo', vm.hostingId.telNo);
-                dataPostInvitation.append('presenter', presenterPostGroup);
+                if(type = 'GROUP'){
+                    var presenterPostGroup;
+                    if(vm.presenterAddGroup == true){
+                        presenterPostGroup = 1
+                    } else {presenterPostGroup = 0}
+                    
+                    dataPostInvitation.append('invitationType', 0);
+                    dataPostInvitation.append('roleId', vm.hostingId.roleId);
+                    dataPostInvitation.append('toUserId', '');
+                    dataPostInvitation.append('fullName', vm.hostingId.name);
+                    dataPostInvitation.append('email', vm.hostingId.email);
+                    dataPostInvitation.append('telNo', vm.hostingId.telNo);
+                    dataPostInvitation.append('presenter', presenterPostGroup);
+                } else if(type = 'UserContact'){
+                    var presenterPostUser;
+                    if(vm.presenterAddGroup == true){
+                        presenterPostUser = 1
+                    } else {presenterPostUser = 0}
+                    dataPostInvitation.append('invitationType', 2);
+                    dataPostInvitation.append('toUserId', vm.contact.userMappingId);
+                    dataPostInvitation.append('fullName', vm.contact.fullName);
+                    dataPostInvitation.append('email', vm.contact.email);
+                    dataPostInvitation.append('telNo', vm.contact.telNo);
+                    dataPostInvitation.append('presenter', presenterPostUser);
+                }
                 
                 var urlUpdate = vm.end_point + "activities/"+vm.class_pk+"/invitations";
                 var paramsPostInvitation = {
@@ -775,6 +817,33 @@
                 })
                 .catch(function (error) {
                     vm.typeCheckin=!vm.typeCheckin;
+                    alert("Cập nhật dữ liệu thất bại!")
+                })
+            },
+            managerCheckin: function(item){
+                var vm =this;
+                var typeCheckManager;
+                typeCheckManager=!item.checkin;
+
+                var dataUpdateAvailable  =new URLSearchParams();
+                dataUpdateAvailable.append('checkin', typeCheckManager);
+                var urlUpdate = vm.end_point + "activities/"+vm.class_pk+"/invitations/"+item.activityInvitationId;
+                var paramsPutInvitation = {
+                    
+                };
+                const configPutInvitation = {
+                    params: paramsPutInvitation,
+                    headers: {
+                        'groupId': vm.group_id
+                    }
+                };
+                axios.put(urlUpdate, dataUpdateAvailable, configPutInvitation)
+                .then(function (response) {
+                    item.checkin = typeCheckManager;
+                    alert("Cập nhật dữ liệu thành công!");
+                })
+                .catch(function (error) {
+                    
                     alert("Cập nhật dữ liệu thất bại!")
                 })
             },

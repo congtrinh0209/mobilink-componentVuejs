@@ -174,38 +174,38 @@
         >
             <template slot="items" slot-scope="props">
                 <tr v-bind:class="{'active': props.index%2==1}">
-                    <td class="pt-2 pb-2">
+                    <td class="py-0 px-2">
                         <span>{{props.item.activityId}}</span>
                     </td>
 
-                    <td class="pt-2 pb-2">
+                    <td class="py-0 px-2">
                         <span>{{props.item.startDate|date}}</span>
                     </td>
 
-                    <td class="pt-2 pb-2">
+                    <td class="py-0 px-2">
                         <a href="javascript:;" title="Xem chi tiết" v-on:click="activityDetail(props.item,props.index)">
                             <span>{{props.item.subject}}</span>
                         </a>
                     </td>
                     
-                    <td class="pt-2 pb-2">
+                    <td class="py-0 px-2">
                         <span>{{getActiviyType(props.item.activityType)}}/ {{props.item.categoryName}}</span>
                     </td>
                     
-                    <td class="pt-2 pb-2">
+                    <td class="py-0 px-2">
                         <span>{{props.item.hosting}}</span>
                     </td>
 
-                    <td class="pt-2 pb-2">
+                    <td class="py-0 px-2">
                         <span>{{props.item.managerName}}</span>
                     </td>
 
-                    <td class="pt-2 pb-2">
+                    <td class="py-0 px-2">
                         <v-chip style="display: inline-block;text-align: center;width:100%" label outline :color="getColor(props.item.openingState)">{{getState(props.item.openingState)}}</v-chip>
 
                     </td>
 
-                    <td>
+                    <td class="py-0 px-2">
                         <v-btn v-if="props.item.permission=='owner'||props.item.permission=='manager'" icon v-on:click="deleteActivity(props.item, props.index,tableListItems)" title="Xóa" class="mt-2 my-0">
                             <v-icon color="red darken-3">clear</v-icon>
                         </v-btn> 
