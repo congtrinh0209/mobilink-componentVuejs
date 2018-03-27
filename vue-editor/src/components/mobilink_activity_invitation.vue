@@ -288,7 +288,7 @@
                                                             <v-flex xs12 sm6 class="pt-1">
                                                                 <v-list-tile-title>
                                                                     <toggle-button class="mr-1 mt-2"
-                                                                    :disabled="disUserMail"
+                                                                    :disabled="(permission_prop=='manager'||permission_prop=='owner')?false:true"
                                                                     :value="bindPresenter(item.presenter)"
                                                                     @change="updatePresenterUserGroup($event,item.activityInvitationId,item)"
                                                                     title_checked = "Thành viên"
@@ -356,6 +356,7 @@
             class_name: null,
             group_id: null,
             end_point: null,
+            working_unit_prop: null,
             permission_prop: null,
             opening_state_prop: null
         },
@@ -366,8 +367,8 @@
         
         data () {
             return {
-                userId: themeDisplay.getUserId(),
-                workingUnitId:'',
+                userId: 1/*themeDisplay.getUserId()*/,
+                
                 invitationUserId:'',
                 mineInv: false,
                 userIdNote:'',
@@ -412,8 +413,8 @@
         methods: {
             initInvitation: function(){
                 var vm = this;
-                vm.userId = 108;/**themeDisplay.getUserId() */
-                vm.workingUnitId = '';
+                console.log(vm._props);
+                              
                 if(vm.permission_prop!='manager' || vm.permission_prop!='owner'){
                     vm.disUserMail = true
                 }
@@ -422,10 +423,10 @@
                 vm.getUserContact();
                 vm.getInvitation();
                 
-                console.log(vm);
                 setTimeout(function(){
                     vm.activeGetEmployees();
-                },500)
+                },3000);
+                
             },
             /* Load data invitation */
             getInvitation: function(){
@@ -582,7 +583,7 @@
             getEmployees: function(){
                 var vm = this;
                 var paramsGetEmployee = {
-                    'workingunit': vm.workingUnitId,
+                    'workingunit': vm.working_unit_prop,
                     'active': true
                 };
                 const configGetEmployee = {
@@ -690,8 +691,9 @@
             /**POST invitation */
             postInvitation: function(type){
                 var vm = this;
-                var dataPostInvitation  =new URLSearchParams();
+                
                 if(type == 'GROUP'){
+                    var dataPostInvitation  =new URLSearchParams();
                     var presenterPostGroup;
                     if(vm.presenterAddGroup == true){
                         presenterPostGroup = 1
@@ -706,6 +708,7 @@
                     dataPostInvitation.append('presenter', presenterPostGroup);
                 } 
                 else if(type == 'UserUnit'){
+                    var dataPostInvitation  =new URLSearchParams();
                     var presenterPostUserUnit;
                     if(vm.presenterAddUserUnit == true){
                         presenterPostUserUnit = 1
@@ -720,6 +723,7 @@
                     dataPostInvitation.append('presenter', presenterPostUserUnit);
                 }
                 else if(type == 'UserContact'){
+                    var dataPostInvitation  =new URLSearchParams();
                     var presenterPostUser;
                     if(vm.presenterAddUser == true){
                         presenterPostUser = 1

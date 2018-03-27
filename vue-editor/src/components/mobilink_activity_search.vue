@@ -35,14 +35,14 @@
                     <v-subheader class="px-0">Từ ngày </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4>
-                    <date-picker class="mt-3" v-model="timeStart" lang="en" type="date" format="dd/MM/yyyy"></date-picker>
+                    <date-picker class="mt-3" v-model="timeStart" placeholder="Chọn ngày" lang="en" type="date" format="dd/MM/yyyy"></date-picker>
                 </v-flex>
                 <!--  -->
                 <v-flex xs12 sm2 class="pl-3 mt-2">
                     <v-subheader class="px-0">Đến ngày </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4 class="pr-2">
-                    <date-picker class="mt-3" v-model="timeEnd" lang="en" type="date" format="dd/MM/yyyy"></date-picker>
+                    <date-picker class="mt-3" v-model="timeEnd" placeholder="Chọn ngày" lang="en" type="date" format="dd/MM/yyyy"></date-picker>
                 </v-flex>
                 <!--  -->
                 <v-flex xs12 sm2 class="pl-3">
@@ -163,6 +163,7 @@
     <v-slide-x-transition>
 
         <v-data-table
+        id = "table_search"
         :headers="headersTable"
         :items="tableListItems"
         :pagination.sync="pagination"
@@ -174,41 +175,52 @@
         >
             <template slot="items" slot-scope="props">
                 <tr v-bind:class="{'active': props.index%2==1}">
-                    <td class="py-0 px-2">
-                        <span>{{props.item.activityId}}</span>
+                    <td class="text-xs-center">
+                        <div class="pt-2 pb-2">
+                            <span>{{props.item.activityId}}</span>
+                        </div>
                     </td>
 
-                    <td class="py-0 px-2">
-                        <span>{{props.item.startDate|date}}</span>
+                    <td class="text-xs-center">
+                        <div class="pt-2 pb-2">
+                            <span>{{props.item.startDate|datetime}}</span>
+                        </div>
                     </td>
 
-                    <td class="py-0 px-2">
-                        <a href="javascript:;" title="Xem chi tiết" v-on:click="activityDetail(props.item,props.index)">
-                            <span>{{props.item.subject}}</span>
-                        </a>
+                    <td>
+                        <div class="pt-2 pb-2">
+                            <a href="javascript:;" title="Xem chi tiết" v-on:click="activityDetail(props.item,props.index)">
+                                <span>{{props.item.subject}}</span>
+                            </a>
+                        </div>
                     </td>
                     
-                    <td class="py-0 px-2">
-                        <span>{{getActiviyType(props.item.activityType)}}/ {{props.item.categoryName}}</span>
+                    <td>
+                        <div class="pt-2 pb-2">
+                            <span>{{getActiviyType(props.item.activityType)}}/ {{props.item.categoryName}}</span>
+                        </div>
                     </td>
                     
-                    <td class="py-0 px-2">
-                        <span>{{props.item.hosting}}</span>
+                    <td>
+                        <div class="pt-2 pb-2">
+                            <span>{{props.item.hosting}}</span>
+                        </div>
                     </td>
 
-                    <td class="py-0 px-2">
-                        <span>{{props.item.managerName}}</span>
+                    <td>
+                        <div class="pt-2 pb-2">
+                            <span>{{props.item.managerName}}</span>
+                        </div>
                     </td>
 
-                    <td class="py-0 px-2">
-                        <v-chip style="display: inline-block;text-align: center;width:100%" label outline :color="getColor(props.item.openingState)">{{getState(props.item.openingState)}}</v-chip>
+                    <td class="text-xs-center">
+                            <v-chip style="display: inline-block;text-align: center;width:90%" label outline :color="getColor(props.item.openingState)"><span>{{getState(props.item.openingState)}}</span></v-chip>
 
                     </td>
 
-                    <td class="py-0 px-2">
-                        <v-btn v-if="props.item.permission=='owner'||props.item.permission=='manager'" icon v-on:click="deleteActivity(props.item, props.index,tableListItems)" title="Xóa" class="mt-2 my-0">
-                            <v-icon color="red darken-3">clear</v-icon>
-                        </v-btn> 
+                    <td class="text-xs-center">
+
+                        <v-icon color="red darken-3" v-if="props.item.permission=='owner'||props.item.permission=='manager'" icon @click="deleteActivity(props.item,props.index,tableListItems)">clear</v-icon>
                     </td>
                 </tr>
             </template>
@@ -748,21 +760,82 @@
     #activitySearch .row-header .input-group label{
         top: 0px!important
     }
-    #activitySearch table thead{
+    #activitySearch #table_search table thead{
         background-color: #82dad5!important;
     }
-    #activitySearch table thead tr th{
+    #activitySearch #table_search table thead tr th{
         border: 1px solid #ddd !important;
     }
-    #activitySearch table tbody td {
+    #activitySearch #table_search table tbody td {
         border: 1px solid #ddd !important;
     }
-    /* .row-header .input-group {
-        padding-top: 9px!important;
-    } */
+
     #activitySearch .mx-datepicker{
         width: 100%!important
     }
+
+
+    /* CSS Hoàn bổ sung */
+    body #activitySearch table.table td{
+            padding: 0 5px!important;
+    }
+    #activitySearch table.table td i{
+        cursor: pointer;
+    }
+    body #activitySearch table.table th{
+        text-align: center!important;
+    }
+    #activitySearch table.table td i{
+        font-size: 13px;
+    }
+    #activitySearch table.table td button{
+        width: 30px;
+        height: 30px;
+    }
+    body #activitySearch table.table td:nth-child(1) div,body #activitySearch table.table td:nth-child(2) div,body #activitySearch table.table td:nth-child(3) div,body #activitySearch table.table td:nth-child(4) div,body #activitySearch table.table td:nth-child(5) div,body #activitySearch table.table td:nth-child(6) div,body #activitySearch table.table td:nth-child(7) div{
+            overflow: hidden;
+            text-overflow: ellipsis; 
+            white-space: nowrap; 
+            width: 90%!important;
+            position: absolute;
+        }
+        body #activitySearch table.table th:nth-child(1),body #activitySearch table.table td:nth-child(1) {
+            width: 3%!important;
+            position: relative;
+        }
+        body #activitySearch table.table th:nth-child(2),body #activitySearch table.table td:nth-child(2) {
+            width: 10%!important;
+            position: relative;
+        }
+        body #activitySearch table.table th:nth-child(3),body #activitySearch table.table td:nth-child(3) {
+            width: 25%!important;
+            position: relative;
+        }
+        body #activitySearch table.table th:nth-child(4),body #activitySearch table.table td:nth-child(4) {
+            width: 19%!important;
+            position: relative;
+        }
+        body #activitySearch table.table th:nth-child(5),body #activitySearch table.table td:nth-child(5) {
+            width: 15%!important;
+            position: relative;
+        }
+        body #activitySearch table.table th:nth-child(6),body #activitySearch table.table td:nth-child(6) {
+            width: 15%!important;
+            position: relative;
+        }
+        body #activitySearch table.table th:nth-child(7),body #activitySearch table.table td:nth-child(7) {
+            width: 10%!important;
+            position: relative;
+        }
+        body #activitySearch table.table th:nth-child(8),body #activitySearch table.table td:nth-child(8){
+            width: 3%!important;
+        }
+
+        body #activitySearch .datatable__actions__select,body #activitySearch .datatable__actions__pagination{
+            display: none;
+        }
+
+
 </style>
 
 
