@@ -308,23 +308,23 @@
                 var vm = this;
                 vm.statusItems = [
                     {
-                        statusName: 'planned',
+                        statusName: 'Mới',
                         statusCode: 'planned'
                     },
                     {
-                        statusName: 'started',
+                        statusName: 'Đã bắt đầu',
                         statusCode: 'started'
                     },
                     {
-                        statusName: 'closed',
+                        statusName: 'Đã kết thúc',
                         statusCode: 'closed'
                     },
                     {
-                        statusName: 'canceled',
+                        statusName: 'Đã hủy',
                         statusCode: 'canceled'
                     },
                     {
-                        statusName: 'opening',
+                        statusName: 'Đang xử lý',
                         statusCode: 'opening'
                     }
                 ];

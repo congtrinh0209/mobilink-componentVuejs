@@ -100,7 +100,7 @@
                                 <v-flex xs12 sm12>
                                     <v-card>
                                         <v-list >
-                                            <v-list-group v-for="item in itemInvGroup" :value="item.active" v-bind:key="item.role.activityInvitationId">
+                                            <v-list-group v-for="(item, index) in itemInvGroup" :value="item.active" v-bind:key="item.role.activityInvitationId">
                                                 <!-- Phần danh sách tổ chức/ đơn vị -->
                                                 <v-list-tile slot="item" class="px-0">
                                                     <v-list-tile-content class="px-0">
@@ -113,7 +113,8 @@
                                                             <v-flex xs6 sm3>
                                                                 <div class="right">
                                                                     <v-chip label outline color="primary" class="mr-2 mt-2">{{item.role.statistic.available}}/{{item.role.statistic.invitation}}</v-chip>
-                                                                    <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager' || permission_prop == 'owner'" @click.stop="updateInvitation('DELETE',item.role.activityInvitationId,index,itemInvGroup)">
+                                                                    <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager' || permission_prop == 'owner'" 
+                                                                    @click.stop="updateInvitation('DELETE',item.role.activityInvitationId,index,itemInvGroup)">
                                                                         <v-icon color="red darken-3">clear</v-icon>
                                                                     </v-btn> 
                                                                 </div>
@@ -156,7 +157,7 @@
                                                 <!-- end -->
 
                                                 <!-- Phần danh sách cá nhân trong tổ chức/ đơn vị -->
-                                                <v-list-tile v-for="subItem in item.items" v-bind:key="subItem.activityInvitationId">
+                                                <v-list-tile v-for="(subItem, index) in item.items" v-bind:key="subItem.activityInvitationId">
                                                     <v-list-tile-content class="mt-2">
                                                         <v-flex xs12 class="layout wrap">
                                                             
@@ -187,7 +188,8 @@
                                                                     
                                                                     <span style="color:green" v-html="bindAvailableText(subItem.available)"></span>
                                                                 
-                                                                    <v-btn v-if="permission_prop=='manager' ||permission_prop=='owner' || item.user_leader == userId" icon title="Xóa" class="mx-0 ml-2" @click.stop="updateInvitation('DELETE',subItem.activityInvitationId,index,item.items)">
+                                                                    <v-btn v-if="permission_prop=='manager' ||permission_prop=='owner' || item.user_leader == userId" icon title="Xóa" class="mx-0 ml-2"
+                                                                     @click.stop="updateInvitation('DELETE',subItem.activityInvitationId,index,item.items)">
                                                                         <v-icon color="red darken-3">clear</v-icon>
                                                                     </v-btn>
                                                                 </div> 
@@ -316,7 +318,8 @@
                                                                         Tôi có mặt
                                                                     </v-btn>
 
-                                                                    <v-btn icon title="Xóa" class="mx-0 ml-2" v-if="permission_prop == 'manager'|| permission_prop == 'owner'" @click.stop="updateInvitation('DELETE',item.activityInvitationId,index,itemInvContact)">
+                                                                    <v-btn icon title="Xóa" class="mx-0 ml-2" v-if="permission_prop == 'manager'|| permission_prop == 'owner'"
+                                                                     @click.stop="updateInvitation('DELETE',item.activityInvitationId,index,itemInvContact)">
                                                                         <v-icon color="red darken-3">clear</v-icon>
                                                                     </v-btn> 
                                                                 </div>
@@ -367,7 +370,7 @@
         
         data () {
             return {
-                userId: 1/*themeDisplay.getUserId()*/,
+                userId: '',
                 
                 invitationUserId:'',
                 mineInv: false,
@@ -413,11 +416,8 @@
         methods: {
             initInvitation: function(){
                 var vm = this;
-                console.log(vm._props);
-                              
-                if(vm.permission_prop!='manager' || vm.permission_prop!='owner'){
-                    vm.disUserMail = true
-                }
+                vm.userId = 108/*themeDisplay.getUserId()*/;
+
                 /** */
                 vm.getWorkingUnit();
                 vm.getUserContact();
@@ -426,7 +426,8 @@
                 setTimeout(function(){
                     vm.activeGetEmployees();
                 },3000);
-                
+                console.log(vm._props);
+                console.log('userId:'+ vm.userId)
             },
             /* Load data invitation */
             getInvitation: function(){
@@ -652,6 +653,7 @@
             /**Xử lý cập nhật  invitation của group và user */
             updateInvitation: function(type,invId,index,items){
                 var vm = this;
+                console.log(index);
                 var urlUpdate = vm.end_point + "activities/"+vm.class_pk+"/invitations/"+invId;
                 var paramsPutInvitation = {
                     
@@ -677,7 +679,7 @@
                 } else if(type == "DELETE") {
                     axios.delete(urlUpdate, configPutInvitation)
                     .then(function (response) {
-                        console.log(response);
+                        
                         items.splice(index,1);
                         alert("Xóa giấy mời thành công!")
                     })
@@ -695,11 +697,16 @@
                 if(type == 'GROUP'){
                     var dataPostInvitation  =new URLSearchParams();
                     var presenterPostGroup;
+                    var typeRole;
                     if(vm.presenterAddGroup == true){
                         presenterPostGroup = 1
                     } else {presenterPostGroup = 0}
-                    
-                    dataPostInvitation.append('invitationType', 0);
+                    if(vm.hostingId.type == "workingunit"){
+                        typeRole = 0
+                    }else if(vm.hostingId.type == "jobpos"){
+                        typeRole = 1
+                    }
+                    dataPostInvitation.append('invitationType', typeRole);
                     dataPostInvitation.append('roleId', vm.hostingId.roleId);
                     dataPostInvitation.append('toUserId', '');
                     dataPostInvitation.append('fullName', vm.hostingId.name);
