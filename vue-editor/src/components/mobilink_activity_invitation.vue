@@ -141,10 +141,10 @@
                                                     <v-flex xs12 sm8>
                                                         <v-select class="selectBoder pt-3"
                                                         placeholder="Cá nhân trong đơn vị/nhóm"
-                                                        :items="itemsSelect1"
+                                                        :items="employeeItems"
                                                         item-text="name"
                                                         item-value="value"
-                                                        v-model="select1"
+                                                        v-model="employee"
                                                         return-object
                                                         :clearable="true"
                                                         ></v-select>
@@ -165,7 +165,7 @@
                                                                     <toggle-button class="mr-1 mt-2" 
                                                                     @change="updatePresenterUserGroup($event,subItem.activityInvitationId,subItem)"
                                                                     :value="bindPresenter(subItem.presenter)"
-                                                                    :disabled="false?item.role.invitationType == 0 && item.user_leader == userId:true"
+                                                                    :disabled="(permission_prop=='manager'||permission_prop=='owner'|| item.user_leader == userId)?false:true"
                                                                     title_checked = "Thành viên"
                                                                     title_unchecked = "Theo dõi"
                                                                     :labels="{checked: 'TV', unchecked: 'TD'}"
@@ -185,10 +185,9 @@
                                                                         <span>{{subItem.userNote}}</span>
                                                                     </v-tooltip>
                                                                     
-
                                                                     <span style="color:green" v-html="bindAvailableText(subItem.available)"></span>
                                                                 
-                                                                    <v-btn v-if="item.user_leader == userId" icon title="Xóa" class="mx-0 ml-2" @click.stop="updateInvitation('DELETE',subItem.activityInvitationId,index,item.items)">
+                                                                    <v-btn v-if="permission_prop=='manager' ||permission_prop=='owner' || item.user_leader == userId" icon title="Xóa" class="mx-0 ml-2" @click.stop="updateInvitation('DELETE',subItem.activityInvitationId,index,item.items)">
                                                                         <v-icon color="red darken-3">clear</v-icon>
                                                                     </v-btn>
                                                                 </div> 
@@ -367,7 +366,8 @@
         
         data () {
             return {
-                userId: 109,/**themeDisplay.getUserId() */
+                userId: '',/**themeDisplay.getUserId() */
+                workingUnitId:'',
                 invitationUserId:'',
                 mineInv: false,
                 userIdNote:'',
@@ -402,19 +402,17 @@
                 /**/ 
                 hostingIdItems:[],
                 hostingId:'',
+                employeeItems:[],
+                employee:'',
                 
-                itemsSelect1: [
-                    { name: 'Trịnh Công Trình', value: 1},
-                    { name: 'Nguyễn Văn Thành', value: 2},
-                    { name: 'Lê Tiến Hoàn', value: 3},
-                ],
-                select1: '',
+
             }
         },
         methods: {
             initInvitation: function(){
                 var vm = this;
-                
+                vm.userId = 108;/**themeDisplay.getUserId() */
+                vm.workingUnitId = '';
                 if(vm.permission_prop!='manager' || vm.permission_prop!='owner'){
                     vm.disUserMail = true
                 }
@@ -422,6 +420,7 @@
                 vm.getWorkingUnit();
                 vm.getUserContact();
                 vm.getInvitation();
+                vm.activeGetEmployees();
                 console.log(vm)
             },
             /* Load data invitation */
@@ -572,6 +571,45 @@
                     console.log(error)
                 })
 
+            },
+            /**get employee */
+            getEmployees: function(){
+                var vm = this;
+                var paramsGetEmployee = {
+                    'workingunit': vm.workingUnitId,
+                    'active': true
+                };
+                const configGetEmployee = {
+                    params: paramsGetEmployee,
+                    headers: {
+                        'groupId': vm.group_id
+                    }
+                };
+                axios.get( vm.end_point + 'employees', configGetEmployee)
+                .then(function (response) {
+                    var serializable = response.data
+                    if (serializable.hasOwnProperty('data')) {
+                        for (var key in serializable.data) {
+                            vm.employeeItems.push(
+                                serializable.data[key]
+                            )
+                            
+                        }
+                    }
+                })
+                .catch(function (error) {
+                    console.log(error)
+                })
+
+            },
+            /**run get employees */
+            activeGetEmployees: function(){
+                var vm = this;
+                for(item in vm.itemInvGroup){
+                    if(item.user_leader){if(item.user_leader == vm.userId) {
+                        vm.getEmployees()
+                    }}
+                }
             },
             /**get contact */
             getUserContact: function(){
