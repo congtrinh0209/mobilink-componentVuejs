@@ -1,5 +1,13 @@
 <template>
+
     <div id="activity_invitation">
+
+        <v-alert type="success" id="alertSuccess" transition="scale-transition" v-model="alertSuccess">
+
+        </v-alert>
+        <v-alert type="error" id="alertError" transition="scale-transition" v-model="alertError">
+
+        </v-alert>
         <div style="position: relative; overflow: hidden;">
             <v-toolbar
                 absolute
@@ -28,7 +36,7 @@
                             <v-icon style="color: white" v-if="typeAvailable == 2" >check</v-icon>
                             Tôi bận
                         </v-btn>
-                        <v-btn v-if="opening_state_prop == 1" small class="text-white mx-1" v-on:click.stop="checkin()" color="indigo">
+                        <v-btn v-if="opening_state_prop == 1 || opening_state_prop == 2" small class="text-white mx-1" v-on:click.stop="checkin()" color="indigo">
                             <v-icon style="color: white" v-if="typeCheckin" >check</v-icon>
                             Tôi có mặt
                         </v-btn>
@@ -77,8 +85,8 @@
                                         placeholder="Chọn đơn vị/nhóm"
                                         :items="hostingIdItems"
                                         v-model="hostingId"
-                                        item-value="workingUnitId"
-                                        item-text="name"
+                                        item-value="roleId"
+                                        item-text="roleName"
                                         return-object
                                         
                                         ></v-select>
@@ -282,7 +290,7 @@
                                     <v-card>
                                         <!-- Phần danh sách cá nhân theo danh bạ -->
                                         <v-list >
-                                            <v-list-tile v-for="item in itemInvContact" v-bind:key="item.activityInvitationId">
+                                            <v-list-tile v-for="(item,index) in itemInvContact" v-bind:key="item.activityInvitationId">
                                                 <v-list-tile-content class="mt-2">
                                                     <v-list-tile-title>
                                                         <v-flex xs12 class="layout wrap">
@@ -371,7 +379,8 @@
         data () {
             return {
                 userId: '',
-                
+                alertSuccess: false,
+                alertError: false,
                 invitationUserId:'',
                 mineInv: false,
                 userIdNote:'',
@@ -416,8 +425,8 @@
         methods: {
             initInvitation: function(){
                 var vm = this;
-                vm.userId = 108/*themeDisplay.getUserId()*/;
-
+                // vm.userId = 108/*themeDisplay.getUserId()*/;
+                vm.userId = themeDisplay.getUserId();
                 /** */
                 vm.getWorkingUnit();
                 vm.getUserContact();
@@ -541,8 +550,8 @@
             /**Xử lý hiển thị các trạng thái invitation */
             bindPresenter: function (item){
                 if(item == 0){
-                    return true
-                } else {return false}
+                    return false
+                } else {return true}
             },
 
             bindAvailableText: function(item){
@@ -555,7 +564,7 @@
             getWorkingUnit: function(){
                 var vm = this;
                 var paramsGetWorkingUnit = {
-                    
+                    full: true
                 };
                 const configGetWorkingUnit = {
                     params: paramsGetWorkingUnit,
@@ -563,7 +572,7 @@
                         'groupId': vm.group_id
                     }
                 };
-                axios.get( vm.end_point + 'workingunits', configGetWorkingUnit)
+                axios.get( vm.end_point + 'resourceroles/'+vm.class_name+'/'+vm.class_pk, configGetWorkingUnit)
                 .then(function (response) {
                     var serializable = response.data
                     if (serializable.hasOwnProperty('data')) {
@@ -700,18 +709,15 @@
                     var typeRole;
                     if(vm.presenterAddGroup == true){
                         presenterPostGroup = 1
-                    } else {presenterPostGroup = 0}
+                    } else {presenterPostGroup = 0};
                     if(vm.hostingId.type == "workingunit"){
                         typeRole = 0
                     }else if(vm.hostingId.type == "jobpos"){
                         typeRole = 1
-                    }
+                    };
                     dataPostInvitation.append('invitationType', typeRole);
                     dataPostInvitation.append('roleId', vm.hostingId.roleId);
-                    dataPostInvitation.append('toUserId', '');
-                    dataPostInvitation.append('fullName', vm.hostingId.name);
-                    dataPostInvitation.append('email', vm.hostingId.email);
-                    dataPostInvitation.append('telNo', vm.hostingId.telNo);
+                    dataPostInvitation.append('fullName', vm.hostingId.roleName);
                     dataPostInvitation.append('presenter', presenterPostGroup);
                 } 
                 else if(type == 'UserUnit'){
