@@ -185,7 +185,7 @@
                                                                 </v-list-tile-title>
                                                             </v-flex>
 
-                                                            <v-flex xs12 sm6 >
+                                                            <v-flex xs12 sm6 class="pt-1 pr-2">
                                                                 <div class="right">
                                                                     <v-tooltip top>
                                                                         <v-btn icon slot="activator" class="text-white mx-0 my-0" >
@@ -577,9 +577,11 @@
                     var serializable = response.data
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            vm.hostingIdItems.push(
-                                serializable.data[key]
-                            )
+                            if(serializable.data[key].selected == false){
+                                vm.hostingIdItems.push(
+                                    serializable.data[key]
+                                )
+                            }
                             
                         }
                     }
@@ -762,6 +764,13 @@
                 axios.post(urlUpdate, dataPostInvitation, configPostInvitation)
                 .then(function (response) {
                     vm.getInvitation();
+                    if(type == 'GROUP'){
+                        var roleAdded = vm.hostingId.roleId;
+                        var hostingAfAdded = vm.hostingIdItems.filter(function(item) {
+                            return item.roleId !== roleAdded;
+                        });
+                        vm.vm.hostingIdItems = hostingAfAdded
+                    };
                     alert("Thêm mới giấy mời thành công!");
                 })
                 .catch(function (error) {
