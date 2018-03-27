@@ -6,9 +6,9 @@
                 color="teal lighten-3"
                 dark
             >   
-                <div class="ml-2" v-if="opening_state_prop == 0">Giấy mời: {{invitationCount}} ({{availableCount}} sẵn sàng)</div>
-                <div class="ml-2" v-if="opening_state_prop == 1">Giấy mời: {{invitationCount}} ({{checkinCount}} có mặt)</div>
-                <div class="ml-2" v-if="opening_state_prop == 2 || opening_state_prop == 3">Giấy mời: {{invitationCount}} ({{checkinCount}} có mặt)</div>
+                <div class="ml-2" v-if="opening_state_prop == 0"><b>Giấy mời: {{invitationCount}} ({{availableCount}} sẵn sàng)</b></div>
+                <div class="ml-2" v-if="opening_state_prop == 1"><b>Giấy mời: {{invitationCount}} ({{checkinCount}} có mặt)</b></div>
+                <div class="ml-2" v-if="opening_state_prop == 2 || opening_state_prop == 3"><b>Giấy mời: {{invitationCount}} ({{checkinCount}} có mặt)</b></div>
                 <v-spacer></v-spacer>
                 
                 <v-flex v-if="mineInv">
@@ -131,8 +131,8 @@
                                                 <!-- Phần thêm cá nhân trong tổ chức/ đơn vị -->
                                                 <div v-if="item.role.invitationType == 0 && item.user_leader == userId" class="layout wrap mx-0 mb-2">
                                                     <toggle-button class="mr-1 mt-4"
-                                                    :value="false"
-                                                    v-model="presenterAddUserGroup"
+                                                    
+                                                    v-model="presenterAddUserUnit"
                                                     title_checked = "Thành viên"
                                                     title_unchecked = "Theo dõi"
                                                     :labels="{checked: 'TV', unchecked: 'TD'}"
@@ -142,14 +142,14 @@
                                                         <v-select class="selectBoder pt-3"
                                                         placeholder="Cá nhân trong đơn vị/nhóm"
                                                         :items="employeeItems"
-                                                        item-text="name"
-                                                        item-value="value"
+                                                        item-text="fullName"
+                                                        item-value="employeeId"
                                                         v-model="employee"
                                                         return-object
                                                         :clearable="true"
                                                         ></v-select>
                                                     </v-flex>
-                                                    <v-btn small outline color="primary" class="mx-0 ml-1 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
+                                                    <v-btn @click.stop="postInvitation('UserUnit')" small outline color="primary" class="mx-0 ml-1 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
                                                         Mời
                                                     </v-btn>
                                                 </div>
@@ -366,7 +366,7 @@
         
         data () {
             return {
-                userId: '',/**themeDisplay.getUserId() */
+                userId: themeDisplay.getUserId(),
                 workingUnitId:'',
                 invitationUserId:'',
                 mineInv: false,
@@ -378,7 +378,7 @@
                 switch1: true,
                 
                 presenterAddUser:'',
-                presenterAddUserGroup:'',
+                presenterAddUserUnit:'',
                 presenterAddGroup:'',
                 dialog_add_note: false,
                 note_text:'',
@@ -404,6 +404,7 @@
                 hostingId:'',
                 employeeItems:[],
                 employee:'',
+                roleIdUser:'',
                 
 
             }
@@ -420,14 +421,18 @@
                 vm.getWorkingUnit();
                 vm.getUserContact();
                 vm.getInvitation();
-                vm.activeGetEmployees();
-                console.log(vm)
+                
+                console.log(vm);
+                setTimeout(function(){
+                    vm.activeGetEmployees();
+                },500)
             },
             /* Load data invitation */
             getInvitation: function(){
                 var vm = this;
                 vm.presenterAddGroup = false;
                 vm.presenterAddUser = false;
+                vm.presenterAddUserUnit = false;
                 vm.itemInvGroup = [];
                 vm.itemInvContact = [];
 
@@ -496,6 +501,7 @@
                     } else {
                         vm.invitationItems = []
                     }
+                    
                 })
                 .catch(function (error) {
                     console.log(error)
@@ -587,7 +593,7 @@
                 };
                 axios.get( vm.end_point + 'employees', configGetEmployee)
                 .then(function (response) {
-                    var serializable = response.data
+                    var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
                             vm.employeeItems.push(
@@ -605,10 +611,11 @@
             /**run get employees */
             activeGetEmployees: function(){
                 var vm = this;
-                for(item in vm.itemInvGroup){
-                    if(item.user_leader){if(item.user_leader == vm.userId) {
-                        vm.getEmployees()
-                    }}
+                for(var keys in vm.itemInvGroup){
+                    if(vm.itemInvGroup[keys].user_leader&&vm.itemInvGroup[keys].user_leader == vm.userId){
+                        vm.roleIdUser = vm.itemInvGroup[keys].role.roleId;
+                        vm.getEmployees();
+                    }
                 }
             },
             /**get contact */
@@ -697,7 +704,22 @@
                     dataPostInvitation.append('email', vm.hostingId.email);
                     dataPostInvitation.append('telNo', vm.hostingId.telNo);
                     dataPostInvitation.append('presenter', presenterPostGroup);
-                } else if(type == 'UserContact'){
+                } 
+                else if(type == 'UserUnit'){
+                    var presenterPostUserUnit;
+                    if(vm.presenterAddUserUnit == true){
+                        presenterPostUserUnit = 1
+                    } else {presenterPostUserUnit = 0}
+                    
+                    dataPostInvitation.append('invitationType', 3);
+                    dataPostInvitation.append('roleId', vm.roleIdUser);
+                    dataPostInvitation.append('toUserId', vm.employee.mappingUser.userId);
+                    dataPostInvitation.append('fullName', vm.employee.fullName);
+                    dataPostInvitation.append('email', vm.employee.email);
+                    dataPostInvitation.append('telNo', vm.employee.telNo);
+                    dataPostInvitation.append('presenter', presenterPostUserUnit);
+                }
+                else if(type == 'UserContact'){
                     var presenterPostUser;
                     if(vm.presenterAddUser == true){
                         presenterPostUser = 1
