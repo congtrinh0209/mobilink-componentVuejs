@@ -2,10 +2,10 @@
 
     <div id="activity_invitation">
 
-        <v-alert type="success" icon="check_circle" id="alertSuccess" transition="slide-y-transition" v-model="alertSuccess">
+        <v-alert type="success" icon="check_circle" class="alertInvitation" transition="slide-y-transition" v-model="alertSuccess">
             {{text_success}}
         </v-alert>
-        <v-alert type="error" icon="check_circle" id="alertError" transition="slide-y-transition" v-model="alertError">
+        <v-alert type="error" icon="check_circle" class="alertInvitation" transition="slide-y-transition" v-model="alertError">
             {{text_error}}
         </v-alert>
         <div style="position: relative; overflow: hidden;">
@@ -88,7 +88,7 @@
                                         item-value="roleId"
                                         item-text="roleName"
                                         return-object
-                                        
+                                        required="true"
                                         ></v-select>
                                     </v-flex>
                                     <toggle-button class="mx-1 mt-4"
@@ -242,6 +242,7 @@
                                         v-model="contact"
                                         item-text="fullName"
                                         item-value="contactId"
+                                        tags="true"
                                         return-object
                                         autocomplete
                                         :clearable="true"
@@ -392,7 +393,7 @@
                 typeCheckin: false,
                 /** */
                 switch1: true,
-                
+                valid: false,
                 presenterAddUser:'',
                 presenterAddUserUnit:'',
                 presenterAddGroup:'',
@@ -680,7 +681,8 @@
             postInvitation: function(type){
                 var vm = this;
                 
-                if(type == 'GROUP'){
+                if(type == 'GROUP'&&vm.hostingId){
+                    vm.valid = true;
                     var dataPostInvitation  =new URLSearchParams();
                     var presenterPostGroup;
                     var typeRole;
@@ -697,12 +699,13 @@
                     dataPostInvitation.append('fullName', vm.hostingId.roleName);
                     dataPostInvitation.append('presenter', presenterPostGroup);
                 } 
-                else if(type == 'UserUnit'){
+                else if(type == 'UserUnit'&&vm.employee){
+                    vm.valid = true;
                     var dataPostInvitation  =new URLSearchParams();
                     var presenterPostUserUnit;
                     if(vm.presenterAddUserUnit == true){
                         presenterPostUserUnit = 1
-                    } else {presenterPostUserUnit = 0}
+                    } else {presenterPostUserUnit = 0};
                     
                     dataPostInvitation.append('invitationType', 3);
                     dataPostInvitation.append('roleId', vm.roleIdUser);
@@ -712,7 +715,8 @@
                     dataPostInvitation.append('telNo', vm.employee.telNo);
                     dataPostInvitation.append('presenter', presenterPostUserUnit);
                 }
-                else if(type == 'UserContact'){
+                else if(type == 'UserContact'&&vm.contact){
+                    vm.valid = true;
                     var dataPostInvitation  =new URLSearchParams();
                     var presenterPostUser;
                     if(vm.presenterAddUser == true){
@@ -739,37 +743,42 @@
                         'groupId': vm.group_id
                     }
                 };
-                axios.post(urlUpdate, dataPostInvitation, configPostInvitation)
-                .then(function (response) {
-                    vm.getInvitation();
-                    
-                    if(type == 'GROUP'){
-                        var roleAdded = vm.hostingId.roleId;
-                        var hostingAfAdded = vm.hostingIdItems.filter(function(item) {
-                            return item.roleId != roleAdded;
-                        });
-                        vm.hostingIdItems = hostingAfAdded
-                    };
-                    if(type == 'UserUnit'){
-                        var employeeAdded = vm.employee.employeeId;
-                        var employeeAfAdded = vm.employeeItems.filter(function(item) {
-                            return item.employeeId != employeeAdded;
-                        });
-                        vm.employeeItems = employeeAfAdded
-                    };
-                    if(type == 'UserContact'){
-                        var contactAdded = vm.contact.contactId;
-                        var contactAfAdded = vm.contactItems.filter(function(item) {
-                            return item.contactId != contactAdded;
-                        });
-                        vm.contactItems = contactAfAdded
-                    };
-                    vm.show_alert('success','Thêm mới giấy mời thành công')
-                })
-                .catch(function (error) {
-                    vm.show_alert('error','Thêm mới giấy mời thất bại')
-                    
-                })
+                if(vm.valid){
+                    axios.post(urlUpdate, dataPostInvitation, configPostInvitation)
+                    .then(function (response) {
+                        vm.getInvitation();
+                        vm.valid = false;
+                        if(type == 'GROUP'){
+                            var roleAdded = vm.hostingId.roleId;
+                            var hostingAfAdded = vm.hostingIdItems.filter(function(item) {
+                                return item.roleId != roleAdded;
+                            });
+                            vm.hostingIdItems = hostingAfAdded;
+                            vm.hostingId = ''
+                        };
+                        if(type == 'UserUnit'){
+                            var employeeAdded = vm.employee.employeeId;
+                            var employeeAfAdded = vm.employeeItems.filter(function(item) {
+                                return item.employeeId != employeeAdded;
+                            });
+                            vm.employeeItems = employeeAfAdded;
+                            vm.employee = ''
+                        };
+                        if(type == 'UserContact'){
+                            var contactAdded = vm.contact.contactId;
+                            var contactAfAdded = vm.contactItems.filter(function(item) {
+                                return item.contactId != contactAdded;
+                            });
+                            vm.contactItems = contactAfAdded;
+                            vm.contact = ''
+                        };
+                        vm.show_alert('success','Thêm mới giấy mời thành công')
+                    })
+                    .catch(function (error) {
+                        vm.show_alert('error','Thêm mới giấy mời thất bại')
+                    })
+                }
+                
             },
             /**Phần cập nhật noteUser của cá nhân */
             showAddNote: function(invId,noteText,items){
@@ -945,7 +954,8 @@
                 vm.showAdd2 =!vm.showAdd2
             },
             show_alert: function(type,text){
-                if(type==success){
+                var vm = this;
+                if(type=='success'){
                     vm.text_success = text;
                     vm.alertSuccess = true;
                     setTimeout(function(){vm.alertSuccess = false},2000)
@@ -972,6 +982,15 @@
 	   -webkit-flex: 1; /* Safari 6.1+ */
 	   flex: 1;
 	}
+    #activity_invitation .alertInvitation{
+        width: 30%!important;
+        height: 75px!important;
+        min-width: 300px!important;
+        position: fixed;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
     #activity_invitation .toolbar__title{
         font-size: 13px!important;
     }
