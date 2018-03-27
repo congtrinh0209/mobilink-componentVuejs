@@ -2,11 +2,11 @@
 
     <div id="activity_invitation">
 
-        <v-alert type="success" id="alertSuccess" transition="scale-transition" v-model="alertSuccess">
-
+        <v-alert type="success" icon="check_circle" id="alertSuccess" transition="slide-y-transition" v-model="alertSuccess">
+            {{text_success}}
         </v-alert>
-        <v-alert type="error" id="alertError" transition="scale-transition" v-model="alertError">
-
+        <v-alert type="error" icon="check_circle" id="alertError" transition="slide-y-transition" v-model="alertError">
+            {{text_error}}
         </v-alert>
         <div style="position: relative; overflow: hidden;">
             <v-toolbar
@@ -373,7 +373,10 @@
         },
 
         created () {
-            
+            var vm = this
+            vm.$nextTick(function () {
+                vm.initInvitation()
+            })
         },
         
         data () {
@@ -418,7 +421,8 @@
                 employeeItems:[],
                 employee:'',
                 roleIdUser:'',
-                
+                text_error:'Cập nhật dữ liệu thất bại',
+                text_success:'Cập nhật dữ liệu thành công',
 
             }
         },
@@ -519,34 +523,7 @@
                 })
                 /** */
             },
-            /* Load data invitation toUserId*/
-            /*getInvitationUserId: function(){
-                var vm = this;
-                var paramsGetInvitationUserId = {
-                    toUserId : vm.userId
-				
-                };
-                const configGetInvitation = {
-                    params: paramsGetInvitationUserId,
-                    headers: {
-                        'groupId': vm.group_id
-                    }
-                };
-                
-                axios.get( vm.end_point + 'activities/' + vm.class_pk + '/invitations', configGetInvitation)
-                .then(function (response) {
-                    vm.mineInv = true;
-                    var serializable = response.data;
-                    if (serializable.hasOwnProperty('data')) {
-                        vm.userIdNote = serializable.data.userNote;
-                        vm.invitationUserId = serializable.data.activityInvitationId
-                    }
-                })
-                .catch(function (error) {
-                    console.log(error)
-                })
-                
-            },*/
+            
             /**Xử lý hiển thị các trạng thái invitation */
             bindPresenter: function (item){
                 if(item == 0){
@@ -680,23 +657,21 @@
                 if(type == "PUT"){
                     axios.put(urlUpdate, postData, configPutInvitation)
                     .then(function (response) {
-                        console.log("run");
-                        alert("Cập nhật dữ liệu thành công!")
+                        vm.show_alert('success','Cập nhật dữ liệu thành công')
                        
                     })
                     .catch(function (error) {
-                        alert("Cập nhật dữ liệu thất bại!")
+                        vm.show_alert('error','Cập nhật dữ liệu thất bại')
                     })
                 } else if(type == "DELETE") {
                     axios.delete(urlUpdate, configPutInvitation)
                     .then(function (response) {
-                        
                         items.splice(index,1);
-                        alert("Xóa giấy mời thành công!")
+                        vm.show_alert('success','Xóa giấy mời thành công')
                     })
                     .catch(function (error) {
-                        console.log(error);
-                        alert("Xóa giấy mời thất bại!")
+                        
+                        vm.show_alert('error','Xóa giấy mời thất bại')
                     });
                 }
             },
@@ -742,13 +717,16 @@
                     var presenterPostUser;
                     if(vm.presenterAddUser == true){
                         presenterPostUser = 1
-                    } else {presenterPostUser = 0}
+                    } else {presenterPostUser = 0};
                     dataPostInvitation.append('invitationType', 2);
-                    dataPostInvitation.append('toUserId', vm.contact.userMappingId);
                     dataPostInvitation.append('fullName', vm.contact.fullName);
-                    dataPostInvitation.append('email', vm.contact.email);
                     dataPostInvitation.append('telNo', vm.contact.telNo);
                     dataPostInvitation.append('presenter', presenterPostUser);
+                    if(vm.contact.userMappingId){
+                        dataPostInvitation.append('toUserId', vm.contact.userMappingId);
+                    } else {
+                        dataPostInvitation.append('email', vm.contact.email);
+                    }
                 }
                 
                 var urlUpdate = vm.end_point + "activities/"+vm.class_pk+"/invitations";
@@ -764,7 +742,7 @@
                 axios.post(urlUpdate, dataPostInvitation, configPostInvitation)
                 .then(function (response) {
                     vm.getInvitation();
-                    alert("Thêm mới giấy mời thành công!");
+                    
                     if(type == 'GROUP'){
                         var roleAdded = vm.hostingId.roleId;
                         var hostingAfAdded = vm.hostingIdItems.filter(function(item) {
@@ -772,11 +750,25 @@
                         });
                         vm.hostingIdItems = hostingAfAdded
                     };
-                    
+                    if(type == 'UserUnit'){
+                        var employeeAdded = vm.employee.employeeId;
+                        var employeeAfAdded = vm.employeeItems.filter(function(item) {
+                            return item.employeeId != employeeAdded;
+                        });
+                        vm.employeeItems = employeeAfAdded
+                    };
+                    if(type == 'UserContact'){
+                        var contactAdded = vm.contact.contactId;
+                        var contactAfAdded = vm.contactItems.filter(function(item) {
+                            return item.contactId != contactAdded;
+                        });
+                        vm.contactItems = contactAfAdded
+                    };
+                    vm.show_alert('success','Thêm mới giấy mời thành công')
                 })
                 .catch(function (error) {
+                    vm.show_alert('error','Thêm mới giấy mời thất bại')
                     
-                    alert("Thêm mới giấy mời thất bại!")
                 })
             },
             /**Phần cập nhật noteUser của cá nhân */
@@ -806,10 +798,9 @@
                     vm.dialog_add_note = false;
                     vm.userIdNote = response.data.userNote;
                     
-                    alert("Cập nhật dữ liệu thành công!");
                 })
                 .catch(function (error) {
-                    alert("Cập nhật dữ liệu thất bại!")
+                    
                 })
             },
             /**Phần cập nhật presenter */
@@ -818,7 +809,7 @@
                 var presenterChange;
                 if(event.value == true){
                     presenterChange = 1
-                }else {presenterChange = 0}
+                }else {presenterChange = 0};
                 vm.submitUpdatePresenter(invId,presenterChange,items)
             },
             submitUpdatePresenter: function(invId,presenter,items){
@@ -837,12 +828,10 @@
                 };
                 axios.put(urlUpdate, dataUpdateInvitation, configPutInvitation)
                 .then(function (response) {
-                    
-                    alert("Cập nhật dữ liệu thành công!");
+                    vm.show_alert('success','Cập nhật dữ liệu thành công')
                 })
                 .catch(function (error) {
-                    
-                    alert("Cập nhật dữ liệu thất bại!")
+                    vm.show_alert('error','Cập nhật dữ liệu thất bại')
                 })
             },
             /** */
@@ -859,9 +848,9 @@
                 var vm = this;
                 if(data){
                     vm.dialog_add_contact = false;
-                    alert("Thêm thành công!")
+                    
                 } else {
-                    alert("Thêm thất bại!")
+                    
                 }
                 
             },
@@ -887,12 +876,11 @@
                 };
                 axios.put(urlUpdate, dataUpdateAvailable, configPutInvitation)
                 .then(function (response) {
-
-                    alert("Cập nhật dữ liệu thành công!");
+                    vm.show_alert('success','Cập nhật dữ liệu thành công')
                 })
                 .catch(function (error) {
                     vm.typeAvailable = vm.typeAvailable;
-                    alert("Cập nhật dữ liệu thất bại!")
+                    vm.show_alert('error','Cập nhật dữ liệu thất bại')
                 })
                 
             },
@@ -942,11 +930,10 @@
                 axios.put(urlUpdate, dataUpdateAvailable, configPutInvitation)
                 .then(function (response) {
                     item.checkin = typeCheckManager;
-                    alert("Cập nhật dữ liệu thành công!");
+                    vm.show_alert('success','Cập nhật dữ liệu thành công')
                 })
                 .catch(function (error) {
-                    
-                    alert("Cập nhật dữ liệu thất bại!")
+                    vm.show_alert('error','Cập nhật dữ liệu thất bại')
                 })
             },
             show_Add1: function(){
@@ -957,6 +944,17 @@
                 var vm =this;
                 vm.showAdd2 =!vm.showAdd2
             },
+            show_alert: function(type,text){
+                if(type==success){
+                    vm.text_success = text;
+                    vm.alertSuccess = true;
+                    setTimeout(function(){vm.alertSuccess = false},2000)
+                } else {
+                    vm.text_error = text;
+                    vm.alertError = true;
+                    setTimeout(function(){vm.alertError = false},2000)
+                }
+            }
   
         }
 
