@@ -425,8 +425,8 @@
         methods: {
             initInvitation: function(){
                 var vm = this;
-                // vm.userId = 108/*themeDisplay.getUserId()*/;
-                vm.userId = themeDisplay.getUserId();
+                vm.userId = 108;
+                // vm.userId = themeDisplay.getUserId();
                 /** */
                 vm.getWorkingUnit();
                 vm.getUserContact();
@@ -664,7 +664,7 @@
             /**Xử lý cập nhật  invitation của group và user */
             updateInvitation: function(type,invId,index,items){
                 var vm = this;
-                console.log(index);
+                
                 var urlUpdate = vm.end_point + "activities/"+vm.class_pk+"/invitations/"+invId;
                 var paramsPutInvitation = {
                     
@@ -764,14 +764,15 @@
                 axios.post(urlUpdate, dataPostInvitation, configPostInvitation)
                 .then(function (response) {
                     vm.getInvitation();
+                    alert("Thêm mới giấy mời thành công!");
                     if(type == 'GROUP'){
                         var roleAdded = vm.hostingId.roleId;
                         var hostingAfAdded = vm.hostingIdItems.filter(function(item) {
-                            return item.roleId !== roleAdded;
+                            return item.roleId != roleAdded;
                         });
-                        vm.vm.hostingIdItems = hostingAfAdded
+                        vm.hostingIdItems = hostingAfAdded
                     };
-                    alert("Thêm mới giấy mời thành công!");
+                    
                 })
                 .catch(function (error) {
                     
