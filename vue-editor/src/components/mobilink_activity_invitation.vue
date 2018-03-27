@@ -185,7 +185,7 @@
                                                                 </v-list-tile-title>
                                                             </v-flex>
 
-                                                            <v-flex xs12 sm6 class="pt-1 pr-2">
+                                                            <v-flex xs12 sm6 class="pt-1">
                                                                 <div class="right">
                                                                     <v-tooltip top>
                                                                         <v-btn icon slot="activator" class="text-white mx-0 my-0" >
@@ -194,9 +194,9 @@
                                                                         <span>{{subItem.userNote}}</span>
                                                                     </v-tooltip>
                                                                     
-                                                                    <span style="color:green" v-html="bindAvailableText(subItem.available)"></span>
+                                                                    <span style="color:green" class="mr-2" v-html="bindAvailableText(subItem.available)"></span>
                                                                 
-                                                                    <v-btn v-if="permission_prop=='manager' ||permission_prop=='owner' || item.user_leader == userId" icon title="Xóa" class="mx-0 ml-2"
+                                                                    <v-btn v-if="permission_prop=='manager' ||permission_prop=='owner' || item.user_leader == userId" icon title="Xóa" class="mx-0"
                                                                      @click.stop="updateInvitation('DELETE',subItem.activityInvitationId,index,item.items)">
                                                                         <v-icon color="red darken-3">clear</v-icon>
                                                                     </v-btn>
@@ -242,7 +242,7 @@
                                         v-model="contact"
                                         item-text="fullName"
                                         item-value="contactId"
-                                        tags="true"
+                                        
                                         return-object
                                         autocomplete
                                         :clearable="true"
@@ -320,14 +320,14 @@
                                                                         <span>{{item.userNote}}</span>
                                                                     </v-tooltip>
                                                                     
-                                                                    <span v-if="opening_state_prop == 0" style="color:green" v-html="bindAvailableText(item.available)"></span>
+                                                                    <span v-if="opening_state_prop == 0" class="mr-2" style="color:green" v-html="bindAvailableText(item.available)"></span>
 
                                                                     <v-btn v-if="opening_state_prop == 1 && item.available==1" v-on:click.stop="managerCheckin(item)" outline small class="text-white mx-1" color="indigo">
                                                                         <v-icon color="indigo" v-if="item.checkin" >check</v-icon>
                                                                         Tôi có mặt
                                                                     </v-btn>
 
-                                                                    <v-btn icon title="Xóa" class="mx-0 ml-2" v-if="permission_prop == 'manager'|| permission_prop == 'owner'"
+                                                                    <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager'|| permission_prop == 'owner'"
                                                                      @click.stop="updateInvitation('DELETE',item.activityInvitationId,index,itemInvContact)">
                                                                         <v-icon color="red darken-3">clear</v-icon>
                                                                     </v-btn> 
@@ -430,8 +430,8 @@
         methods: {
             initInvitation: function(){
                 var vm = this;
-                vm.userId = 108;
-                // vm.userId = themeDisplay.getUserId();
+                // vm.userId = 108;
+                vm.userId = themeDisplay.getUserId();
                 /** */
                 vm.getWorkingUnit();
                 vm.getUserContact();
@@ -680,7 +680,7 @@
             /**POST invitation */
             postInvitation: function(type){
                 var vm = this;
-                
+                console.log(vm);
                 if(type == 'GROUP'&&vm.hostingId){
                     vm.valid = true;
                     var dataPostInvitation  =new URLSearchParams();
@@ -770,9 +770,10 @@
                                 return item.contactId != contactAdded;
                             });
                             vm.contactItems = contactAfAdded;
-                            vm.contact = ''
+                            vm.contact = '';
                         };
-                        vm.show_alert('success','Thêm mới giấy mời thành công')
+                        vm.show_alert('success','Thêm mới giấy mời thành công');
+                        
                     })
                     .catch(function (error) {
                         vm.show_alert('error','Thêm mới giấy mời thất bại')
@@ -986,6 +987,7 @@
         width: 30%!important;
         height: 75px!important;
         min-width: 300px!important;
+        z-index: 122!important;
         position: fixed;
         top: 0;
         left: 50%;
