@@ -1,7 +1,25 @@
 <template>
 
     <div id="activity_invitation">
+        <!-- <v-dialog v-model="dialog_remove" persistent max-width="500px">
+            <v-card>
+                <v-card-title class="headline">Xác nhận xóa giấy mời?</v-card-title>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="green darken-1" flat @click.native="dialog_remove = false">Hủy</v-btn>
+                    <v-btn color="green darken-1" flat @click.native="dialog_remove = false">Xóa</v-btn>
+                </v-card-actions>
+            </v-card>
+        </v-dialog> -->
+        
+        <v-dialog class="application theme--light progessLoading" v-model="dialog_loading" persistent max-width="50px">
+            <v-card>
+                <v-progress-circular v-bind:size="25" indeterminate color="primary"></v-progress-circular>
+            </v-card>
+                
+        </v-dialog>
 
+        
         <v-alert type="success" icon="check_circle" class="alertInvitation" transition="slide-y-transition" v-model="alertSuccess">
             {{text_success}}
         </v-alert>
@@ -10,7 +28,7 @@
         </v-alert>
         
         <div style="position: relative; overflow: hidden;">
-            <v-progress-circular v-if="loadingInv" indeterminate color="primary"></v-progress-circular>
+            <!-- <v-progress-circular v-if="loadingInv" indeterminate color="primary"></v-progress-circular> -->
             <v-toolbar
                 absolute
                 color="teal lighten-3"
@@ -122,7 +140,8 @@
                                                             </v-flex>
                                                             <v-flex xs6 sm3>
                                                                 <div class="right">
-                                                                    <v-chip label outline color="primary" class="mr-2 mt-2">{{item.role.statistic.available}}/{{item.role.statistic.invitation}}</v-chip>
+                                                                    <v-chip v-if="opening_state_prop == 0" label outline color="primary" class="mr-2 mt-2">{{item.role.statistic.available}}/{{item.role.statistic.invitation}}</v-chip>
+                                                                    <v-chip v-if="opening_state_prop == 1 || opening_state_prop == 2" label outline color="primary" class="mr-2 mt-2">{{item.role.statistic.checkin}}/{{item.role.statistic.invitation}}</v-chip>
                                                                     <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager' || permission_prop == 'owner'" 
                                                                     @click.stop="updateInvitation('DELETE',item.role.activityInvitationId,index,itemInvGroup)">
                                                                         <v-icon color="red darken-3">clear</v-icon>
@@ -250,11 +269,12 @@
                                         v-model="contact"
                                         item-text="fullName"
                                         item-value="contactId"
-                                        
-                                        return-object
                                         autocomplete
-                                        :clearable="true"
+                                        return-object
+                                        combobox
+                                        clearable
                                         ></v-select>
+                                        
                                     </v-flex>
                                     <toggle-button class="mx-1 mt-4"
                                     
@@ -435,14 +455,14 @@
                 text_error:'Cập nhật dữ liệu thất bại',
                 text_success:'Cập nhật dữ liệu thành công',
                 pointerEvent: 'pointerEvent',
-                loadingInv: false
+                dialog_loading: false
 
             }
         },
         methods: {
             initInvitation: function(){
                 var vm = this;
-                /* vm.userId = 108;*/
+                /*vm.userId = 108;*/
                 vm.userId = themeDisplay.getUserId();
                 /** */
                 vm.getWorkingUnit();
@@ -656,7 +676,12 @@
                 })
 
             },
-            
+            addUserContact:function(){
+                var vm = this;
+                for(var key in vm.contactItems){
+                    
+                }
+            },
             /**Xử lý cập nhật  invitation của group và user */
             updateInvitation: function(type,invId,index,items){
                 var vm = this;
@@ -764,10 +789,10 @@
                 if(vm.valid){
                     axios.post(urlUpdate, dataPostInvitation, configPostInvitation)
                     .then(function (response) {
-                        vm.loadingInv = true;
+                        vm.dialog_loading = true;
                         setTimeout(function(){
                             vm.getInvitation();
-                            vm.loadingInv = false;
+                            vm.dialog_loading = false;
                             vm.show_alert('success','Thêm mới giấy mời thành công');
                         },3000) ;
                         vm.valid = false;
@@ -1072,13 +1097,10 @@
     .pointerEvent{
         pointer-events: none!important
     }
-    #activity_invitation .progress-circular{
-        z-index: 120!important;
-        position: fixed;
-        top: 10%;
-        left: 50%;
-        transform: translate(-50%, -10%);
+    #activity_invitation .progessLoading{
+        text-align: center
     }
+
     
 </style>
 
