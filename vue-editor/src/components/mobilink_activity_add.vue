@@ -959,7 +959,7 @@
             },
             getCurrentDate: function(){
                 var vm = this;
-                vm.timeStart = new Date();
+                vm.timeStart = vm.roundDate(15,new Date());
                 vm.timeStartMin = new Date();
                 vm.timeEndMin = new Date();
                 var timeEnd = new Date();
@@ -968,10 +968,18 @@
                 } else if(vm.type_activity == 'tasks' || vm.type_activity == 'requests'){
                     timeEnd.setHours(timeEnd.getHours() + 24);
                 };
-                vm.timeEnd = timeEnd;
+                vm.timeEnd = vm.roundDate(15,timeEnd);
                 
                 /* */
             },
+            
+            roundDate(minutes, d){
+                var milisecond = 1000 * 60 * minutes; // đổi ra milisecond
+                var newdate = new Date(Math.ceil(d.getTime() / milisecond) * milisecond);
+                return newdate
+            },
+                
+
             parseDate (date) {
                 if (!date) {
                     return null

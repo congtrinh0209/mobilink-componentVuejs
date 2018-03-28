@@ -430,8 +430,8 @@
         methods: {
             initInvitation: function(){
                 var vm = this;
-                // vm.userId = 108;
-                vm.userId = themeDisplay.getUserId();
+                 vm.userId = 108;
+                // vm.userId = themeDisplay.getUserId();
                 /** */
                 vm.getWorkingUnit();
                 vm.getUserContact();
@@ -439,7 +439,7 @@
                 
                 setTimeout(function(){
                     vm.activeGetEmployees();
-                },3000);
+                },4000);
                 console.log(vm._props);
                 console.log('userId:'+ vm.userId)
             },
@@ -464,7 +464,7 @@
                 
                 axios.get( vm.end_point + 'activities/' + vm.class_pk + '/invitations', configGetInvitation)
                 .then(function (response) {
-                    var serializable = response.data
+                    var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
                         vm.invitationItems = serializable.data;
                         vm.invitationCount = serializable.invitationCount;
@@ -754,7 +754,10 @@
                                 return item.roleId != roleAdded;
                             });
                             vm.hostingIdItems = hostingAfAdded;
-                            vm.hostingId = ''
+                            vm.hostingId = '';
+                            setTimeout(function(){
+                                vm.activeGetEmployees();
+                            },3000);
                         };
                         if(type == 'UserUnit'){
                             var employeeAdded = vm.employee.employeeId;

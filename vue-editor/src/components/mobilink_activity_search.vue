@@ -5,10 +5,13 @@
             <v-layout wrap>
                 
                 <div class="row-header flex-break pl-2">
-                    <v-flex>
-                        {{textResult}} - Có {{tableListTotal}} kết quả 
+                    <v-flex style="max-width:50%">
+                        <div :title="textResult" style="overflow: hidden;max-width:90%;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;">{{textResult}} </div>
+                        <span>Có {{tableListTotal}} kết quả</span>
                     </v-flex>
-
+                    
                     <v-text-field class="pt-0" id="searchInput"
                         append-icon="search"
                         label="Nhập từ khóa"
@@ -48,8 +51,8 @@
                 <v-flex xs12 sm2 class="pl-3">
                     <v-subheader class="px-0 pt-3" >Trạng thái</v-subheader>
                 </v-flex>
-                <v-flex xs12 sm4>
-                    <v-select
+                <v-flex xs12 sm4 id="statusTxt">
+                    <v-select 
                         v-bind:items="statusItems"
                         v-model="status"
                         item-text="statusName"
@@ -65,8 +68,8 @@
                 <v-flex xs12 sm2 class="pl-3">
                     <v-subheader class="px-0 pt-3">Đơn vị tổ chức/ chủ trì </v-subheader>
                 </v-flex>
-                <v-flex xs12 sm4 class="pr-2">
-                    <v-select
+                <v-flex xs12 sm4 class="pr-2" id="hostingTxt">
+                    <v-select 
                         v-bind:items="hostingIdItems"
                         v-model="hostingId"
                         item-text="name"
@@ -81,8 +84,8 @@
                 <v-flex xs12 sm2 class="pl-3">
                     <v-subheader class="px-0 pt-3">Người chủ trì/ phụ trách</v-subheader>
                 </v-flex>
-                <v-flex xs12 sm4>
-                    <v-select
+                <v-flex xs12 sm4 id="managerTxt">
+                    <v-select 
                         v-bind:items="managerItems"
                         v-model="managerS"
                         clearable
@@ -97,8 +100,8 @@
                 <v-flex xs12 sm2 class="pl-3">
                     <v-subheader class="px-0 pt-3">Dự án/ chương trình</v-subheader>
                 </v-flex>
-                <v-flex xs12 sm4 class="pr-2">
-                    <v-select
+                <v-flex xs12 sm4 class="pr-2" id="projectTxt">
+                    <v-select 
                         v-bind:items="projectItems"
                         v-model="projectS"
                         clearable
@@ -113,8 +116,8 @@
                 <v-flex xs12 sm2 class="pl-3">
                     <v-subheader class="px-0 pt-3">Địa chỉ </v-subheader>
                 </v-flex>
-                <v-flex xs12 sm4>
-                    <v-select
+                <v-flex xs12 sm4 id="locationTxt">
+                    <v-select 
                         v-bind:items="locationItems"
                         v-model="locationS"
                         item-text="location"
@@ -132,8 +135,8 @@
                 <v-flex xs12 sm2>
                     <v-subheader class="px-0 pl-3 pt-3">Thẻ nhãn</v-subheader>
                 </v-flex>
-                <v-flex xs12 sm4 class="pr-2">
-                    <v-select
+                <v-flex xs12 sm4 class="pr-2" id="labelTxt">
+                    <v-select 
                         v-bind:items="labelItems"
                         v-model="labelS"
                         clearable
@@ -577,9 +580,9 @@
                 vm.timeEnd = vm.todate?new Date (vm.todate.slice(0,4)+'-'+vm.todate.slice(4,6)+'-'+ vm.todate.slice(6,8)):'';
             },
             /**filter get text search */
-            filterText: function(arr,key,text){
+            filterText: function(arr,key,value){
                 arr.filter(function(item) {
-                    return item.key == text;
+                    return item.key == value;
                 })
             },
             /**load table */
@@ -589,7 +592,7 @@
                 var paramsTableActivity = {
                     sort:'startDate',
                     order:true
-                }
+                };
                 if(vm.keyS){
                     paramsTableActivity.keywords= vm.keyValue;
                     vm.textResult = '';
@@ -603,35 +606,10 @@
                     paramsTableActivity.location = vm.locationS?vm.locationS:'';
                     paramsTableActivity.fromdate = vm.parseDateFormat(vm.timeStart);
                     paramsTableActivity.todate = vm.parseDateFormat(vm.timeEnd);
-
+                    
                     vm.startDate = vm.timeStart?vm.parseDateView(vm.timeStart):'';
                     vm.endDate = vm.timeEnd?vm.parseDateView(vm.timeEnd):'';
-                    /**textSerach */
-                    /*var stateT= vm.statusItems.filter(function(item) {return item.statusCode == vm.state})[0].statusName;
-                     var managerT= vm.managerItems.filter(function(item) {return item.employeeId == vm.manager});
-                     vm.filterText(vm.statusItems,'statusCode',vm.state).statusName;
-                     var managerT= vm.filterText(vm.managerItems,'employeeId',vm.manager).fullName;
-                     var hostingT= vm.hostingIdItems.filter(function(item) {return item.workingUnitId == vm.hosting})[0].name;
-                     var stateT= vm.filterText(vm.statusItems,'statusCode',vm.state).statusName;
-                     var projectT= vm.filterText(vm.projectItems,'projectId',vm.project).projectName;
-                     var labelT= vm.labelItems.filter(function(item) {return item.labelId == vm.label})[0].name*/;
-
-                    var textShow = {
-                        /* 'Trạng thái:' : stateT,
-                        'Đơn vị tổ chức:' : hostingT,
-                        'Người chủ trì/ phụ trách:': managerT,
-                        'Dự án/chương trình:' : projectT,
-                        'Thẻ nhãn:' :labelT,*/
-                        'Từ ngày:': vm.startDate,
-                        'Đến ngày:': vm.endDate
-                    };
-                    vm.textResult = '';
-                    for(var key in textShow){
-                        if(textShow[key]){
-                            var txt = key+textShow[key]+';';
-                            vm.textResult+=txt
-                        }
-                    };
+                    
                 }
                 
                 var configGetActivity = {
@@ -646,19 +624,77 @@
                     if (serializable.hasOwnProperty('data') && Array.isArray(serializable.data)) {
                         vm.tableListItems = serializable.data;
                         vm.tableListTotal = serializable.total;
-                    } else if (typeof (serializable.data) == 'object') {
-                        vm.tableListItems = [serializable.data];
-                        /* vm.tableListTotal = 1;*/
-                    } else {
+                    }  else {
                         vm.tableListItems = [];
+                        vm.tableListTotal = 0;
                     }
                 })
                 .catch(function (error) {
                     console.log(error);
                     vm.tableListItems = [];
-                })
+                });
+                // console.log(vm)
             },
-            
+            /**get text search */
+            getTxtSearch: function(){
+                var vm = this;
+                if(vm.hostingId){
+                    var arr = vm.hostingIdItems;
+                    var hostingT = arr.filter(function(item) {
+                        return item.workingUnitId == vm.hostingId;
+                    })[0].name
+                };
+                
+                if(vm.status){
+                    var arr = vm.statusItems;
+                    var stateT = arr.filter(function(item) {
+                        return item.statusCode == vm.status;
+                    })[0].statusName
+                };
+                if(vm.locationS){
+                    var arr = vm.locationItems;
+                    var locationT = arr.filter(function(item) {
+                        return item.locationId == vm.locationS;
+                    })[0].location
+                };
+                // if(vm.managerS){
+                //     var arr = vm.managerItems;
+                //     var managerT = arr.filter(function(item) {
+                //         return item.mappingUser.userId == vm.managerS;
+                //     }).fullName
+                // };
+                if(vm.projectS){
+                    var arr = vm.projectItems;
+                    var projectT = arr.filter(function(item) {
+                        return item.projectId == vm.projectS;
+                    })[0].projectName
+                };
+                if(vm.labelS){
+                    var arr = vm.labelItems;
+                    var labelT = arr.filter(function(item) {
+                        return item.labelId == vm.labelS;
+                    })[0].name
+                };
+                var textShow = {
+                    'Trạng thái:' : stateT,
+                    'Đơn vị tổ chức:' : hostingT,
+                    'Địa chỉ:' : locationT,
+                    // 'Người chủ trì/ phụ trách:': managerT,
+                    'Dự án/chương trình:' : projectT,
+                    'Thẻ nhãn:' :labelT,
+                    'Từ ngày:': vm.startDate,
+                    'Đến ngày:': vm.endDate
+                };
+                console.log(textShow);
+                vm.textResult = '';
+                for(var key in textShow){
+                    if(textShow[key]){
+                        var txt = key+textShow[key]+'; ';
+                        vm.textResult+=txt
+                    }
+                };
+
+            },
             /** search by key */
             search_by_key: function(){
                 console.log("run");
@@ -675,7 +711,16 @@
                 var vm = this;
                 vm.keyS = true;
                 vm.keyValue = vm.keySearch;
+                vm.timeStart='';
+                vm.timeEnd ='';
+                vm.projectS='';
+                vm.status = '';
+                vm.hostingId = '';
+                vm.managerS = '';
+                vm.labelS = '';
+                vm.locationS = '';
                 vm.getTableList();
+                
             },
             /** search advanced */
             search_advanced: function(){
@@ -686,6 +731,9 @@
                 vm.bindAdvanceSearch();
                 vm.getTableList();
                 vm.viewAdvancedSearch = false;
+                setTimeout(function(){
+                    vm.getTxtSearch();
+                },500)
             },
             /** search advancedOwn */
             search_advancedOwn: function(){
@@ -693,7 +741,10 @@
                 vm.keyS = false;
                 vm.getTableList();
                 vm.viewAdvancedSearch = false;
-                vm.keySearch = ''
+                vm.keySearch = '';
+                setTimeout(function(){
+                    vm.getTxtSearch();
+                },500)
             },
             /**Load activity detail */
             activityDetail: function(item, index){
@@ -753,6 +804,9 @@
         padding-left: 3px!important;
         border-radius: 2px!important;
         color: #3486D7 !important;
+    }
+    #activitySearch .row-header .input-group label{
+        margin-left: 10px!important;
     }
     #activitySearch .row-header .input-group .input-group__details{
         display: none
