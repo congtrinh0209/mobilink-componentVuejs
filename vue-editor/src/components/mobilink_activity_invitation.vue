@@ -8,7 +8,9 @@
         <v-alert type="error" icon="check_circle" class="alertInvitation" transition="slide-y-transition" v-model="alertError">
             {{text_error}}
         </v-alert>
+        
         <div style="position: relative; overflow: hidden;">
+            <v-progress-circular v-if="loadingInv" indeterminate color="primary"></v-progress-circular>
             <v-toolbar
                 absolute
                 color="teal lighten-3"
@@ -16,7 +18,7 @@
             >   
                 <div class="ml-2" v-if="opening_state_prop == 0"><b>Giấy mời: {{invitationCount}} ({{availableCount}} sẵn sàng)</b></div>
                 <div class="ml-2" v-if="opening_state_prop == 1"><b>Giấy mời: {{invitationCount}} ({{checkinCount}} có mặt)</b></div>
-                <div class="ml-2" v-if="opening_state_prop == 2 || opening_state_prop == 3"><b>Giấy mời: {{invitationCount}} ({{checkinCount}} có mặt)</b></div>
+                <div class="ml-2" v-if="opening_state_prop == 2 "><b>Giấy mời: {{invitationCount}} ({{checkinCount}} có mặt)</b></div>
                 <v-spacer></v-spacer>
                 
                 <v-flex v-if="mineInv">
@@ -199,7 +201,7 @@
                                                                     :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
                                                                      v-on:click.stop="managerCheckin(subItem)" outline small class="text-white mx-1" color="indigo">
                                                                         <v-icon color="indigo" v-if="subItem.checkin" >check</v-icon>
-                                                                        Tôi có mặt
+                                                                        Có mặt
                                                                     </v-btn>
 
                                                                     <v-btn v-if="permission_prop=='manager' ||permission_prop=='owner' || item.user_leader == userId" icon title="Xóa" class="mx-0"
@@ -332,7 +334,7 @@
                                                                     :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
                                                                     v-on:click.stop="managerCheckin(item)"  outline small class="text-white mx-1" color="indigo">
                                                                         <v-icon color="indigo" v-if="item.checkin" >check</v-icon>
-                                                                        Tôi có mặt
+                                                                        Có mặt
                                                                     </v-btn>
 
                                                                     <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager'|| permission_prop == 'owner'"
@@ -432,14 +434,15 @@
                 roleIdUser:'',
                 text_error:'Cập nhật dữ liệu thất bại',
                 text_success:'Cập nhật dữ liệu thành công',
-                pointerEvent: 'pointerEvent'
+                pointerEvent: 'pointerEvent',
+                loadingInv: false
 
             }
         },
         methods: {
             initInvitation: function(){
                 var vm = this;
-                 /*vm.userId = 108;*/
+                /* vm.userId = 108;*/
                 vm.userId = themeDisplay.getUserId();
                 /** */
                 vm.getWorkingUnit();
@@ -478,6 +481,7 @@
                         vm.invitationItems = serializable.data;
                         vm.invitationCount = serializable.invitationCount;
                         vm.availableCount = serializable.availableCount;
+                        vm.checkinCount = serializable.checkinCount;
 
                         for (var key in vm.invitationItems) {
                             
@@ -760,7 +764,12 @@
                 if(vm.valid){
                     axios.post(urlUpdate, dataPostInvitation, configPostInvitation)
                     .then(function (response) {
-                        vm.getInvitation();
+                        vm.loadingInv = true;
+                        setTimeout(function(){
+                            vm.getInvitation();
+                            vm.loadingInv = false;
+                            vm.show_alert('success','Thêm mới giấy mời thành công');
+                        },3000) ;
                         vm.valid = false;
                         if(type == 'GROUP'){
                             var roleAdded = vm.hostingId.roleId;
@@ -771,7 +780,7 @@
                             vm.hostingId = '';
                             setTimeout(function(){
                                 vm.activeGetEmployees();
-                            },3000);
+                            },4000);
                         };
                         if(type == 'UserUnit'){
                             var employeeAdded = vm.employee.employeeId;
@@ -789,7 +798,7 @@
                             vm.contactItems = contactAfAdded;
                             vm.contact = '';
                         };
-                        vm.show_alert('success','Thêm mới giấy mời thành công');
+                        
                         
                     })
                     .catch(function (error) {
@@ -1063,5 +1072,13 @@
     .pointerEvent{
         pointer-events: none!important
     }
+    #activity_invitation .progress-circular{
+        z-index: 120!important;
+        position: fixed;
+        top: 10%;
+        left: 50%;
+        transform: translate(-50%, -10%);
+    }
+    
 </style>
 
