@@ -194,8 +194,14 @@
                                                                         <span>{{subItem.userNote}}</span>
                                                                     </v-tooltip>
                                                                     
-                                                                    <span style="color:green" class="mr-2" v-html="bindAvailableText(subItem.available)"></span>
-                                                                
+                                                                    <span v-if="opening_state_prop == 0" style="color:green" class="mr-2" v-html="bindAvailableText(subItem.available)"></span>
+                                                                    <v-btn v-if="opening_state_prop == 1 || opening_state_prop == 2"
+                                                                    :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
+                                                                     v-on:click.stop="managerCheckin(subItem)" outline small class="text-white mx-1" color="indigo">
+                                                                        <v-icon color="indigo" v-if="subItem.checkin" >check</v-icon>
+                                                                        Tôi có mặt
+                                                                    </v-btn>
+
                                                                     <v-btn v-if="permission_prop=='manager' ||permission_prop=='owner' || item.user_leader == userId" icon title="Xóa" class="mx-0"
                                                                      @click.stop="updateInvitation('DELETE',subItem.activityInvitationId,index,item.items)">
                                                                         <v-icon color="red darken-3">clear</v-icon>
@@ -322,7 +328,9 @@
                                                                     
                                                                     <span v-if="opening_state_prop == 0" class="mr-2" style="color:green" v-html="bindAvailableText(item.available)"></span>
 
-                                                                    <v-btn v-if="opening_state_prop == 1 && item.available==1" v-on:click.stop="managerCheckin(item)" outline small class="text-white mx-1" color="indigo">
+                                                                    <v-btn v-if="opening_state_prop == 1 || opening_state_prop == 2" 
+                                                                    :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
+                                                                    v-on:click.stop="managerCheckin(item)"  outline small class="text-white mx-1" color="indigo">
                                                                         <v-icon color="indigo" v-if="item.checkin" >check</v-icon>
                                                                         Tôi có mặt
                                                                     </v-btn>
@@ -424,14 +432,15 @@
                 roleIdUser:'',
                 text_error:'Cập nhật dữ liệu thất bại',
                 text_success:'Cập nhật dữ liệu thành công',
+                pointerEvent: 'pointerEvent'
 
             }
         },
         methods: {
             initInvitation: function(){
                 var vm = this;
-                 vm.userId = 108;
-                // vm.userId = themeDisplay.getUserId();
+                 /*vm.userId = 108;*/
+                vm.userId = themeDisplay.getUserId();
                 /** */
                 vm.getWorkingUnit();
                 vm.getUserContact();
@@ -481,7 +490,7 @@
                                 vm.typeAvailable = item.available;
                                 vm.typeCheckin = item.checkin
                             }
-                            /** */
+                            /** push đơn vị, nhóm*/
                             if(item.invitationType == 0 ||item.invitationType == 1) {
                                 vm.itemInvGroup.push(
                                     {
@@ -493,6 +502,7 @@
                                 vm.itemInvContact.push(item)
                             }
                         };
+                        /**push cá nhân trong đơn vị */
                         for(var keys in vm.itemInvGroup){
                             for (var key in vm.invitationItems) {
                                 let item = vm.invitationItems[key];
@@ -502,12 +512,13 @@
                                 }
                             }
                         }
+                        /**check leader */
                         for(var keys in vm.itemInvGroup){
                             for (var key in vm.invitationItems) {
                                 let item = vm.invitationItems[key];
                                 let itemGroups = vm.itemInvGroup[keys].role;
                                 if(item.roleId==itemGroups.roleId&&item.invitationType==4 ){
-                                    vm.itemInvGroup[keys].user_leader = item.userId
+                                    vm.itemInvGroup[keys].user_leader = item.toUserId
                                 } else{
                                     
                                 }
@@ -536,7 +547,10 @@
                 if(item == 0) {
                     return "Chưa xác nhận"
                 } else if(item == 1){return "Sẵn sàng"}
-                else {return "Bận"}
+                else{
+                    return "Bận"
+                }
+                
             },
             /**get workingUnit */
             getWorkingUnit: function(){
@@ -1045,6 +1059,9 @@
     #activity_invitation .tooltip{
         opacity: 1!important;
         z-index: 0
+    }
+    .pointerEvent{
+        pointer-events: none!important
     }
 </style>
 

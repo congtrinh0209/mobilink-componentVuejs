@@ -888,7 +888,9 @@
         body #activitySearch .datatable__actions__select,body #activitySearch .datatable__actions__pagination{
             display: none;
         }
-
+        body #activitySearch table.table td div{
+            margin-top: 4px;
+        }
 
 </style>
 
