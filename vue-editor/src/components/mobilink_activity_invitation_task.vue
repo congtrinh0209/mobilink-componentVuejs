@@ -16,7 +16,7 @@
                 <v-expansion-panel-content value="true">
                     <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0">
                         <div><b>Đơn vị/ Nhóm trong cơ quan</b></div>
-                        <v-btn fab small grey lighten-3 class="btn-add mx-0 my-0" v-on:click.stop="show_Add1" v-if="permission_prop == 'manager'|| permission_prop == 'owner'">
+                        <v-btn fab small grey lighten-3 class="btn-add mx-0 my-0" v-on:click.stop="show_Add1Task" v-if="permission_prop == 'manager'|| permission_prop == 'owner'">
                             <v-icon grey darken-4>add</v-icon>
                         </v-btn>
                     </div>
@@ -28,8 +28,8 @@
                                     <v-flex xs12 sm8>
                                         <v-select class="selectBoder pt-3"
                                         placeholder="Chọn đơn vị/nhóm"
-                                        :items="hostingIdItems"
-                                        v-model="hostingId"
+                                        :items="hostingIdItemsTask"
+                                        v-model="hostingIdTask"
                                         item-value="roleId"
                                         item-text="roleName"
                                         return-object
@@ -44,8 +44,8 @@
                                     :labels="{checked: 'TH', unchecked: 'PH'}"
                                     :color="{checked: '#7DCE94', unchecked: '#82C7EB'}"
                                     :width="50"/>
-                                    <v-btn small outline color="primary" @click.stop="postInvitation('GROUP')" class="mx-0 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
-                                        Mời
+                                    <v-btn small outline color="primary" @click.stop="postInvitationTask('GROUP')" class="mx-0 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
+                                        Giao
                                     </v-btn>
 
                                 </v-flex>
@@ -53,7 +53,7 @@
                                 <v-flex xs12 sm12>
                                     <v-card>
                                         <v-list >
-                                            <v-list-group v-for="(item, index) in itemInvGroup" :value="item.active" v-bind:key="item.role.activityInvitationId">
+                                            <v-list-group v-for="(item, index) in itemInvGroupTask" :value="item.active" v-bind:key="item.role.activityInvitationId">
                                                 <!-- Phần danh sách tổ chức/ đơn vị -->
                                                 <v-list-tile slot="item" class="px-0">
                                                     <v-list-tile-content class="px-0">
@@ -65,10 +65,10 @@
                                                             </v-flex>
                                                             <v-flex xs6 sm3>
                                                                 <div class="right">
-                                                                    <v-chip v-if="opening_state_prop == 0" label outline color="primary" class="mr-2 mt-2">{{item.role.statistic.available}}/{{item.role.statistic.invitation}}</v-chip>
-                                                                    <v-chip v-if="opening_state_prop == 1 || opening_state_prop == 2" label outline color="primary" class="mr-2 mt-2">{{item.role.statistic.checkin}}/{{item.role.statistic.invitation}}</v-chip>
+                                                                    <v-chip label outline color="primary" class="mr-2 mt-2">{{item.role.statistic.invitation}}</v-chip>
+                                                                    
                                                                     <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager' || permission_prop == 'owner'" 
-                                                                    @click.stop="updateInvitation('DELETE',item.role.activityInvitationId,index,itemInvGroup)">
+                                                                    @click.stop="updateInvitationTask('DELETE',item.role.activityInvitationId,index,itemInvGroupTask)">
                                                                         <v-icon color="red darken-3">clear</v-icon>
                                                                     </v-btn> 
                                                                 </div>
@@ -96,15 +96,15 @@
                                                     <v-flex xs12 sm8>
                                                         <v-select class="selectBoder pt-3"
                                                         placeholder="Cá nhân trong đơn vị/nhóm"
-                                                        :items="employeeItems"
+                                                        :items="employeeItemsTask"
                                                         item-text="fullName"
                                                         item-value="employeeId"
-                                                        v-model="employee"
+                                                        v-model="employeeTask"
                                                         return-object
                                                         :clearable="true"
                                                         ></v-select>
                                                     </v-flex>
-                                                    <v-btn @click.stop="postInvitation('UserUnit')" small outline color="primary" class="mx-0 ml-1 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
+                                                    <v-btn @click.stop="postInvitationTask('UserUnit')" small outline color="primary" class="mx-0 ml-1 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
                                                         Giao
                                                     </v-btn>
                                                 </div>
@@ -118,7 +118,7 @@
                                                             <v-flex xs12 sm6 class="pt-1">
                                                                 <v-list-tile-title>
                                                                     <toggle-button class="mr-1 mt-2" 
-                                                                    @change="updatePresenterUserGroup($event,subItem.activityInvitationId,subItem)"
+                                                                    @change="updatePresenterUserGroupTask($event,subItem.activityInvitationId,subItem)"
                                                                     :value="bindPresenter(subItem.presenter)"
                                                                     :disabled="(permission_prop=='manager'||permission_prop=='owner'|| item.user_leader == userId)?false:true"
                                                                     title_checked = "Thực hiện"
@@ -149,7 +149,7 @@
                                                                     </v-btn> -->
 
                                                                     <v-btn v-if="permission_prop=='manager' ||permission_prop=='owner' || item.user_leader == userId" icon title="Xóa" class="mx-0"
-                                                                     @click.stop="updateInvitation('DELETE',subItem.activityInvitationId,index,item.items)">
+                                                                     @click.stop="updateInvitationTask('DELETE',subItem.activityInvitationId,index,item.items)">
                                                                         <v-icon color="red darken-3">clear</v-icon>
                                                                     </v-btn>
                                                                 </div> 
@@ -178,7 +178,7 @@
                 <v-expansion-panel-content value="true">
                     <div slot="header" class="custome-panel-heading-with-icon pl-0 mr-2">
                         <div><b>Cá nhân/ Tổ chức theo danh bạ</b></div>
-                        <v-btn fab small grey lighten-3 class="btn-add mx-0 my-0" v-on:click.stop="show_Add2" v-if="permission_prop == 'manager'|| permission_prop == 'owner'">
+                        <v-btn fab small grey lighten-3 class="btn-add mx-0 my-0" v-on:click.stop="show_Add2Task" v-if="permission_prop == 'manager'|| permission_prop == 'owner'">
                             <v-icon grey darken-4>add</v-icon>
                         </v-btn>
                     </div>
@@ -190,7 +190,7 @@
                                     <v-flex xs12 sm8>
                                         <v-select class="selectBoder pt-3"
                                         placeholder="Cá nhân/ tổ chức theo danh bạ"
-                                        :items="contactItems"
+                                        :items="contactItemsTask"
                                         v-model="contact"
                                         item-text="fullName"
                                         item-value="contactId"
@@ -210,11 +210,11 @@
                                     :color="{checked: '#7DCE94', unchecked: '#82C7EB'}"
                                     :width="50"/>
 
-                                    <v-btn small outline color="primary" @click="addUserContact" class="mx-0 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
+                                    <v-btn small outline color="primary" @click="addUserContactTask" class="mx-0 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
                                         Giao
                                     </v-btn>
 
-                                    <!-- Phần dialog thêm mới liên lạc postInvitation('UserContact')-->
+                                    <!-- Phần dialog thêm mới liên lạc postInvitationTask('UserContact')-->
                                     <v-dialog v-model="dialog_add_contact" persistent max-width="700px">
                                         <v-card>
                                             <v-card-title style="background-color: rgb(214, 233, 247)">
@@ -245,7 +245,7 @@
                                     <v-card>
                                         <!-- Phần danh sách cá nhân theo danh bạ -->
                                         <v-list >
-                                            <v-list-tile v-for="(item,index) in itemInvContact" v-bind:key="item.activityInvitationId">
+                                            <v-list-tile v-for="(item,index) in itemInvContactTask" v-bind:key="item.activityInvitationId">
                                                 <v-list-tile-content class="mt-2">
                                                     <v-list-tile-title>
                                                         <v-flex xs12 class="layout wrap">
@@ -255,7 +255,7 @@
                                                                     <toggle-button class="mr-1 mt-2"
                                                                     :disabled="(permission_prop=='manager'||permission_prop=='owner')?false:true"
                                                                     :value="bindPresenter(item.presenter)"
-                                                                    @change="updatePresenterUserGroup($event,item.activityInvitationId,item)"
+                                                                    @change="updatePresenterUserGroupTask($event,item.activityInvitationId,item)"
                                                                     title_checked = "Thực hiện"
                                                                     title_unchecked = "Phối hợp"
                                                                     :labels="{checked: 'TH', unchecked: 'PH'}"
@@ -284,7 +284,7 @@
                                                                     </v-btn> -->
 
                                                                     <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager'|| permission_prop == 'owner'"
-                                                                     @click.stop="updateInvitation('DELETE',item.activityInvitationId,index,itemInvContact)">
+                                                                     @click.stop="updateInvitationTask('DELETE',item.activityInvitationId,index,itemInvContactTask)">
                                                                         <v-icon color="red darken-3">clear</v-icon>
                                                                     </v-btn> 
                                                                 </div>
@@ -332,7 +332,7 @@
         created () {
             var vm = this
             vm.$nextTick(function () {
-                vm.initInvitation()
+                vm.initInvitationTask()
             })
         },
         
@@ -364,20 +364,20 @@
                 showAdd2: false,
                 disUserMail: false,
                 /**/ 
-                invitationItems:[],
-                itemInvGroup:[],
-                itemInvContact:[],
-                contactItems:[],
+                invitationTaskItems:[],
+                itemInvGroupTask:[],
+                itemInvContactTask:[],
+                contactItemsTask:[],
                 contact:'',
                 invitationCount: 0,
                 availableCount: 0,
                 checkinCount:0,
                 dataUpdateInvitation: new URLSearchParams(),
                 /**/ 
-                hostingIdItems:[],
-                hostingId:'',
-                employeeItems:[],
-                employee:'',
+                hostingIdItemsTask:[],
+                hostingIdTask:'',
+                employeeItemsTask:[],
+                employeeTask:'',
                 roleIdUser:'',
                 text_error:'Cập nhật dữ liệu thất bại',
                 text_success:'Cập nhật dữ liệu thành công',
@@ -391,29 +391,29 @@
             }
         },
         methods: {
-            initInvitation: function(){
+            initInvitationTask: function(){
                 var vm = this;
-                vm.userId = 108;
-                // vm.userId = themeDisplay.getUserId();
+                /*vm.userId = 108;*/
+                vm.userId = themeDisplay.getUserId();
                 /** */
-                vm.getWorkingUnit();
+                vm.getWorkingUnitTask();
                 vm.getUserContact();
-                vm.getInvitation();
+                vm.getInvitationTask();
                 
                 setTimeout(function(){
-                    vm.activeGetEmployees();
+                    vm.activeGetEmployeesTask();
                 },4000);
                 console.log(vm._props);
                 console.log('userId:'+ vm.userId)
             },
             /* Load data invitation */
-            getInvitation: function(){
+            getInvitationTask: function(){
                 var vm = this;
                 vm.presenterAddGroup = false;
                 vm.presenterAddUser = false;
                 vm.presenterAddUserUnit = false;
-                vm.itemInvGroup = [];
-                vm.itemInvContact = [];
+                vm.itemInvGroupTask = [];
+                vm.itemInvContactTask = [];
 
                 var paramsGetInvitation = {
                     
@@ -429,14 +429,14 @@
                 .then(function (response) {
                     var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
-                        vm.invitationItems = serializable.data;
+                        vm.invitationTaskItems = serializable.data;
                         vm.invitationCount = serializable.invitationCount;
                         vm.availableCount = serializable.availableCount;
                         vm.checkinCount = serializable.checkinCount;
 
-                        for (var key in vm.invitationItems) {
+                        for (var key in vm.invitationTaskItems) {
                             
-                            let item = vm.invitationItems[key];
+                            let item = vm.invitationTaskItems[key];
                             /**check mine */
                             if(item.mine == true){
                                 vm.mineInv = true;
@@ -447,33 +447,33 @@
                             }
                             /** push đơn vị, nhóm*/
                             if(item.invitationType == 0 ||item.invitationType == 1) {
-                                vm.itemInvGroup.push(
+                                vm.itemInvGroupTask.push(
                                     {
                                         "role": item,
                                         items: []
                                     }
                                 )
                             } else if(item.invitationType == 2){
-                                vm.itemInvContact.push(item)
+                                vm.itemInvContactTask.push(item)
                             }
                         };
                         /**push cá nhân trong đơn vị */
-                        for(var keys in vm.itemInvGroup){
-                            for (var key in vm.invitationItems) {
-                                let item = vm.invitationItems[key];
-                                let itemGroups = vm.itemInvGroup[keys].role;
+                        for(var keys in vm.itemInvGroupTask){
+                            for (var key in vm.invitationTaskItems) {
+                                let item = vm.invitationTaskItems[key];
+                                let itemGroups = vm.itemInvGroupTask[keys].role;
                                 if(item.roleId==itemGroups.roleId&&item.invitationType==3 || item.roleId==itemGroups.roleId&&item.invitationType==5 || item.roleId==itemGroups.roleId&&item.invitationType==4){
-                                    vm.itemInvGroup[keys].items.push(item)
+                                    vm.itemInvGroupTask[keys].items.push(item)
                                 }
                             }
                         }
                         /**check leader */
-                        for(var keys in vm.itemInvGroup){
-                            for (var key in vm.invitationItems) {
-                                let item = vm.invitationItems[key];
-                                let itemGroups = vm.itemInvGroup[keys].role;
+                        for(var keys in vm.itemInvGroupTask){
+                            for (var key in vm.invitationTaskItems) {
+                                let item = vm.invitationTaskItems[key];
+                                let itemGroups = vm.itemInvGroupTask[keys].role;
                                 if(item.roleId==itemGroups.roleId&&item.invitationType==4 ){
-                                    vm.itemInvGroup[keys].user_leader = item.toUserId
+                                    vm.itemInvGroupTask[keys].user_leader = item.toUserId
                                 } else{
                                     
                                 }
@@ -481,7 +481,7 @@
                         }
                         
                     } else {
-                        vm.invitationItems = []
+                        vm.invitationTaskItems = []
                     }
                     
                 })
@@ -498,7 +498,7 @@
                 } else {return true}
             },
 
-            bindAvailableText: function(item){
+            /*bindAvailableText: function(item){
                 if(item == 0) {
                     return "Chưa xác nhận"
                 } else if(item == 1){return "Sẵn sàng"}
@@ -506,9 +506,9 @@
                     return "Bận"
                 }
                 
-            },
+            },*/
             /**get workingUnit */
-            getWorkingUnit: function(){
+            getWorkingUnitTask: function(){
                 var vm = this;
                 var paramsGetWorkingUnit = {
                     full: true
@@ -525,7 +525,7 @@
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
                             if(serializable.data[key].selected == false){
-                                vm.hostingIdItems.push(
+                                vm.hostingIdItemsTask.push(
                                     serializable.data[key]
                                 )
                             }
@@ -538,8 +538,8 @@
                 })
 
             },
-            /**get employee */
-            getEmployees: function(){
+            /**get employeeTask */
+            getEmployeesTask: function(){
                 var vm = this;
                 var paramsGetEmployee = {
                     'workingunit': vm.working_unit_prop,
@@ -556,7 +556,7 @@
                     var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            vm.employeeItems.push(
+                            vm.employeeItemsTask.push(
                                 serializable.data[key]
                             )
                             
@@ -569,12 +569,12 @@
 
             },
             /**run get employees */
-            activeGetEmployees: function(){
+            activeGetEmployeesTask: function(){
                 var vm = this;
-                for(var keys in vm.itemInvGroup){
-                    if(vm.itemInvGroup[keys].user_leader&&vm.itemInvGroup[keys].user_leader == vm.userId){
-                        vm.roleIdUser = vm.itemInvGroup[keys].role.roleId;
-                        vm.getEmployees();
+                for(var keys in vm.itemInvGroupTask){
+                    if(vm.itemInvGroupTask[keys].user_leader&&vm.itemInvGroupTask[keys].user_leader == vm.userId){
+                        vm.roleIdUser = vm.itemInvGroupTask[keys].role.roleId;
+                        vm.getEmployeesTask();
                     }
                 }
             },
@@ -595,7 +595,7 @@
                     var serializable = response.data
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            vm.contactItems.push(
+                            vm.contactItemsTask.push(
                                 serializable.data[key]
                             )
                             
@@ -609,7 +609,7 @@
             },
             
             /**Xử lý cập nhật  invitation của group và user */
-            updateInvitation: function(type,invId,index,items){
+            updateInvitationTask: function(type,invId,index,items){
                 var vm = this;
                 
                 var urlUpdate = vm.end_point + "activities/"+vm.class_pk+"/invitations/"+invId;
@@ -647,10 +647,10 @@
             },
             
             /**POST invitation */
-            postInvitation: function(type){
+            postInvitationTask: function(type){
                 var vm = this;
                 console.log(vm);
-                if(type == 'GROUP'&&vm.hostingId){
+                if(type == 'GROUP'&&vm.hostingIdTask){
                     vm.valid = true;
                     var dataPostInvitation  =new URLSearchParams();
                     var presenterPostGroup;
@@ -658,17 +658,17 @@
                     if(vm.presenterAddGroup == true){
                         presenterPostGroup = 1
                     } else {presenterPostGroup = 0};
-                    if(vm.hostingId.type == "workingunit"){
+                    if(vm.hostingIdTask.type == "workingunit"){
                         typeRole = 0
-                    }else if(vm.hostingId.type == "jobpos"){
+                    }else if(vm.hostingIdTask.type == "jobpos"){
                         typeRole = 1
                     };
                     dataPostInvitation.append('invitationType', typeRole);
-                    dataPostInvitation.append('roleId', vm.hostingId.roleId);
-                    dataPostInvitation.append('fullName', vm.hostingId.roleName);
+                    dataPostInvitation.append('roleId', vm.hostingIdTask.roleId);
+                    dataPostInvitation.append('fullName', vm.hostingIdTask.roleName);
                     dataPostInvitation.append('presenter', presenterPostGroup);
                 } 
-                else if(type == 'UserUnit'&&vm.employee){
+                else if(type == 'UserUnit'&&vm.employeeTask){
                     vm.valid = true;
                     var dataPostInvitation  =new URLSearchParams();
                     var presenterPostUserUnit;
@@ -678,10 +678,10 @@
                     
                     dataPostInvitation.append('invitationType', 3);
                     dataPostInvitation.append('roleId', vm.roleIdUser);
-                    dataPostInvitation.append('toUserId', vm.employee.mappingUser.userId);
-                    dataPostInvitation.append('fullName', vm.employee.fullName);
-                    dataPostInvitation.append('email', vm.employee.email);
-                    dataPostInvitation.append('telNo', vm.employee.telNo);
+                    dataPostInvitation.append('toUserId', vm.employeeTask.mappingUser.userId);
+                    dataPostInvitation.append('fullName', vm.employeeTask.fullName);
+                    dataPostInvitation.append('email', vm.employeeTask.email);
+                    dataPostInvitation.append('telNo', vm.employeeTask.telNo);
                     dataPostInvitation.append('presenter', presenterPostUserUnit);
                 }
                 else if(type == 'UserContact'&&vm.contact){
@@ -717,36 +717,36 @@
                     .then(function (response) {
                         vm.dialog_loading = true;
                         setTimeout(function(){
-                            vm.getInvitation();
+                            vm.getInvitationTask();
                             vm.dialog_loading = false;
                             vm.show_alert('success','Thêm mới giấy mời thành công');
                         },3000) ;
                         vm.valid = false;
                         if(type == 'GROUP'){
-                            var roleAdded = vm.hostingId.roleId;
-                            var hostingAfAdded = vm.hostingIdItems.filter(function(item) {
+                            var roleAdded = vm.hostingIdTask.roleId;
+                            var hostingAfAdded = vm.hostingIdItemsTask.filter(function(item) {
                                 return item.roleId != roleAdded;
                             });
-                            vm.hostingIdItems = hostingAfAdded;
-                            vm.hostingId = '';
+                            vm.hostingIdItemsTask = hostingAfAdded;
+                            vm.hostingIdTask = '';
                             setTimeout(function(){
-                                vm.activeGetEmployees();
+                                vm.activeGetEmployeesTask();
                             },4000);
                         };
                         if(type == 'UserUnit'){
-                            var employeeAdded = vm.employee.employeeId;
-                            var employeeAfAdded = vm.employeeItems.filter(function(item) {
+                            var employeeAdded = vm.employeeTask.employeeId;
+                            var employeeAfAdded = vm.employeeItemsTask.filter(function(item) {
                                 return item.employeeId != employeeAdded;
                             });
-                            vm.employeeItems = employeeAfAdded;
-                            vm.employee = ''
+                            vm.employeeItemsTask = employeeAfAdded;
+                            vm.employeeTask = ''
                         };
                         if(type == 'UserContact'){
                             var contactAdded = vm.contact.contactId;
-                            var contactAfAdded = vm.contactItems.filter(function(item) {
+                            var contactAfAdded = vm.contactItemsTask.filter(function(item) {
                                 return item.contactId != contactAdded;
                             });
-                            vm.contactItems = contactAfAdded;
+                            vm.contactItemsTask = contactAfAdded;
                             vm.contact = '';
                         };
                         
@@ -791,15 +791,15 @@
                 })
             },
             /**Phần cập nhật presenter */
-            updatePresenterUserGroup: function(event,invId,items){
+            updatePresenterUserGroupTask: function(event,invId,items){
                 var vm = this;
                 var presenterChange;
                 if(event.value == true){
                     presenterChange = 1
                 }else {presenterChange = 0};
-                vm.submitUpdatePresenter(invId,presenterChange,items)
+                vm.submitUpdatePresenterTask(invId,presenterChange,items)
             },
-            submitUpdatePresenter: function(invId,presenter,items){
+            submitUpdatePresenterTask: function(invId,presenter,items){
                 var vm = this;
                 var dataUpdateInvitation  =new URLSearchParams();
                 dataUpdateInvitation.append('presenter', presenter);
@@ -822,15 +822,15 @@
                 })
             },
             /** */
-            showAddCot: function(){
+            showAddCotTask: function(){
                 var vm =this;
 
                 vm.dialog_add_contact = true
             },
 
-            addUserContact:function(){
+            addUserContactTask:function(){
                 var vm = this;
-                var contactList = vm.contactItems;
+                var contactList = vm.contactItemsTask;
                 var checkContact = true;
                 for(var key in contactList){
                     if(vm.contact == contactList[key].fullName){
@@ -842,7 +842,7 @@
                     vm.fullNameCot = vm.contact;
                     
                 } else {
-                    vm.postInvitation('UserContact')
+                    vm.postInvitationTask('UserContact')
                 }
             },
             /** */
@@ -928,11 +928,11 @@
                     vm.show_alert('error','Cập nhật dữ liệu thất bại')
                 })
             },
-            show_Add1: function(){
+            show_Add1Task: function(){
                 var vm =this;
                 vm.showAdd1 =!vm.showAdd1
             },
-            show_Add2: function(){
+            show_Add2Task: function(){
                 var vm =this;
                 vm.showAdd2 =!vm.showAdd2
             },
@@ -948,7 +948,7 @@
                     setTimeout(function(){vm.alertError = false},2000)
                 }
             },
-            submitAddContact: function(){
+            submitAddContactTask: function(){
                 if (this.$refs.form.validate()) {
                     var vm = this;
 
@@ -963,6 +963,7 @@
                     paramsAddContact.append('email', vm.emailCot?vm.emailCot:'')
                     paramsAddContact.append('telNo', vm.telNoCot?vm.telNoCot:'')
                     paramsAddContact.append('companyName', vm.companyName?vm.companyName:'')
+                    paramsAddContact.append('contactType', 0)
 
                     axios.post(vm.end_point + 'contacts',
                         paramsAddContact,
@@ -977,7 +978,7 @@
                         var nameRes = serializable.fullName;
                         var emailRes = serializable.email;
                         var telRes = serializable.telNo;
-                        vm.addInvitationCotEmail(nameRes,telRes,emailRes);
+                        vm.addInvitationCotEmailTask(nameRes,telRes,emailRes);
                         console.log("run success add contact")
                         
                     })
@@ -989,7 +990,7 @@
                 }
                 
             },
-            addInvitationCotEmail: function(name,tel,email){
+            addInvitationCotEmailTask: function(name,tel,email){
                 var vm = this;
                 var urlUpdate = vm.end_point + "activities/"+vm.class_pk+"/invitations";
                 var dataPostInvitation  =new URLSearchParams();
@@ -1003,7 +1004,9 @@
                 dataPostInvitation.append('telNo', tel);
                 dataPostInvitation.append('email', email);
                 dataPostInvitation.append('presenter', presenterPostUser);
-
+                var paramsPostInvitation = {
+                    
+                };
                 const configPostInvitation = {
                     params: paramsPostInvitation,
                     headers: {
@@ -1014,7 +1017,7 @@
                 .then(function (response) {
                     vm.dialog_loading = true;
                     setTimeout(function(){
-                        vm.getInvitation();
+                        vm.getInvitationTask();
                         vm.dialog_loading = false;
                         vm.show_alert('success','Thêm mới giấy mời thành công');
                     },3000) ;
@@ -1043,6 +1046,64 @@
 	   -webkit-flex: 1; /* Safari 6.1+ */
 	   flex: 1;
 	}
+    /* #activity_invitation_task_task .toolbar__title{
+        font-size: 13px!important;
+    }
+    #activity_invitation_task_task .btn__content {
+        padding-left: 0px!important;
+        padding-right: 0px!important;
+    }
+    #activity_invitation_task_task .expansion-panel__header{
+        padding-left: 10px!important;
+        padding-right: 10px!important;
+    }
+    #activity_invitation_task_task .list__tile{
+        padding: 0!important;
+    }
+    #activity_invitation_task_task .list__tile__title{
+
+        height: 100%!important;
+    }
+    #activity_invitation_task_task .list__tile__content{
+        overflow: visible!important;
+    }
+    #activity_invitation_task_task .item_group:hover{
+        color: blue;
+        cursor: pointer;
+    }
+    #activity_invitation_task_task .chip {
+        max-height: 30px!important
+    }
+    #activity_invitation_task_task .selectBoder .input-group__input{
+        border: 1px solid #1976D2 ;
+        border-radius: 4px;
+        padding-left: 8px;
+    }
+    #activity_invitation_task_task .selectBoder .input-group__details {
+        display: none
+    }
+    #activity_invitation_task_task  .iconCmm {
+        color: #1976D2
+    }
+    #activity_invitation_task_task .invBtn{
+        margin-top: 19px!important;
+    }
+    #activity_invitation_task_task .btn-add{
+        width: 30px;
+        height: 30px;
+    } */
+
+
+    #activity_invitation_task .alertInvitation{
+        width: 30%!important;
+        height: 75px!important;
+        min-width: 300px!important;
+        z-index: 122!important;
+        position: fixed;
+        top: 0;
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
     #activity_invitation_task .toolbar__title{
         font-size: 13px!important;
     }
@@ -1089,5 +1150,18 @@
         width: 30px;
         height: 30px;
     }
+    #activity_invitation_task .tooltip{
+        opacity: 1!important;
+        z-index: 0
+    }
+    .pointerEvent{
+        pointer-events: none!important
+    }
+    #activity_invitation_task .progessLoading{
+        text-align: center
+    }
+
+    
 </style>
+
 
