@@ -1,6 +1,6 @@
 <template>
     <div id="activity_add_contact">
-        <!-- Template activity add events --> 
+        <!-- Template activity add contact --> 
         <v-form v-model="valid" ref="form" lazy-validation >
             <v-layout wrap >
                 
@@ -69,7 +69,8 @@
             group_id: null,
             end_point: null,
             email_inp: null,
-            dataForm: null
+            dataForm: null,
+            name:''
         },
 
         created () {
@@ -85,6 +86,10 @@
             }
         },
         methods: {
+            bindContact: function(){
+                var vm = this;
+                vm.fullName = vm.name
+            },
             submitAddContact: function(){
                 if (this.$refs.form.validate()) {
                     var vm = this;

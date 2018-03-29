@@ -297,75 +297,19 @@
                                             </v-card-title>
 
                                             <v-card-text>
-                                                <!-- <jx-mobilink-activity-contact
+                                                <jx-mobilink-activity-contact
                                                 ref="activity_contact_ref"
                                                 :group_id="group_id"
                                                 :end_point= "end_point" 
                                                 :name="contactInput"
                                                 @add-contact = 'addContact'
-                                                ></jx-mobilink-activity-contact> -->
-                                                <!-- Template activity add contact --> 
-                                                <v-form v-model="valid" ref="form" lazy-validation >
-                                                    <v-layout wrap >
-                                                        
-                                                        <!--  -->
-                                                        <v-flex xs12 sm3 class="mt-2">
-                                                            <v-subheader class="px-0">Tên cá nhân/ tổ chức *</v-subheader>
-                                                        </v-flex>
-                                                        <v-flex xs12 sm9>
-                                                            <v-text-field
-                                                                placeholder = ''
-                                                                v-model="fullNameCot"
-                                                                clearable="true"
-                                                                :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
-                                                                required
-                                                            ></v-text-field>
-                                                        </v-flex>
-                                                        <!--  -->
-                                                        <v-flex xs12 sm3 class="mt-2">
-                                                            <v-subheader class="px-0">Email *</v-subheader>
-                                                        </v-flex>
-                                                        <v-flex xs12 sm9>
-                                                            <v-text-field
-                                                                placeholder = ''
-                                                                v-model="emailCot"
-                                                                clearable="true"
-                                                                :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
-                                                                required
-                                                            ></v-text-field>
-                                                        </v-flex>
-                                                        <!--  -->
-                                                        <v-flex xs12 sm3 class="mt-2">
-                                                            <v-subheader class="px-0">Số điện thoại</v-subheader>
-                                                        </v-flex>
-                                                        <v-flex xs12 sm9>
-                                                            <v-text-field
-                                                                placeholder = ''
-                                                                v-model="telNoCot"
-                                                                clearable="true"
-                                                            ></v-text-field>
-                                                        </v-flex>
-                                                        <!--  -->
-                                                        <v-flex xs12 sm3 class="mt-2">
-                                                            <v-subheader class="px-0">Cơ quan/ địa chỉ</v-subheader>
-                                                        </v-flex>
-                                                        <v-flex xs12 sm9>
-                                                            <v-text-field
-                                                                placeholder = ''
-                                                                v-model="companyName"
-                                                                clearable="true"
-                                                            ></v-text-field>
-                                                        </v-flex>
-                                                        
-                                                    </v-layout>
-                                                </v-form>
-                                                <!-- end -->
+                                                ></jx-mobilink-activity-contact>
                                             </v-card-text>
 
                                             <v-card-actions>
                                                 <v-spacer></v-spacer>
                                                 <v-btn class="mr-3" color="primary"  @click.native="dialog_add_contact= false">Hủy</v-btn>
-                                                <v-btn color="primary" @click.native="submitAddContact" >Thêm vào liên lạc</v-btn>
+                                                <v-btn color="primary" @click.native="addContactInfo" >Thêm vào liên lạc</v-btn>
                                             </v-card-actions>
                                         </v-card>
                                     </v-dialog>
@@ -513,12 +457,8 @@
                 text_error:'Cập nhật dữ liệu thất bại',
                 text_success:'Cập nhật dữ liệu thành công',
                 pointerEvent: 'pointerEvent',
-                dialog_loading: false,
-                // 
-                fullNameCot:'',
-                emailCot:'',
-                telNoCot:'',
-                companyName:''
+                dialog_loading: false
+
             }
         },
         methods: {
@@ -958,7 +898,20 @@
 
                 vm.dialog_add_contact = true
             },
-
+            addContact: function(){
+                var vm =this;
+                vm.$refs.activity_contact_ref.submitAddContact()
+            },
+            // addContactInfo: function(data){
+            //     var vm = this;
+            //     if(data){
+            //         vm.dialog_add_contact = false;
+                    
+            //     } else {
+                    
+            //     }
+                
+            // },
             addUserContact:function(){
                 var vm = this;
                 var contactList = vm.contactItems;
@@ -966,12 +919,12 @@
                 for(var key in contactList){
                     if(vm.contact == contactList[key].fullName){
                         checkContact = false;
+                        return 
                     }
-                };
+                }
                 if(checkContact){
                     vm.dialog_add_contact = true;
-                    vm.fullNameCot = vm.contact;
-                    
+                    vm.contactInput = vm.contact;
                 } else {
                     vm.postInvitation('UserContact')
                 }
@@ -1078,84 +1031,6 @@
                     vm.alertError = true;
                     setTimeout(function(){vm.alertError = false},2000)
                 }
-            },
-            submitAddContact: function(){
-                if (this.$refs.form.validate()) {
-                    var vm = this;
-
-                    const configContact = {
-                        headers: {
-                            'groupId': vm.group_id
-                        }
-                    };
-                    var paramsAddContact = new URLSearchParams()
-
-                    paramsAddContact.append('fullName', vm.fullNameCot?vm.fullNameCot:'')
-                    paramsAddContact.append('email', vm.emailCot?vm.emailCot:'')
-                    paramsAddContact.append('telNo', vm.telNoCot?vm.telNoCot:'')
-                    paramsAddContact.append('companyName', vm.companyName?vm.companyName:'')
-
-                    axios.post(vm.end_point + 'contacts',
-                        paramsAddContact,
-                        configContact
-                    )
-                    .then(function (response) {
-                        vm.contact = '';
-                        vm.$refs.form.reset();
-                        vm.dialog_add_contact = false;
-                        var serializable = response.data;
-                        
-                        var nameRes = serializable.fullName;
-                        var emailRes = serializable.email;
-                        var telRes = serializable.telNo;
-                        vm.addInvitationCotEmail(nameRes,telRes,emailRes);
-                        console.log("run success add contact")
-                        
-                    })
-                    .catch(function (error) {
-                        
-                        console.log(error);
-                        
-                    })
-                }
-                
-            },
-            addInvitationCotEmail: function(name,tel,email){
-                var vm = this;
-                var urlUpdate = vm.end_point + "activities/"+vm.class_pk+"/invitations";
-                var dataPostInvitation  =new URLSearchParams();
-                var presenterPostUser;
-                if(vm.presenterAddUser == true){
-                    presenterPostUser = 1
-                } else {presenterPostUser = 0};
-                dataPostInvitation.append('invitationType', 2);
-
-                dataPostInvitation.append('fullName', name);
-                dataPostInvitation.append('telNo', tel);
-                dataPostInvitation.append('email', email);
-                dataPostInvitation.append('presenter', presenterPostUser);
-
-                const configPostInvitation = {
-                    params: paramsPostInvitation,
-                    headers: {
-                        'groupId': vm.group_id
-                    }
-                };
-                axios.post(urlUpdate, dataPostInvitation, configPostInvitation)
-                .then(function (response) {
-                    vm.dialog_loading = true;
-                    setTimeout(function(){
-                        vm.getInvitation();
-                        vm.dialog_loading = false;
-                        vm.show_alert('success','Thêm mới giấy mời thành công');
-                    },3000) ;
-                    
-    
-                })
-                .catch(function (error) {
-                    vm.show_alert('error','Thêm mới giấy mời thất bại')
-                });
-                console.log("run add contact invitation")
             }
   
         }

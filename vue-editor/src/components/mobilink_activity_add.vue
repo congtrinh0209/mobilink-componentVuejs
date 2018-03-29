@@ -6,11 +6,11 @@
             <v-layout wrap >
                 <!--  -->
                 <v-flex xs12 sm2>
-                    <v-subheader class="px-0">Chủ đề *</v-subheader>
+                    <v-subheader class="px-0">Tên cuộc họp *</v-subheader>
                 </v-flex>
                 <v-flex xs12 sm10>
                     <v-text-field
-                        placeholder="Chủ đề "
+                        placeholder="Tên cuộc họp "
                         v-model="topic"
                         :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
                         required
@@ -70,7 +70,7 @@
                 </v-flex>
                 <!--  -->
                 <v-flex xs12 sm2>
-                    <v-subheader class="px-0">Đơn vị tổ chức </v-subheader>
+                    <v-subheader class="px-0">Đơn vị tham mưu </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4>
                     <v-select
@@ -86,7 +86,7 @@
                 </v-flex>
                 <!--  -->
                 <v-flex xs12 sm2 class="pl-3">
-                    <v-subheader class="px-0">Người chủ trì </v-subheader>
+                    <v-subheader class="px-0">Lãnh đạo chủ trì </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4>
                     <v-select
