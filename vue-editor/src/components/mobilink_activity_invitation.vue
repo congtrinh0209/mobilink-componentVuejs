@@ -34,9 +34,9 @@
                 color="teal lighten-3"
                 dark
             >   
-                <div class="ml-2" v-if="opening_state_prop == 0"><b>Giấy mời: {{invitationCount}} ({{availableCount}} sẵn sàng)</b></div>
-                <div class="ml-2" v-if="opening_state_prop == 1"><b>Giấy mời: {{invitationCount}} ({{checkinCount}} có mặt)</b></div>
-                <div class="ml-2" v-if="opening_state_prop == 2 "><b>Giấy mời: {{invitationCount}} ({{checkinCount}} có mặt)</b></div>
+                <div class="ml-2" v-if="opening_state_prop == 0">Giấy mời: {{invitationCount}} ({{availableCount}} sẵn sàng)</div>
+                <div class="ml-2" v-if="opening_state_prop == 1">Giấy mời: {{invitationCount}} ({{checkinCount}} có mặt)</div>
+                <div class="ml-2" v-if="opening_state_prop == 2 ">Giấy mời: {{invitationCount}} ({{checkinCount}} có mặt)</div>
                 <v-spacer></v-spacer>
                 
                 <v-flex v-if="mineInv">
@@ -109,6 +109,7 @@
                                         item-text="roleName"
                                         return-object
                                         required="true"
+                                        autocomplete
                                         ></v-select>
                                     </v-flex>
                                     <toggle-button class="mx-1 mt-4"
@@ -176,6 +177,7 @@
                                                         item-value="employeeId"
                                                         v-model="employee"
                                                         return-object
+                                                        autocomplete
                                                         :clearable="true"
                                                         ></v-select>
                                                     </v-flex>
@@ -265,13 +267,14 @@
                                     <v-flex xs12 sm8>
                                         <v-select class="selectBoder pt-3"
                                         placeholder="Cá nhân/ tổ chức theo danh bạ"
-                                        :items="contactItems"
+                                        v-bind:items="contactItems"
                                         v-model="contact"
                                         item-text="fullName"
                                         item-value="contactId"
                                         autocomplete
                                         return-object
                                         combobox
+                                        
                                         clearable
                                         ></v-select>
                                         
@@ -524,8 +527,8 @@
         methods: {
             initInvitation: function(){
                 var vm = this;
-                /* vm.userId = 108;*/
-                vm.userId = themeDisplay.getUserId();
+                vm.userId = 108;
+                // vm.userId = themeDisplay.getUserId();
                 /** */
                 vm.getWorkingUnit();
                 vm.getUserContact();
@@ -999,10 +1002,15 @@
                 };
                 axios.put(urlUpdate, dataUpdateAvailable, configPutInvitation)
                 .then(function (response) {
+                    setTimeout (function(){
+                        vm.getInvitation();
+                    },1000);
                     vm.show_alert('success','Cập nhật dữ liệu thành công')
                 })
                 .catch(function (error) {
-                    vm.typeAvailable = vm.typeAvailable;
+                    setTimeout (function(){
+                        vm.getInvitation();
+                    },1000);
                     vm.show_alert('error','Cập nhật dữ liệu thất bại')
                 })
                 
@@ -1158,6 +1166,15 @@
                     vm.show_alert('error','Thêm mới giấy mời thất bại')
                 });
                 console.log("run add contact invitation")
+            },
+            eventChange: function(event){
+                var vm = this;
+                console.log(vm);
+                vm.contact = null;
+                console.log("run change");
+                console.log(event);
+                vm.contact = event
+                
             }
   
         }

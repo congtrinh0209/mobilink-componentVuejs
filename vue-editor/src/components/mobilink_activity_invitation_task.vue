@@ -5,7 +5,7 @@
                 absolute
                 color="teal lighten-3"
                 dark
-                scroll-off-screen
+                
             >
                 <v-toolbar-title class="ml-3">Giao thực hiện/ phối hợp</v-toolbar-title>
                 <v-spacer></v-spacer>
@@ -15,7 +15,7 @@
             <v-expansion-panel style="padding-top:65px" expand>
                 <v-expansion-panel-content value="true">
                     <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0">
-                        <div><b>Đơn vị/ Nhóm trong cơ quan</b></div>
+                        <div>Đơn vị/ Nhóm trong cơ quan</div>
                         <v-btn fab small grey lighten-3 class="btn-add mx-0 my-0" v-on:click.stop="show_Add1Task" v-if="permission_prop == 'manager'|| permission_prop == 'owner'">
                             <v-icon grey darken-4>add</v-icon>
                         </v-btn>
@@ -34,6 +34,7 @@
                                         item-text="roleName"
                                         return-object
                                         required="true"
+                                        autocomplete
                                         ></v-select>
                                     </v-flex>
                                     <toggle-button class="mx-1 mt-4"
@@ -101,6 +102,7 @@
                                                         item-value="employeeId"
                                                         v-model="employeeTask"
                                                         return-object
+                                                        autocomplete
                                                         :clearable="true"
                                                         ></v-select>
                                                     </v-flex>
@@ -177,7 +179,7 @@
             <v-expansion-panel expand class="mt-1">
                 <v-expansion-panel-content value="true">
                     <div slot="header" class="custome-panel-heading-with-icon pl-0 mr-2">
-                        <div><b>Cá nhân/ Tổ chức theo danh bạ</b></div>
+                        <div>Cá nhân/ Tổ chức theo danh bạ</div>
                         <v-btn fab small grey lighten-3 class="btn-add mx-0 my-0" v-on:click.stop="show_Add2Task" v-if="permission_prop == 'manager'|| permission_prop == 'owner'">
                             <v-icon grey darken-4>add</v-icon>
                         </v-btn>
@@ -188,7 +190,7 @@
                             <v-layout row wrap class="mx-0">
                                 <v-flex class="layout wrap" v-if="showAdd2">
                                     <v-flex xs12 sm8>
-                                        <v-select class="selectBoder pt-3"
+                                        <v-select class="selectBoder pt-3" id="selectContact"
                                         placeholder="Cá nhân/ tổ chức theo danh bạ"
                                         :items="contactItemsTask"
                                         v-model="contact"
@@ -196,7 +198,7 @@
                                         item-value="contactId"
                                         autocomplete
                                         return-object
-                                        combobox
+                                        
                                         clearable
                                         ></v-select>
                                         
