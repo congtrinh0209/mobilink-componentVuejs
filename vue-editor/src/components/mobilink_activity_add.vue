@@ -27,7 +27,7 @@
                     @confirm = "changeDate" 
                     v-bind:not-before="timeStartMin" 
                     :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" 
-                    lang="vi" type="datetime" format="dd/MM/yyyy HH:mm" 
+                    type="datetime" format="dd/MM/yyyy HH:mm" 
                     confirm="true"
                     :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
                     required

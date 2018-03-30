@@ -4,7 +4,7 @@
  <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>Activity Invitation</title>
+    <title>Activity Detail</title>
     <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
     <!-- vuejs -->
     <script type="text/javascript" src="../js/axios.min.js"></script>
@@ -54,7 +54,7 @@
                 <div class="flex xs12">
                     <v-menu transition="slide-x-transition" full-width>
                         <v-btn slot="activator" block color="primary">
-                            <v-icon>library_add</v-icon> &nbsp;<span v-lang.them_moi></span>
+                            <span v-lang.them_moi></span>
                         </v-btn>
                         <v-list>
                             <v-list-tile v-for="item in addNewOptions" :key="item.id" @click="addNewOptionSelect(item)">
@@ -108,7 +108,7 @@
                                                                 {{activityCatSelect.itemName}}
                                                                 
                                                                 <v-btn flat icon class="btn--editable btn--editable--done mx-0 my-0"
-                                                                    v-if="categoryName_hidden && (detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager')"
+                                                                    v-if="categoryName_hidden && (detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager' || detailModelSelected.permission== 'hoster' )"
                                                                     @click.stop.prevent="categoryName_TempleDataEvent(activityCatSelect)" 
                                                                     :loading="categoryName_hidden_loading" 
                                                                     :disabled="categoryName_hidden_loading">
@@ -124,14 +124,14 @@
                                                             single-line bottom item-text="itemName" 
                                                             item-value="itemCode"
                                                             class="weekly_calendar__month" 
-                                                            v-if="!categoryName_hidden && ( detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager')" >
+                                                            v-if="!categoryName_hidden && ( detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager' || detailModelSelected.permission== 'hoster')" >
                                                             </v-select>
                                                         </v-flex>
                                                     </div>
                                                     <div class="editable-tool">
                                     
                                                         <v-btn flat icon class="btn--editable btn--editable--done mx-0 my-0"
-                                                            v-if="!categoryName_hidden && ( detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager')"
+                                                            v-if="!categoryName_hidden && ( detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager'|| detailModelSelected.permission== 'hoster')"
                                                             @click.stop.prevent="categoryName_UpdateEvent(activityCatSelect)" 
                                                             :loading="categoryName_hidden_loading" 
                                                             :disabled="categoryName_hidden_loading"
@@ -140,7 +140,7 @@
                                                         </v-btn>
                                                         
                                                         <v-btn flat icon class="mx-0 my-0"
-                                                            v-if="!categoryName_hidden && (detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager')"
+                                                            v-if="!categoryName_hidden && (detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager'|| detailModelSelected.permission== 'hoster')"
                                                             @click.stop.prevent="categoryName_RolbackEvent(activityCatSelect)" 
                                                             :loading="categoryName_hidden_loading" 
                                                             :disabled="categoryName_hidden_loading"
@@ -155,7 +155,7 @@
                                                             <span v-if="subject_hidden" class="editable__content__value pt-0 ">
                                                                 {{detailModelSelected.subject}}
                                                                 <v-btn flat icon class="btn--editable btn--editable--done mx-0 my-0"
-                                                                    v-if="subject_hidden && ( detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager')"
+                                                                    v-if="subject_hidden && ( detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager'|| detailModelSelected.permission== 'hoster')"
                                                                     @click.stop.prevent="subjectTempleDataEvent(detailModelSelected)" 
                                                                     :loading="subject_hidden_loading" 
                                                                     :disabled="subject_hidden_loading"
@@ -163,7 +163,7 @@
                                                                     <v-icon>create</v-icon>
                                                                 </v-btn>
                                                             </span>
-                                                                <v-text-field v-if="!subject_hidden && ( detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager')"
+                                                                <v-text-field v-if="!subject_hidden && ( detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager'|| detailModelSelected.permission== 'hoster')"
                                                                   class="flex sm12"
                                                                   v-model="detailModelSelected.subject"
                                                                 ></v-text-field>
@@ -172,7 +172,7 @@
                                                     <div class="editable-tool">
                                                         
                                                         <v-btn flat icon class="btn--editable btn--editable--done mx-0 my-0"
-                                                            v-if="!subject_hidden && (detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager')"
+                                                            v-if="!subject_hidden && (detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager'|| detailModelSelected.permission== 'hoster')"
                                                             @click.stop.prevent="subjectUpdateEvent(detailModelSelected)" 
                                                             :loading="subject_hidden_loading" 
                                                             :disabled="subject_hidden_loading"
@@ -181,7 +181,7 @@
                                                         </v-btn>
                                                         
                                                         <v-btn flat icon class="mx-0 my-0"
-                                                            v-if="!subject_hidden && (detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager')"
+                                                            v-if="!subject_hidden && (detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager'|| detailModelSelected.permission== 'hoster')"
                                                             @click.stop.prevent="subjectRolbackEvent(detailModelSelected)" 
                                                             :loading="subject_hidden_loading" 
                                                             :disabled="subject_hidden_loading"
@@ -194,14 +194,14 @@
                                         </v-flex>
                                         <v-flex xs12 sm5 class="headerClassDetail_right">
                                             <v-layout wrap>
-                                                <div class="headerClass_right">
+                                                <div class="headerClass_right mt-2">
                                                     <i class="text-gray">
                                                     Tạo bởi: {{detailModelSelected.userName}} - {{detailModelSelected.createDate | datetime}}
                                                     </i>
-                                                    <v-btn flat icon v-on:click.native="detailShowMore1 = !detailShowMore1">
+                                                    <span @click="detailShowMore1 = !detailShowMore1" class="mr-2" style="cursor: pointer;">
                                                         <v-icon v-if="!detailShowMore1">expand_less</v-icon>
                                                         <v-icon v-if="detailShowMore1">expand_more</v-icon>
-                                                    </v-btn>
+                                                    </span>
                                                 </div>
                                             </v-layout>
                                             <v-layout wrap v-if="detailModelSelected.isTemplate!=true" class="color_openingState">
@@ -234,12 +234,6 @@
                                                         <span v-if="detailModelSelected.activityType=='EVENT'">
                                                             <b>{{openingState1[detailModelSelected.openingState].event}}</b>
                                                         </span>
-                                                        <span  v-if="detailModelSelected.activityType=='TASK' || detailModelSelected.activityType=='REQUEST'">
-                                                            <b>{{openingState2[detailModelSelected.openingState].task_request}}</b>
-                                                        </span>
-                                                    </div>
-                                                    <div class="openingState__class color_openingState_4" v-if="openingState2[detailModelSelected.openingState].openingState=='4'">
-                                          
                                                         <span  v-if="detailModelSelected.activityType=='TASK' || detailModelSelected.activityType=='REQUEST'">
                                                             <b>{{openingState2[detailModelSelected.openingState].task_request}}</b>
                                                         </span>
@@ -307,46 +301,47 @@
                                         ></uploader-list>
                                     </uploader>
                                     <script type="text/javascript" src="http://apis.google.com/js/api.js?onload=onApiLoad"></script>
-                                </div>
-                            </div>
-                            <div class="panel" v-if="detailModelSelected.isTemplate!=true">
-                                <div class="panel-heading">
-                                    <v-layout wrap>
-                                        <div class="" v-if="detailModelSelected.permission=='owner'||detailModelSelected.permission=='manager'">
-                                            <v-btn v-for="(item,index) in openingState1" v-if="change_openingState== item.openingState && detailModelSelected.activityType=='EVENT'" v-on:click.stop.prevent="changeOpeningState(item,index)">
-                                                <v-icon v-if="item.openingState==2" color="success">check_circle</v-icon>
-                                                <v-icon v-if="item.openingState==1" color="warning">hourglass_full</v-icon>&nbsp;&nbsp;
-                                                {{item.event}}
-                                            </v-btn>
-                                            <v-btn v-for="(item,index) in openingState2" v-if="change_openingState == item.openingState && (detailModelSelected.activityType=='TASK'||detailModelSelected.activityType=='REQUEST')" v-on:click.stop.prevent="changeOpeningState(item,index)">
-                                                <v-icon v-if="item.openingState==2" color="success">check_circle</v-icon>
-                                                <v-icon v-if="item.openingState==1" color="warning">hourglass_full</v-icon>&nbsp;&nbsp;
-                                                {{item.task_request}}
-                                            </v-btn>
-                                            <v-btn v-for="(item,index) in openingState1" v-if="change_openingState1 == item.openingState && detailModelSelected.activityType=='EVENT'" v-on:click.stop.prevent="changeOpeningState(item,index)">
-                                                <v-icon color="red">delete</v-icon>&nbsp;&nbsp;
-                                                {{ item.event_huy}}
-                                            </v-btn>
-                                            <v-btn v-for="(item,index) in openingState2" v-if="change_openingState1 == item.openingState && (detailModelSelected.activityType=='TASK'||detailModelSelected.activityType=='REQUEST')" v-on:click.stop.prevent="changeOpeningState(item,index)">
-                                                <v-icon color="red">delete</v-icon>&nbsp;&nbsp; 
-                                                {{ item.task_request_huy }}
-                                            </v-btn>
-                                        </div>
-                                        <div class="" v-else>
-                                            <v-btn v-for="(item,index) in openingState1" v-if="change_openingState2== item.openingState && detailModelSelected.activityType=='EVENT'" v-on:click.stop.prevent="changeOpeningState(item,index)">
-                                                {{item.event}}
-                                            </v-btn>
-                                            <v-btn v-for="(item,index) in openingState2" v-if="change_openingState2 == item.openingState && (detailModelSelected.activityType=='TASK'||detailModelSelected.activityType=='REQUEST')" v-on:click.stop.prevent="changeOpeningState(item,index)">
-                                                {{item.task_request}}
-                                            </v-btn>
-                                        </div>
-                                        <div class="flex w-100-xs" style="display: flex;display: -webkit-box;align-items: center;padding: 0">
-                                            <div class="flex w-100-xs pt-2 pl-2" v-if="detailModelSelected.activityType=='TASK'||detailModelSelected.activityType=='REQUEST'" jx-bind="detail__okrArchive" style="padding: 0"></div>
-                                        </div>
-                                    </v-layout>
+                                    <div class="panel-heading" v-if="detailModelSelected.isTemplate!=true">
+                                        <v-layout wrap>
+                                            <div class="" v-if="(detailModelSelected.permission=='owner'||detailModelSelected.permission=='manager'|| detailModelSelected.permission== 'hoster')">
+                                                <v-btn v-for="(item,index) in openingState1" v-if="change_openingState== item.openingState && detailModelSelected.activityType=='EVENT'" v-on:click.stop.prevent="changeOpeningState(item,index)">
+                                                    <v-icon v-if="item.openingState==2" color="success">check_circle</v-icon>
+                                                    <v-icon v-if="item.openingState==1" color="warning">hourglass_full</v-icon>&nbsp;&nbsp;
+                                                    {{item.event}}
+                                                </v-btn>
+                                                <v-btn v-for="(item,index) in openingState2" v-if="change_openingState == item.openingState && (detailModelSelected.activityType=='TASK'||detailModelSelected.activityType=='REQUEST')" v-on:click.stop.prevent="changeOpeningState(item,index)">
+                                                    <v-icon v-if="item.openingState==2" color="success">check_circle</v-icon>
+                                                    <v-icon v-if="item.openingState==1" color="warning">hourglass_full</v-icon>&nbsp;&nbsp;
+                                                    {{item.task_request}}
+                                                </v-btn>
+                                                <v-btn v-for="(item,index) in openingState1" v-if="change_openingState1 == item.openingState && detailModelSelected.activityType=='EVENT'" v-on:click.stop.prevent="changeOpeningState(item,index)">
+                                                    <v-icon color="red">delete</v-icon>&nbsp;&nbsp;
+                                                    {{ item.event_huy}}
+                                                </v-btn>
+                                                <v-btn v-for="(item,index) in openingState2" v-if="change_openingState1 == item.openingState && (detailModelSelected.activityType=='TASK'||detailModelSelected.activityType=='REQUEST')" v-on:click.stop.prevent="changeOpeningState(item,index)">
+                                                    <v-icon color="red">delete</v-icon>&nbsp;&nbsp; 
+                                                    {{ item.task_request_huy }}
+                                                </v-btn>
+                                            </div>
+                                            <div class="" v-else>
+                                                <v-btn v-for="(item,index) in openingState1" v-if="change_openingState2== item.openingState && detailModelSelected.activityType=='EVENT'" v-on:click.stop.prevent="changeOpeningState(item,index)">
+                                                    <v-icon color="warning">hourglass_full</v-icon>&nbsp;&nbsp;
+                                                    {{item.event}}
+                                                </v-btn>
+                                                <v-btn v-for="(item,index) in openingState2" v-if="change_openingState2 == item.openingState && (detailModelSelected.activityType=='TASK'||detailModelSelected.activityType=='REQUEST')" v-on:click.stop.prevent="changeOpeningState(item,index)">
+                                                    <v-icon color="warning">hourglass_full</v-icon>&nbsp;&nbsp;
+                                                    {{item.task_request}}
+                                                </v-btn>
+                                            </div>
+                                            <div class="flex w-100-xs" style="display: flex;display: -webkit-box;align-items: center;padding: 0">
+                                                <div class="flex w-100-xs pt-2 pl-2" v-if="detailModelSelected.activityType=='TASK'||detailModelSelected.activityType=='REQUEST'" jx-bind="detail__okrArchive" style="padding: 0"></div>
+                                            </div>
+                                        </v-layout>
 
+                                    </div>
                                 </div>
                             </div>
+                            
                             
                             <v-layout wrap>
                                 <v-flex xs12 v-bind="{ 'order-xs2': detailModelSelected.activityType=='EVENT', 'order-xs1': detailModelSelected.activityType!='EVENT' }">
@@ -398,9 +393,9 @@
                             </div>
                         </v-flex>
                         <v-flex xs12 sm4 class="pl-3">
-                            <div class="panel">
+                            <div class="panel" v-if="detailModelSelected.isTemplate !=true">
                                 <v-layout wrap>
-                                    <v-flex xs12 sm12 v-if="detailModelSelected.isTemplate !=true" class="px-3 pt-1" :class="{'order-lg1': true}">
+                                    <v-flex xs12 sm12 class="px-3 pt-1" :class="{'order-lg1': true}">
                                         <div class="editable-wrap editable-wrap-before-select">
                                             <v-layout wrap>
                                                 <v-flex v-if="detailModelSelected.activityType=='EVENT'" class="labelClass" xs12 sm4>
@@ -421,7 +416,7 @@
                                                                         </span>
                                                                         
                                                                     </span>
-                                                                    <date-picker v-if="!codeStartDate_hidden && ( detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager')" ref="inputStart" 
+                                                                    <date-picker v-if="!codeStartDate_hidden && ( detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager'|| detailModelSelected.permission== 'hoster')" ref="inputStart" 
                                                                     v-model="detailModelSelected.startDate" lang="en" type="datetime" format="dd/MM/yyyy HH:mm" :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" confirm="true">
                                                                     </date-picker>
                                                                 </v-flex>
@@ -431,7 +426,7 @@
                                                 </v-flex>
                                             </v-layout>
                                             <div class="editable-tool">
-                                                <v-button v-if="codeStartDate_hidden && (detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager')" @click="show__startDate(detailModelSelected)" class="btn--editable btn--editable--done mx-0 my-0 btn btn--flat btn--icon" 
+                                                <v-button v-if="codeStartDate_hidden && (detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager'|| detailModelSelected.permission== 'hoster')" @click="show__startDate(detailModelSelected)" class="btn--editable btn--editable--done mx-0 my-0 btn btn--flat btn--icon" 
                                                 :loading="codeStartDate_hidden_loading" 
                                                 :disabled="codeStartDate_hidden_loading" >
                                                     <div class="btn__content">
@@ -440,7 +435,7 @@
                                                     
                                                 </v-button>
                                                 <v-btn flat icon class="btn--editable btn--editable--done mx-0 my-0"
-                                                    v-if="!codeStartDate_hidden && (detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager')"
+                                                    v-if="!codeStartDate_hidden && (detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager'|| detailModelSelected.permission== 'hoster')"
                                                     @click.stop.prevent="startDateUpdateEvent(detailModelSelected)" 
                                                     :loading="codeStartDate_hidden_loading" 
                                                     :disabled="codeStartDate_hidden_loading">
@@ -450,7 +445,7 @@
                                                 </v-btn>
                                                 
                                                 <v-btn flat icon class="mx-0 my-0"
-                                                    v-if="!codeStartDate_hidden && (detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager')"
+                                                    v-if="!codeStartDate_hidden && (detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager'|| detailModelSelected.permission== 'hoster')"
                                                     @click.stop.prevent="startDateRolbackEvent(detailModelSelected)" 
                                                     :loading="codeStartDate_hidden_loading" 
                                                     :disabled="codeStartDate_hidden_loading">
@@ -462,7 +457,7 @@
                                             </div>
                                         </div>
                                     </v-flex>
-                                    <v-flex xs12 sm12 v-if="detailModelSelected.isTemplate!=true" class="px-3" :class="{'order-lg1': true}">
+                                    <v-flex xs12 sm12 class="px-3" :class="{'order-lg1': true}">
                                         <div class="editable-wrap editable-wrap-before-select">
                                             <v-layout wrap>
                                                 <v-flex xs12 sm4 v-if="detailModelSelected.activityType=='EVENT'" class="labelClass">
@@ -481,7 +476,7 @@
                                                                             {{ detailModelSelected.endDate|datetime }}
                                                                         </span>
                                                                     </span>
-                                                                    <date-picker v-if="!codeEndDate_hidden && ( detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager')" ref="inputEnd" v-model="detailModelSelected.endDate" lang="en" type="datetime" format="dd/MM/yyyy HH:mm"  :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" confirm="true"
+                                                                    <date-picker v-if="!codeEndDate_hidden && ( detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager'|| detailModelSelected.permission== 'hoster')" ref="inputEnd" v-model="detailModelSelected.endDate" lang="en" type="datetime" format="dd/MM/yyyy HH:mm"  :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" confirm="true"
                                                                     :not-before='detailModelSelected.startDate'>
                                                                     </date-picker>
                                                                 </v-flex>
@@ -493,7 +488,7 @@
                                                 </v-flex>
                                             </v-layout>
                                             <div class="editable-tool">
-                                                <v-button v-if="codeEndDate_hidden && (detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager')" @click="show__endDate(detailModelSelected)" class="btn--editable btn--editable--done mx-0 my-0 btn btn--flat btn--icon" 
+                                                <v-button v-if="codeEndDate_hidden && (detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager'|| detailModelSelected.permission== 'hoster')" @click="show__endDate(detailModelSelected)" class="btn--editable btn--editable--done mx-0 my-0 btn btn--flat btn--icon" 
                                                 :loading="codeEndDate_hidden_loading" 
                                                 :disabled="codeEndDate_hidden_loading" >
                                                     <div class="btn__content">
@@ -501,7 +496,7 @@
                                                     </div>
                                                 </v-button>
                                                 <v-btn flat icon class="btn--editable btn--editable--done mx-0 my-0"
-                                                    v-if="!codeEndDate_hidden && ( detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager')"
+                                                    v-if="!codeEndDate_hidden && ( detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager'|| detailModelSelected.permission== 'hoster')"
                                                     @click.stop.prevent="endDateUpdateEvent(detailModelSelected)" 
                                                     :loading="codeEndDate_hidden_loading" 
                                                     :disabled="codeEndDate_hidden_loading">
@@ -511,7 +506,7 @@
                                                 </v-btn>
                                                 
                                                 <v-btn flat icon class="mx-0 my-0"
-                                                    v-if="!codeEndDate_hidden && ( detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager')"
+                                                    v-if="!codeEndDate_hidden && ( detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager'|| detailModelSelected.permission== 'hoster')"
                                                     @click.stop.prevent="endDateRolbackEvent(detailModelSelected)" 
                                                     :loading="codeEndDate_hidden_loading" 
                                                     :disabled="codeEndDate_hidden_loading">
@@ -524,14 +519,14 @@
                                         
                                     </v-flex>
                                     <v-flex xs12 sm12 jx-bind="detail__onCalendar" 
-                                        v-if="detailModelSelected.activityType!='EVENT'||detailModelSelected.isTemplate!=true" 
+                                        v-if="detailModelSelected.activityType!='EVENT'" 
                                         class="px-3" :class="{'order-lg1': true}">
                                     </v-flex>
-                                    <v-flex xs12 sm12 jx-bind="detail__hostingId" class="px-3" id="hostingClass" :class="{'order-lg1': true}" v-if="detailModelSelected.isTemplate!=true">
+                                    <v-flex xs12 sm12 jx-bind="detail__hostingId" class="px-3" id="hostingClass" :class="{'order-lg1': true}">
                                     </v-flex>
-                                    <v-flex xs12 sm12 jx-bind="detail__managerId" class="px-3" id="managerClass" :class="{'order-lg1': true}" v-if="detailModelSelected.isTemplate!=true"> 
+                                    <v-flex xs12 sm12 jx-bind="detail__managerId" class="px-3" id="managerClass" :class="{'order-lg1': true}"> 
                                     </v-flex>
-                                    <v-flex xs12 sm12 v-if="detailModelSelected.isTemplate!=true" class="px-3 mb-2" :class="{'order-lg1': true}">
+                                    <v-flex xs12 sm12 class="px-3 mb-2" :class="{'order-lg1': true}">
                                         <div class="editable-wrap">
                                             <v-layout wrap>
                                                 <v-flex class="labelClass xs12 sm4">Địa điểm:</v-flex>
@@ -551,7 +546,7 @@
                                                                 single-line bottom item-text="location" 
                                                                 item-value="locationId"
                                                                 class="weekly_calendar__month" 
-                                                                v-if="!location_hidden && ( detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager')" >
+                                                                v-if="!location_hidden && ( detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager'|| detailModelSelected.permission== 'hoster')" >
                                                                 </v-select>
                                                             </div>
                                                         </div>
@@ -561,7 +556,7 @@
                                             </v-layout>
                                             <div class="editable-tool">
                                                 <v-btn flat icon class="btn--editable btn--editable--done mx-0 my-0 btn btn--flat btn--icon"
-                                                    v-if="location_hidden && ( detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager')"
+                                                    v-if="location_hidden && ( detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager'|| detailModelSelected.permission== 'hoster')"
                                                     @click.stop.prevent="locationTempleDataEvent(locationIdSelect)" 
                                                     :loading="location_hidden_loading" 
                                                     :disabled="location_hidden_loading"
@@ -569,7 +564,7 @@
                                                     <v-icon>create</v-icon>
                                                 </v-btn>
                                                 <v-btn flat icon class="btn--editable btn--editable--done mx-0 my-0"
-                                                    v-if="!location_hidden && (detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager')"
+                                                    v-if="!location_hidden && (detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager'|| detailModelSelected.permission== 'hoster')"
                                                     @click.stop.prevent="locationUpdateEvent(locationIdSelect)" 
                                                     :loading="location_hidden_loading" 
                                                     :disabled="location_hidden_loading"
@@ -578,7 +573,7 @@
                                                 </v-btn>
                                                 
                                                 <v-btn flat icon class="mx-0 my-0"
-                                                    v-if="!location_hidden && (detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager')"
+                                                    v-if="!location_hidden && (detailModelSelected.permission == 'owner' || detailModelSelected.permission == 'manager'|| detailModelSelected.permission== 'hoster')"
                                                     @click.stop.prevent="locationRolbackEvent(locationIdSelect)" 
                                                     :loading="location_hidden_loading" 
                                                     :disabled="location_hidden_loading"
@@ -591,7 +586,8 @@
                    
                                 </v-layout>
                             </div>
-                            <div v-if="detailModelSelected.isTemplate != true">
+                            <br v-if="detailModelSelected.isTemplate == true">
+                            <div v-if="detailModelSelected.isTemplate == true">
                                 <jx-mobilink-share 
                                     visibilities_api="/o/v2/mobilink/visibilities"
                                     resourceworkspace_get_api="/o/v2/mobilink/resourceworkspaces"
@@ -606,29 +602,30 @@
                                 ></jx-mobilink-share>
                             </div>
                             <br>
-                            <div >
-                                <jx-mobilink-activity-invitation v-if="typeListModel=='EVENT'" class=""
-                                group_id = "20147"
-                                class_pk = "1"
-                                class_name = "org.mobilink.activitymgt.model.Activity"
-                                end_point= "http://127.0.0.1:8081/api/"
-                                permission_prop= "manager"
-                                working_unit_prop = 101
-                                opening_state_prop = 0 >
-                                </jx-mobilink-activity-invitation>
-                            
-                                <jx-mobilink-activity-invitation v-if="typeListModel=='TASK'" class=""
-                                group_id = "20147"
-                                class_pk = "1"
-                                class_name = "org.mobilink.activitymgt.model.Activity"
-                                end_point= "http://127.0.0.1:8081/api/"
-                                permission_prop= "manager"
-                                working_unit_prop = 101
-                                opening_state_prop = 0 >
+                            <div v-if="detailModelSelected.activityType=='EVENT'&& detailModelSelected.isTemplate!=true">
+                                <jx-mobilink-activity-invitation
+                                    working_unit_prop = "${(workingUnitId)!0}"
+                                    :group_id = "groupId"
+                                    :class_pk = "class_pk"
+                                    class_name ="org.mobilink.activitymgt.model.Activity"
+                                    end_point= "/o/v2/mobilink/"
+                                    :permission_prop= "detailModelSelected.permission"
+                                    :opening_state_prop = "openingState1[detailModelSelected.openingState].openingState">
                                 </jx-mobilink-activity-invitation>
                             </div>
+                            <div v-if="detailModelSelected.activityType=='TASK'&& detailModelSelected.isTemplate!=true">
+                                <jx-mobilink-activity-invitation-task
+                                    working_unit_prop = "${(workingUnitId)!0}"
+                                    :group_id = "groupId"
+                                    :class_pk = "class_pk"
+                                    class_name ="org.mobilink.activitymgt.model.Activity"
+                                    end_point= "/o/v2/mobilink/"
+                                    :permission_prop= "detailModelSelected.permission"
+                                    :opening_state_prop = "openingState1[detailModelSelected.openingState].openingState">
+                                </jx-mobilink-activity-invitation-task>
+                            </div>
                             <br/>
-                            <div v-if="detailModelSelected.isTemplate != true">
+                            <div v-if="detailModelSelected.isTemplate == true||detailModelSelected.activityType=='EVENT'">
                                 <jx-mobilink-album-image-use
                                 :id="class_pk"
                                 :class_name="class_name_activity"
@@ -638,7 +635,9 @@
                                 :options="optionsAlbum"
                                 album_api="/o/v2/mobilink/albumfiles"
                                 ></jx-mobilink-album-image-use>
-                                <br>
+                            </div>
+                            <br>
+                            <div v-if="detailModelSelected.activityType=='EVENT' && detailModelSelected.isTemplate!=true">
                                 <jx-mobilink-voting
                                     :class_name="class_name_activity"
                                     :class_pk="class_pk"
@@ -647,6 +646,7 @@
                                     voting-title="Lấy ý kiến thống nhất"
                                     voting_api="/o/v2/mobilink/votings"
                                     :permission="detailModelSelected.permission"
+                                    :user_id="current_user_id"
                                 ></jx-mobilink-voting>
                             </div>
                         </v-flex>
@@ -657,41 +657,53 @@
     
             <div class="xs6" :class="{'no-width': !currentListPage, 'max-width': currentListPage}" v-if="!keywordsSearchable">
                 <v-slide-x-transition>
-                    <div id="activitySearch">
+                    <div id="activityHeader">
                             
-                            <div class="row-header pl-2">
-                                <v-flex>
+                            <div class="row-header flex-break pl-2">
+                                <v-flex >
                                     <v-layout wrap>
-                                        <div xs12 sm6 class="ml-3" v-if="typeListModel=='WEEK'">
-                                            <v-select v-bind:items="selectWeek" v-model="selectWeekModel" label="Select" single-line bottom item-text="text" item-value="id" class="weekly_calendar__month"
-                                                @change="getWeekEventList">
-                                            </v-select>
-                                        </div>
-                                        <div xs12 sm6 class="ml-3" v-if="typeListModel=='WEEK'">
-                                            <v-select v-bind:items="selectYear" v-model="selectYearModel" label="Select" single-line bottom item-text="text" item-value="id" class="weekly_calendar__year"
-                                                @change="getWeekEventList">
-                                            </v-select>
-                                        </div>
+                                        <v-flex xs6 v-if="typeListModel=='WEEK'">
+                                            <v-layout>
+                                                <v-select v-bind:items="selectWeek" v-model="selectWeekModel" label="Select" single-line bottom item-text="text" item-value="id" class="ml-3 weekly_calendar__month"
+                                                    @change="getWeekEventList">
+                                                </v-select>
+                                                <v-select v-bind:items="selectYear" v-model="selectYearModel" label="Select" single-line bottom item-text="text" item-value="id" class="ml-3 weekly_calendar__year"
+                                                    @change="getWeekEventList">
+                                                </v-select>
+                                            </v-layout>
+                                        </v-flex>
                                         <v-flex xs12 sm12 v-if="typeListModel=='MONTH'">
                                             <v-layout  wrap>
                                                 <v-btn icon @click.stop="goPrev">
-                                                    <v-icon>fast_rewind</v-icon>
+                                                    <v-icon color="white">fast_rewind</v-icon>
                                                 </v-btn>
                                                 <p style="margin-top: auto;">{{monthListTitle}}</p>
                                                 <v-btn icon @click.stop="goNext">
-                                                    <v-icon>fast_forward</v-icon>
+                                                    <v-icon color="white">fast_forward</v-icon>
                                                 </v-btn>
-                                                <v-checkbox class="checkbox_month" v-model="checkbox_month_event" label="Sự kiện"></v-checkbox>
-                                                <v-checkbox class="checkbox_month_tack" v-model="checkbox_month_tack" label="Nhiệm vụ"></v-checkbox>
+                                                <v-checkbox class="checkbox_month colorCheck" @change="getEventsOfMonth()" v-model="checkbox_month_event" label="Sự kiện"></v-checkbox>
+                                                <v-checkbox class="checkbox_month_tack colorCheck" @change="getEventsOfMonth()" v-model="checkbox_month_tack" label="Nhiệm vụ"></v-checkbox>
                                             </v-layout>
                                             
                                         </v-flex>
                                         <v-flex xs12 sm12 v-if="typeListModel=='KANBAN'">
-                                            <v-layout  wrap>
+                                            <!-- <v-layout  wrap> -->
                                                 <a class="kanbanClass">Bảng Kanban</a>
-                                                <v-checkbox class="checkbox_month" v-model="checkbox_month_event" label="Sự kiện"></v-checkbox>
-                                                <v-checkbox class="checkbox_month_tack" v-model="checkbox_month_tack" label="Nhiệm vụ"></v-checkbox>
-                                            </v-layout>
+                                            
+                                                <v-layout wrap>
+                                                    <v-flex xs6>
+                                                        <v-checkbox @change="getKanban()" class="colorCheck checkbox_kanban_1" v-model="checkbox_kanban_1" label="Tôi quản lý"></v-checkbox>
+                                                    </v-flex>
+                                                    <v-flex xs6>
+                                                        <v-checkbox @change="getKanban()" class="colorCheck checkbox_kanban_2" v-model="checkbox_kanban_2" label="Tôi tham gia"></v-checkbox>
+                                                    </v-flex>
+                                                    <v-flex xs6>
+                                                        <v-checkbox @change="getKanban()" class="colorCheck checkbox_kanban_3" v-model="checkbox_kanban_3" label="Nhiệm vụ"></v-checkbox>
+                                                    </v-flex>
+                                                    <v-flex xs6>
+                                                        <v-checkbox @change="getKanban()" class="colorCheck checkbox_kanban_4" v-model="checkbox_kanban_4" label="Yêu cầu - đề xuất"></v-checkbox>
+                                                    </v-flex>
+                                                </v-layout>
                                             
                                         </v-flex>
                                         <v-flex xs12 sm12 v-if="typeListModel!='WEEK' && typeListModel!='MONTH' &&  typeListModel!='KANBAN'">
@@ -699,14 +711,27 @@
                                                 <v-icon slot="divider">chevron_right</v-icon>
                                                 <v-breadcrumbs-item v-for="item in viewBreadcrumbs" :key="item.title">
                                                     {{ item.title }}
+
                                                 </v-breadcrumbs-item>
+                                                <v-flex v-if="typeListModel=='EVENT'">
+                                                    Có {{tableEventListCout}} kết quả
+                                                </v-flex>
+                                                <v-flex v-if="typeListModel=='TASK'">
+                                                    Có {{tableTaskListCout}} kết quả
+                                                </v-flex>
+                                                <v-flex v-if="typeListModel=='REQUEST'">
+                                                    Có {{tableRequestListCout}} kết quả
+                                                </v-flex>
+                                                <v-flex v-if="typeListModel=='TEMPLATE'">
+                                                    Có {{tableTemplateListCout}} kết quả
+                                                </v-flex>
                                             </v-breadcrumbs>
                                         </v-flex>
                                     </v-layout>
                                 </v-flex>
                                 <v-text-field class="pt-0 keywordsSearch" id="searchInput"
                                     append-icon="search"
-                                    label="Nhập từ khóa"
+                                    placeholder="Nhập từ khóa"
                                     single-line
                                     hide-details
                                     v-on:keyup.enter="filterTableKeywords"
@@ -730,13 +755,32 @@
                                 <div class="mt-4 ml-3"><span v-lang.tu_ngay></span></div>
                             </v-flex>
                             <v-flex xs4>
-                                <div jx-bind="advanced__startDate"></div>
+                                <date-picker class="mt-3"
+                    v-model="timeStart" 
+                    placeholder="Thời gian bắt đầu"
+                    
+                    :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" 
+                    lang="vi" type="datetime" format="dd/MM/yyyy HH:mm" 
+                    confirm="true"
+                    :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
+                    required
+                    ></date-picker>
                             </v-flex>
                             <v-flex xs2>
                                 <div class="mt-4 ml-3"><span v-lang.den_ngay></span></div>
                             </v-flex>
                             <v-flex xs4>
-                                <div jx-bind="advanced__endDate"></div>
+                                <date-picker class="mt-3"
+                    v-model="timeStart" 
+                    placeholder="Thời gian bắt đầu"
+                    
+                    
+                    :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" 
+                    lang="vi" type="datetime" format="dd/MM/yyyy HH:mm" 
+                    confirm="true"
+                    :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
+                    required
+                    ></date-picker>
                             </v-flex>
                             <v-flex xs2>
                                 <div class="mt-4 ml-3"><span v-lang.trang_thai></span></div>
@@ -800,30 +844,35 @@
                                     <div v-for="(items,indexs) in item.obj" v-if="items.activityId">
 
                                         <v-layout wrap class="weekClass">
-                                            <v-flex xs2 py-2 class="week1Class">
-                                                <div class="py-1 px-1 flex" >{{ items.startDate|time }}</div>
-                                                <div class="py-1 px-1 flex" v-if="item.date1 < items.endDate">{{ items.endDate|datetime }}</div>
-                                                <div class="py-1 px-1 flex" v-if="item.date1 == items.endDate">{{ items.endDate|time}}</div>
+                                            <v-flex xs2 py-1 class="week1Class">
+                                                <div class="px-1 flex" >{{ items.startDate|time }}</div>
+                                                <div class="px-1 flex" v-if="compareDateMoment(items.startDate, items.endDate) ==1">
+                                                    <span v-if="compareYearMoment(items.startDate, items.endDate) == 0">{{ items.endDate|time_date}}</span>
+                                                    <span v-else>{{ items.endDate|time_date_year }}</span>
+                                                </div>
+                                                <div class="px-1 flex" v-else>{{ items.endDate|time}}</div>
+
                                             </v-flex>
-                                            <v-flex xs10 py-2>
-                                                <v-layout wrap  py-1 px-2>
-                                                    <v-flex xs6 pl-3>
+                                            <v-flex xs10 py-1>
+                                                <v-layout wrap px-2>
+                                                    <v-flex xs6 pl-3 class="ellipsisWeekClass">
                                                         <a href="javascript:;" @click.stop.prevent="detail__all(items,indexs)">
-                                                            {{ items.subject }}
+                                                            <span>{{ items.subject }}</span>
                                                         </a>
                                                      </v-flex>
-                                                     <v-flex xs6>
+                                                     <v-flex xs6 class="ellipsisWeekClass">
                                                         <a :href='"http://maps.google.com/?q=" +items.location' target="_blank">
-                                                            <v-icon class="location_week">place</v-icon> {{ items.location }}
+                                                            <span><v-icon class="location_week">place</v-icon> 
+                                                            {{ items.location }}</span>
                                                         </a>
                                                      </v-flex>
                                                  </v-layout>
-                                                 <v-layout wrap px-2 py-1>
-                                                    <v-flex xs6 pl-3> 
-                                                        Người chủ trì: {{ items.managerName }}
+                                                 <v-layout wrap px-2>
+                                                    <v-flex xs6 pl-3 class="ellipsisWeekClass"> 
+                                                        <span >Người chủ trì: {{ items.managerName }}</span>
                                                      </v-flex>
-                                                     <v-flex xs6>
-                                                        Thành phần: {{ items.invitation }}
+                                                     <v-flex xs6 class="ellipsisWeekClass">
+                                                        <span>Thành phần: {{ items.invitation }}</span>
                                                      </v-flex>
                                                  </v-layout>
 
@@ -853,7 +902,7 @@
                     </jx-mobilink-full-calendar>
                 </v-slide-x-transition>
                 <v-slide-x-transition v-if="typeListModel=='KANBAN'">
-                    <div>hahaa</div>
+                    <div><jx-mobilink-activity-kanbannnnnn></jx-mobilink-activity-kanbannnnnn></div>
                 </v-slide-x-transition>
                 <v-slide-x-transition v-if="typeListModel=='EVENT'">
                     <div class="layout wrap" jx-bind="tableEventList">
@@ -892,30 +941,40 @@
     <div id="table_event_list_template" class="hidden">
         <template slot="items" slot-scope="props">
             <tr v-bind:class="{'active': props.index%2==1}">
-                <td class="pt-2 pb-2">
-                    <span>{{props.item.activityId}}</span>
+                <td class="text-xs-center">
+                    <div class="pt-2 pb-2">
+                        <span v-bind:title="props.item.activityId">{{props.item.activityId}}</span>
+                    </div>
                 </td>
-                <td class="pt-2 pb-2">
-                    <span>{{props.item.startDate|datetime}}</span>
-                </td>
-                <td class="pt-2 pb-2">
-                    <a href="javascript:;" @click.stop.prevent="detail__all(props.item,props.index)">
-                        <span>{{props.item.subject}}</span>
-                    </a>
-                </td>
-                <td class="pt-2 pb-2">
-                    <span>{{props.item.hosting}}</span>
-                </td>
-                <td class="pt-2 pb-2">
-                    <span>{{props.item.managerName}}</span>
-                </td>
-                <td class="pt-2 pb-2">
-                    <span>{{props.item.invitation}}</span>
+                <td class="text-xs-center">
+                    <div class="pt-2 pb-2">
+                        <span v-bind:title="props.item.startDate|datetime">{{props.item.startDate|datetime}}</span>
+                    </div>
                 </td>
                 <td>
-                    <v-btn v-if="props.item.permission=='owner'||props.item.permission=='manager'" icon v-on:click.native="toRemoveEvent(props.item, props.index)" class="mx-0 my-0">
-                        <v-icon color="red darken-3">clear</v-icon>
-                    </v-btn> 
+                    <div class="pt-2 pb-2">
+                        <a href="javascript:;" @click.stop.prevent="detail__all(props.item,props.index)">
+                            <span v-bind:title="props.item.subject">{{props.item.subject}}</span>
+                        </a>
+                    </div>
+                </td>
+                <td>
+                    <div class="pt-2 pb-2">
+                        <span v-bind:title="props.item.hosting">{{props.item.hosting}}</span>
+                    </div>
+                </td>
+                <td>
+                    <div class="pt-2 pb-2">
+                        <span v-bind:title="props.item.managerName">{{props.item.managerName}}</span>
+                    </div>
+                </td>
+                <td>
+                    <div class="pt-2 pb-2">
+                        <span v-bind:title="props.item.invitation">{{props.item.invitation}}</span>
+                    </div>
+                </td>
+                <td class="text-xs-center">
+                    <v-icon class="pt-2 pb-2" v-if="props.item.permission=='owner'||props.item.permission=='manager'|| detailModelSelected.permission== 'hoster' " icon @click="toRemoveEvent(props.item,props.index)" color="red darken-3">clear</v-icon>
                 </td>
             </tr>
         </template>
@@ -925,34 +984,55 @@
     <div id="table_task_list_template" class="hidden">
         <template slot="items" slot-scope="props">
             <tr v-bind:class="{'active': props.index%2==1}">
-                <td class="pt-2 pb-2">
-                    <span>{{props.item.activityId}}</span>
+                <td class="text-xs-center">
+                    <div class="pt-2 pb-2">
+                        <span v-bind:title="props.item.activityId">{{props.item.activityId}}</span>
+                    </div>
                 </td>
-                <td class="pt-2 pb-2">
-                    <span>{{props.item.startDate|datetime}}</span>
-                </td>
-                <td class="pt-2 pb-2">
-                    <a href="javascript:;" @click.stop.prevent="detail__all(props.item,props.index)">
-                        <span>{{props.item.subject}}</span>
-                    </a>
-                </td>
-
-                <td class="pt-2 pb-2">
-                    <span>{{props.item.hosting}}</span>
-                </td>
-                <td class="pt-2 pb-2">
-                    <span>{{props.item.managerName}}</span>
-                </td>
-                <td class="pt-2 pb-2">
-                    <span>{{openingState2[props.item.openingState].task_request}}</span>
-                </td>
-                <td class="pt-2 pb-2">
-                    <span>{{props.item.endDate|datetime}}</span>
+                <td class="text-xs-center">
+                    <div class="pt-2 pb-2">
+                        <span v-bind:title="props.item.startDate|datetime">{{props.item.startDate|datetime}}</span>
+                    </div>
                 </td>
                 <td>
-                    <v-btn v-if="props.item.permission=='owner'||props.item.permission=='manager'" icon v-on:click.native="toRemoveTask(props.item, props.index)" class="mx-0 my-0">
-                        <v-icon color="red darken-3">clear</v-icon>
-                    </v-btn> 
+                    <div class="pt-2 pb-2">
+                        <a href="javascript:;" @click.stop.prevent="detail__all(props.item,props.index)">
+                            <span v-bind:title="props.item.subject">{{props.item.subject}}</span>
+                        </a>
+                    </div>
+                </td>
+
+                <td>
+                    <div class="pt-2 pb-2">
+                        <span v-bind:title="props.item.hosting">{{props.item.hosting}}</span>
+                    </div>
+                </td>
+                <td>
+                    <div class="pt-2 pb-2">
+                        <span v-bind:title="props.item.managerName">{{props.item.managerName}}</span>
+                    </div>
+                </td>
+                <td class="text-xs-center">
+                    <v-chip label outline color="red" v-if="openingState2[props.item.openingState].openingState==0">
+                        <span>{{openingState2[props.item.openingState].task_request}}</span>
+                    </v-chip>
+                    <v-chip label outline color="blue" v-if="openingState2[props.item.openingState].openingState==1">
+                        <span>{{openingState2[props.item.openingState].task_request}}</span>
+                    </v-chip>
+                    <v-chip label outline color="amber" v-if="openingState2[props.item.openingState].openingState==2">
+                        <span>{{openingState2[props.item.openingState].task_request}}</span>
+                    </v-chip>
+                    <v-chip label outline color="grey" v-if="openingState2[props.item.openingState].openingState==3">
+                        <span>{{openingState2[props.item.openingState].task_request}}</span>
+                    </v-chip>
+                </td>
+                <td class="text-xs-center">
+                    <div class="pt-2 pb-2">
+                        <span v-bind:title="props.item.endDate|datetime">{{props.item.endDate|datetime}}</span>
+                    </div>
+                </td>
+                <td class="text-xs-center">
+                    <v-icon class="pt-2 pb-2" v-if="props.item.permission=='owner'||props.item.permission=='manager'|| detailModelSelected.permission== 'hoster'" icon @click="toRemoveTask(props.item,props.index)" color="red darken-3">clear</v-icon>
                 </td>
             </tr>
         </template>
@@ -962,37 +1042,61 @@
     <div id="table_request_list_template" class="hidden">
         <template slot="items" slot-scope="props">
             <tr v-bind:class="{'active': props.index%2==1}">
-                <td class="pt-2 pb-2">
-                    <span>{{props.item.activityId}}</span>
+                <td class="text-xs-center">
+                    <div class="pt-2 pb-2">
+                        <span v-bind:title="props.item.activityId">{{props.item.activityId}}</span>
+                    </div>
                 </td>
-                <td class="pt-2 pb-2">
-                    <span>{{props.item.startDate|datetime}}</span>
+                <td class="text-xs-center">
+                    <div class="pt-2 pb-2">
+                        <span v-bind:title="props.item.startDate|datetime">{{props.item.startDate|datetime}}</span>
+                    </div>
                 </td>
-                <td class="pt-2 pb-2">
-                    <a href="javascript:;" @click.stop.prevent="detail__all(props.item,props.index)">
-                        <span>{{props.item.subject}}</span>
-                    </a>
+                <td>
+                    <div class="pt-2 pb-2">
+                        <a href="javascript:;" @click.stop.prevent="detail__all(props.item,props.index)">
+                            <span v-bind:title="props.item.subject">{{props.item.subject}}</span>
+                        </a>
+                    </div>
                 </td>
-                <td class="pt-2 pb-2">
-                    <span>{{props.item.userName}}</span>
+                <td>
+                    <div class="pt-2 pb-2">
+                        <span v-bind:title="props.item.userName">{{props.item.userName}}</span>
+                    </div>
                 </td>
-                <td class="pt-2 pb-2">
-                    <span>{{props.item.hosting}}</span>
+                <td>
+                    <div class="pt-2 pb-2">
+                        <span v-bind:title="props.item.hosting">{{props.item.hosting}}</span>
+                    </div>
                 </td>
-                <td class="pt-2 pb-2">
-                    <span>{{props.item.managerName}}</span>
+                <td>
+                    <div class="pt-2 pb-2">
+                        <span v-bind:title="props.item.managerName">{{props.item.managerName}}</span>
+                    </div>
                 </td>
-                <td class="pt-2 pb-2">
-                    <span>{{props.item.endDate|datetime}}</span>
+                <td class="text-xs-center">
+                    <div class="pt-2 pb-2">
+                        <span v-bind:title="props.item.endDate|datetime">{{props.item.endDate|datetime}}</span>
+                    </div>
                 </td>
-                <td class="pt-2 pb-2">
-                    <span>{{openingState2[props.item.openingState].task_request}}</span>
+                <td class="text-xs-center">
+                    <v-chip label outline color="red" v-if="openingState2[props.item.openingState].openingState==0">
+                        <span>{{openingState2[props.item.openingState].task_request}}</span>
+                    </v-chip>
+                    <v-chip label outline color="blue" v-if="openingState2[props.item.openingState].openingState==1">
+                        <span>{{openingState2[props.item.openingState].task_request}}</span>
+                    </v-chip>
+                    <v-chip label outline color="amber" v-if="openingState2[props.item.openingState].openingState==2">
+                        <span>{{openingState2[props.item.openingState].task_request}}</span>
+                    </v-chip>
+                    <v-chip label outline color="grey" v-if="openingState2[props.item.openingState].openingState==3">
+                        <span>{{openingState2[props.item.openingState].task_request}}</span>
+                    </v-chip>
+                    
                 </td>
                 
-                <td>
-                    <v-btn v-if="props.item.permission=='owner'||props.item.permission=='manager'" icon v-on:click.native="toRemoverequest(props.item, props.index)" class="mx-0 my-0">
-                        <v-icon color="red darken-3">clear</v-icon>
-                    </v-btn> 
+                <td class="text-xs-center">
+                    <v-icon class="pt-2 pb-2" v-if="props.item.permission=='owner'||props.item.permission=='manager'|| detailModelSelected.permission== 'hoster'" icon @click="toRemoverequest(props.item,props.index)" color="red darken-3">clear</v-icon>
                 </td>
             </tr>
         </template>
@@ -1003,31 +1107,41 @@
         <template slot="items" slot-scope="props">
     
             <tr v-bind:class="{'active': props.index%2==1}">
-                <td class="pt-2 pb-2">
-                    <span>{{props.index+1}}</span>
+                <td class="text-xs-center">
+                    <div class="pt-2 pb-2">
+                        <span v-bind:title="props.index+1">{{props.index+1}}</span>
+                    </div>
                 </td>
-                <td class="pt-2 pb-2">
-                    <span>{{props.item.startDate|datetime}}</span>
-                </td>
-                <td class="pt-2 pb-2">
-                    <a href="javascript:;" @click.stop.prevent="detail__all(props.item,props.index)">
-                        <span>{{props.item.subject}}</span>
-                    </a>
-                </td>
-                <td class="pt-2 pb-2">
-                    <span>{{props.item.templateNo}}</span>
-                </td>
-                
-                <td class="pt-2 pb-2">
-                    <span>{{ props.item.activityType }} - {{ props.item.categoryName }}</span>
-                </td>
-                <td class="pt-2 pb-2">
-                    <span>{{props.item.hosting}}</span>
+                <td class="text-xs-center">
+                    <div class="pt-2 pb-2">
+                        <span v-bind:title="props.item.startDate|datetime">{{props.item.startDate|datetime}}</span>
+                    </div>
                 </td>
                 <td>
-                    <v-btn v-if="props.item.permission=='owner'||props.item.permission=='manager'" icon v-on:click.native="toRemoveTableActivityTemp(props.item, props.index)" class="mx-0 my-0">
-                        <v-icon color="red darken-3">clear</v-icon>
-                    </v-btn>
+                    <div class="pt-2 pb-2">
+                        <a href="javascript:;" @click.stop.prevent="detail__all(props.item,props.index)">
+                            <span v-bind:title="props.item.subject">{{props.item.subject}}</span>
+                        </a>
+                    </div>
+                </td>
+                <td class="text-xs-center">
+                    <div class="pt-2 pb-2">
+                        <span v-bind:title="props.item.templateNo">{{props.item.templateNo}}</span>
+                    </div>
+                </td>
+                
+                <td>
+                    <div class="pt-2 pb-2">
+                        <span v-bind:title="props.item.activityType - props.item.categoryName">{{ props.item.activityType }} - {{ props.item.categoryName }}</span>
+                    </div>
+                </td>
+                <td>
+                    <div class="pt-2 pb-2">
+                        <span v-bind:title="props.item.hosting">{{props.item.hosting}}</span>
+                    </div>
+                </td>
+                <td class="text-xs-center">
+                    <v-icon class="pt-2 pb-2" v-if="props.item.permission=='owner'||props.item.permission=='manager'|| detailModelSelected.permission== 'hoster'" icon @click="toRemoveTableActivityTemp(props.item,props.index)" color="red darken-3">clear</v-icon>
                 </td>
             </tr>
         </template>
@@ -1068,6 +1182,7 @@
                         fromdate:'',
                         todate:''
                     },
+                    timeStart:'',
                     currentListPage: true, /** ${ (Request.activityId == -1)?c } **/
                     keywordsSearchable: false,
                     addNewOptions: [],
@@ -1139,8 +1254,18 @@
 
                     current_activity_id: 1, /** ${Request.activityId} **/
                     keywordsSearch:'',
-                    checkbox_month_event:'',
-                    checkbox_month_tack:'',
+                    tableEventListCout:0,
+                    tableTaskListCout:0,
+                    tableRequestListCout:0,
+                    tableTemplateListCout:0,
+                    checkbox_kanban_1:true,
+                    checkbox_kanban_2:true,
+                    checkbox_kanban_3:true,
+                    checkbox_kanban_4:true,
+                    checkbox_month_event:true,
+                    checkbox_month_tack:true,
+                    openingState_hidden:true
+
 
                 },
                 schema: {
@@ -1155,6 +1280,30 @@
                         'events': {
                             initComment: function(prevewConfig) {
                                 $('#mobilink-comments-container').comments(prevewConfig);
+                            },
+                            compareDateMoment: function(date1, date2) {
+                                var d1 = moment(date1).format('MM/DD/YYYY');
+                                var d2 =  moment(date2).format('MM/DD/YYYY');
+                                
+                                if (Date.parse(d1)==Date.parse(d2)) {
+                                    return 0;
+                                } else if (Date.parse(d1)<Date.parse(d2)) {
+                                    return 1;
+                                } else {
+                                    return -1;
+                                }
+                            },
+                            compareYearMoment: function(date1, date2) {
+                                var d1 = moment(date1).format('YYYY');
+                                var d2 =  moment(date2).format('YYYY');
+                                
+                                if (Date.parse(d1)==Date.parse(d2)) {
+                                    return 0;
+                                } else if (Date.parse(d1)<Date.parse(d2)) {
+                                    return 1;
+                                } else {
+                                    return -1;
+                                }
                             },
                             initAlbumFileUpload: function (prevewConfig) {
                                 var vm=this;
@@ -1174,8 +1323,18 @@
                             /** lay ra danh sach su kien trong thang*/
                             getEventsOfMonth: function () {
                                 var vm = this;
+                                var typeCheck='';
+                                if(vm.checkbox_month_event==true){
+                                    typeCheck='EVENT';
+                                }
+                                if(vm.checkbox_month_tack==true){
+                                    typeCheck='TASK';
+                                }
+                                if((vm.checkbox_month_event==true&&vm.checkbox_month_tack==true)||(vm.checkbox_month_event==false&&vm.checkbox_month_tack==false) ){
+                                    typeCheck='EVENT,TASK';
+                                }
                                 var url = vm.endPoint + 'activities?fromdate=' + vm.fromdate +
-                                    '&todate=' + vm.todate + '&template=false';
+                                    '&todate=' + vm.todate + '&template=false'+'&type='+typeCheck;
                                 axios.get(url, config)
                                     .then(function (response) {
                                         var serializable = response.data
@@ -1223,25 +1382,25 @@
                                 for (var i = vm.selectYearModel; i >= vm.selectYearModel - 10; i--) {
                                     arrTemp.push({
                                         id: i,
-                                        text: vm.translate('nam') + ' ' + i
+                                        text: i
                                     });
                                 }
                                 vm.selectYear = arrTemp;
                                 vm.getWeekEventList();
                                 vm.addNewOptions = [{
-                                    title: vm.translate('them_moi_su_kien'),
+                                    title: 'Thêm mới các cuộc họp',
                                     id: 1,
                                     typeActivity: 'events'
                                 }, {
-                                    title: vm.translate('them_moi_nhiem_vu'),
+                                    title: 'Thêm mới các nhiệm vụ được giao',
                                     id: 2,
                                     typeActivity: 'tasks'
                                 },{
-                                    title: vm.translate('them_moi_yeu_cau'),
+                                    title: 'Thêm mới đề xuất, kiến nghị',
                                     id: 4,
                                     typeActivity: 'requests'
                                 }, {
-                                    title: vm.translate('them_moi_quy_trinh'),
+                                    title: 'Thêm mới mẫu hoạt động',
                                     id: 3,
                                     typeActivity: 'process'
                                 }];
@@ -1280,10 +1439,6 @@
                                     openingState: 3,
                                     task_request: vm.translate('da_huy'),
                                     task_request_huy:vm.translate('huy')
-                                },
-                                {
-                                    openingState: 4,
-                                    task_request: vm.translate('bao_hoan_thanh')
                                 }
                                 ];
 
@@ -1335,7 +1490,7 @@
                                                 true)[key]).week(w).year(y),
                                             date: moment().day(moment.weekdays(true)[
                                                 key]).week(w).year(y).format(
-                                                formatDate),
+                                                'DD/MM'),
                                             obj: weekEventItems.filter(function (
                                                 item) {
                                                 return moment(item.startDate).format(formatDate) ==moment().day(moment.weekdays(true)[key]).week(w).year(y).format(formatDate)
@@ -1373,8 +1528,8 @@
                             cancelAdvancedSearch: function () {
                                 var vm = this;
                                 vm.advanced__trang_thai = [];
-                                vm.advanced__startDate = '';
-                                vm.advanced__endDate = '';
+                                // vm.advanced__startDate = '';
+                                // vm.advanced__endDate = '';
                                 vm.advanced__don_vi_to_chuc_chu_tri = [];
                                 vm.advanced__nguoi_chu_tri_phu_trach = [];
                                 vm.advanced__du_an_chuong_trinh = [];
@@ -1393,8 +1548,8 @@
                                 vm.todo.project = vm.advanced__du_an_chuong_trinh.projectId;
                                 vm.todo.label = vm.advanced__the_nhan.labelId;
                                 vm.todo.location = vm.advanced__dia_chi.locationId;
-                                vm.todo.fromdate = vm.formatDateAdvanced(vm.advanced__startDate);
-                                vm.todo.todate = vm.formatDateAdvanced(vm.advanced__endDate);
+                                // vm.todo.fromdate = vm.formatDateAdvanced(vm.advanced__startDate);
+                                // vm.todo.todate = vm.formatDateAdvanced(vm.advanced__endDate);
                                 vm.runTable();
                             },
                             formatDateAdvanced: function(date) {
@@ -1450,7 +1605,7 @@
                                 else if(vm.detailModelSelected.openingState==1){
                                     vm.change_openingState = 2;
                                     vm.change_openingState1=3;
-                                    vm.change_openingState2=4;
+                                    vm.change_openingState2=5;
                                 }
                                 else if(vm.detailModelSelected.openingState==2){
                                     vm.change_openingState = 1;
@@ -1461,11 +1616,6 @@
                                     vm.change_openingState = 1;
                                     vm.change_openingState1=5;
                                     vm.change_openingState2=5;
-                                }
-                                else if(vm.detailModelSelected.openingState==4){
-                                    vm.change_openingState = 2;
-                                    vm.change_openingState1=3;
-                                    vm.change_openingState2=1;
                                 }
                                 vm.detail__onCalendar=item.onCalendar;
                                 vm.detail__onCalendar_template=item.onCalendar;
@@ -1530,9 +1680,9 @@
                                         }
                                         ],
                                         vm.detailModelSelected, 
-                                       vm.detailModelSelected.activityId,
-                                       vm.detailModelSelected['permission'] == "manager" ||vm.detailModelSelected['permission'] == "owner",
-                                       vm
+                                        vm.detailModelSelected.activityId,
+                                        vm.detailModelSelected['permission'] == "manager" || vm.detailModelSelected['permission'] == "owner" || vm.detailModelSelected['permission'] == "hoster",
+                                        vm
                                       );
                                     
                                     }, 500);
@@ -1568,7 +1718,7 @@
                                     else if(vm.detailModelSelected.openingState==1){
                                         vm.change_openingState = 2;
                                         vm.change_openingState1= 3;
-                                        vm.change_openingState2= 4;
+                                        vm.change_openingState2= 5;
                                     }
                                     else if(vm.detailModelSelected.openingState==2){
                                         vm.change_openingState = 1;
@@ -1579,11 +1729,6 @@
                                         vm.change_openingState = 1;
                                         vm.change_openingState1= 5;
                                         vm.change_openingState2= 5;
-                                    }
-                                    else if(vm.detailModelSelected.openingState==4){
-                                        vm.change_openingState = 2;
-                                        vm.change_openingState1= 3;
-                                        vm.change_openingState2= 1;
                                     }
                                 })
                                     .catch(function (error) {
@@ -1631,10 +1776,8 @@
                             },
                             locationUpdateEvent: function(item) {
                                 var vm = this; 
-                                var validator = document.querySelector(".editable-wrap .error--text"); 
                                 var dataToAPI = new URLSearchParams();
                                 dataToAPI.append("locationId", item.locationId);
-                                if(validator == null) {
                                     var url = vm.endPoint + 'activities/' +vm.detailModelSelected.activityId ;
                                     axios.put(url, dataToAPI, config).then(function(response) {
                                         vm.snackbartextactivityMgtViewJX = "Cập nhật dữ liệu thành công!";
@@ -1646,7 +1789,6 @@
                                         vm.snackbartextactivityMgtViewJX = "Cập nhật dữ liệu thất bại!";
                                         vm.snackbareroractivityMgtViewJX = true;
                                       });
-                                }
                             },
                             subjectTempleDataEvent: function(data) {
                                 this.tempData2 = data.subject;
@@ -1658,10 +1800,8 @@
                             },
                             subjectUpdateEvent: function(item) {
                                 var vm = this; 
-                                var validator = document.querySelector(".editable-wrap .error--text"); 
                                 var dataToAPI = new URLSearchParams();
                                 dataToAPI.append("subject", item.subject);
-                                if(validator == null) {
                                     var url = vm.endPoint + 'activities/' +item.activityId ;
                                     axios.put(url, dataToAPI, config).then(function(response) {
                                         vm.snackbartextactivityMgtViewJX = "Cập nhật dữ liệu thành công!";
@@ -1673,16 +1813,13 @@
                                         vm.snackbartextactivityMgtViewJX = "Cập nhật dữ liệu thất bại!";
                                         vm.snackbareroractivityMgtViewJX = true;
                                       });
-                                }
                             },
                             categoryName_UpdateEvent: function(item) {
                                 var vm = this; 
 
-                                var validator = document.querySelector(".editable-wrap .error--text"); 
                                 var dataToAPI = new URLSearchParams();
 
                                 dataToAPI.append("activityCat", item.itemCode);
-                                if(validator == null) {
                                    var url = vm.endPoint + 'activities/'+ vm.detailModelSelected.activityId;
                                     axios.put(url, dataToAPI, config).then(function(response) {
                                         vm.snackbartextactivityMgtViewJX= "Cập nhật dữ liệu thành công!";
@@ -1694,7 +1831,6 @@
                                         vm.snackbartextactivityMgtViewJX = "Cập nhật dữ liệu thất bại!";
                                         vm.snackbareroractivityMgtViewJX= true;
                                       });
-                                }
                             },
                             startDateUpdateEvent:function(item){
                                 var vm = this; 
@@ -1792,8 +1928,7 @@
                             /** xóa trong list danh sách sau khi tìm kiếm*/
                             remove_activity: function (item, index, tableListItems) {
                                 var vm = this;
-                                console.log(index);
-                                console.log(tableListItems);
+
                                 vm.$dialog.confirm('Xác nhận xóa dữ liệu', {
                                     html: true,
                                     loader: true,
@@ -1833,10 +1968,34 @@
                                     vm.todo.search = vm.keywordsSearch;
                                     
                                     vm.runTable1();
+                            },
+                            getKanban:function(){
+                                var vm = this;
+                                var permissionCheck='';
+                                var typeCheck='';
 
-
-                                
-
+                                if(vm.checkbox_kanban_1==true){
+                                    permissionCheck="manager";
+                                }
+                                if(vm.checkbox_kanban_2==true){
+                                    permissionCheck="follow";
+                                }
+                                if((vm.checkbox_kanban_1==true&&vm.checkbox_kanban_2==true)||(vm.checkbox_kanban_1==false&&vm.checkbox_kanban_2==false)){
+                                    permissionCheck="follow,manager";
+                                }
+                                if(vm.checkbox_kanban_3==true){
+                                    typeCheck="TASK"
+                                }
+                                if(vm.checkbox_kanban_4==true){
+                                    typeCheck="REQUEST"
+                                }
+                                if((vm.checkbox_kanban_3==true&&vm.checkbox_kanban_4==true)||(vm.checkbox_kanban_3==false&&vm.checkbox_kanban_4==false)){
+                                    typeCheck="TASK,REQUEST";
+                                }
+                                console.log("test permission",permissionCheck);
+                                console.log("test type",typeCheck);
+                                kanban_api_get: "127.0.0.1:8081/activities?permission="+permissionCheck+"&type="+typeCheck;
+                                kanban_api_put:"127.0.0.1:8081/activities/";
                             },
 
                         }
@@ -1847,16 +2006,16 @@
 
 
 
-                    'advanced__startDate': {
-                        'id': 'advanced__startDate',
-                        'name': 'advanced__startDate',
-                        'type': 'date'
-                    },
-                    'advanced__endDate': {
-                        'id': 'advanced__endDate',
-                        'name': 'advanced__endDate',
-                        'type': 'date'
-                    },
+                    // 'advanced__startDate': {
+                    //     'id': 'advanced__startDate',
+                    //     'name': 'advanced__startDate',
+                    //     'type': 'date'
+                    // },
+                    // 'advanced__endDate': {
+                    //     'id': 'advanced__endDate',
+                    //     'name': 'advanced__endDate',
+                    //     'type': 'date'
+                    // },
                     'advanced__trang_thai': {
                         'id': 'advanced__trang_thai',
                         'name': 'advanced__trang_thai',
@@ -2186,7 +2345,7 @@
                         }
                     },
                     'detail__hostingId': {
-                        'id': 'detail__hostingId',
+                        'id': 'hostingId',
                         'name': 'detail__hostingId',
                         'type': 'select',
                         'label': 'Đơn vị tổ chức:',
@@ -2226,7 +2385,7 @@
                         }
                     },
                     'detail__hostingId_template': {
-                        'id': 'detail__hostingId_template',
+                        'id': 'hostingId',
                         'name': 'detail__hostingId_template',
                         'type': 'select',
                         'label': 'Đơn vị chủ trì:',
@@ -2266,7 +2425,7 @@
                         }
                     },
                     'detail__managerId': {
-                        'id': 'detail__managerId',
+                        'id': 'managerId',
                         'name': 'detail__managerId',
                         'type': 'select',
                         'label': 'Người chủ trì: ',
@@ -2308,7 +2467,7 @@
                         }
                     },
                     'detail__managerId_template': {
-                        'id': 'detail__managerId_template',
+                        'id': 'managerId',
                         'name': 'detail__managerId_template',
                         'type': 'select',
                         'label': 'Người chủ trì: ',
@@ -2350,7 +2509,7 @@
                         }
                     },
                     'detail__projectId': {
-                        'id': 'detail__projectId',
+                        'id': 'projectId',
                         'name': 'detail__projectId',
                         'type': 'select',
                         'label': 'Thuộc dự án: ',
@@ -2384,7 +2543,7 @@
                         }
                     },
                     'detail__onCalendar': {
-                        'id': 'detail__onCalendar',
+                        'id': 'onCalendar',
                         'name': 'detail__onCalendar',
                         'type': 'select',
                         'label': 'Ghi lịch tuần: ',
@@ -2412,7 +2571,7 @@
                         }
                     },
                     'detail__onCalendar_template': {
-                        'id': 'detail__onCalendar_template',
+                        'id': 'onCalendar',
                         'name': 'detail__onCalendar_template',
                         'type': 'select',
                         'label': 'Ghi lịch tuần: ',
@@ -2440,7 +2599,7 @@
                         }
                     },
                     'detail__description': {
-                        'id': 'detail__description',
+                        'id': 'description',
                         'name': 'detail__description',
                         'type': 'text',
                         'label': 'Nội dung: ',
@@ -2456,7 +2615,7 @@
                         'multi_line': true
                     },
                     'detail__okrArchive': {
-                        'id': 'detail__okrArchive',
+                        'id': 'okrArchive',
                         'name': 'detail__okrArchive',
                         'label': 'Đánh giá OKR: ',
                         'type':'number',
@@ -2508,6 +2667,12 @@
                                         vm.keywordsSearchable=false;
                                         vm.wantAdvancedSearch=false;
                                         vm.getEventsOfMonth();
+                                        break;
+                                    case 'KANBAN':
+                                        vm.keywordsSearch='';
+                                        vm.wantAdvancedSearch=false;
+                                        vm.keywordsSearchable=false;
+                                        vm.getKanban();
                                         break;
                                     case 'EVENT':
                                         vm.keywordsSearch='';
@@ -2571,7 +2736,7 @@
                                     
                                 },
                                 {
-                                    "action": "content_paste",
+                                    "action": "date_range",
                                     "action_active": "event_note",
                                     "id": -3,
                                     "title": 'Bảng Kanban',
@@ -2585,7 +2750,7 @@
                                     "action": "group_add",
                                     "action_active": "group",
                                     "id": -4,
-                                    "title": vm.translate('su_kien'),
+                                    "title": 'Cuộc họp, hội nghị',
                                     "type": 'EVENT',
                                     "active": false,
                                     "parent": {
@@ -2596,7 +2761,7 @@
                                     "action": "spellcheck",
                                     "action_active": "done_all",
                                     "id": -5,
-                                    "title": vm.translate('nhiem_vu'),
+                                    "title": 'Nhiệm vụ được giao',
                                     "type": 'TASK',
                                     "active": false,
                                     "parent": {
@@ -2607,7 +2772,7 @@
                                     "action": "open_in_browser",
                                     "action_active": "settings_backup_restore",
                                     "id": -6,
-                                    "title": vm.translate('yeu_cau'),
+                                    "title": 'Đề xuất kiến nghị',
                                     "type": 'REQUEST',
                                     "active": false,
                                     "parent": {
@@ -2619,7 +2784,7 @@
                                     "action": "extension",
                                     "action_active": "exit_to_app",
                                     "id": -7,
-                                    "title": vm.translate('quy_trinh'),
+                                    "title": 'Mẫu hoạt động',
                                     "type": 'TEMPLATE',
                                     "active": false,
                                     "parent": {
@@ -2825,8 +2990,8 @@
                                         .projectId;
                                     paramsActivityBuilder.label = vm.advanced__the_nhan.labelId;
                                     paramsActivityBuilder.location = vm.advanced__dia_chi.locationId;
-                                    paramsActivityBuilder.fromdate = vm.advanced__startDate ? moment(vm.advanced__startDate, 'DD/MM/YYYY').format('YYYYMMDD') : null;
-                                    paramsActivityBuilder.todate = vm.advanced__endDate ? moment(vm.advanced__endDate, 'DD/MM/YYYY').format('YYYYMMDD') : null;
+                                    // paramsActivityBuilder.fromdate = vm.advanced__startDate ? moment(vm.advanced__startDate, 'DD/MM/YYYY').format('YYYYMMDD') : null;
+                                    // paramsActivityBuilder.todate = vm.advanced__endDate ? moment(vm.advanced__endDate, 'DD/MM/YYYY').format('YYYYMMDD') : null;
                                 }
                                 var configGetActivity = {
                                     params: paramsActivityBuilder,
@@ -2839,6 +3004,8 @@
                                     var serializable = response.data;
                                     if (serializable.hasOwnProperty('data') && Array.isArray(serializable.data)) {
                                         vm.tableEventListItems = serializable.data;
+                                        vm.tableEventListCout=serializable.total;
+
                                     } else if (typeof (serializable.data) == 'object') {
                                         vm.tableEventListItems = [serializable.data];
                                     } else {
@@ -2981,8 +3148,8 @@
                                         .projectId;
                                     paramsCheckListBuilder.label = vm.advanced__the_nhan.labelId;
                                     paramsCheckListBuilder.location = vm.advanced__dia_chi.locationId;
-                                    paramsActivityBuilder.fromdate = vm.advanced__startDate ? moment(vm.advanced__startDate, 'DD/MM/YYYY').format('YYYYMMDD') : null;
-                                    paramsActivityBuilder.todate = vm.advanced__endDate ? moment(vm.advanced__endDate, 'DD/MM/YYYY').format('YYYYMMDD') : null;
+                                    // paramsActivityBuilder.fromdate = vm.advanced__startDate ? moment(vm.advanced__startDate, 'DD/MM/YYYY').format('YYYYMMDD') : null;
+                                    // paramsActivityBuilder.todate = vm.advanced__endDate ? moment(vm.advanced__endDate, 'DD/MM/YYYY').format('YYYYMMDD') : null;
 
                                 }
 
@@ -2999,9 +3166,15 @@
                                     if (serializable.hasOwnProperty('data') && Array.isArray(serializable.data)) {
 
                                         vm.tableTaskListItems = serializable.data;
+                                        vm.tableTaskListCout=serializable.total;
                                     } else if (typeof (serializable.data) == 'object') {
 
-                                        vm.tableTaskListItems = [serializable.data];
+                                        vm.tableTaskListItems = serializable.data;
+                                        for(var key in vm.tableTaskListItems){
+                                            if(vm.tableTaskListItems[key].subject.length>13){
+                                            vm.tableTaskListItems[key].subject=vm.tableTaskListItems[key].subject.replace(/^(.{13}[^\s]*).*/, "$1") + " ...";
+                                             }
+                                        }
                                     } else {
 
                                         vm.tableTaskListItems = [];
@@ -3147,8 +3320,8 @@
                                         .projectId;
                                     paramsCheckListBuilder.label = vm.advanced__the_nhan.labelId;
                                     paramsCheckListBuilder.location = vm.advanced__dia_chi.locationId;
-                                    paramsActivityBuilder.fromdate = vm.advanced__startDate ? moment(vm.advanced__startDate, 'DD/MM/YYYY').format('YYYYMMDD') : null;
-                                    paramsActivityBuilder.todate = vm.advanced__endDate ? moment(vm.advanced__endDate, 'DD/MM/YYYY').format('YYYYMMDD') : null;
+                                    // paramsActivityBuilder.fromdate = vm.advanced__startDate ? moment(vm.advanced__startDate, 'DD/MM/YYYY').format('YYYYMMDD') : null;
+                                    // paramsActivityBuilder.todate = vm.advanced__endDate ? moment(vm.advanced__endDate, 'DD/MM/YYYY').format('YYYYMMDD') : null;
 
                                 }
 
@@ -3165,6 +3338,7 @@
                                     if (serializable.hasOwnProperty('data') && Array.isArray(serializable.data)) {
 
                                         vm.tablerequestListItems = serializable.data;
+                                        vm.tableRequestListCout=serializable.total;
                                     } else if (typeof (serializable.data) == 'object') {
 
                                         vm.tablerequestListItems = [serializable.data];
@@ -3300,8 +3474,8 @@
                                         .projectId;
                                     paramsTableActivityTempBuilder.label = vm.advanced__the_nhan.labelId;
                                     paramsTableActivityTempBuilder.location = vm.advanced__dia_chi.locationId;
-                                    paramsActivityBuilder.fromdate = vm.advanced__startDate ? moment(vm.advanced__startDate, 'DD/MM/YYYY').format('YYYYMMDD') : null;
-                                    paramsActivityBuilder.todate = vm.advanced__endDate ? moment(vm.advanced__endDate, 'DD/MM/YYYY').format('YYYYMMDD') : null;
+                                    // paramsActivityBuilder.fromdate = vm.advanced__startDate ? moment(vm.advanced__startDate, 'DD/MM/YYYY').format('YYYYMMDD') : null;
+                                    // paramsActivityBuilder.todate = vm.advanced__endDate ? moment(vm.advanced__endDate, 'DD/MM/YYYY').format('YYYYMMDD') : null;
                                 }
 
                                 var configGettableActivityTemp = {
@@ -3315,6 +3489,7 @@
                                     var serializable = response.data;
                                     if (serializable.hasOwnProperty('data') && Array.isArray(serializable.data)) {
                                         vm.tableActivityTempListItems = serializable.data;
+                                        vm.tableTemplateListCout=serializable.total;
                                     } else if (typeof (serializable.data) == 'object') {
                                         vm.tableActivityTempListItems = [serializable.data];
                                     } else {
@@ -3368,9 +3543,6 @@
                             }
                         }
                     },
-                    
-                            
-
                     /** popup */
                     'popUpEditActivity': {
                         'id': 'popUpEditActivity',
@@ -3603,8 +3775,32 @@
             text-transform: none;
             color: #939393;
         }
-        /*tableEventList__class*/
 
+
+        body table.table td i{
+             cursor: pointer;
+        }
+
+        body .tableEventList__class table.table td,body .tableTaskList__class table.table td,body .tablerequestList__class table.table td,body .tableActivityTempList__class table.table td{
+            padding: 0 5px!important;
+        }
+        body .tableEventList__class table.table th,body .tableTaskList__class table.table th,body .tablerequestList__class table.table th,body .tableActivityTempList__class table.table th{
+            text-align: center!important;
+        }
+        /*tableEventList__class*/
+        .tableEventList__class table.table td i{
+            font-size: 13px;
+        }
+        .tableEventList__class table.table td button{
+            width: 30px;
+            height: 30px;
+        }
+        body .tableEventList__class table.table td:nth-child(1) div,body .tableEventList__class table.table td:nth-child(2) div,body .tableEventList__class table.table td:nth-child(3) div,body .tableEventList__class table.table td:nth-child(4) div,body .tableEventList__class table.table td:nth-child(5) div,body .tableEventList__class table.table td:nth-child(6) div{
+            overflow: hidden;
+            text-overflow: ellipsis; 
+            white-space: nowrap; 
+            width: 90%!important;
+        }
         body .tableEventList__class table.table th:nth-child(1),body .tableEventList__class table.table td:nth-child(1){
             width: 5%!important;
             position: relative;
@@ -3614,27 +3810,44 @@
             position: relative;
         }
         body .tableEventList__class table.table th:nth-child(3),body .tableEventList__class table.table td:nth-child(3){
-            width: 20%!important;
+            width: 25%!important;
             position: relative;
         }
         body .tableEventList__class table.table th:nth-child(4),body .tableEventList__class table.table td:nth-child(4){
-            width: 15%!important;
+            width: 19%!important;
             position: relative;
         }
         body .tableEventList__class table.table th:nth-child(5),body .tableEventList__class table.table td:nth-child(5){
-            width: 15%!important;
+            width: 18%!important;
             position: relative;
         }
         body .tableEventList__class table.table th:nth-child(6),body .tableEventList__class table.table td:nth-child(6){
             width: 15%!important;
             position: relative;
         }
-        body .tableEventList__class table.table th:nth-child(7){
-            width: 5%!important;
+        body .tableEventList__class table.table th:nth-child(7),body .tableEventList__class table.table td:nth-child(7){
+            width: 3%!important;
         }
 
 
         /*tableTaskList__class*/
+        .tableTaskList__class table.table td i{
+            font-size: 13px;
+        }
+        .tableTaskList__class table.table td button{
+            width: 30px;
+            height: 30px;
+        }
+        body .tableTaskList__class table.table td:nth-child(1) div,body .tableTaskList__class table.table td:nth-child(2) div,body .tableTaskList__class table.table td:nth-child(3) div,body .tableTaskList__class table.table td:nth-child(4) div,body .tableTaskList__class table.table td:nth-child(5) div,body .tableTaskList__class table.table td:nth-child(6) div,body .tableTaskList__class table.table td:nth-child(7) div{
+            overflow: hidden;
+            text-overflow: ellipsis; 
+            white-space: nowrap; 
+            width: 90%!important;
+            position: absolute;
+        }
+        body .tableTaskList__class table.table td div{
+            margin-top: 4px;
+        }
          .tableTaskList__class table thead,.tableEventList__class table thead,.tablerequestList__class table thead,.tableActivityTempList__class table thead{
             background-color: #82dad5!important;
         }
@@ -3678,9 +3891,25 @@
         }
 
         /*tablerequestList__class*/
-
+        body .tablerequestList__class table.table td:nth-child(1) div,body .tablerequestList__class table.table td:nth-child(2) div,body .tablerequestList__class table.table td:nth-child(3) div,body .tablerequestList__class table.table td:nth-child(4) div,body .tablerequestList__class table.table td:nth-child(5) div,body .tablerequestList__class table.table td:nth-child(6) div,body .tablerequestList__class table.table td:nth-child(7) div,body .tablerequestList__class table.table td:nth-child(8) div{
+            overflow: hidden;
+            text-overflow: ellipsis; 
+            white-space: nowrap; 
+            width: 90%!important;
+            position: absolute;
+        }
+        body .tablerequestList__class table.table td div{
+            margin-top: 4px;
+        }
+        .tablerequestList__class table.table td i{
+            font-size: 13px;
+        }
+        .tablerequestList__class table.table td button{
+            width: 30px;
+            height: 30px;
+        }
         body .tablerequestList__class table.table th:nth-child(1),body .tablerequestList__class table.table td:nth-child(1) {
-            width: 3%!important;
+            width: 2%!important;
             position: relative;
         }
         body .tablerequestList__class table.table th:nth-child(2),body .tablerequestList__class table.table td:nth-child(2) {
@@ -3712,22 +3941,44 @@
             position: relative;
         }
         body .tablerequestList__class table.table th:nth-child(9),body .tablerequestList__class table.table td:nth-child(9) {
-            width: 3%!important;
+            width: 2%!important;
+            position: relative;
         }
-
+        .tablerequestList__class .chip{
+            display: inline-block;
+            text-align: center;
+            width: 90%;
+        }
+        .tableTaskList__class .chip{
+            display: inline-block;
+            text-align: center;
+            width: 90%;
+        }
         /*tableActivityTempList__class*/
-
+        body .tableActivityTempList__class table.table td:nth-child(1) div,body .tableActivityTempList__class table.table td:nth-child(2) div,body .tableActivityTempList__class table.table td:nth-child(3) div,body .tableActivityTempList__class table.table td:nth-child(4) div,body .tableActivityTempList__class table.table td:nth-child(5) div,body .tableActivityTempList__class table.table td:nth-child(6) div{
+            overflow: hidden;
+            text-overflow: ellipsis; 
+            white-space: nowrap; 
+            width: 90%!important;
+        }
+        .tableActivityTempList__class table.table td i{
+            font-size: 13px;
+        }
+        .tableActivityTempList__class table.table td button{
+            width: 30px;
+            height: 30px;
+        }
         body .tableActivityTempList__class table.table th:nth-child(1),body .tableActivityTempList__class table.table td:nth-child(1) {
             width: 5%;
             position: relative;
         }
     
         body .tableActivityTempList__class table.table th:nth-child(2),body .tableActivityTempList__class table.table td:nth-child(2) {
-            width: 10%;
+            width: 15%;
             position: relative;
         }
         body .tableActivityTempList__class table.table th:nth-child(3),body .tableActivityTempList__class table.table td:nth-child(3) {
-            width: 35%;
+            width: 30%;
             position: relative;
         }
         body .tableActivityTempList__class table.table th:nth-child(4),body .tableActivityTempList__class table.table td:nth-child(4) {
@@ -3845,50 +4096,49 @@
             padding: 0!important;
         }
         .weekClass .week1Class{
-            border-right: 3px dotted #eee;
+            border-right: 2px dotted #eee;
             text-align: center;
 
         }
         .weekClass{
-            border-bottom: 3px dotted #eee;
+            border-bottom: 2px dotted #eee;
             line-height: 2;
 
         }
         .weekClass_hidden{
-            border-bottom: 3px dotted #fff;
-            margin-top: -3px;
+            border-bottom: 2px dotted #fff;
+            margin-top: -2px;
 
         }
-        #activitySearch .row-header {
+        #activityHeader .row-header {
             background-color: #3486D7!important;
             color: #ffffff!important;
             overflow: hidden;
-            display: -webkit-flex;
-            display: flex;
             align-items: center;
             width: 100%;
         }
-        .checkbox_month i,.checkbox_month label,.checkbox_month_tack i{
-            color: #fff!important;
-        }
-        .checkbox_month_tack label{
+        .colorCheck label,.colorCheck i{
             color: #fff!important;
             padding: 0;
         }
-        #activitySearch  .row-header .checkbox_month_tack{
+        #activityHeader  .row-header .checkbox_month_tack{
             margin-top: auto;
         }
-        #activitySearch  .row-header .keywordsSearch .input-group__input,#activitySearch  .row-header .weekly_calendar__year .input-group__input,#activitySearch  .row-header .weekly_calendar__month .input-group__input{
+        #activityHeader .row-header .checkbox_month_tack .input-group__input,#activityHeader .row-header .checkbox_month .input-group__input{
+            background-color: #3486D7!important;
+        }
+        #activityHeader .row-header .keywordsSearch .input-group__input,#activityHeader .row-header .weekly_calendar__year .input-group__input,#activityHeader .row-header .weekly_calendar__month .input-group__input{
             background-color: #ffffff!important;
             padding-left: 3px!important;
             border-radius: 2px!important;
             color: #3486D7 !important;
         }
-        #activitySearch .row-header .input-group .input-group__details{
-            display: none
+        #activityHeader .row-header .input-group .input-group__details{
+            display: none!important;
         }
-        #activitySearch .row-header .keywordsSearch label{
-            top: 0px!important
+        #activityHeader .row-header .keywordsSearch label{
+            top: 0px!important;
+            padding-left: 10px;
         }
         .location_week
         {
@@ -3901,6 +4151,15 @@
         .kanbanClass{
             margin: auto;
             font-size: 14px;
+        }
+        .checkbox_kanban_1,.checkbox_kanban_2,.checkbox_kanban_3,.checkbox_kanban_4{
+            margin:auto;
+        }
+        .ellipsisWeekClass{
+            white-space: nowrap; 
+            width: 90%; 
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
     </style>
 

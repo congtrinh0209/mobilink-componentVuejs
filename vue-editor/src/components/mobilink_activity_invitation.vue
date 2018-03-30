@@ -263,11 +263,14 @@
                     <v-card class="pl-2 pr-1">
                         <v-card-text class="px-0 pt-0">
                             <v-layout row wrap class="mx-0">
-                                <v-flex class="layout wrap" v-if="showAdd2">
+                                <v-flex class="layout wrap" >
                                     <v-flex xs12 sm8>
-                                        <v-select class="selectBoder pt-3"
+                                        <v-select class="selectBoder pt-3" id="selectContact"
                                         placeholder="Cá nhân/ tổ chức theo danh bạ"
                                         v-bind:items="contactItems"
+                                        @input="eventInput($event)"
+                                        hide-selected
+                                        tags
                                         v-model="contact"
                                         item-text="fullName"
                                         item-value="contactId"
@@ -526,8 +529,8 @@
             
             initInvitation: function(){
                 var vm = this;
-                /*vm.userId = 108;*/
-                vm.userId = themeDisplay.getUserId();
+                vm.userId = 108;
+                // vm.userId = themeDisplay.getUserId();
                 /** */
                 vm.getWorkingUnit();
                 vm.getUserContact();
@@ -825,13 +828,13 @@
                         presenterPostUser = 1
                     } else {presenterPostUser = 0};
                     dataPostInvitation.append('invitationType', 2);
-                    dataPostInvitation.append('fullName', vm.contact.fullName);
-                    dataPostInvitation.append('telNo', vm.contact.telNo);
+                    dataPostInvitation.append('fullName', vm.contact[0].fullName);
+                    dataPostInvitation.append('telNo', vm.contact[0].telNo);
                     dataPostInvitation.append('presenter', presenterPostUser);
                     if(vm.contact.userMappingId){
-                        dataPostInvitation.append('toUserId', vm.contact.userMappingId);
+                        dataPostInvitation.append('toUserId', vm.contact[0].userMappingId);
                     } else {
-                        dataPostInvitation.append('email', vm.contact.email);
+                        dataPostInvitation.append('email', vm.contact[0].email);
                     }
                 }
                 
@@ -960,20 +963,40 @@
 
                 vm.dialog_add_contact = true
             },
-
+            eventInput: function(event){
+                var vm = this;
+                console.log(event);
+                vm.contact = [];
+                console.log("run input");
+                setTimeout(function(){
+                    if(event.length!=0){
+                        vm.contact = [event[event.length -1]];
+                    }else {vm.contact= []}            
+                },200)
+            },
             addUserContact:function(){
                 var vm = this;
+                
                 var contactList = vm.contactItems;
                 var checkContact = true;
                 for(var key in contactList){
-                    if(vm.contact.contactId == contactList[key].contactId){
-                        checkContact = false;
-                    }
+                    if(typeof(vm.contact[0]) == 'object'){
+                        if(vm.contact[0].contactId == contactList[key].contactId){
+                            checkContact = false;
+                        }
+                    } 
+                    
                 };
                 if(checkContact){
-                    vm.dialog_add_contact = true;
-                    vm.fullNameCot = vm.contact;
-                    
+                    setTimeout(function(){
+                        console.log(vm);
+                        vm.dialog_add_contact = true;
+                        setTimeout(function(){
+                            console.log(vm.contact);
+                            vm.fullNameCot = vm.contact[0];
+                            console.log(vm.fullNameCot)
+                        },100);
+                    },200)
                 } else {
                     vm.postInvitation('UserContact')
                 };
@@ -1166,17 +1189,7 @@
                     vm.show_alert('error','Thêm mới giấy mời thất bại')
                 });
                 console.log("run add contact invitation")
-            },
-            eventChange: function(event){
-                var vm = this;
-                console.log(vm);
-                vm.contact = null;
-                console.log("run change");
-                console.log(event);
-                vm.contact = event
-                
             }
-  
         }
 
     }
@@ -1259,7 +1272,9 @@
     #activity_invitation .progessLoading{
         text-align: center
     }
-
+    #activity_invitation .input-group .input-group--selection-controls{
+        display: none!important;
+    }
     
 </style>
 

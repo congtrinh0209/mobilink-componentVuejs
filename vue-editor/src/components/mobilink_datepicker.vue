@@ -175,7 +175,7 @@ export default {
   },
   computed: {
     translation () {
-      return Languages[this.lang] || Languages['en']
+      return Languages[this.lang] || Languages['vi']
     },
     innerPlaceholder () {
       return (
