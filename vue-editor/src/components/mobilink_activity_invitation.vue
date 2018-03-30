@@ -271,12 +271,10 @@
                                         v-model="contact"
                                         item-text="fullName"
                                         item-value="contactId"
-                                        autocomplete
                                         return-object
-                                        combobox
-                                        
+                                        autocomplete
                                         clearable
-                                        ></v-select>
+                                    ></v-select>
                                         
                                     </v-flex>
                                     <toggle-button class="mx-1 mt-4"
@@ -525,10 +523,11 @@
             }
         },
         methods: {
+            
             initInvitation: function(){
                 var vm = this;
-                vm.userId = 108;
-                // vm.userId = themeDisplay.getUserId();
+                /*vm.userId = 108;*/
+                vm.userId = themeDisplay.getUserId();
                 /** */
                 vm.getWorkingUnit();
                 vm.getUserContact();
@@ -967,7 +966,7 @@
                 var contactList = vm.contactItems;
                 var checkContact = true;
                 for(var key in contactList){
-                    if(vm.contact == contactList[key].fullName){
+                    if(vm.contact.contactId == contactList[key].contactId){
                         checkContact = false;
                     }
                 };
@@ -977,7 +976,8 @@
                     
                 } else {
                     vm.postInvitation('UserContact')
-                }
+                };
+                
             },
             /** */
             checkAvailable: function(typeCheck){

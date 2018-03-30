@@ -190,7 +190,7 @@
                             <v-layout row wrap class="mx-0">
                                 <v-flex class="layout wrap" v-if="showAdd2">
                                     <v-flex xs12 sm8>
-                                        <v-select class="selectBoder pt-3" id="selectContact"
+                                        <v-select class="selectBoder pt-3"
                                         placeholder="Cá nhân/ tổ chức theo danh bạ"
                                         :items="contactItemsTask"
                                         v-model="contact"
@@ -385,7 +385,7 @@
                 text_success:'Cập nhật dữ liệu thành công',
                 pointerEvent: 'pointerEvent',
                 dialog_loading: false,
-                // 
+                
                 fullNameCot:'',
                 emailCot:'',
                 telNoCot:'',
@@ -835,7 +835,7 @@
                 var contactList = vm.contactItemsTask;
                 var checkContact = true;
                 for(var key in contactList){
-                    if(vm.contact == contactList[key].fullName){
+                    if(vm.contact.contactId == contactList[key].contactId){
                         checkContact = false;
                     }
                 };
