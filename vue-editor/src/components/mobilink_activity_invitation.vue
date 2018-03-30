@@ -1,17 +1,7 @@
 <template>
 
     <div id="activity_invitation">
-        <!-- <v-dialog v-model="dialog_remove" persistent max-width="500px">
-            <v-card>
-                <v-card-title class="headline">Xác nhận xóa giấy mời?</v-card-title>
-                <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn color="green darken-1" flat @click.native="dialog_remove = false">Hủy</v-btn>
-                    <v-btn color="green darken-1" flat @click.native="dialog_remove = false">Xóa</v-btn>
-                </v-card-actions>
-            </v-card>
-        </v-dialog> -->
-        
+                
         <v-dialog class="application theme--light progessLoading" v-model="dialog_loading" persistent max-width="50px">
             <v-card>
                 <v-progress-circular v-bind:size="25" indeterminate color="primary"></v-progress-circular>
@@ -19,7 +9,6 @@
                 
         </v-dialog>
 
-        
         <v-alert type="success" icon="check_circle" class="alertInvitation" transition="slide-y-transition" v-model="alertSuccess">
             {{text_success}}
         </v-alert>
@@ -277,11 +266,10 @@
                                         return-object
                                         autocomplete
                                         clearable
-                                    ></v-select>
-                                        
+                                        ></v-select>
                                     </v-flex>
+
                                     <toggle-button class="mx-1 mt-4"
-                                    
                                     v-model="presenterAddUser"
                                     title_checked = "Thành viên"
                                     title_unchecked = "Theo dõi"
@@ -301,13 +289,7 @@
                                             </v-card-title>
 
                                             <v-card-text>
-                                                <!-- <jx-mobilink-activity-contact
-                                                ref="activity_contact_ref"
-                                                :group_id="group_id"
-                                                :end_point= "end_point" 
-                                                :name="contactInput"
-                                                @add-contact = 'addContact'
-                                                ></jx-mobilink-activity-contact> -->
+                                                
                                                 <!-- Template activity add contact --> 
                                                 <v-form v-model="valid" ref="form" lazy-validation >
                                                     <v-layout wrap >
@@ -855,7 +837,7 @@
                         setTimeout(function(){
                             vm.getInvitation();
                             vm.dialog_loading = false;
-                            vm.show_alert('success','Thêm mới giấy mời thành công');
+                            vm.show_alert('success','Thêm giấy mời thành công');
                         },3000) ;
                         vm.valid = false;
                         if(type == 'GROUP'){
@@ -878,18 +860,18 @@
                             vm.employee = ''
                         };
                         if(type == 'UserContact'){
-                            var contactAdded = vm.contact.contactId;
+                            var contactAdded = vm.contact[0].contactId.contactId;
                             var contactAfAdded = vm.contactItems.filter(function(item) {
                                 return item.contactId != contactAdded;
                             });
                             vm.contactItems = contactAfAdded;
-                            vm.contact = '';
+                            vm.contact = [];
                         };
                         
                         
                     })
                     .catch(function (error) {
-                        vm.show_alert('error','Thêm mới giấy mời thất bại')
+                        vm.show_alert('error','Thêm giấy mời thất bại')
                     })
                 }
                 

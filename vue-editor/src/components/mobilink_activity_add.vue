@@ -118,30 +118,12 @@
                         clearable
                     ></v-select>
                 </v-flex>
-                <!--  -->
-                <v-flex xs12 sm2 class="pl-3">
-                    <v-subheader class="px-0">Quy trình </v-subheader>
-                </v-flex>
-                <v-flex xs12 sm4>
-                    <v-select
-                        v-bind:items="processItems"
-                        v-model="process"
-                        placeholder="Chọn quy trình"
-                        clearable
-                        item-text="subject"
-                        item-value="activityId"
-                        @change="chooseProcessEvent"
-                        autocomplete
-                        return-object
-                        hide-selected
-                    ></v-select>
-                </v-flex>
 
                 <!--  -->
                 <v-flex xs12 sm2>
                     <v-subheader class="px-0">Lĩnh vực/ thẻ nhãn </v-subheader>
                 </v-flex>
-                <v-flex xs12 sm10>
+                <v-flex xs12 sm4>
                     <v-select
                         v-bind:items="labelItems"
                         v-model="label"
@@ -245,13 +227,6 @@
                         hide-selected
                     ></v-select>
                 </v-flex>
-                
-                <!--  -->
-                <v-flex xs12 sm2></v-flex>
-                <v-flex xs12 sm4>
-                    <v-checkbox v-bind:label="`Có ghi lịch`" v-model="noteCalendard"></v-checkbox>
-                </v-flex>
-                <v-flex xs12 sm6></v-flex>
                 <!--  -->
                 <v-flex xs12 sm2>
                     <v-subheader class="px-0">Loại nhiệm vụ </v-subheader>
@@ -270,24 +245,9 @@
                     ></v-select>
                 </v-flex>
                 <!--  -->
-                <v-flex xs12 sm2 class="pl-2">
-                    <v-subheader class="px-0">Quy trình </v-subheader>
+                <v-flex xs12 sm6> 
+                    <v-checkbox v-bind:label="`Có ghi lịch`" v-model="noteCalendard"></v-checkbox>
                 </v-flex>
-                <v-flex xs12 sm4 class="pl-2">
-                    <v-select
-                        v-bind:items="processItems"
-                        v-model="process"
-                        clearable
-                        placeholder="Chọn quy trình"
-                        @change="chooseProcessTask"
-                        item-text="subject"
-                        item-value="activityId"
-                        autocomplete
-                        return-object
-                        hide-selected
-                    ></v-select>
-                </v-flex>
-
                 
                 <!--  -->
                 <v-flex xs12 sm2>
@@ -1026,112 +986,7 @@
                 }
                 return date
             },
-            /**Choose process add event */
-            chooseProcessEvent: function(){
-                var vm = this;   
-                const configChooseProcess = {
-                    headers: {
-                        'groupId': vm.group_id
-                    }
-                };
-                setTimeout(function(){
 
-                    /* Load data quy trình đã chọn*/
-                    if(vm.process){
-                        axios.get( vm.end_point + 'activities/'+ vm.process.activityId, configChooseProcess)
-                        .then(function (response) {
-                            var serializable = response.data;
-                            vm.templateNo = serializable.templateNo; 
-                            /* console.log('templateNo: '+ vm.templateNo);*/
-                            var arrParticipators = [];
-                            for (var key in serializable.participators) {
-                                arrParticipators.push(
-                                    serializable.participators[key].workingUnitId,
-                                )
-                                
-                            };
-
-                            vm.topic = serializable.subject;
-                            vm.hostingId = {workingUnitId:serializable.hostingId, name: serializable.hosting };
-                            vm.manager = {employeeId:serializable.managerId,fullName: serializable.managerName };
-                            
-                            vm.location = {locationId:serializable.locationId,location: serializable.location, geolocation:serializable.geolocation };
-                            vm.content = serializable.description;
-                            /* vm.contact = {itemCode:serializable.contact.contactId,itemName: serializable.contact.fullname};*/
-                        })
-                        .catch(function (error) {
-                            console.log(error)
-                        })
-                    }
-                    
-                },1000);
-                  
-            },
-            /**End */
-
-            /**Choose process add task */
-            chooseProcessTask: function(){
-                var vm = this;   
-                const configChooseProcess = {
-                    headers: {
-                        'groupId': vm.group_id
-                    }
-                };
-                setTimeout(function(){
-                    /* Load data quy trình đã chọn*/
-                    if(vm.process){
-                        axios.get( vm.end_point + 'activities/'+ vm.process.activityId, configChooseProcess)
-                        .then(function (response) {
-                            var serializable = response.data;
-                            vm.templateNo = serializable.templateNo; 
-
-                            vm.taskname = serializable.subject;
-                            vm.hostingId = {workingUnitId:serializable.hostingId,name: serializable.hosting };
-                            vm.manager = {employeeId:serializable.managerId,fullName: serializable.managerName };
-                            vm.noteCalendard = serializable.onCalendar;
-                            
-                            vm.content = serializable.description;
-                            /*vm.contact = {itemCode:serializable.contact.contactId,itemName: serializable.contact.fullname};*/
-                        })
-                        .catch(function (error) {
-                            console.log(error)
-                        })
-                    }
-                    
-                },1000);
-                  
-            },
-            /**End */
-
-            /**Choose process add ticket */
-            chooseProcessTicket: function(){
-                var vm = this;   
-                const configChooseTicket = {
-                    headers: {
-                        'groupId': vm.group_id
-                    }
-                };
-                setTimeout(function(){
-
-                    /* Load data quy trình đã chọn*/
-                    if(vm.process){
-                        axios.get( vm.end_point + 'activities/'+ vm.process.activityId, configChooseTicket)
-                        .then(function (response) {
-                            var serializable = response.data;
-                            vm.templateNo = serializable.templateNo; 
-                            vm.topicRequest = serializable.subject;
-                            vm.hostingId = {workingUnitId:serializable.hostingId,name: serializable.hosting };
-                            vm.contentRequest = serializable.description;
-    
-                        })
-                        .catch(function (error) {
-                            console.log(error)
-                        })
-                    }   
-
-                },1000);
-                  
-            },
             /**End */
             submitAddEvents: function () {
                 if (this.$refs.form.validate()) {
@@ -1154,7 +1009,7 @@
                     paramsAddEvent.append('subject', vm.topic?vm.topic:'')
                     paramsAddEvent.append('hostingId', vm.hostingId?vm.hostingId.workingUnitId:'')
                     paramsAddEvent.append('hosting', vm.hostingId?vm.hostingId.name:'')
-                    paramsAddEvent.append('managerId', vm.manager?vm.manager.employeeId:'')
+                    paramsAddEvent.append('leaderId', vm.manager?vm.manager.employeeId:'')
                     paramsAddEvent.append('labelId', vm.label?vm.label.labelId:'')
 
                     paramsAddEvent.append('startDate', startDateEvent)
@@ -1232,7 +1087,7 @@
                     paramsAddTask.append('subject', vm.taskname?vm.taskname:"")
                     paramsAddTask.append('hostingId', vm.hostingId?vm.hostingId.workingUnitId:"")
                     paramsAddTask.append('hosting', vm.hostingId?vm.hostingId.name:'')
-                    paramsAddTask.append('managerId', vm.manager?vm.manager.employeeId:"")
+                    paramsAddTask.append('leaderId', vm.manager?vm.manager.employeeId:"")
                     
                     paramsAddTask.append('onCalendar', vm.noteCalendard?vm.noteCalendard: false)
                     paramsAddTask.append('startDate', startDateTask)
@@ -1314,7 +1169,7 @@
                     paramsAddRequest.append('onCalendar', true)
                     paramsAddRequest.append('hostingId', vm.hostingId?vm.hostingId.workingUnitId:"")
                     paramsAddRequest.append('hosting', vm.hostingId?vm.hostingId.name:'')
-                    /*paramsAddRequest.append('managerId', vm.manager?vm.manager.employeeId:"")
+                    /*paramsAddRequest.append('leaderId', vm.manager?vm.manager.employeeId:"")
                     paramsAddRequest.append('startDate', startDateTicket)
                     paramsAddRequest.append('endDate', endDateTicket)*/
                     paramsAddRequest.append('description', vm.contentRequest?vm.contentRequest:"")

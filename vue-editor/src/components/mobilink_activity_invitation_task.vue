@@ -1,14 +1,50 @@
 <template>
     <div id="activity_invitation_task">
+        <v-dialog class="application theme--light progessLoading" v-model="dialog_loading" persistent max-width="50px">
+            <v-card>
+                <v-progress-circular v-bind:size="25" indeterminate color="primary"></v-progress-circular>
+            </v-card>
+                
+        </v-dialog>
+
+        <v-alert type="success" icon="check_circle" class="alertInvitation" transition="slide-y-transition" v-model="alertSuccess">
+            {{text_success}}
+        </v-alert>
+        <v-alert type="error" icon="check_circle" class="alertInvitation" transition="slide-y-transition" v-model="alertError">
+            {{text_error}}
+        </v-alert>
+
         <div style="position: relative; overflow: hidden;">
             <v-toolbar
                 absolute
                 color="teal lighten-3"
                 dark
-                
             >
-                <v-toolbar-title class="ml-3">Giao thực hiện/ phối hợp</v-toolbar-title>
+                <div class="ml-2">Thành phần: {{availableCount}}/ {{invitationCount}}  sẵn sàng</div>
                 <v-spacer></v-spacer>
+                
+                <v-flex v-if="mineInv">
+                    <div class="right">
+                        <v-tooltip top>
+                            <v-btn icon slot="activator" class="text-white mx-0 my-0"  @click.stop="showAddNote(invitationUserId,userIdNote)">
+                                <v-icon class="iconCmm" >comment</v-icon>
+                            </v-btn>
+                            <span :v-model="userIdNote">{{userIdNote}}</span>
+                        </v-tooltip>
+                        
+                        <v-btn class="mx-0" small color="success" v-on:click.stop="checkAvailable('ready')" style="padding-left: 6px;padding-right: 6px">
+                            <v-icon style="color: white" v-if="typeAvailable == 1" >check</v-icon>
+                            Sẵn sàng
+                        </v-btn>
+                        <v-btn small class="text-white mx-1" v-on:click.stop="checkAvailable('busy')" color="error">
+                            <v-icon style="color: white" v-if="typeAvailable == 2" >check</v-icon>
+                            Tôi bận
+                        </v-btn>
+                        
+                        
+                    </div>
+                    
+                </v-flex>
                 
             </v-toolbar>
             <!-- Phần đơn vị/ Nhóm trong cơ quan-->
@@ -16,7 +52,10 @@
                 <v-expansion-panel-content value="true">
                     <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0">
                         <div>Đơn vị/ Nhóm trong cơ quan</div>
-                        <v-btn fab small grey lighten-3 class="btn-add mx-0 my-0" v-on:click.stop="show_Add1Task" v-if="permission_prop == 'manager'|| permission_prop == 'owner'">
+                        <v-btn fab small grey lighten-3 class="btn-add mx-0 my-0" 
+                            v-if="permission_prop == 'manager'|| permission_prop == 'owner'"
+                            v-on:click.stop="show_Add1Task"
+                        >
                             <v-icon grey darken-4>add</v-icon>
                         </v-btn>
                     </div>
@@ -66,7 +105,7 @@
                                                             </v-flex>
                                                             <v-flex xs6 sm3>
                                                                 <div class="right">
-                                                                    <v-chip label outline color="primary" class="mr-2 mt-2">{{item.role.statistic.invitation}}</v-chip>
+                                                                    <v-chip v-if="opening_state_prop == 0" label outline color="primary" class="mr-2 mt-2">{{item.role.statistic.available}}/{{item.role.statistic.invitation}}</v-chip>
                                                                     
                                                                     <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager' || permission_prop == 'owner'" 
                                                                     @click.stop="updateInvitationTask('DELETE',item.role.activityInvitationId,index,itemInvGroupTask)">
@@ -135,21 +174,15 @@
 
                                                             <v-flex xs12 sm6 class="pt-1">
                                                                 <div class="right">
-                                                                    <!-- <v-tooltip top>
+                                                                    <v-tooltip top>
                                                                         <v-btn icon slot="activator" class="text-white mx-0 my-0" >
                                                                             <v-icon class="iconCmm" >comment</v-icon>
                                                                         </v-btn>
                                                                         <span>{{subItem.userNote}}</span>
-                                                                    </v-tooltip> -->
+                                                                    </v-tooltip>
                                                                     
-                                                                    <!-- <span v-if="opening_state_prop == 0" style="color:green" class="mr-2" v-html="bindAvailableText(subItem.available)"></span>
-                                                                    <v-btn v-if="opening_state_prop == 1 || opening_state_prop == 2"
-                                                                    :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
-                                                                     v-on:click.stop="managerCheckin(subItem)" outline small class="text-white mx-1" color="indigo">
-                                                                        <v-icon color="indigo" v-if="subItem.checkin" >check</v-icon>
-                                                                        Có mặt
-                                                                    </v-btn> -->
-
+                                                                    <span style="color:green" class="mr-2" v-html="bindAvailableText(subItem.available)"></span>
+                                                                    
                                                                     <v-btn v-if="permission_prop=='manager' ||permission_prop=='owner' || item.user_leader == userId" icon title="Xóa" class="mx-0"
                                                                      @click.stop="updateInvitationTask('DELETE',subItem.activityInvitationId,index,item.items)">
                                                                         <v-icon color="red darken-3">clear</v-icon>
@@ -190,21 +223,22 @@
                             <v-layout row wrap class="mx-0">
                                 <v-flex class="layout wrap" v-if="showAdd2">
                                     <v-flex xs12 sm8>
-                                        <v-select class="selectBoder pt-3"
+                                        <v-select class="selectBoder pt-3" id="selectContact"
                                         placeholder="Cá nhân/ tổ chức theo danh bạ"
-                                        :items="contactItemsTask"
+                                        v-bind:items="contactItemsTask"
+                                        @input="eventInput($event)"
+                                        hide-selected
+                                        tags
                                         v-model="contact"
                                         item-text="fullName"
                                         item-value="contactId"
-                                        autocomplete
                                         return-object
-                                        
+                                        autocomplete
                                         clearable
                                         ></v-select>
                                         
                                     </v-flex>
                                     <toggle-button class="mx-1 mt-4"
-                                    
                                     v-model="presenterAddUser"
                                     title_checked = "Thực hiện"
                                     title_unchecked = "Phối hợp"
@@ -216,7 +250,7 @@
                                         Giao
                                     </v-btn>
 
-                                    <!-- Phần dialog thêm mới liên lạc postInvitationTask('UserContact')-->
+                                    <!-- Phần dialog thêm mới liên lạc -->
                                     <v-dialog v-model="dialog_add_contact" persistent max-width="700px">
                                         <v-card>
                                             <v-card-title style="background-color: rgb(214, 233, 247)">
@@ -269,21 +303,14 @@
                                                             
                                                             <v-flex xs12 sm6>
                                                                 <div class="right">
-                                                                    <!-- <v-tooltip top>
+                                                                    <v-tooltip top>
                                                                         <v-btn icon slot="activator" class="text-white mx-0 my-0" >
                                                                             <v-icon class="iconCmm" >comment</v-icon>
                                                                         </v-btn>
                                                                         <span>{{item.userNote}}</span>
                                                                     </v-tooltip>
                                                                     
-                                                                    <span v-if="opening_state_prop == 0" class="mr-2" style="color:green" v-html="bindAvailableText(item.available)"></span>
-
-                                                                    <v-btn v-if="opening_state_prop == 1 || opening_state_prop == 2" 
-                                                                    :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
-                                                                    v-on:click.stop="managerCheckin(item)"  outline small class="text-white mx-1" color="indigo">
-                                                                        <v-icon color="indigo" v-if="item.checkin" >check</v-icon>
-                                                                        Có mặt
-                                                                    </v-btn> -->
+                                                                    <span class="mr-2" style="color:green" v-html="bindAvailableText(item.available)"></span>
 
                                                                     <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager'|| permission_prop == 'owner'"
                                                                      @click.stop="updateInvitationTask('DELETE',item.activityInvitationId,index,itemInvContactTask)">
@@ -395,8 +422,8 @@
         methods: {
             initInvitationTask: function(){
                 var vm = this;
-                /*vm.userId = 108;*/
-                vm.userId = themeDisplay.getUserId();
+                vm.userId = 108;
+                /* vm.userId = themeDisplay.getUserId();*/
                 /** */
                 vm.getWorkingUnitTask();
                 vm.getUserContact();
@@ -500,7 +527,7 @@
                 } else {return true}
             },
 
-            /*bindAvailableText: function(item){
+            bindAvailableText: function(item){
                 if(item == 0) {
                     return "Chưa xác nhận"
                 } else if(item == 1){return "Sẵn sàng"}
@@ -508,7 +535,7 @@
                     return "Bận"
                 }
                 
-            },*/
+            },
             /**get workingUnit */
             getWorkingUnitTask: function(){
                 var vm = this;
@@ -694,13 +721,13 @@
                         presenterPostUser = 1
                     } else {presenterPostUser = 0};
                     dataPostInvitation.append('invitationType', 2);
-                    dataPostInvitation.append('fullName', vm.contact.fullName);
-                    dataPostInvitation.append('telNo', vm.contact.telNo);
+                    dataPostInvitation.append('fullName', vm.contact[0].fullName);
+                    dataPostInvitation.append('telNo', vm.contact[0].telNo);
                     dataPostInvitation.append('presenter', presenterPostUser);
                     if(vm.contact.userMappingId){
-                        dataPostInvitation.append('toUserId', vm.contact.userMappingId);
+                        dataPostInvitation.append('toUserId', vm.contact[0].userMappingId);
                     } else {
-                        dataPostInvitation.append('email', vm.contact.email);
+                        dataPostInvitation.append('email', vm.contact[0].email);
                     }
                 }
                 
@@ -721,7 +748,7 @@
                         setTimeout(function(){
                             vm.getInvitationTask();
                             vm.dialog_loading = false;
-                            vm.show_alert('success','Thêm mới giấy mời thành công');
+                            vm.show_alert('success','Giao nhiệm vụ thành công');
                         },3000) ;
                         vm.valid = false;
                         if(type == 'GROUP'){
@@ -744,18 +771,18 @@
                             vm.employeeTask = ''
                         };
                         if(type == 'UserContact'){
-                            var contactAdded = vm.contact.contactId;
+                            var contactAdded = vm.contact[0].contactId.contactId;
                             var contactAfAdded = vm.contactItemsTask.filter(function(item) {
                                 return item.contactId != contactAdded;
                             });
                             vm.contactItemsTask = contactAfAdded;
-                            vm.contact = '';
+                            vm.contact = [];
                         };
                         
                         
                     })
                     .catch(function (error) {
-                        vm.show_alert('error','Thêm mới giấy mời thất bại')
+                        vm.show_alert('error','Giao nhiệm vụ thất bại')
                     })
                 }
                 
@@ -829,23 +856,38 @@
 
                 vm.dialog_add_contact = true
             },
-
+            eventInput: function(event){
+                var vm = this;
+                vm.contact = [];
+                setTimeout(function(){
+                    if(event.length!=0){
+                        vm.contact = [event[event.length -1]];
+                    }else {vm.contact= []}            
+                },200)
+            },
             addUserContactTask:function(){
                 var vm = this;
                 var contactList = vm.contactItemsTask;
                 var checkContact = true;
                 for(var key in contactList){
-                    if(vm.contact.contactId == contactList[key].contactId){
-                        checkContact = false;
-                    }
+                    if(typeof(vm.contact[0]) == 'object'){
+                        if(vm.contact[0].contactId == contactList[key].contactId){
+                            checkContact = false;
+                        }
+                    } 
+                    
                 };
                 if(checkContact){
-                    vm.dialog_add_contact = true;
-                    vm.fullNameCot = vm.contact;
-                    
+                    setTimeout(function(){
+                        vm.dialog_add_contact = true;
+                        setTimeout(function(){
+                            vm.fullNameCot = vm.contact[0];
+                        },100);
+                    },200)
                 } else {
                     vm.postInvitationTask('UserContact')
-                }
+                };
+                
             },
             /** */
             checkAvailable: function(typeCheck){
@@ -1048,53 +1090,6 @@
 	   -webkit-flex: 1; /* Safari 6.1+ */
 	   flex: 1;
 	}
-    /* #activity_invitation_task_task .toolbar__title{
-        font-size: 13px!important;
-    }
-    #activity_invitation_task_task .btn__content {
-        padding-left: 0px!important;
-        padding-right: 0px!important;
-    }
-    #activity_invitation_task_task .expansion-panel__header{
-        padding-left: 10px!important;
-        padding-right: 10px!important;
-    }
-    #activity_invitation_task_task .list__tile{
-        padding: 0!important;
-    }
-    #activity_invitation_task_task .list__tile__title{
-
-        height: 100%!important;
-    }
-    #activity_invitation_task_task .list__tile__content{
-        overflow: visible!important;
-    }
-    #activity_invitation_task_task .item_group:hover{
-        color: blue;
-        cursor: pointer;
-    }
-    #activity_invitation_task_task .chip {
-        max-height: 30px!important
-    }
-    #activity_invitation_task_task .selectBoder .input-group__input{
-        border: 1px solid #1976D2 ;
-        border-radius: 4px;
-        padding-left: 8px;
-    }
-    #activity_invitation_task_task .selectBoder .input-group__details {
-        display: none
-    }
-    #activity_invitation_task_task  .iconCmm {
-        color: #1976D2
-    }
-    #activity_invitation_task_task .invBtn{
-        margin-top: 19px!important;
-    }
-    #activity_invitation_task_task .btn-add{
-        width: 30px;
-        height: 30px;
-    } */
-
 
     #activity_invitation_task .alertInvitation{
         width: 30%!important;
