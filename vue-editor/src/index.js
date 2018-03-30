@@ -5,6 +5,7 @@ import UploaderUnsupport from './components/unsupport.vue'
 import UploaderList from './components/list.vue'
 import UploaderFiles from './components/files.vue'
 import UploaderFile from './components/file.vue'
+import CalendarPanel from './components/calendar-panel.vue'
 import JxAce from './components/ace.vue'
 import JxEditor from './components/editor.vue'
 import JxRate from './components/rate.vue'
@@ -32,7 +33,7 @@ import JxMobilinkSliderColor from './components/slider_color.vue'
 import VuejsDialog from 'vuejs-dialog'
 import FullCalendar from './components/fullCalendar.vue'
 import EventCard from './components/eventCard.vue'
-import DatePicker from 'vue2-datepicker'
+import DatePicker from './components/mobilink_datepicker.vue'
 import MultiLanguage from './common/vue-multilanguage'
 import language from './lang/language'
 
@@ -60,6 +61,7 @@ function install (Vue) {
   Vue.component(UploaderList.name, UploaderList)
   Vue.component(UploaderFiles.name, UploaderFiles)
   Vue.component(UploaderFile.name, UploaderFile)
+  Vue.component(CalendarPanel.name, CalendarPanel)
   Vue.component(JxAce.name, JxAce)
   Vue.component(JxEditor.name, JxEditor)
   Vue.component(JxRate.name, JxRate)

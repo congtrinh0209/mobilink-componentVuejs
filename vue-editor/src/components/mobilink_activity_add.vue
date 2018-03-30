@@ -27,7 +27,7 @@
                     @confirm = "changeDate" 
                     v-bind:not-before="timeStartMin" 
                     :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" 
-                    lang="en" type="datetime" format="dd/MM/yyyy HH:mm" 
+                    lang="vi" type="datetime" format="dd/MM/yyyy HH:mm" 
                     confirm="true"
                     :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
                     required
@@ -43,7 +43,7 @@
                     placeholder="Thời gian kết thúc" 
                     v-bind:not-before="timeEndMin" 
                     :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" 
-                    lang="en" type="datetime" format="dd/MM/yyyy HH:mm" 
+                    lang="vi" type="datetime" format="dd/MM/yyyy HH:mm" 
                     confirm="true"
                     :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
                     required
@@ -196,7 +196,7 @@
                     @confirm = "changeDate" 
                     v-bind:not-before="timeStartMin" 
                     :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" 
-                    lang="en" type="datetime" format="dd/MM/yyyy HH:mm" 
+                    lang="vi" type="datetime" format="dd/MM/yyyy HH:mm" 
                     confirm="true"
                     :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
                     required
@@ -207,7 +207,9 @@
                     <v-subheader class="px-0">Thời hạn hoàn thành </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4>
-                    <date-picker class="mt-3" v-model="timeEnd" placeholder="Thời hạn hoàn thành" v-bind:not-before="timeEndMin" :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" lang="en" type="datetime" format="dd/MM/yyyy HH:mm" confirm="true"></date-picker>
+                    <date-picker class="mt-3" v-model="timeEnd" placeholder="Thời hạn hoàn thành" 
+                    v-bind:not-before="timeEndMin" :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" lang="vi" 
+                    type="datetime" format="dd/MM/yyyy HH:mm" confirm="true"></date-picker>
                 </v-flex>
                 <!--  -->
                 <v-flex xs12 sm2>
@@ -401,14 +403,14 @@
                     <v-subheader class="px-0">Ngày yêu cầu </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4>
-                    <date-picker class="mt-2" v-model="timeStart" placeholder="Ngày yêu cầu" @confirm = "changeDate" v-bind:not-before="timeStartMin" :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" lang="en" type="datetime" format="dd/MM/yyyy HH:mm" confirm="true"></date-picker>
+                    <date-picker class="mt-2" v-model="timeStart" placeholder="Ngày yêu cầu" @confirm = "changeDate" v-bind:not-before="timeStartMin" :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" lang="vi" type="datetime" format="dd/MM/yyyy HH:mm" confirm="true"></date-picker>
                 </v-flex> -->
                 <!--  -->
                 <!-- <v-flex xs12 sm2 class="pl-4">
                     <v-subheader class="px-0">Hạn xử lý </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4>
-                    <date-picker class="mt-2" v-model="timeEnd" placeholder="Hạn xử lý" v-bind:not-before="timeEndMin" :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" lang="en" type="datetime" format="dd/MM/yyyy HH:mm" confirm="true"></date-picker>
+                    <date-picker class="mt-2" v-model="timeEnd" placeholder="Hạn xử lý" v-bind:not-before="timeEndMin" :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" lang="vi" type="datetime" format="dd/MM/yyyy HH:mm" confirm="true"></date-picker>
                 </v-flex> -->
                 <!--  -->
                 <v-flex xs12 sm2>
