@@ -6,7 +6,7 @@
                 <v-subheader class="px-0">Nhóm theo: </v-subheader>
             </v-flex>
             <v-flex xs10 sm10 class="pt-2">
-                <v-radio-group class="py-0" v-model="radioGroup" row>
+                <v-radio-group class="py-0" v-model="radioGroup" row class="groupRadido">
                     <v-radio class="my-0" label="Nguồn" color="secondary"
                         value="source">
                     </v-radio>
@@ -73,7 +73,7 @@
             <v-data-table id="tableActivity" 
             :headers="mainHeaders"
             :items="mainItems"
-            item-key="hosting"
+            item-key="workingUnitId"
             hide-actions
             expand
             >
@@ -82,7 +82,7 @@
                         <td colspan="100%" class="px-0">
                             <v-card class="pl-3">
                                 <v-card-text>
-                                    {{ props.item.hosting }}
+                                    {{ props.item.name }}
                                 </v-card-text>
                             </v-card>
                         </td>
@@ -94,11 +94,12 @@
                 <template slot="expand" scope="props">
                         <v-data-table id="subTableActivity"
                         hide-headers
-                        :items="subItems"
+                        :items="subItems[props.index]"
                         item-key="activityId"
                         hide-actions
                         >
                             <template slot="items" scope="props">
+                                
                                 <tr v-bind:class="{'active': props.index%2==1}">
                                     <td class="text-xs-center py-2">{{props.index}}</td>
                                     <td class="text-xs-center py-2">{{ props.item.subject }}</td>
@@ -190,28 +191,31 @@
                     }
                 ],
 
-                mainItems: [
-                   {hosting: 'Phòng Dự án1', hostingId: 1},
-                   {hosting: 'Phòng Dự án2', hostingId: 2},
-                   {hosting: 'Phòng Dự án3', hostingId: 3},
-                   {hosting: 'Phòng Dự án4', hostingId: 4},
-                   {hosting: 'Phòng Dự án5', hostingId: 5},
-                ],
-                subItems: [
-                    { activityId: 1, subject: 'Hoạt động triển khai khoa học kỹ thuật trong XD 1',hosting: 'FDS CTCP',
+                mainItems: [],
+                subItems: [ 
+                    [{ activityId: 1, subject: 'Hoạt động triển khai khoa học kỹ thuật trong XD 1',hosting: 'FDS CTCP',
                     endDate: '20/08/2018', stateName: 'Đang diễn ra', resultNote: 'Triển khai đúng tiến độ' },
                     { activityId: 2, subject: 'Hoạt động triển khai khoa học kỹ thuật trong XD 2',hosting: 'FDS CTCP',
                     endDate: '20/08/2018', stateName: 'Đang diễn ra', resultNote: 'Triển khai đúng tiến độ' },
                     { activityId: 3, subject: 'Hoạt động triển khai khoa học kỹ thuật trong XD 3',hosting: 'FDS CTCP',
                     endDate: '20/08/2018', stateName: 'Đang diễn ra', resultNote: 'Triển khai đúng tiến độ' },
                     { activityId: 4, subject: 'Hoạt động triển khai khoa học kỹ thuật trong XD 4',hosting: 'FDS CTCP',
-                    endDate: '20/08/2018', stateName: 'Đang diễn ra', resultNote: 'Triển khai đúng tiến độ' },
-                    { activityId: 5, subject: 'Hoạt động triển khai khoa học kỹ thuật trong XD',hosting: 'FDS CTCP',
+                    endDate: '20/08/2018', stateName: 'Đang diễn ra', resultNote: 'Triển khai đúng tiến độ' }] ,
+
+                    [{ activityId: 5, subject: 'Hoạt động triển khai khoa học kỹ thuật trong XD',hosting: 'FDS CTCP',
                     endDate: '20/08/2018', stateName: 'Đang diễn ra', resultNote: 'Triển khai đúng tiến độ' },
                     { activityId: 6, subject: 'Hoạt động triển khai khoa học kỹ thuật trong XD',hosting: 'FDS CTCP',
                     endDate: '20/08/2018', stateName: 'Đang diễn ra', resultNote: 'Triển khai đúng tiến độ' },
                     { activityId: 7, subject: 'Hoạt động triển khai khoa học kỹ thuật trong XD',hosting: 'FDS CTCP',
+                    endDate: '20/08/2018', stateName: 'Đang diễn ra', resultNote: 'Triển khai đúng tiến độ' }] ,
+
+                    [{ activityId: 7, subject: 'Hoạt động triển khai khoa học kỹ thuật trong XD6',hosting: 'FDS CTCP',
                     endDate: '20/08/2018', stateName: 'Đang diễn ra', resultNote: 'Triển khai đúng tiến độ' },
+                    { activityId: 8, subject: 'Hoạt động triển khai khoa học kỹ thuật trong XD7',hosting: 'FDS CTCP',
+                    endDate: '20/08/2018', stateName: 'Đang diễn ra', resultNote: 'Triển khai đúng tiến độ' },
+                    { activityId: 9, subject: 'Hoạt động triển khai khoa học kỹ thuật trong XD8',hosting: 'FDS CTCP',
+                    endDate: '20/08/2018', stateName: 'Đang diễn ra', resultNote: 'Triển khai đúng tiến độ' }] 
+                    
                 ]
                 
             }
@@ -270,7 +274,9 @@
                                 workingUnitId: serializable.data[key].workingUnitId
                             })
                             
-                        }
+                        };
+                        vm.mainItems = vm.hostingIdItems
+
                     }
                 })
                 .catch(function (error) {
@@ -294,7 +300,13 @@
                 axios.get(url, configGetActivity).then(function (response) {
                     var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
-                        vm.activityListItems = serializable.data;
+                        // for (var key in serializable.data) {
+                        //     if(){
+                        //         vm.mainItems
+                        //     }
+
+                        // }
+                        
                         
                     }  else {
                         vm.activityListItems = [];
@@ -343,10 +355,19 @@
     }
     #activity_manager #tableActivity table thead tr th{
         border: 1px solid #ddd !important;
-        
+
     }
     #activity_manager #tableActivity table tbody td {
         border: 1px solid #ddd !important;
+    }
+    #activity_manager .groupRadido .radio{
+        max-width: 150px !important;
+    }
+    #activity_manager .groupRadido .radio label{
+        padding-left: 0!important
+    }
+    #activity_manager  .radio-group--row{
+        padding-top: 0!important
     }
 </style>
 
