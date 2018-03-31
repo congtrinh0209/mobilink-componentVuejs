@@ -6,7 +6,7 @@
                 <v-subheader class="px-0">Nhóm theo: </v-subheader>
             </v-flex>
             <v-flex xs10 sm10 class="pt-2">
-                <v-radio-group class="py-0" v-model="radioGroup" row class="groupRadido">
+                <v-radio-group class="py-0 groupRadido" v-model="radioGroup" row>
                     <v-radio class="my-0" label="Nguồn" color="secondary"
                         value="source">
                     </v-radio>
@@ -138,19 +138,26 @@
             vm.$nextTick(function () {
                 vm.getManager();
                 vm.getWorkingUnit();
+                setTimeout(function(){
+                    vm.getActivity()
+                },1000)
+                
             })
         },
         
         data () {
             return {
                 userId: '',
-                radioGroup:'',
+                activityListItems:[],
+                radioGroup:'workingUnit',
                 managerItems: [],
                 manager:'',
                 hostingIdItems:[],
                 hostingId:'',
                 timeStart:'',
                 timeEnd:'',
+                mainItems: [],
+                subItems: [],
 
                 mainHeaders: [
                     {
@@ -189,33 +196,6 @@
                         value: 'resultNote',
                         sortable: false
                     }
-                ],
-
-                mainItems: [],
-                subItems: [ 
-                    [{ activityId: 1, subject: 'Hoạt động triển khai khoa học kỹ thuật trong XD 1',hosting: 'FDS CTCP',
-                    endDate: '20/08/2018', stateName: 'Đang diễn ra', resultNote: 'Triển khai đúng tiến độ' },
-                    { activityId: 2, subject: 'Hoạt động triển khai khoa học kỹ thuật trong XD 2',hosting: 'FDS CTCP',
-                    endDate: '20/08/2018', stateName: 'Đang diễn ra', resultNote: 'Triển khai đúng tiến độ' },
-                    { activityId: 3, subject: 'Hoạt động triển khai khoa học kỹ thuật trong XD 3',hosting: 'FDS CTCP',
-                    endDate: '20/08/2018', stateName: 'Đang diễn ra', resultNote: 'Triển khai đúng tiến độ' },
-                    { activityId: 4, subject: 'Hoạt động triển khai khoa học kỹ thuật trong XD 4',hosting: 'FDS CTCP',
-                    endDate: '20/08/2018', stateName: 'Đang diễn ra', resultNote: 'Triển khai đúng tiến độ' }] ,
-
-                    [{ activityId: 5, subject: 'Hoạt động triển khai khoa học kỹ thuật trong XD',hosting: 'FDS CTCP',
-                    endDate: '20/08/2018', stateName: 'Đang diễn ra', resultNote: 'Triển khai đúng tiến độ' },
-                    { activityId: 6, subject: 'Hoạt động triển khai khoa học kỹ thuật trong XD',hosting: 'FDS CTCP',
-                    endDate: '20/08/2018', stateName: 'Đang diễn ra', resultNote: 'Triển khai đúng tiến độ' },
-                    { activityId: 7, subject: 'Hoạt động triển khai khoa học kỹ thuật trong XD',hosting: 'FDS CTCP',
-                    endDate: '20/08/2018', stateName: 'Đang diễn ra', resultNote: 'Triển khai đúng tiến độ' }] ,
-
-                    [{ activityId: 7, subject: 'Hoạt động triển khai khoa học kỹ thuật trong XD6',hosting: 'FDS CTCP',
-                    endDate: '20/08/2018', stateName: 'Đang diễn ra', resultNote: 'Triển khai đúng tiến độ' },
-                    { activityId: 8, subject: 'Hoạt động triển khai khoa học kỹ thuật trong XD7',hosting: 'FDS CTCP',
-                    endDate: '20/08/2018', stateName: 'Đang diễn ra', resultNote: 'Triển khai đúng tiến độ' },
-                    { activityId: 9, subject: 'Hoạt động triển khai khoa học kỹ thuật trong XD8',hosting: 'FDS CTCP',
-                    endDate: '20/08/2018', stateName: 'Đang diễn ra', resultNote: 'Triển khai đúng tiến độ' }] 
-                    
                 ]
                 
             }
@@ -269,13 +249,9 @@
                     var serializable = response.data
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            vm.hostingIdItems.push({
-                                name: serializable.data[key].name,
-                                workingUnitId: serializable.data[key].workingUnitId
-                            })
-                            
+                            vm.hostingIdItems.push(serializable.data[key])
                         };
-                        vm.mainItems = vm.hostingIdItems
+                        
 
                     }
                 })
@@ -300,23 +276,52 @@
                 axios.get(url, configGetActivity).then(function (response) {
                     var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
-                        // for (var key in serializable.data) {
-                        //     if(){
-                        //         vm.mainItems
-                        //     }
-
-                        // }
+                        for (var key in serializable.data) {
+                            vm.activityListItems.push(serializable.data[key])
+                        };
+                        if(vm.radioGroup=='workingUnit'){
+                            vm.getListItemGroup(vm.hostingIdItems);
+                            vm.getListSubitemGroup()
+                        } else if(vm.radioGroup=='leader') {
+                            vm.getListItemGroup(vm.managerItems);
+                            vm.getListSubitemGroup()
+                        };
                         
                         
-                    }  else {
+                    }else {
                         vm.activityListItems = [];
-
                     }
+                    console.log(vm)
                 })
                 .catch(function (error) {
                     console.log(error);
                     vm.activityListItems = [];
                 });
+            },
+            /**get list item group */
+            getListItemGroup: function(target){
+                var vm = this;
+                for(var key in target) {
+                    for(var index in vm.activityListItems){
+                        if(target[key].workingUnitId == vm.activityListItems[index].hostingId){
+                            vm.mainItems.push(target[key]);
+                            vm.subItems.push([]);
+                            break;
+                        }
+                        
+                    }
+                }
+            },
+            getListSubitemGroup: function(){
+                var vm =this;
+                for(var key in vm.mainItems) {
+                    for(var index in vm.activityListItems){
+                        if(vm.activityListItems[index].hostingId == vm.mainItems[key].workingUnitId){
+                            vm.subItems[key].push(vm.activityListItems[index]);
+                        }
+                        
+                    }
+                }
             }
         }
 
@@ -368,6 +373,10 @@
     }
     #activity_manager  .radio-group--row{
         padding-top: 0!important
+    }
+    #activity_manager #tableActivity td .card__text{
+        font-weight: bold !important;
+        padding-left: 8px !important
     }
 </style>
 
