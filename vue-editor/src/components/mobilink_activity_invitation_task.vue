@@ -423,7 +423,7 @@
             initInvitationTask: function(){
                 var vm = this;
                 vm.userId = 108;
-                /* vm.userId = themeDisplay.getUserId();*/
+                //  vm.userId = themeDisplay.getUserId();
                 /** */
                 vm.getWorkingUnitTask();
                 vm.getUserContact();

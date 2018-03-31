@@ -68,7 +68,7 @@
                 <v-flex xs12 sm2 class="pl-3">
                     <v-subheader class="px-0 pt-3">Đơn vị tổ chức/ chủ trì </v-subheader>
                 </v-flex>
-                <v-flex xs12 sm4 class="pr-2" id="hostingTxt">
+                <v-flex xs12 sm4 class="pr-2">
                     <v-select 
                         v-bind:items="hostingIdItems"
                         v-model="hostingId"
@@ -84,7 +84,7 @@
                 <v-flex xs12 sm2 class="pl-3">
                     <v-subheader class="px-0 pt-3">Người chủ trì/ phụ trách</v-subheader>
                 </v-flex>
-                <v-flex xs12 sm4 id="managerTxt">
+                <v-flex xs12 sm4>
                     <v-select 
                         v-bind:items="managerItems"
                         v-model="managerS"
