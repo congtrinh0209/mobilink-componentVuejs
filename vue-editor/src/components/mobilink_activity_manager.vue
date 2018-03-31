@@ -73,7 +73,7 @@
             <v-data-table id="tableActivity" 
             :headers="mainHeaders"
             :items="mainItems"
-            item-key="workingUnitId"
+            :item-key="getKeyGroup(radioGroup)"
             hide-actions
             expand
             >
@@ -95,25 +95,25 @@
                 </template>
 
                 <template slot="expand" scope="props">
-                        <v-data-table id="subTableActivity"
-                        hide-headers
-                        :items="subItems[props.index]"
-                        item-key="activityId"
-                        hide-actions
-                        >
-                            <template slot="items" scope="props">
-                                
-                                <tr v-bind:class="{'active': props.index%2==1}">
-                                    <td class="text-xs-center py-2">{{props.index}}</td>
-                                    <td class="text-xs-center py-2">{{ props.item.subject }}</td>
-                                    <td class="text-xs-center py-2">{{ props.item.hosting }}</td>
-                                    <td class="text-xs-center py-2">{{ props.item.endDate }}</td>
-                                    <td class="text-xs-center py-2">{{ props.item.stateName }}</td>
-                                    <td class="text-xs-center py-2">{{ props.item.resultNote }}</td>
-                                </tr>
-                                
-                            </template>
-                        </v-data-table>
+                    <v-data-table id="subTableActivity"
+                    hide-headers
+                    :items="subItems[props.index]"
+                    item-key="activityId"
+                    hide-actions
+                    >
+                        <template slot="items" scope="props">
+                            
+                            <tr v-bind:class="{'active': props.index%2==1}">
+                                <td class="text-xs-center py-2">{{props.index}}</td>
+                                <td class="text-xs-center py-2">{{ props.item.subject }}</td>
+                                <td class="text-xs-center py-2">{{ props.item.hosting }}</td>
+                                <td class="text-xs-center py-2">{{ props.item.endDate }}</td>
+                                <td class="text-xs-center py-2">{{ props.item.stateName }}</td>
+                                <td class="text-xs-center py-2">{{ props.item.resultNote }}</td>
+                            </tr>
+                            
+                        </template>
+                    </v-data-table>
                     
                 </template>
             </v-data-table>
@@ -326,6 +326,7 @@
                     }
                 }
             },
+            /**get list subItem group */
             getListSubitemGroup: function(){
                 var vm =this;
                 for(var key in vm.mainItems) {
@@ -342,6 +343,13 @@
                         
                         
                     }
+                }
+            },
+            getKeyGroup: function(radio){
+                if(radio=="workingUnit"){
+                    return 'workingUnitId'
+                } else if(radio=="leader"){
+                    return 'employeeId'
                 }
             }
         }
