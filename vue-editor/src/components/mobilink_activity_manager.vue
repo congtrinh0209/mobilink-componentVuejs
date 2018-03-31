@@ -6,7 +6,7 @@
                 <v-subheader class="px-0">Nhóm theo: </v-subheader>
             </v-flex>
             <v-flex xs10 sm10 class="pt-2">
-                <v-radio-group class="py-0 groupRadido" v-model="radioGroup" row>
+                <v-radio-group v-model="radioGroup" @change="getActivity" row class="py-0 groupRadido">
                     <v-radio class="my-0" label="Nguồn" color="secondary"
                         value="source">
                     </v-radio>
@@ -81,8 +81,11 @@
                     <tr @click="props.expanded = !props.expanded" v-bind:class="{'active': props.index%2==1}">
                         <td colspan="100%" class="px-0">
                             <v-card class="pl-3">
-                                <v-card-text>
+                                <v-card-text v-if="radioGroup=='workingUnit'">
                                     {{ props.item.name }}
+                                </v-card-text>
+                                <v-card-text v-if="radioGroup=='leader'">
+                                    Đồng chí {{ props.item.fullName }} - {{ props.item.jobTitle }}
                                 </v-card-text>
                             </v-card>
                         </td>
@@ -219,10 +222,9 @@
                     var serializable = response.data
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            vm.managerItems.push({
-                                fullName: serializable.data[key].fullName,
-                                employeeId: serializable.data[key].mappingUser?serializable.data[key].mappingUser.userId:''
-                            })
+                            vm.managerItems.push(
+                                serializable.data[key]
+                            )
                             
                         }
                     }
@@ -262,6 +264,7 @@
             /* Load data activity */
             getActivity: function(){
                 var vm = this;
+                vm.activityListItems=[];
                 var paramsGetActivity = {
                     sort:'startDate',
                     type:'TASK'
@@ -287,7 +290,6 @@
                             vm.getListSubitemGroup()
                         };
                         
-                        
                     }else {
                         vm.activityListItems = [];
                     }
@@ -301,13 +303,25 @@
             /**get list item group */
             getListItemGroup: function(target){
                 var vm = this;
+                vm.mainItems =[];
+                vm.subItems =[];
                 for(var key in target) {
                     for(var index in vm.activityListItems){
-                        if(target[key].workingUnitId == vm.activityListItems[index].hostingId){
-                            vm.mainItems.push(target[key]);
-                            vm.subItems.push([]);
-                            break;
+                        if(vm.radioGroup == "workingUnit"){
+                            if(target[key].workingUnitId == vm.activityListItems[index].hostingId){
+                                vm.mainItems.push(target[key]);
+                                vm.subItems.push([]);
+                                break;
+                            }
+                        } else if(vm.radioGroup == "leader"){
+                            if(target[key].mappingUser.userId == vm.activityListItems[index].leaderId){
+                                vm.mainItems.push(target[key]);
+                                vm.subItems.push([]);
+                                break;
+                            }
+                            
                         }
+                        
                         
                     }
                 }
@@ -316,9 +330,16 @@
                 var vm =this;
                 for(var key in vm.mainItems) {
                     for(var index in vm.activityListItems){
-                        if(vm.activityListItems[index].hostingId == vm.mainItems[key].workingUnitId){
-                            vm.subItems[key].push(vm.activityListItems[index]);
+                        if(vm.radioGroup == "workingUnit"&&vm.mainItems.length!=0){
+                            if(vm.activityListItems[index].hostingId == vm.mainItems[key].workingUnitId){
+                                vm.subItems[key].push(vm.activityListItems[index]);
+                            }
+                        } else if(vm.radioGroup == "leader"&&vm.mainItems.length!=0){
+                            if(vm.activityListItems[index].leaderId == vm.mainItems[key].mappingUser.userId){
+                                vm.subItems[key].push(vm.activityListItems[index]);
+                            }
                         }
+                        
                         
                     }
                 }
