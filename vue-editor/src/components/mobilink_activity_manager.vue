@@ -6,15 +6,15 @@
                 <v-subheader class="px-0">Nhóm theo: </v-subheader>
             </v-flex>
             <v-flex xs10 sm10 class="pt-2">
-                <v-radio-group v-model="radioGroup" @change="getActivity" row class="py-0 groupRadido">
-                    <v-radio class="my-0" label="Nguồn" color="secondary"
-                        value="source">
-                    </v-radio>
+                <v-radio-group v-model="radioGroup" @change="changeGroup" row class="py-0 groupRadido">
                     <v-radio class="my-0" label="Lãnh đạo" color="secondary"
                         value="leader">
                     </v-radio>
                     <v-radio class="my-0" label="Đơn vị chủ trì" color="secondary"
                         value="workingUnit">
+                    </v-radio>
+                    <v-radio class="my-0" label="Lĩnh vực/ nhóm" color="secondary"
+                        value="source">
                     </v-radio>
                 </v-radio-group>
             </v-flex>
@@ -30,10 +30,10 @@
             <v-flex xs12 sm4>
                 <date-picker class="mt-3" v-model="timeEnd" lang="vi" type="date" format="dd/MM/yyyy"></date-picker>
             </v-flex>
-            <v-flex xs12 sm2 class="mt-2">
+            <!-- <v-flex xs12 sm2 class="mt-2">
                 <v-subheader class="px-0">Lọc theo lãnh đạo: </v-subheader>
-            </v-flex>
-            <v-flex xs12 sm4 class="pt-3 pr-3">
+            </v-flex> -->
+            <v-flex xs12 sm4 class="pt-3 pr-3" style="display:none">
                 <v-select class="selectBoder py-0"
                     v-bind:items="managerItems"
                     v-model="manager"
@@ -42,14 +42,14 @@
                     item-text="fullName"
                     item-value="employeeId"
                     autocomplete
-                    placeholder="Chọn lãnh đạo"
-                    
+                    placeholder="Lọc theo lãnh đạo"
+                    @change="getFilterLeader"
                 ></v-select>
             </v-flex>
-            <v-flex xs12 sm2 class="mt-2">
+            <!-- <v-flex xs12 sm2 class="mt-2">
                 <v-subheader class="px-0">Lọc theo đơn vị chủ trì: </v-subheader>
-            </v-flex>
-            <v-flex xs12 sm4 class="pt-3">
+            </v-flex> -->
+            <v-flex xs12 sm4 class="pt-3 pr-3" style="display:none">
                 <v-select class="selectBoder py-0"
                     v-bind:items="hostingIdItems"
                     v-model="hostingId"
@@ -57,12 +57,25 @@
                     item-value="workingUnitId"
                     return-object
                     autocomplete
-                    placeholder="Chọn đơn vị"
-                    
+                    placeholder="Lọc theo đơn vị chủ trì"
+                    @change="getFilterWorkingUnit"
                     clearable
                 ></v-select>
             </v-flex>
 
+            <v-flex xs12 sm4 class="pt-3" style="display:none">
+                <v-select class="selectBoder py-0"
+                    v-bind:items="hostingIdItems"
+                    v-model="hostingId"
+                    item-text="name"
+                    item-value="workingUnitId"
+                    return-object
+                    autocomplete
+                    placeholder="Lọc theo lĩnh vực/ nhóm"
+                    @change="getFilterWorkingUnit"
+                    clearable
+                ></v-select>
+            </v-flex>
             
         </v-layout>
 
@@ -79,7 +92,7 @@
             >
                 <template slot="items" scope="props">
                     <tr @click="props.expanded = !props.expanded" v-bind:class="{'active': props.index%2==1}">
-                        <td colspan="100%" class="px-0">
+                        <td colspan="100%" class="px-0" style="border: none!important">
                             <v-card class="pl-3">
                                 <v-card-text v-if="radioGroup=='workingUnit'">
                                     {{ props.item.name }}
@@ -104,12 +117,17 @@
                         <template slot="items" scope="props">
                             
                             <tr v-bind:class="{'active': props.index%2==1}">
-                                <td class="text-xs-center py-2">{{props.index}}</td>
-                                <td class="text-xs-center py-2">{{ props.item.subject }}</td>
-                                <td class="text-xs-center py-2">{{ props.item.hosting }}</td>
-                                <td class="text-xs-center py-2">{{ props.item.endDate }}</td>
-                                <td class="text-xs-center py-2">{{ props.item.stateName }}</td>
-                                <td class="text-xs-center py-2">{{ props.item.resultNote }}</td>
+                                <td class="text-xs-center py-2" style="width: 3%">{{props.index}}</td>
+                                <td class="text-xs-center py-2" style="width: 32%">{{ props.item.subject }}</td>
+                                <td class="text-xs-center py-2" style="width: 20%">{{ props.item.hosting }}</td>
+                                <td class="text-xs-center py-2" style="width: 10%">{{parseDateView(new Date(props.item.endDate))}}</td>
+                                <td class="text-xs-center" style="width: 15%">
+                                    <v-chip style="display: inline-block;text-align: center;width:90%" label outline :color="getColor(props.item.stateName)">
+                                        <span>{{getState(props.item.stateName)}}</span>
+                                    </v-chip>
+                                    
+                                </td>
+                                <td class="text-xs-center py-2" style="width: 20%">{{ props.item.resultNote }}</td>
                             </tr>
                             
                         </template>
@@ -161,7 +179,7 @@
                 timeEnd:'',
                 mainItems: [],
                 subItems: [],
-
+                paramsGet: {},
                 mainHeaders: [
                     {
                         text: 'STT',
@@ -267,10 +285,11 @@
                 vm.activityListItems=[];
                 var paramsGetActivity = {
                     sort:'startDate',
-                    type:'TASK'
+                    type:'EVENT'
                 };
+                vm.paramsGet = paramsGetActivity;
                 var configGetActivity = {
-                    params: paramsGetActivity,
+                    params: vm.paramsGet,
                     headers: {
                         groupId: vm.group_id
                     }
@@ -299,6 +318,64 @@
                     console.log(error);
                     vm.activityListItems = [];
                 });
+            },
+            callGetActivity: function(){
+                var vm = this;
+                var configGetActivity = {
+                    params: vm.paramsGet,
+                    headers: {
+                        groupId: vm.group_id
+                    }
+                };
+                var url = vm.end_point + 'activities';
+                axios.get(url, configGetActivity).then(function (response) {
+                    var serializable = response.data;
+                    if (serializable.hasOwnProperty('data')) {
+                        for (var key in serializable.data) {
+                            vm.activityListItems.push(serializable.data[key])
+                        };
+                        if(vm.radioGroup=='workingUnit'){
+                            vm.getListItemGroup(vm.hostingIdItems);
+                            vm.getListSubitemGroup()
+                        } else if(vm.radioGroup=='leader') {
+                            vm.getListItemGroup(vm.managerItems);
+                            vm.getListSubitemGroup()
+                        };
+                        
+                    }else {
+                        vm.activityListItems = [];
+                    }
+                    console.log(vm)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    vm.activityListItems = [];
+                });
+            },
+            /**Lọc theo leader */
+            changeGroup: function(){
+                var vm = this;
+                vm.timeStart = '';
+                vm.timeEnd= '';
+                vm.hostingId = '';
+                vm.manager = '';
+                vm.getActivity()
+            },
+            /**Lọc theo leader */
+            getFilterLeader: function(){
+                var vm = this;
+                setTimeout(function(){
+                    vm.paramsGet.leader  = vm.manager.employeeId;
+                    vm.callGetActivity();
+                },200)
+            },
+            /**Lọc theo đơn vị */
+            getFilterWorkingUnit: function(){
+                var vm = this;
+                setTimeout(function(){
+                    vm.paramsGet.hosting  = vm.hostingId.workingUnitId;
+                    vm.callGetActivity();
+                },200)
             },
             /**get list item group */
             getListItemGroup: function(target){
@@ -351,7 +428,53 @@
                 } else if(radio=="leader"){
                     return 'employeeId'
                 }
-            }
+            },
+            parseDateView : function(fullDate){
+                var date;
+                if(fullDate){
+                    date = fullDate.getDate().toString().padStart(2, '0')+'/'+(fullDate.getMonth()+1).toString().padStart(2, '0')+'/'+fullDate.getFullYear();
+                } else {
+                    date = ""
+                }
+                return date
+            },
+            /** */
+            getState: function(item){
+                var state;
+                switch (item) {
+                    case 0:
+                        state = "Mới";
+                        break;
+                    case 1:
+                        state = "Đang xử lý";
+                        break;
+                    case 2:
+                        state = "Hoàn thành";
+                        break;
+                    case 3:
+                        state = "Đã hủy";
+                        
+                }
+                return state
+            },
+            getColor: function(item){
+                var color;
+                switch (item) {
+                    case 0:
+                        color = "red";
+                        break;
+                    case 1:
+                        color = "blue";
+                        break;
+                    case 2:
+                        color = "amber";
+                        break;
+                    case 3:
+                        color = "grey";
+                        
+                }
+                return color
+            },
         }
 
     }
@@ -384,15 +507,42 @@
     #activity_manager #tableActivity thead {
         background-color: #82dad5!important
     }
+    #activity_manager #tableActivity table thead tr th:nth-child(1){
+        width: 3%
+    }
+    #activity_manager #tableActivity table thead tr th:nth-child(2){
+        width: 32%
+    }
+    #activity_manager #tableActivity table thead tr th:nth-child(3){
+        width: 20%
+    }
+    #activity_manager #tableActivity table thead tr th:nth-child(4){
+        width: 10%
+    }
+    #activity_manager #tableActivity table thead tr th:nth-child(5){
+        width: 15%
+    }
+    #activity_manager #tableActivity table thead tr th:nth-child(6){
+        width: 20%
+    }
+
     #activity_manager #subTableActivity tr{
         height: 40px!important
     }
     #activity_manager #tableActivity table thead tr th{
         border: 1px solid #ddd !important;
-
+        padding: 8 5px!important;
     }
-    #activity_manager #tableActivity table tbody td {
+    #activity_manager #subTableActivity > table > tbody > tr > td {
+        overflow: hidden;
+        text-overflow: ellipsis; 
+        white-space: nowrap;
         border: 1px solid #ddd !important;
+        padding: 8 5px!important;
+    }
+    
+    #activity_manager #tableActivity .datatable__expand-row .datatable__expand-col--expanded {
+        border: none!important
     }
     #activity_manager .groupRadido .radio{
         max-width: 150px !important;
