@@ -80,7 +80,8 @@
                 <v-expansion-panel expand>
                     <v-expansion-panel-content v-bind:value="item === 1">
                         <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0">
-                            <b>{{item.leader.title}} {{ item.leader.fullName }} - {{ item.leader.jobTitle }}</b>
+                            <b v-if="vm.groupRadido == 'leader'">{{item.leader.title}} {{ item.leader.fullName }} - {{ item.leader.jobTitle }}</b>
+                            <b v-if="vm.groupRadido == 'activityCat'">{{item.leader.itemName}}</b>
                         </div>
                         
                         <v-card class="">
