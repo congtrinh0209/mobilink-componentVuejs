@@ -69,83 +69,85 @@
         </v-layout>
         <div id="list-content">
             <v-layout wrap class="header-menu" >
-                <div style="width:5%"><b>STT</b></div>
-                <div style="width:30%"><b>Nội dung</b></div>
-                <div style="width:20%"><b>Đơn vị chủ trì</b></div>
-                <div style="width:13%"><b>Hạn hoàn thành</b></div>
-                <div style="width:12%"><b>Trạng thái</b></div>
-                <div style="width:20%"><b>Ghi chú</b></div>
+                <div style="width:5%"><p>STT</p></div>
+                <div style="width:30%"><p>Nội dung</p></div>
+                <div style="width:20%"><p>Đơn vị chủ trì</p></div>
+                <div style="width:13%"><p>Hạn hoàn thành</p></div>
+                <div style="width:12%"><p>Trạng thái</p></div>
+                <div style="width:20%"><p>Ghi chú</p></div>
             </v-layout>
-            <div v-for="item in mainItems" :key="item.leader.employeeId">
-                <v-expansion-panel expand>
-                    <v-expansion-panel-content v-bind:value="item === 1">
-                        <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0">
-                            <b v-if="vm.groupRadido == 'leader'">{{item.leader.title}} {{ item.leader.fullName }} - {{ item.leader.jobTitle }}</b>
-                            <b v-if="vm.groupRadido == 'activityCat'">{{item.leader.itemName}}</b>
-                        </div>
-                        
-                        <v-card class="">
-                            <v-card-text class="px-0 py-0">
-                                <v-layout row wrap class="mx-0">
-                                <v-flex xs12 sm12>
-                                        <v-card>
-                                            <v-list class="py-0">
-                                                <v-list-group class="py-0" v-for="item1 in item.activityItems" :value="item1.active" v-bind:key="item1.activityId">
-                                                        <v-list-tile slot="item" class="px-0">
-                                                            <v-list-tile-content class="px-0 pl-2">
-                                                                <v-flex xs12 class="layout wrap">
-                                                                    <v-list-tile-title class="item_group">
-                                                                        <b style="font-family: sans-serif">{{ parseDateView(new Date(item1.startDate))}}</b> - {{item1.resultNote}}
-                                                                    </v-list-tile-title>
-                                                                    
-                                                                </v-flex>
+            
+            <v-expansion-panel expand v-for="(item,index) in mainItems" :key="item.leader.employeeId">
+                <v-expansion-panel-content :value="item==mainItems[0]">
+                    <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0" style="font-family: sans-serif">
+                        <b v-if="radioGroup == 'leader'">{{item.leader.title}} {{ item.leader.fullName }} - {{ item.leader.jobTitle }}</b>
+                        <b v-if="radioGroup == 'activityCat'">{{item.leader.itemName}}</b>
+                    </div>
+                    
+                    <v-card class="">
+                        <v-card-text class="px-0 py-0">
+                            <v-layout row wrap class="mx-0">
+                            <v-flex xs12 sm12>
+                                    <v-card>
+                                        <v-list class="py-0">
+                                            <v-list-group class="listGroup py-0" v-for="(item1,index1) in item.activityItems" :value="item1.activityId==item.activityItems[0].activityId" v-bind:key="item1.activityId">
+                                                    <v-list-tile slot="item" class="px-0">
+                                                        <v-list-tile-content class="px-0 pl-2">
+                                                            <v-flex xs12 class="layout wrap">
+                                                                <v-list-tile-title class="item_group" @click="getListActivitySource(item1.activityId,index,index1)">
+                                                                    <b>{{ parseDateView(new Date(item1.startDate))}}</b> - {{item1.resultNote}}
+                                                                </v-list-tile-title>
                                                                 
-                                                            </v-list-tile-content>
-                                                        </v-list-tile>
-                                                        
-                                                        <!-- end -->
-                                                        <v-list-tile-content class="mt-2">
-                                                            <v-data-table id="subTableActivity"
-                                                            hide-headers
-                                                            :items="item.activitySourceItems"
-                                                            item-key="activityId"
-                                                            hide-actions
-                                                            >
-                                                                <template slot="items" scope="props">
-                                                                    
-                                                                    <tr v-bind:class="{'active': props.index%2==1}">
-                                                                        <td class="text-xs-center py-2" style="width: 5%">{{props.index}}</td>
-                                                                        <td class="text-xs-center py-2" style="width: 30%">{{ props.item.subject }}</td>
-                                                                        <td class="text-xs-center py-2" style="width: 20%">{{ props.item.hosting }}</td>
-                                                                        <td class="text-xs-center py-2" style="width: 13%">{{parseDateView(new Date(props.item.endDate))}}</td>
-                                                                        <td class="text-xs-center" style="width: 12%">
-                                                                            <v-chip style="display: inline-block;text-align: center;width:90%" label outline :color="getColor(props.item.stateName)">
-                                                                                <span>{{getState(props.item.stateName)}}</span>
-                                                                            </v-chip>
-                                                                            
-                                                                        </td>
-                                                                        <td class="text-xs-center py-2" style="width: 20%">{{ props.item.resultNote }}</td>
-                                                                    </tr>
-                                                                    
-                                                                </template>
-                                                            </v-data-table>
+                                                            </v-flex>
                                                             
-                                                        </v-list-tile-content>  
+                                                        </v-list-tile-content>
+                                                        <v-list-tile-action class="pr-2">
+                                                            <v-icon>keyboard_arrow_down</v-icon>
+                                                        </v-list-tile-action>
+                                                    </v-list-tile>
                                                     
-                                                        <!-- end -->
-                                                </v-list-group>
+                                                    <!-- end -->
+                                                    <v-list-tile-content>
+                                                        <v-data-table id="subTableActivity"
+                                                        hide-headers
+                                                        :items="item.activitySourceItems[index1]"
+                                                        item-key="activityId"
+                                                        hide-actions
+                                                        >
+                                                            <template slot="items" scope="props">
+                                                                
+                                                                <tr v-bind:class="{'active': props.index%2==1}">
+                                                                    <td class="text-xs-center py-2" style="width: 5%">{{props.index + 1}}</td>
+                                                                    <td class="text-xs-center py-2" style="width: 30%" :title="props.item.subject">{{ props.item.subject }}</td>
+                                                                    <td class="text-xs-center py-2" style="width: 20%" :title="props.item.hosting ">{{ props.item.hosting }}</td>
+                                                                    <td class="text-xs-center py-2" style="width: 13%">{{parseDateView(new Date(props.item.endDate))}}</td>
+                                                                    <td class="text-xs-center" style="width: 12%">
+                                                                        <v-chip style="display: inline-block;text-align: center;width:90%" label outline :color="getColor(props.item.state)">
+                                                                            <span>{{props.item.stateName}}</span>
+                                                                        </v-chip>
+                                                                        
+                                                                    </td>
+                                                                    <td class="text-xs-center py-2" style="width: 20%" :title="props.item.resultNote">{{ props.item.resultNote }}</td>
+                                                                </tr>
+                                                                
+                                                            </template>
+                                                        </v-data-table>
+                                                        
+                                                    </v-list-tile-content>  
                                                 
-                                            </v-list>
-                                        </v-card>
-                                    </v-flex>
-                                </v-layout>
-                            </v-card-text>
-                        </v-card>
-                    </v-expansion-panel-content>
-                </v-expansion-panel>
+                                                    <!-- end -->
+                                            </v-list-group>
+                                            
+                                        </v-list>
+                                    </v-card>
+                                </v-flex>
+                            </v-layout>
+                        </v-card-text>
+                    </v-card>
+                </v-expansion-panel-content>
                 <v-divider xs12 class="my-0"></v-divider>
-                <!--  -->
-            </div>
+            </v-expansion-panel>
+            
         </div>
         
     </div>
@@ -179,9 +181,7 @@
         data () {
             return {
                 class_name: "org.mobilink.activitymgt.model.Activity",
-                mainItems: [
-                    
-                ],
+                mainItems: [],
                 
                 userId: '',
                 activityListItems:[],
@@ -270,6 +270,7 @@
             },
             /* Load data đơn vị chủ trì */
             getActivityCat: function(){
+                console.log("run get activityCat");
                 var vm = this;
                 var paramsTypeProcess = {
                     sort: "treeIndex"
@@ -327,11 +328,11 @@
                         if(vm.radioGroup=='activityCat'){
                             vm.getListItemGroup(vm.activityCatItems);
                             vm.getListActivityItemsGroup(vm.activityCatItems);
-                            vm.getListActivitySource(vm.mainItems[0].activityItems[0].activityId,0)
+                            vm.getListActivitySource(vm.mainItems[0].activityItems[0].activityId,0,0)
                         } else if(vm.radioGroup=='leader') {
                             vm.getListItemGroup(vm.managerItems);
                             vm.getListActivityItemsGroup(vm.activityCatItems);
-                            vm.getListActivitySource(vm.mainItems[0].activityItems[0].activityId,0)
+                            vm.getListActivitySource(vm.mainItems[0].activityItems[0].activityId,0,0)
                         };
                         
                     }else {
@@ -363,11 +364,11 @@
                         if(vm.radioGroup=='activityCat'){
                             vm.getListItemGroup(vm.activityCatItems);
                             vm.getListActivityItemsGroup(vm.activityCatItems);
-                            vm.getListActivitySource(vm.mainItems[0].activityItems[0].activityId,0)
+                            vm.getListActivitySource(vm.mainItems[0].activityItems[0].activityId,0,0)
                         } else if(vm.radioGroup=='leader') {
                             vm.getListItemGroup(vm.managerItems);
                             vm.getListActivityItemsGroup(vm.activityCatItems);
-                            vm.getListActivitySource(vm.mainItems[0].activityItems[0].activityId,0)
+                            vm.getListActivitySource(vm.mainItems[0].activityItems[0].activityId,0,0)
                         };
                         
                     }else {
@@ -460,10 +461,12 @@
                         if(vm.radioGroup == "activityCat"&&vm.mainItems.length!=0){
                             if(vm.activityListItems[index].activityCat == vm.mainItems[key].leader.itemCode){
                                 vm.mainItems[key].activityItems.push(vm.activityListItems[index]);
+                                vm.mainItems[key].activitySourceItems.push([])
                             }
                         } else if(vm.radioGroup == "leader"&&vm.mainItems.length!=0){
                             if(vm.activityListItems[index].leaderId == vm.mainItems[key].leader.mappingUser.userId){
                                 vm.mainItems[key].activityItems.push(vm.activityListItems[index]);
+                                vm.mainItems[key].activitySourceItems.push([])
                             }
                         }
                         
@@ -471,7 +474,7 @@
                 }
             },
             /** get list source group*/
-            getListActivitySource: function(class_pk,index){
+            getListActivitySource: function(class_pk,indexGroup,index){
                 var vm =this;
                 var paramsGetSource = {
                     
@@ -487,7 +490,7 @@
                     var serializable = response.data
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            vm.mainItems[index].activitySourceItems.push(
+                            vm.mainItems[indexGroup].activitySourceItems[index].push(
                                 serializable.data[key]
                             )
                           
@@ -576,6 +579,10 @@
         background-color: #82dad5!important;
         height: 40px;
     }
+    #activity_manager .listGroup .list__tile:hover{
+        cursor: pointer;
+        color: blue
+    }
     #activity_manager .header-menu div{
         text-align: center;
         overflow: hidden;
@@ -591,6 +598,9 @@
         border: 1px solid #ddd !important;
         padding: 8px 5px!important;
     }
+    #activity_manager #list-content table tr td:nth-child(5){
+        padding: 0px 5px!important;
+    }
     #activity_manager #list-content .list--group__container{
         border: 1px solid #ddd !important;
     }
@@ -603,7 +613,9 @@
         border-radius: 2px!important;
         height: 34px!important;
     }
-
+    #activity_manager #subTableActivity table{
+        table-layout: fixed
+    }
     #activity_manager .mx-datepicker{
         width: 100%!important
     }
