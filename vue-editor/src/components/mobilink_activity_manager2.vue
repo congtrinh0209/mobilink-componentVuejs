@@ -2,10 +2,10 @@
 
     <div id="activity_manager">
         <v-layout wrap class="navTable px-3 py-3">
-            <v-flex xs2 sm2>
+            <v-flex xs2 sm1>
                 <v-subheader class="px-0">Nhóm theo: </v-subheader>
             </v-flex>
-            <v-flex xs10 sm10 class="pt-2">
+            <v-flex xs10 sm11 class="pt-2">
                 <v-radio-group v-model="radioGroup" @change="changeGroup" row class="py-0 groupRadido">
                     <v-radio class="my-0" label="Lãnh đạo" color="secondary"
                         value="leader">
@@ -21,7 +21,7 @@
             <v-flex xs12 sm1 class="mt-2">
                 <v-subheader class="px-0">Từ ngày: </v-subheader>
             </v-flex>
-            <v-flex xs12 sm3 class="pr-3">
+            <v-flex xs12 sm3 class="pr-3 pl-4">
                 <date-picker class="mt-3" v-model="timeStart" lang="vi" type="date" format="dd/MM/yyyy"></date-picker>
             </v-flex>
             <v-flex xs12 sm1 class="mt-2">
@@ -93,35 +93,33 @@
                                     <v-card>
                                         <v-list >
                                             
-                                            <v-list-group v-for="item1 in item.activityItems" :value="item1.active" v-bind:key="item1.userId">
+                                            <v-list-group v-for="item1 in item.activityItems" :value="item1.active" v-bind:key="item1.activityId">
                                                 <!-- Phần danh sách tổ chức/ đơn vị -->
                                                 <v-list-tile slot="item" class="px-0">
                                                     <v-list-tile-content class="px-0">
                                                         <v-flex xs12 class="layout wrap">
                                                             <v-flex xs6 sm9 class="pt-2">
                                                                 <v-list-tile-title class="item_group">
-                                                                    {{ parseDateView(item1.startDate)}} - {{item1.resultNote}}
+                                                                    {{ parseDateView(new Date(item1.startDate))}} - {{item1.resultNote}}
                                                                 </v-list-tile-title>
                                                                 
                                                             </v-flex>
                                                             
                                                         </v-flex>
                                                         <v-divider xs12 class="my-0"></v-divider>
-                                                        
                                                     </v-list-tile-content>
-                                                    
                                                 </v-list-tile>
                                                 
                                                 <!-- end -->
 
                                                 <!-- Phần danh sách cá nhân trong tổ chức/ đơn vị -->
-                                                <v-list-tile v-for="item2 in item.activitySourceItems" v-bind:key="item2.userId">
+                                                <v-list-tile v-for="item2 in item.activitySourceItems" v-bind:key="item2.activityId">
                                                     <v-list-tile-content class="mt-2">
                                                         <v-flex xs12 class="layout wrap">
                                                             
                                                             <v-flex xs12 sm6 class="pt-1">
                                                                 <v-list-tile-title>
-                                                                    <span class="pt-2">{{ item2.fullname }}</span>
+                                                                    <span class="pt-2">{{ item2.subject }}</span>
                                                                 </v-list-tile-title>
                                                             </v-flex>
                                                             
@@ -176,36 +174,7 @@
             return {
                 class_name: "org.mobilink.activitymgt.model.Activity",
                 mainItems: [
-                    {
-                        'leader' :{name:'Trịnh Công Trình', userId: 101},
-                        activityItems :[
-                            {date:'Trịnh Công Trình0', userId: 1},
-                            {date:'Nguyễn Văn Thành0', userId: 2},
-                            {date:'Trịnh Công Trình0', userId: 3},
-                            {date:'Nguyễn Văn Thành0', userId: 4}
-                        ],
-                        activitySourceItems: [
-                            {fullname:'Trịnh Công Trình1', userId: 1},
-                            {fullname:'Nguyễn Văn Thành1', userId: 2},
-                            {fullname:'Trịnh Công Trình1', userId: 3},
-                            {fullname:'Nguyễn Văn Thành1', userId: 4}
-                        ]
-                    },
-                    {
-                        'leader' :{name:'Nguyễn Văn Thành', userId: 101},
-                        activityItems :[
-                            {date:'Trịnh Công Trình01', userId: 1},
-                            {date:'Nguyễn Văn Thành01', userId: 2},
-                            {date:'Trịnh Công Trình01', userId: 3},
-                            {date:'Nguyễn Văn Thành01', userId: 4}
-                        ],
-                        activitySourceItems: [
-                            {fullname:'Trịnh Công Trình2', userId: 1},
-                            {fullname:'Nguyễn Văn Thành2', userId: 2},
-                            {fullname:'Trịnh Công Trình2', userId: 3},
-                            {fullname:'Nguyễn Văn Thành2', userId: 4}
-                        ]
-                    }
+                    
                 ],
                 
                 userId: '',
@@ -345,20 +314,22 @@
                         };
                         if(vm.radioGroup=='activityCat'){
                             vm.getListItemGroup(vm.hostingIdItems);
-                            vm.getListActivitySource(vm.activityItems[0].activityId,0)
+                            vm.getListActivityItemsGroup(vm.hostingIdItems);
+                            vm.getListActivitySource(vm.mainItems[0].activityItems[0].activityId,0)
                         } else if(vm.radioGroup=='leader') {
                             vm.getListItemGroup(vm.managerItems);
-                            vm.getListActivitySource(vm.activityItems[0].activityId,0)
+                            vm.getListActivityItemsGroup(vm.hostingIdItems);
+                            vm.getListActivitySource(vm.mainItems[0].activityItems[0].activityId,0)
                         };
                         
                     }else {
-                        vm.activityListItems = [];
+                        
                     }
                     console.log(vm)
                 })
                 .catch(function (error) {
                     console.log(error);
-                    vm.activityListItems = [];
+                    
                 });
             },
             callGetActivity: function(){
@@ -378,20 +349,22 @@
                         };
                         if(vm.radioGroup=='workingUnit'){
                             vm.getListItemGroup(vm.hostingIdItems);
-                            vm.getListActivitySource(vm.activityItems[0].activityId,0)
+                            vm.getListActivityItemsGroup(vm.hostingIdItems);
+                            vm.getListActivitySource(vm.mainItems[0].activityItems[0].activityId,0)
                         } else if(vm.radioGroup=='leader') {
                             vm.getListItemGroup(vm.managerItems);
-                            vm.getListActivitySource(vm.activityItems[0].activityId,0)
+                            vm.getListActivityItemsGroup(vm.hostingIdItems);
+                            vm.getListActivitySource(vm.mainItems[0].activityItems[0].activityId,0)
                         };
                         
                     }else {
-                        vm.activityListItems = [];
+                        
                     }
                     console.log(vm)
                 })
                 .catch(function (error) {
                     console.log(error);
-                    vm.activityListItems = [];
+                    
                 });
             },
             /**Lọc theo leader */
@@ -430,7 +403,7 @@
                             if(target[key].workingUnitId == vm.activityListItems[index].hostingId){
                                 vm.mainItems.push(
                                     {
-                                        'leader': item,
+                                        'leader': target[key],
                                         activityItems: [],
                                         activitySourceItems:[]
                                     }
@@ -442,7 +415,7 @@
                             if(target[key].mappingUser.userId == vm.activityListItems[index].leaderId){
                                 vm.mainItems.push(
                                     {
-                                        'leader': item,
+                                        'leader': target[key],
                                         activityItems: [],
                                         activitySourceItems:[]
                                     }
@@ -461,11 +434,11 @@
                 for(var key in vm.mainItems) {
                     for(var index in vm.activityListItems){
                         if(vm.radioGroup == "workingUnit"&&vm.mainItems.length!=0){
-                            if(vm.activityListItems[index].hostingId == vm.mainItems[key].workingUnitId){
+                            if(vm.activityListItems[index].hostingId == vm.mainItems[key].leader.workingUnitId){
                                 vm.mainItems[key].activityItems.push(vm.activityListItems[index]);
                             }
                         } else if(vm.radioGroup == "leader"&&vm.mainItems.length!=0){
-                            if(vm.activityListItems[index].leaderId == vm.mainItems[key].mappingUser.userId){
+                            if(vm.activityListItems[index].leaderId == vm.mainItems[key].leader.mappingUser.userId){
                                 vm.mainItems[key].activityItems.push(vm.activityListItems[index]);
                             }
                         }
@@ -486,7 +459,7 @@
                         'groupId': vm.group_id
                     }
                 };
-                axios.get( vm.end_point + 'activities/source/'+vm.class_name+'/'+class_pk, configGetSource)
+                axios.get( vm.end_point + 'activities/source/'+vm.class_name+'/'+ class_pk, configGetSource)
                 .then(function (response) {
                     var serializable = response.data
                     if (serializable.hasOwnProperty('data')) {
