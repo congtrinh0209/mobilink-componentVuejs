@@ -1,7 +1,7 @@
 <template>
 
     <div id="activity_manager">
-        <v-layout wrap class="navTable px-3 py-3">
+        <v-layout wrap class="navTable px-3 py-1 pb-2">
             <v-flex xs2 sm1>
                 <v-subheader class="px-0">Nhóm theo: </v-subheader>
             </v-flex>
@@ -10,9 +10,7 @@
                     <v-radio class="my-0" label="Lãnh đạo" color="secondary"
                         value="leader">
                     </v-radio>
-                    <!-- <v-radio class="my-0" label="Đơn vị chủ trì" color="secondary"
-                        value="activityCat">
-                    </v-radio> -->
+                   
                     <v-radio class="my-0" label="Lĩnh vực/ nhóm" color="secondary"
                         value="activityCat">
                     </v-radio>
@@ -32,9 +30,7 @@
                 <date-picker @change="changeDate" class="mt-3" v-model="timeEnd" 
                 v-bind:not-before="timeEndMin" lang="vi" type="date" format="dd/MM/yyyy"></date-picker>
             </v-flex>
-            <!-- <v-flex xs12 sm2 class="mt-2">
-                <v-subheader class="px-0">Lọc theo lãnh đạo: </v-subheader>
-            </v-flex> -->
+
             <v-flex xs12 sm4 class="pt-3 pr-3" style="display:none">
                 <v-select class="selectBoder py-0"
                     v-bind:items="managerItems"
@@ -48,9 +44,6 @@
                     @change="getFilterLeader"
                 ></v-select>
             </v-flex>
-            <!-- <v-flex xs12 sm2 class="mt-2">
-                <v-subheader class="px-0">Lọc theo đơn vị chủ trì: </v-subheader>
-            </v-flex> -->
 
             <v-flex xs12 sm4 class="pt-3" style="display:none">
                 <v-select class="selectBoder py-0"
@@ -144,6 +137,7 @@
                             </v-layout>
                         </v-card-text>
                     </v-card>
+                    <v-divider xs12 class="my-0"></v-divider>
                 </v-expansion-panel-content>
                 <v-divider xs12 class="my-0"></v-divider>
             </v-expansion-panel>
@@ -527,37 +521,19 @@
                 return date
             },
             /** */
-            getState: function(item){
-                var state;
-                switch (item) {
-                    case 0:
-                        state = "Mới";
-                        break;
-                    case 1:
-                        state = "Đang xử lý";
-                        break;
-                    case 2:
-                        state = "Hoàn thành";
-                        break;
-                    case 3:
-                        state = "Đã hủy";
-                        
-                }
-                return state
-            },
             getColor: function(item){
                 var color;
                 switch (item) {
-                    case 0:
+                    case 'New':
                         color = "red";
                         break;
-                    case 1:
+                    case 'Processing':
                         color = "blue";
                         break;
-                    case 2:
+                    case 'Closed':
                         color = "amber";
                         break;
-                    case 3:
+                    case 'Canceled':
                         color = "grey";
                         
                 }

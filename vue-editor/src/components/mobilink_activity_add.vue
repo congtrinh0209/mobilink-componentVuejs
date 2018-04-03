@@ -70,7 +70,7 @@
                 </v-flex>
                 <!--  -->
                 <v-flex xs12 sm2>
-                    <v-subheader class="px-0">Đơn vị tham mưu </v-subheader>
+                    <v-subheader class="px-0">Đơn vị tổ chức </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4>
                     <v-select
@@ -86,7 +86,7 @@
                 </v-flex>
                 <!--  -->
                 <v-flex xs12 sm2 class="pl-3">
-                    <v-subheader class="px-0">Lãnh đạo chủ trì </v-subheader>
+                    <v-subheader class="px-0">Người chủ trì </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4>
                     <v-select
@@ -103,13 +103,13 @@
                 
                 <!--  -->
                 <v-flex xs12 sm2>
-                    <v-subheader class="px-0" >Loại sự kiện </v-subheader>
+                    <v-subheader class="px-0" >Lĩnh vực </v-subheader>
                 </v-flex>
-                <v-flex xs12 sm4>
+                <v-flex xs12 sm10>
                     <v-select
                         v-bind:items="eventTypeItems"
                         v-model="eventType"
-                        placeholder="Chọn loại sự kiện"
+                        placeholder="Chọn lĩnh vực"
                         item-text="itemName"
                         item-value="itemCode"
                         autocomplete
@@ -120,7 +120,7 @@
                 </v-flex>
 
                 <!--  -->
-                <v-flex xs12 sm2>
+                <!-- <v-flex xs12 sm2>
                     <v-subheader class="px-0">Lĩnh vực/ thẻ nhãn </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4>
@@ -135,7 +135,7 @@
                         hide-selected
 
                     ></v-select>
-                </v-flex>
+                </v-flex> -->
                 <!--  -->
                 <v-flex xs12 sm2>
                     <v-subheader class="px-0">Nội dung</v-subheader>
@@ -229,7 +229,7 @@
                 </v-flex>
                 <!--  -->
                 <v-flex xs12 sm2>
-                    <v-subheader class="px-0">Loại nhiệm vụ </v-subheader>
+                    <v-subheader class="px-0">Lĩnh vực </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4>
                     <v-select
@@ -238,16 +238,33 @@
                         item-text="itemName"
                         item-value="itemCode"
                         autocomplete
-                        placeholder="Chọn loại nhiệm vụ"
+                        placeholder="Chọn lĩnh vực"
                         return-object
                         hide-selected
                         clearable
                     ></v-select>
                 </v-flex>
                 <!--  -->
-                <v-flex xs12 sm6> 
-                    <v-checkbox v-bind:label="`Có ghi lịch`" v-model="noteCalendard"></v-checkbox>
+                <!--  -->
+                <v-flex xs12 sm2 class="pl-2">
+                    <v-subheader class="px-0">Độ ưu tiên </v-subheader>
                 </v-flex>
+                <v-flex xs12 sm4>
+                    <v-select
+                        v-bind:items="priorityItems"
+                        v-model="priority"
+                        item-text="itemName"
+                        item-value="itemCode"
+                        autocomplete
+                        placeholder="Chọn mức độ ưu tiên"
+                        return-object
+                        hide-selected
+                        clearable
+                    ></v-select>
+                </v-flex>
+                <!-- <v-flex xs12 sm6> 
+                    <v-checkbox v-bind:label="`Có ghi lịch`" v-model="noteCalendard"></v-checkbox>
+                </v-flex> -->
                 
                 <!--  -->
                 <v-flex xs12 sm2>
@@ -503,6 +520,12 @@
                 templateNo:'',
                 labelItems:[],
                 label:'',
+                priorityItems:[
+                    {'itemCode': 0,'itemName': 'Thường'},
+                    {'itemCode': 1,'itemName': 'Cao'},
+                    {'itemCode': 2,'itemName': 'Khẩn'}
+                ],
+                priority:'',
                 className:'org.mobilink.activitymgt.model.Activity',
 
                 valid: false,
@@ -1004,13 +1027,11 @@
                     paramsAddEvent.append('isTemplate', false)
                     paramsAddEvent.append('activityType', 'EVENT')
                     paramsAddEvent.append('activityCat', vm.eventType?vm.eventType.itemCode: '')
-                    paramsAddEvent.append('templateNo', vm.templateNo?vm.templateNo: '')
-                    paramsAddEvent.append('onCalendar', true)
                     paramsAddEvent.append('subject', vm.topic?vm.topic:'')
                     paramsAddEvent.append('hostingId', vm.hostingId?vm.hostingId.workingUnitId:'')
                     paramsAddEvent.append('hosting', vm.hostingId?vm.hostingId.name:'')
                     paramsAddEvent.append('leaderId', vm.manager?vm.manager.employeeId:'')
-                    paramsAddEvent.append('labelId', vm.label?vm.label.labelId:'')
+                    /* paramsAddEvent.append('labelId', vm.label?vm.label.labelId:'')*/
 
                     paramsAddEvent.append('startDate', startDateEvent)
                     paramsAddEvent.append('endDate', endDateEvent)
@@ -1026,12 +1047,12 @@
                     )
                     .then(function (response) {
                         vm.dataForm = response.data;
-                        var fixLabel = vm.label?vm.label.labelId:'';
+                        /*var fixLabel = vm.label?vm.label.labelId:'';
                         var classPK = response.data.activityId;
                         console.log(fixLabel);
                         if(fixLabel){
                             vm.addResourceLabel(vm.className, classPK, fixLabel)
-                        }
+                        }*/
                         vm.$emit('call-back-add', vm.dataForm);
                     })
                     .catch(function (error) {
@@ -1083,19 +1104,16 @@
                     paramsAddTask.append('isTemplate', false)
                     paramsAddTask.append('activityType', "TASK")
                     paramsAddTask.append('activityCat', vm.taskType?vm.taskType.itemCode:"")
-                    paramsAddTask.append('templateNo', vm.templateNo?vm.templateNo:"")
+                    paramsAddTask.append('priority', vm.priority?vm.priority.itemCode:"")
                     paramsAddTask.append('subject', vm.taskname?vm.taskname:"")
                     paramsAddTask.append('hostingId', vm.hostingId?vm.hostingId.workingUnitId:"")
                     paramsAddTask.append('hosting', vm.hostingId?vm.hostingId.name:'')
                     paramsAddTask.append('leaderId', vm.manager?vm.manager.employeeId:"")
-                    
-                    paramsAddTask.append('onCalendar', vm.noteCalendard?vm.noteCalendard: false)
+
                     paramsAddTask.append('startDate', startDateTask)
                     paramsAddTask.append('endDate', endDateTask)
                     paramsAddTask.append('description', vm.content?vm.content:"")
                 
-                    
-
                     axios.post(vm.end_point + 'activities',
                         paramsAddTask,
                         configPostAddTask
@@ -1125,7 +1143,7 @@
                     
                     paramsAddProcess.append('isTemplate', true)
                     paramsAddProcess.append('activityCat', vm.processType?vm.processType.itemCode:"")
-                    paramsAddProcess.append('templateNo', vm.processCode?vm.processCode:"")
+                    
                     paramsAddProcess.append('subject', vm.processName?vm.processName:"")
                     paramsAddProcess.append('hostingId', vm.hostingId?vm.hostingId.workingUnitId:"")
                     paramsAddProcess.append('hosting', vm.hostingId?vm.hostingId.name:'')
@@ -1166,7 +1184,7 @@
 
                     /*paramsAddRequest.append('templateNo', vm.templateNo?vm.templateNo:"")*/
                     paramsAddRequest.append('subject', vm.topicRequest?vm.topicRequest:"")
-                    paramsAddRequest.append('onCalendar', true)
+                    
                     paramsAddRequest.append('hostingId', vm.hostingId?vm.hostingId.workingUnitId:"")
                     paramsAddRequest.append('hosting', vm.hostingId?vm.hostingId.name:'')
                     /*paramsAddRequest.append('leaderId', vm.manager?vm.manager.employeeId:"")
