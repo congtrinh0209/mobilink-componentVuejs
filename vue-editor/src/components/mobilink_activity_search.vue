@@ -200,7 +200,7 @@
                     
                     <td>
                         <div class="pt-2 pb-2">
-                            <span>{{getActiviyType(props.item.activityType)}}/ {{props.item.categoryName}}</span>
+                            <span>{{getActiviyType(props.item.activityType)}}</span>
                         </div>
                     </td>
                     
@@ -217,7 +217,7 @@
                     </td>
 
                     <td class="text-xs-center">
-                            <v-chip style="display: inline-block;text-align: center;width:90%" label outline :color="getColor(props.item.openingState)"><span>{{getState(props.item.openingState)}}</span></v-chip>
+                            <v-chip style="display: inline-block;text-align: center;width:90%" label outline :color="getColor(props.item.state)"><span>{{getState(props.item.state)}}</span></v-chip>
 
                     </td>
 
@@ -454,17 +454,33 @@
             getState: function(item){
                 var state;
                 switch (item) {
-                    case 0:
+                    case 1:
                         state = "Mới";
                         break;
-                    case 1:
-                        state = "Đang xử lý";
-                        break;
                     case 2:
-                        state = "Hoàn thành";
+                        state = "Xin chỉ đạo";
                         break;
                     case 3:
+                        state = "Chờ thực hiện";
+                        break;
+                    case 4:
+                        state = "Đang thực hiện";
+                        break;
+                    case 5:
+                        state = "Chờ xác nhận";
+                        break;
+                    case 6:
+                        state = "Đang theo dõi";
+                        break;
+                    case 7:
+                        state = "Đã kết thúc";
+                        break;
+                    case 8:
                         state = "Đã hủy";
+                        break;
+                    case 9:
+                        state = "Không xử lý";
+                        break;
                         
                 }
                 return state
@@ -472,16 +488,16 @@
             getColor: function(item){
                 var color;
                 switch (item) {
-                    case 0:
+                    case 1:
                         color = "red";
                         break;
-                    case 1:
+                    case 4:
                         color = "blue";
                         break;
-                    case 2:
+                    case 7:
                         color = "amber";
                         break;
-                    case 3:
+                    case 8:
                         color = "grey";
                         
                 }
@@ -514,7 +530,7 @@
                         value: 'activityId'
                     },
                     { 
-                        text: 'Ngày tạo',
+                        text: 'Ngày bắt đầu',
                         align: 'left',
                         sortable: true,
                         value: 'time'

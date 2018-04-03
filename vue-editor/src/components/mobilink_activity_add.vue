@@ -424,7 +424,7 @@
                 </v-flex> -->
                 
                 <!--  -->
-                <v-flex xs12 sm2>
+                <v-flex xs12 sm2 class="pl-4">
                     <v-subheader class="px-0">Đơn vị xử lý </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4>

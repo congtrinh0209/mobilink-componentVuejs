@@ -86,13 +86,11 @@
                                             <v-list-group class="listGroup py-0" v-for="(item1,index1) in item.activityItems" :value="item1.activityId==item.activityItems[0].activityId" v-bind:key="item1.activityId">
                                                     <v-list-tile slot="item" class="px-0">
                                                         <v-list-tile-content class="px-0 pl-2">
-                                                            <v-flex xs12 class="layout wrap">
-                                                                <v-list-tile-title class="item_group" @click="getListActivitySource(item1.activityId,index,index1)">
-                                                                    <b>{{ parseDateView(new Date(item1.startDate))}}</b> - {{item1.resultNote}}
-                                                                </v-list-tile-title>
-                                                                
-                                                            </v-flex>
                                                             
+                                                            <v-list-tile-title class="item_group" @click="getListActivitySource(item1.activityId,index,index1)">
+                                                                <b>{{ parseDateView(new Date(item1.startDate))}}</b> - {{item1.resultNote}}
+                                                            </v-list-tile-title>
+                                                                
                                                         </v-list-tile-content>
                                                         <v-list-tile-action class="pr-2">
                                                             <v-icon>keyboard_arrow_down</v-icon>
@@ -174,8 +172,8 @@
         data () {
             return {
                 class_name: 'org.mobilink.activitymgt.model.Activity',
-                group_id: themeDisplay.getScopeGroupId()/*20147*/,
-                end_point: '/o/v2/mobilink/'  /*"http://127.0.0.1:8081/api/"*/,
+                group_id: /*themeDisplay.getScopeGroupId()*/20147,
+                end_point: /*'/o/v2/mobilink/'*/"http://127.0.0.1:8081/api/",
                 mainItems: [],
                 userId: '',
                 activityListItems:[],
@@ -471,6 +469,7 @@
             /** get list source group*/
             getListActivitySource: function(class_pk,indexGroup,index){
                 var vm =this;
+                
                 var paramsGetSource = {
                     
                 };
@@ -480,21 +479,24 @@
                         'groupId': vm.group_id
                     }
                 };
-                axios.get( vm.end_point + 'activities/source/'+vm.class_name+'/'+ class_pk, configGetSource)
-                .then(function (response) {
-                    var serializable = response.data
-                    if (serializable.hasOwnProperty('data')) {
-                        for (var key in serializable.data) {
-                            vm.mainItems[indexGroup].activitySourceItems[index].push(
-                                serializable.data[key]
-                            )
-                          
+                if(vm.mainItems[indexGroup].activitySourceItems[index].length==0){
+                    axios.get( vm.end_point + 'activities/source/'+vm.class_name+'/'+ class_pk, configGetSource)
+                    .then(function (response) {
+                        var serializable = response.data
+                        if (serializable.hasOwnProperty('data')) {
+                            for (var key in serializable.data) {
+                                vm.mainItems[indexGroup].activitySourceItems[index].push(
+                                    serializable.data[key]
+                                )
+                            
+                            }
                         }
-                    }
-                })
-                .catch(function (error) {
-                    console.log(error)
-                })
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+                }
+                
             },
             getKeyGroup: function(radio){
                 if(radio=="activityCat"){
