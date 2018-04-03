@@ -65,8 +65,8 @@
                 <div style="width:5%"><p>STT</p></div>
                 <div style="width:30%"><p>Nội dung</p></div>
                 <div style="width:20%"><p>Đơn vị chủ trì</p></div>
-                <div style="width:10%"><p>Hạn hoàn thành</p></div>
-                <div style="width:15%"><p>Trạng thái</p></div>
+                <div style="width:12%"><p>Hạn hoàn thành</p></div>
+                <div style="width:13%"><p>Trạng thái</p></div>
                 <div style="width:20%"><p>Ghi chú</p></div>
             </v-layout>
             
@@ -113,8 +113,8 @@
                                                                     <td class="text-xs-center py-2" style="width: 5%">{{props.index + 1}}</td>
                                                                     <td class="text-xs-center py-2" style="width: 30%" :title="props.item.subject">{{ props.item.subject }}</td>
                                                                     <td class="text-xs-center py-2" style="width: 20%" :title="props.item.hosting ">{{ props.item.hosting }}</td>
-                                                                    <td class="text-xs-center py-2" style="width: 10%">{{parseDateView(new Date(props.item.endDate))}}</td>
-                                                                    <td class="text-xs-center" style="width: 15%">
+                                                                    <td class="text-xs-center py-2" style="width: 12%">{{parseDateView(new Date(props.item.endDate))}}</td>
+                                                                    <td class="text-xs-center" style="width: 13%">
                                                                         <v-chip style="display: inline-block;text-align: center;width:90%" label outline :color="getColor(props.item.state)">
                                                                             <span>{{props.item.stateName}}</span>
                                                                         </v-chip>
@@ -153,14 +153,9 @@
 
     export default {
         name: COMPONENT_NAME,
-        props: {
-            class_name: null,
-            group_id: null,
-            end_point: null,
-        },
 
         created () {
-            var vm = this
+            var vm = this;
             vm.$nextTick(function () {
                 Promise.all([vm.getManager(), vm.getActivityCat()]).then(function() {
                     vm.getActivity()
@@ -178,9 +173,10 @@
         
         data () {
             return {
-                class_name: "org.mobilink.activitymgt.model.Activity",
+                class_name: 'org.mobilink.activitymgt.model.Activity',
+                group_id: themeDisplay.getScopeGroupId()/*20147*/,
+                end_point: '/o/v2/mobilink/'  /*"http://127.0.0.1:8081/api/"*/,
                 mainItems: [],
-                
                 userId: '',
                 activityListItems:[],
                 radioGroup:'leader',

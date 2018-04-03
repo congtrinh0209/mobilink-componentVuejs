@@ -361,7 +361,7 @@
         created () {
             var vm = this
             vm.$nextTick(function () {
-                // vm.initInvitationTask()
+                vm.initInvitationTask()
             })
         },
         
@@ -425,7 +425,9 @@
                 /*vm.userId = 108;*/
                  vm.userId = themeDisplay.getUserId();
                 /** */
-                Promise.all([vm.getWorkingUnitTask(), vm.getUserContact(),vm.getInvitationTask(),vm.activeGetEmployeesTask()]).then(function() {
+                Promise.all([vm.getInvitationTask(),vm.activeGetEmployeesTask()]).then(function() {
+                    vm.getWorkingUnitTask();
+                    vm.getUserContact();
                     vm.getEmployeesTask()
                 }, function() {
                     console.log("error")
@@ -558,10 +560,14 @@
                     var serializable = response.data
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            if(serializable.data[key].selected == false){
-                                vm.hostingIdItemsTask.push(
-                                    serializable.data[key]
-                                )
+                            for(var keys in vm.invitationTaskItems){
+                                if(serializable.data[key].roleId == vm.invitationTaskItems[keys].roleId){
+                                    vm.hostingIdItemsTask.push(
+                                        serializable.data[key]
+                                    );
+                                    break;
+                                    
+                                }
                             }
                             
                         }
@@ -590,12 +596,18 @@
                     var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            vm.employeeItemsTask.push(
-                                serializable.data[key]
-                            )
+                            for(var keys in vm.invitationTaskItems){
+                                if(serializable.data[key].mappingUser.userId == vm.invitationTaskItems[keys].toUserId){
+                                    vm.employeeItemsTask.push(
+                                        serializable.data[key]
+                                    )
+                                    break;
+                                }
+                            }
                             
                         }
-                    }
+                    };
+                    
                 })
                 .catch(function (error) {
                     console.log(error)
@@ -629,10 +641,15 @@
                     var serializable = response.data
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            vm.contactItemsTask.push(
-                                serializable.data[key]
-                            )
                             
+                            for(var keys in vm.invitationTaskItems){
+                                if(serializable.data[key].userMappingId == vm.invitationTaskItems[keys].toUserId){
+                                    vm.contactItemsTask.push(
+                                        serializable.data[key]
+                                    )
+                                    break;
+                                }
+                            }
                         }
                     }
                 })
@@ -683,7 +700,7 @@
             /**POST invitation */
             postInvitationTask: function(type){
                 var vm = this;
-                console.log(vm);
+                /*console.log(vm);*/
                 if(type == 'GROUP'&&vm.hostingIdTask){
                     vm.valid = true;
                     var dataPostInvitation  =new URLSearchParams();
@@ -1028,13 +1045,11 @@
                         var emailRes = serializable.email;
                         var telRes = serializable.telNo;
                         vm.addInvitationCotEmailTask(nameRes,telRes,emailRes);
-                        console.log("run success add contact")
+                        /*console.log("run success add contact")*/
                         
                     })
                     .catch(function (error) {
-                        
                         console.log(error);
-                        
                     })
                 }
                 
@@ -1076,7 +1091,7 @@
                 .catch(function (error) {
                     vm.show_alert('error','Thêm mới giấy mời thất bại')
                 });
-                console.log("run add contact invitation")
+                /*console.log("run add contact invitation")*/
             }
   
         }

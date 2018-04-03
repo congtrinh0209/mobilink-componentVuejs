@@ -252,7 +252,7 @@
                     <v-card class="pl-2 pr-1">
                         <v-card-text class="px-0 pt-0">
                             <v-layout row wrap class="mx-0">
-                                <v-flex class="layout wrap" >
+                                <v-flex class="layout wrap" v-if="showAdd2">
                                     <v-flex xs12 sm8>
                                         <v-select class="selectBoder pt-3" id="selectContact"
                                         placeholder="Cá nhân/ tổ chức theo danh bạ"
@@ -513,7 +513,9 @@
                 var vm = this;
                 /*vm.userId = 108;*/
                 vm.userId = themeDisplay.getUserId();
-                Promise.all([vm.getWorkingUnit(), vm.getUserContact(),vm.getInvitation(),vm.activeGetEmployees()]).then(function() {
+                Promise.all([vm.getInvitation(),vm.activeGetEmployees()]).then(function() {
+                    vm.getWorkingUnit();
+                    vm.getUserContact();
                     vm.getEmployees()
                 }, function() {
                     console.log("error")
@@ -530,7 +532,7 @@
             },
             /* Load data invitation */
             getInvitation: function(){
-                console.log("getInvitation");
+                /*console.log("getInvitation");*/
                 var vm = this;
                 vm.presenterAddGroup = false;
                 vm.presenterAddUser = false;
@@ -632,7 +634,7 @@
             },
             /**get workingUnit */
             getWorkingUnit: function(){
-                console.log("getWorkingUnit");
+                /*console.log("getWorkingUnit");*/
                 var vm = this;
                 var paramsGetWorkingUnit = {
                     full: true
@@ -648,19 +650,24 @@
                     var serializable = response.data
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            if(serializable.data[key].selected == false){
-                                vm.hostingIdItems.push(
-                                    serializable.data[key]
-                                )
+                            for(var keys in vm.invitationItems){
+                                if(serializable.data[key].roleId == vm.invitationItems[keys].roleId){
+                                    vm.hostingIdItems.push(
+                                        serializable.data[key]
+                                    );
+                                    break;
+                                    
+                                }
                             }
                             
                         }
-                    }
+                    };
+                    /*console.log(vm)*/
                 })
                 .catch(function (error) {
                     console.log(error)
                 })
-
+                
             },
             /**get employee */
             getEmployees: function(){
@@ -680,10 +687,15 @@
                     var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            vm.employeeItems.push(
-                                serializable.data[key]
-                            )
-                            
+                            for(var keys in vm.invitationItems){
+                                if(serializable.data[key].mappingUser.userId == vm.invitationItems[keys].toUserId){
+                                    vm.employeeItems.push(
+                                        serializable.data[key]
+                                    )
+                                    break;
+                                }
+                            }
+  
                         }
                     }
                 })
@@ -694,7 +706,7 @@
             },
             /**run get employees */
             activeGetEmployees: function(){
-                console.log("activeGetEmployees");
+                /*console.log("activeGetEmployees");*/
                 var vm = this;
                 for(var keys in vm.itemInvGroup){
                     if(vm.itemInvGroup[keys].user_leader&&vm.itemInvGroup[keys].user_leader == vm.userId){
@@ -705,7 +717,7 @@
             },
             /**get contact */
             getUserContact: function(){
-                console.log("getUserContact");
+                /*console.log("getUserContact");*/
                 var vm = this;
                 var paramsGetUserContact = {
                     
@@ -721,10 +733,14 @@
                     var serializable = response.data
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            vm.contactItems.push(
-                                serializable.data[key]
-                            )
-                            
+                            for(var keys in vm.invitationItems){
+                                if(serializable.data[key].userMappingId == vm.invitationItems[keys].toUserId){
+                                    vm.contactItems.push(
+                                        serializable.data[key]
+                                    )
+                                    break;
+                                }
+                            }
                         }
                     }
                 })
@@ -775,7 +791,7 @@
             /**POST invitation */
             postInvitation: function(type){
                 var vm = this;
-                console.log(vm);
+                /*console.log(vm);*/
                 if(type == 'GROUP'&&vm.hostingId){
                     vm.valid = true;
                     var dataPostInvitation  =new URLSearchParams();
@@ -955,9 +971,9 @@
             },
             eventInput: function(event){
                 var vm = this;
-                console.log(event);
+                /*console.log(event);*/
                 vm.contact = [];
-                console.log("run input");
+                /*console.log("run input");*/
                 setTimeout(function(){
                     if(event.length!=0){
                         vm.contact = [event[event.length -1]];
@@ -979,12 +995,9 @@
                 };
                 if(checkContact){
                     setTimeout(function(){
-                        console.log(vm);
                         vm.dialog_add_contact = true;
                         setTimeout(function(){
-                            console.log(vm.contact);
                             vm.fullNameCot = vm.contact[0];
-                            console.log(vm.fullNameCot)
                         },100);
                     },200)
                 } else {
@@ -1130,7 +1143,7 @@
                         var emailRes = serializable.email;
                         var telRes = serializable.telNo;
                         vm.addInvitationCotEmail(nameRes,telRes,emailRes);
-                        console.log("run success add contact")
+                        /*console.log("run success add contact")*/
                         
                     })
                     .catch(function (error) {
@@ -1178,7 +1191,7 @@
                 .catch(function (error) {
                     vm.show_alert('error','Thêm mới giấy mời thất bại')
                 });
-                console.log("run add contact invitation")
+                /*console.log("run add contact invitation")*/
             }
         }
 
