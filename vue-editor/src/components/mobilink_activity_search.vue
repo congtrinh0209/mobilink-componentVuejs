@@ -38,14 +38,16 @@
                     <v-subheader class="px-0">Từ ngày </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4>
-                    <date-picker class="mt-3" v-model="timeStart" placeholder="Chọn ngày" lang="vi" type="date" format="dd/MM/yyyy"></date-picker>
+                    <date-picker @change="changeDate" v-bind:not-after="timeStartMax" class="mt-3" v-model="timeStart" placeholder="Chọn ngày" 
+                    lang="vi" type="date" format="dd/MM/yyyy"></date-picker>
                 </v-flex>
                 <!--  -->
                 <v-flex xs12 sm2 class="pl-3 mt-2">
                     <v-subheader class="px-0">Đến ngày </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4 class="pr-2">
-                    <date-picker class="mt-3" v-model="timeEnd" placeholder="Chọn ngày" lang="vi" type="date" format="dd/MM/yyyy"></date-picker>
+                    <date-picker @change="changeDate" v-bind:not-before="timeEndMin" class="mt-3" v-model="timeEnd" placeholder="Chọn ngày" 
+                    lang="vi" type="date" format="dd/MM/yyyy"></date-picker>
                 </v-flex>
                 <!--  -->
                 <v-flex xs12 sm2 class="pl-3">
@@ -269,6 +271,8 @@
             return {
                 timeStart: '',
                 timeEnd: '',
+                timeStartMax:'',
+                timeEndMin:'',
                 processTypeItems:[],
                 processType:'',
                 statusItems:[],
@@ -502,6 +506,14 @@
                         
                 }
                 return color
+            },
+            changeDate: function(){
+                var vm = this;
+                setTimeout(function(){
+                    vm.timeEndMin = vm.timeStart?new Date(vm.timeStart):'';
+                    vm.timeStartMax = vm.timeEnd?new Date(vm.timeEnd):'';
+                },200)
+                
             },
             /** */
             getActiviyType: function(item){

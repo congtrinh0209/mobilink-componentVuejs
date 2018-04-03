@@ -84,14 +84,13 @@
                                     <v-card>
                                         <v-list class="py-0">
                                             <v-list-group class="listGroup py-0" v-for="(item1,index1) in item.activityItems" :value="item1.activityId==item.activityItems[0].activityId" v-bind:key="item1.activityId">
-                                                    <v-list-tile slot="item" class="px-0">
+                                                    <v-list-tile slot="item" class="px-0" @click="getListActivitySource(item1.activityId,index,index1,$event)">
                                                         <v-list-tile-content class="px-0 pl-2">
-                                                            
-                                                            <v-list-tile-title class="item_group" @click="getListActivitySource(item1.activityId,index,index1)">
+                                                            <v-list-tile-title class="item_group" >
                                                                 <b>{{ parseDateView(new Date(item1.startDate))}}</b> - {{item1.resultNote}}
                                                             </v-list-tile-title>
-                                                                
                                                         </v-list-tile-content>
+
                                                         <v-list-tile-action class="pr-2">
                                                             <v-icon>keyboard_arrow_down</v-icon>
                                                         </v-list-tile-action>
@@ -386,8 +385,8 @@
             changeDate: function(){
                 var vm = this;
                 setTimeout(function(){
-                    vm.timeEndMin = vm.timeStart?new Date(vm.timeStart):null;
-                    vm.timeStartMax = vm.timeEnd?new Date(vm.timeEnd):null;
+                    vm.timeEndMin = vm.timeStart?new Date(vm.timeStart):'';
+                    vm.timeStartMax = vm.timeEnd?new Date(vm.timeEnd):'';
                     vm.paramsGet.fromdate = vm.timeStart?vm.parseDateFormat(vm.timeStart):null;
                     vm.paramsGet.todate = vm.timeEnd?vm.parseDateFormat(vm.timeEnd):null;
                     vm.callGetActivity()
@@ -467,9 +466,9 @@
                 }
             },
             /** get list source group*/
-            getListActivitySource: function(class_pk,indexGroup,index){
+            getListActivitySource: function(class_pk,indexGroup,index,event){
                 var vm =this;
-                
+                console.log(event);
                 var paramsGetSource = {
                     
                 };
@@ -561,6 +560,12 @@
     #activity_manager .listGroup .list__tile:hover{
         cursor: pointer;
         color: blue
+    }
+    
+    #activity_manager .list--group__header--active .list__tile__action > i{
+        -webkit-transform: rotate(-180deg);
+        -ms-transform: rotate(-180deg);
+        transform: rotate(-180deg);
     }
     #activity_manager .header-menu div{
         text-align: center;
