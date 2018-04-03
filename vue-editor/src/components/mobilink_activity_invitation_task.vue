@@ -361,7 +361,7 @@
         created () {
             var vm = this
             vm.$nextTick(function () {
-                vm.initInvitationTask()
+                // vm.initInvitationTask()
             })
         },
         
@@ -425,13 +425,18 @@
                 /*vm.userId = 108;*/
                  vm.userId = themeDisplay.getUserId();
                 /** */
-                vm.getWorkingUnitTask();
+                Promise.all([vm.getWorkingUnitTask(), vm.getUserContact(),vm.getInvitationTask(),vm.activeGetEmployeesTask()]).then(function() {
+                    vm.getEmployeesTask()
+                }, function() {
+                    console.log("error")
+                });
+                /*vm.getWorkingUnitTask();
                 vm.getUserContact();
                 vm.getInvitationTask();
                 
                 setTimeout(function(){
                     vm.activeGetEmployeesTask();
-                },4000);
+                },4000);*/
                 console.log(vm._props);
                 console.log('userId:'+ vm.userId)
             },
@@ -603,7 +608,7 @@
                 for(var keys in vm.itemInvGroupTask){
                     if(vm.itemInvGroupTask[keys].user_leader&&vm.itemInvGroupTask[keys].user_leader == vm.userId){
                         vm.roleIdUser = vm.itemInvGroupTask[keys].role.roleId;
-                        vm.getEmployeesTask();
+                        
                     }
                 }
             },

@@ -511,21 +511,26 @@
             
             initInvitation: function(){
                 var vm = this;
-                vm.userId = 108;
-                // vm.userId = themeDisplay.getUserId();
-                /** */
-                vm.getWorkingUnit();
-                vm.getUserContact();
-                vm.getInvitation();
+                /*vm.userId = 108;*/
+                vm.userId = themeDisplay.getUserId();
+                Promise.all([vm.getWorkingUnit(), vm.getUserContact(),vm.getInvitation(),vm.activeGetEmployees()]).then(function() {
+                    vm.getEmployees()
+                }, function() {
+                    console.log("error")
+                });
                 
+                /*vm.getWorkingUnit();
+                vm.getUserContact();
+                vm.getInvitation(); 
                 setTimeout(function(){
                     vm.activeGetEmployees();
-                },4000);
+                },4000);*/
                 console.log(vm._props);
                 console.log('userId:'+ vm.userId)
             },
             /* Load data invitation */
             getInvitation: function(){
+                console.log("getInvitation");
                 var vm = this;
                 vm.presenterAddGroup = false;
                 vm.presenterAddUser = false;
@@ -627,6 +632,7 @@
             },
             /**get workingUnit */
             getWorkingUnit: function(){
+                console.log("getWorkingUnit");
                 var vm = this;
                 var paramsGetWorkingUnit = {
                     full: true
@@ -688,16 +694,18 @@
             },
             /**run get employees */
             activeGetEmployees: function(){
+                console.log("activeGetEmployees");
                 var vm = this;
                 for(var keys in vm.itemInvGroup){
                     if(vm.itemInvGroup[keys].user_leader&&vm.itemInvGroup[keys].user_leader == vm.userId){
                         vm.roleIdUser = vm.itemInvGroup[keys].role.roleId;
-                        vm.getEmployees();
+                        
                     }
                 }
             },
             /**get contact */
             getUserContact: function(){
+                console.log("getUserContact");
                 var vm = this;
                 var paramsGetUserContact = {
                     
