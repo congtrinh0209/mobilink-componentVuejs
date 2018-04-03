@@ -947,7 +947,7 @@
                     setTimeout(function(){
                         vm.getInvitationTask();
                         vm.dialog_loading = false;
-                        vm.show_alert('success','Cập nhật thất bại');
+                        vm.show_alert('error','Cập nhật thất bại');
                     },1000) ;
                 })
                 

@@ -1041,11 +1041,10 @@
                     setTimeout(function(){
                         vm.getInvitation();
                         vm.dialog_loading = false;
-                        vm.show_alert('success','Cập nhật thất bại');
+                        vm.show_alert('error','Cập nhật thất bại');
                     },1000) ;
                 });
-                
-                
+
             },
             checkin: function(){
                 var vm =this;
