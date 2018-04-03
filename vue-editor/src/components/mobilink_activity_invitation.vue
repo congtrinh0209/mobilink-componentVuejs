@@ -496,8 +496,8 @@
                 employeeItems:[],
                 employee:'',
                 roleIdUser:'',
-                text_error:'Cập nhật dữ liệu thất bại',
-                text_success:'Cập nhật dữ liệu thành công',
+                text_error:'Cập nhật thất bại',
+                text_success:'Cập nhật thành công',
                 pointerEvent: 'pointerEvent',
                 dialog_loading: false,
                 // 
@@ -550,7 +550,7 @@
                     }
                 };
                 
-                axios.get( vm.end_point + 'activities/' + vm.class_pk + '/invitations', configGetInvitation)
+                axios.get( vm.end_point + 'resourceinvitations/'+vm.class_name+'/' + vm.class_pk, configGetInvitation)
                 .then(function (response) {
                     var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
@@ -754,7 +754,7 @@
             updateInvitation: function(type,invId,index,items){
                 var vm = this;
                 
-                var urlUpdate = vm.end_point + "activities/"+vm.class_pk+"/invitations/"+invId;
+                var urlUpdate = vm.end_point + "resourceinvitations/"+invId;
                 var paramsPutInvitation = {
                     
                 };
@@ -769,11 +769,11 @@
                 if(type == "PUT"){
                     axios.put(urlUpdate, postData, configPutInvitation)
                     .then(function (response) {
-                        vm.show_alert('success','Cập nhật dữ liệu thành công')
+                        vm.show_alert('success','Cập nhật thành công')
                        
                     })
                     .catch(function (error) {
-                        vm.show_alert('error','Cập nhật dữ liệu thất bại')
+                        vm.show_alert('error','Cập nhật thất bại')
                     })
                 } else if(type == "DELETE") {
                     axios.delete(urlUpdate, configPutInvitation)
@@ -844,7 +844,7 @@
                     }
                 }
                 
-                var urlUpdate = vm.end_point + "activities/"+vm.class_pk+"/invitations";
+                var urlUpdate = vm.end_point + "resourceinvitations";
                 var paramsPostInvitation = {
                     
                 };
@@ -912,7 +912,7 @@
                 var vm = this;
                 var dataUpdateInvitation  =new URLSearchParams();
                 dataUpdateInvitation.append('userNote', note);
-                var urlUpdate = vm.end_point + "activities/"+vm.class_pk+"/invitations/"+invId;
+                var urlUpdate = vm.end_point + "resourceinvitations/"+invId;
                 var paramsPutInvitation = {
                     
                 };
@@ -945,7 +945,7 @@
                 var vm = this;
                 var dataUpdateInvitation  =new URLSearchParams();
                 dataUpdateInvitation.append('presenter', presenter);
-                var urlUpdate = vm.end_point + "activities/"+vm.class_pk+"/invitations/"+invId;
+                var urlUpdate = vm.end_point + "resourceinvitations/"+invId;
                 var paramsPutInvitation = {
                     
                 };
@@ -957,10 +957,10 @@
                 };
                 axios.put(urlUpdate, dataUpdateInvitation, configPutInvitation)
                 .then(function (response) {
-                    vm.show_alert('success','Cập nhật dữ liệu thành công')
+                    vm.show_alert('success','Cập nhật thành công')
                 })
                 .catch(function (error) {
-                    vm.show_alert('error','Cập nhật dữ liệu thất bại')
+                    vm.show_alert('error','Cập nhật thất bại')
                 })
             },
             /** */
@@ -1016,7 +1016,7 @@
 
                 var dataUpdateAvailable  =new URLSearchParams();
                 dataUpdateAvailable.append('available', vm.typeAvailable);
-                var urlUpdate = vm.end_point + "activities/"+vm.class_pk+"/invitations/"+vm.invitationUserId;
+                var urlUpdate = vm.end_point + "resourceinvitations/"+vm.invitationUserId;
                 var paramsPutInvitation = {
                     
                 };
@@ -1028,17 +1028,23 @@
                 };
                 axios.put(urlUpdate, dataUpdateAvailable, configPutInvitation)
                 .then(function (response) {
-                    setTimeout (function(){
+                    vm.dialog_loading = true;
+                    setTimeout(function(){
                         vm.getInvitation();
-                    },1000);
-                    vm.show_alert('success','Cập nhật dữ liệu thành công')
+                        vm.dialog_loading = false;
+                        vm.show_alert('success','Cập nhật thành công');
+                    },1000) ;
+                    
                 })
                 .catch(function (error) {
-                    setTimeout (function(){
+                    vm.dialog_loading = true;
+                    setTimeout(function(){
                         vm.getInvitation();
-                    },1000);
-                    vm.show_alert('error','Cập nhật dữ liệu thất bại')
-                })
+                        vm.dialog_loading = false;
+                        vm.show_alert('success','Cập nhật thất bại');
+                    },1000) ;
+                });
+                
                 
             },
             checkin: function(){
@@ -1047,7 +1053,7 @@
 
                 var dataUpdateAvailable  =new URLSearchParams();
                 dataUpdateAvailable.append('checkin', vm.typeCheckin);
-                var urlUpdate = vm.end_point + "activities/"+vm.class_pk+"/invitations/"+vm.invitationUserId;
+                var urlUpdate = vm.end_point + "resourceinvitations/"+vm.invitationUserId;
                 var paramsPutInvitation = {
                     
                 };
@@ -1059,12 +1065,21 @@
                 };
                 axios.put(urlUpdate, dataUpdateAvailable, configPutInvitation)
                 .then(function (response) {
+                    vm.dialog_loading = true;
+                    setTimeout(function(){
+                        vm.getInvitation();
+                        vm.dialog_loading = false;
+                        vm.show_alert('success','Cập nhật thành công');
+                    },1000) ;
 
-                    alert("Cập nhật dữ liệu thành công!");
                 })
                 .catch(function (error) {
-                    vm.typeCheckin=!vm.typeCheckin;
-                    alert("Cập nhật dữ liệu thất bại!")
+                    vm.dialog_loading = true;
+                    setTimeout(function(){
+                        vm.getInvitation();
+                        vm.dialog_loading = false;
+                        vm.show_alert('success','Cập nhật thất bại');
+                    },1000) ;
                 })
             },
             managerCheckin: function(item){
@@ -1074,7 +1089,7 @@
 
                 var dataUpdateAvailable  =new URLSearchParams();
                 dataUpdateAvailable.append('checkin', typeCheckManager);
-                var urlUpdate = vm.end_point + "activities/"+vm.class_pk+"/invitations/"+item.activityInvitationId;
+                var urlUpdate = vm.end_point + "resourceinvitations/"+item.activityInvitationId;
                 var paramsPutInvitation = {
                     
                 };
@@ -1087,10 +1102,14 @@
                 axios.put(urlUpdate, dataUpdateAvailable, configPutInvitation)
                 .then(function (response) {
                     item.checkin = typeCheckManager;
-                    vm.show_alert('success','Cập nhật dữ liệu thành công')
+                    if(typeCheckManager == true){
+                        vm.checkinCount+=1;
+                    } else {vm.checkinCount-=1;}
+                    
+                    vm.show_alert('success','Cập nhật thành công')
                 })
                 .catch(function (error) {
-                    vm.show_alert('error','Cập nhật dữ liệu thất bại')
+                    vm.show_alert('error','Cập nhật thất bại')
                 })
             },
             show_Add1: function(){
@@ -1156,7 +1175,7 @@
             },
             addInvitationCotEmail: function(name,tel,email){
                 var vm = this;
-                var urlUpdate = vm.end_point + "activities/"+vm.class_pk+"/invitations";
+                var urlUpdate = vm.end_point + "resourceinvitations";
                 var dataPostInvitation  =new URLSearchParams();
                 var presenterPostUser;
                 if(vm.presenterAddUser == true){
@@ -1186,7 +1205,6 @@
                         vm.show_alert('success','Thêm mới giấy mời thành công');
                     },3000) ;
                     
-    
                 })
                 .catch(function (error) {
                     vm.show_alert('error','Thêm mới giấy mời thất bại')
