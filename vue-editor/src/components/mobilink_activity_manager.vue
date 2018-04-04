@@ -171,8 +171,8 @@
         data () {
             return {
                 class_name: 'org.mobilink.activitymgt.model.Activity',
-                group_id: /*themeDisplay.getScopeGroupId()*/20147,
-                end_point: /*'/o/v2/mobilink/'*/"http://127.0.0.1:8081/api/",
+                group_id: themeDisplay.getScopeGroupId()/*20147*/,
+                end_point: '/o/v2/mobilink/'/*"http://127.0.0.1:8081/api/"*/,
                 mainItems: [],
                 userId: '',
                 activityListItems:[],
@@ -526,16 +526,16 @@
             getColor: function(item){
                 var color;
                 switch (item) {
-                    case 'New':
+                    case 1:
                         color = "red";
                         break;
-                    case 'Processing':
+                    case 4:
                         color = "blue";
                         break;
-                    case 'Closed':
+                    case 7:
                         color = "amber";
                         break;
-                    case 'Canceled':
+                    case 8:
                         color = "grey";
                         
                 }
@@ -566,6 +566,9 @@
         -webkit-transform: rotate(-180deg);
         -ms-transform: rotate(-180deg);
         transform: rotate(-180deg);
+    }
+    #activity_manager .list--group__header--active{
+        background-color: #eee!important
     }
     #activity_manager .header-menu div{
         text-align: center;

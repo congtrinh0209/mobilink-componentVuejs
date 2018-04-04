@@ -1,5 +1,5 @@
 <template>
-    <div id="activity_invitation_task">
+    <div id="activity_invitation_task" v-if="opening_state_prop == 3 || opening_state_prop == 4 ">
         <v-dialog class="application theme--light progessLoading" v-model="dialog_loading" persistent max-width="50px">
             <v-card>
                 <v-progress-circular v-bind:size="25" indeterminate color="primary"></v-progress-circular>
@@ -105,7 +105,7 @@
                                                             </v-flex>
                                                             <v-flex xs6 sm3>
                                                                 <div class="right">
-                                                                    <v-chip v-if="opening_state_prop == 0" label outline color="primary" class="mr-2 mt-2">{{item.role.statistic.available}}/{{item.role.statistic.invitation}}</v-chip>
+                                                                    <v-chip label outline color="primary" class="mr-2 mt-2">{{item.role.statistic.available}}/{{item.role.statistic.invitation}}</v-chip>
                                                                     
                                                                     <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager' || permission_prop == 'owner'" 
                                                                     @click.stop="updateInvitationTask('DELETE',item.role.activityInvitationId,index,itemInvGroupTask)">

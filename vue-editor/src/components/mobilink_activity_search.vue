@@ -219,7 +219,7 @@
                     </td>
 
                     <td class="text-xs-center">
-                            <v-chip style="display: inline-block;text-align: center;width:90%" label outline :color="getColor(props.item.state)"><span>{{getState(props.item.state)}}</span></v-chip>
+                        <v-chip style="display: inline-block;text-align: center;width:90%" label outline :color="getColor(props.item.state)"><span>{{getState(props.item.state)}}</span></v-chip>
 
                     </td>
 
@@ -316,23 +316,39 @@
                 vm.statusItems = [
                     {
                         statusName: 'Mới',
-                        statusCode: 'planned'
+                        statusCode: 1
                     },
                     {
-                        statusName: 'Đã bắt đầu',
-                        statusCode: 'started'
+                        statusName: 'Xin chỉ đạo',
+                        statusCode: 2
+                    },
+                    {
+                        statusName: 'Chờ thực hiện',
+                        statusCode: 3
+                    },
+                    {
+                        statusName: 'Đang thực hiện',
+                        statusCode: 4
+                    },
+                    {
+                        statusName: 'Chờ xác nhận',
+                        statusCode: 5
+                    },
+                    {
+                        statusName: 'Đang theo dõi',
+                        statusCode: 6
                     },
                     {
                         statusName: 'Đã kết thúc',
-                        statusCode: 'closed'
+                        statusCode: 7
                     },
                     {
                         statusName: 'Đã hủy',
-                        statusCode: 'canceled'
+                        statusCode: 8
                     },
                     {
-                        statusName: 'Đang xử lý',
-                        statusCode: 'opening'
+                        statusName: 'Không xử lý',
+                        statusCode: 9
                     }
                 ];
                 
