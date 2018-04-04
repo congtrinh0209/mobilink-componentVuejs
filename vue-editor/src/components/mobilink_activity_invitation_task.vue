@@ -560,22 +560,22 @@
                     var serializable = response.data
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            // if(vm.invitationTaskItems.length!=0){
-                            //     for(var keys in vm.invitationTaskItems){
-                            //         if(serializable.data[key].roleId != vm.invitationTaskItems[keys].roleId){
-                                        vm.hostingIdItemsTask.push(
-                                            serializable.data[key]
-                                        );
-                            //             break;
-                                        
-                            //         }
-                            //     }
-                            // } else {
-                            //     vm.hostingIdItemsTask.push(
-                            //         serializable.data[key]
-                            //     );
-                            // }
-                            
+                            if(vm.invitationTaskItems.length!=0){
+                                var itemInv = true;
+                                for(var keys in vm.invitationTaskItems){
+                                    if(serializable.data[key].roleId == vm.invitationTaskItems[keys].roleId){
+                                        itemInv = false;
+                                        break;
+                                    }
+                                }
+                                if(itemInv){
+                                    vm.hostingIdItemsTask.push(serializable.data[key])
+                                }
+                            } else {
+                                vm.hostingIdItemsTask.push(
+                                    serializable.data[key]
+                                );
+                            }
                             
                         }
                     }
@@ -603,20 +603,22 @@
                     var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            // if(vm.invitationTaskItems.length!=0){
-                            //     for(var keys in vm.invitationTaskItems){
-                            //         if(serializable.data[key].mappingUser.userId != vm.invitationTaskItems[keys].toUserId){
-                                        vm.employeeItemsTask.push(
-                                            serializable.data[key]
-                                        )
-                            //             break;
-                            //         }
-                            //     }
-                            // } else {
-                            //     vm.employeeItemsTask.push(
-                            //         serializable.data[key]
-                            //     )
-                            // }
+                            if(vm.invitationTaskItems.length!=0){
+                                var itemInv = true;
+                                for(var keys in vm.invitationTaskItems){
+                                    if(serializable.data[key].mappingUser.userId == vm.invitationTaskItems[keys].toUserId){
+                                        itemInv = false;
+                                        break;
+                                    }
+                                }
+                                if(itemInv){
+                                    vm.employeeItemsTask.push(serializable.data[key])
+                                }
+                            } else {
+                                vm.employeeItemsTask.push(
+                                    serializable.data[key]
+                                )
+                            }
                             
                         }
                     };
@@ -654,20 +656,22 @@
                     var serializable = response.data
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                        //     if(vm.invitationTaskItems.length!=0){
-                        //         for(var keys in vm.invitationTaskItems){
-                        //             if(serializable.data[key].userMappingId == vm.invitationTaskItems[keys].toUserId){
-                                        vm.contactItemsTask.push(
-                                            serializable.data[key]
-                                        )
-                        //                 break;
-                        //             }
-                        //         }
-                        //     } else {
-                        //         vm.contactItemsTask.push(
-                        //             serializable.data[key]
-                        //         )
-                        //     }
+                            if(vm.invitationTaskItems.length!=0){
+                                var itemInv = true;
+                                for(var keys in vm.invitationTaskItems){
+                                    if(serializable.data[key].userMappingId == vm.invitationTaskItems[keys].toUserId){
+                                        itemInv = false;
+                                        break;
+                                    }
+                                }
+                                if(itemInv){
+                                    vm.contactItemsTask.push(serializable.data[key])
+                                }
+                            } else {
+                                vm.contactItemsTask.push(
+                                    serializable.data[key]
+                                )
+                            }
                             
                         }
                     }

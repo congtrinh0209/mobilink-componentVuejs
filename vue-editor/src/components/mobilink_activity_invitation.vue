@@ -650,24 +650,22 @@
                     var serializable = response.data
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            vm.hostingIdItems.push(
-                                serializable.data[key]
-                            )
-                        };
-
-                        // if(vm.invitationItems.length!=0){
-                        //     for (var key in vm.hostingIdItems) {
-                        //         for(var keys in vm.invitationItems){
-                        //             if(vm.hostingIdItems[key].roleId == vm.invitationItems[keys].roleId){
-                        //                 targetFilter.push(vm.hostingIdItems[key].roleId)
-                        //                 break;
-                        //             }
-                                    
-                        //         };
-                        //     }
-                            
-                        // }
-                        
+                            if(vm.invitationItems.length!=0){
+                                var itemInv = true;
+                                for(var keys in vm.invitationItems){
+                                    if(serializable.data[key].roleId == vm.invitationItems[keys].roleId){
+                                        itemInv = false
+                                    }
+                                };
+                                if(itemInv){
+                                    vm.hostingIdItems.push(serializable.data[key])
+                                }
+                                  
+                            } else{
+                                vm.hostingIdItems.push(serializable.data[key])
+                            }
+                        }
+    
                     };
                     /*console.log(vm)*/
                 })
@@ -694,20 +692,22 @@
                     var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            // if(vm.invitationItems.length!=0){
-                            //     for(var keys in vm.invitationItems){
-                            //         if(serializable.data[key].mappingUser.userId != vm.invitationItems[keys].toUserId){
-                                        vm.employeeItems.push(
-                                            serializable.data[key]
-                                        )
-                            //             break;
-                            //         }
-                            //     }
-                            // } else {
-                            //     vm.employeeItems.push(
-                            //         serializable.data[key]
-                            //     )
-                            // }
+                            if(vm.invitationItems.length!=0){
+                                var itemInv = true;
+                                for(var keys in vm.invitationItems){
+                                    if(serializable.data[key].mappingUser.userId == vm.invitationItems[keys].toUserId){
+                                        itemInv = false;
+                                        break;
+                                    }
+                                }
+                                if(itemInv){
+                                    vm.employeeItems.push(serializable.data[key])
+                                }
+                            } else {
+                                vm.employeeItems.push(
+                                    serializable.data[key]
+                                )
+                            }
                         }
                     }
                 })
@@ -745,22 +745,24 @@
                     var serializable = response.data
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            // if(vm.invitationItems.length!=0){
-                            //     for(var keys in vm.invitationItems){
-                                
-                            //         if(serializable.data[key].userMappingId == vm.invitationItems[keys].toUserId){
-                            //             vm.contactItems.push(
-                            //                 serializable.data[key]
-                            //             )
-                            //             break;
-                            //         }
-                            //     }
-                            // }
-                            //  else {
+                            if(vm.invitationItems.length!=0){
+                                var itemInv = true;
+                                for(var keys in vm.invitationItems){
+                                    
+                                    if(serializable.data[key].userMappingId == vm.invitationItems[keys].toUserId){
+                                        itemInv = false;
+                                        break;
+                                    }
+                                }
+                                if(itemInv){
+                                    vm.contactItems.push(serializable.data[key])
+                                }
+                            }
+                            else {
                                 vm.contactItems.push(
                                     serializable.data[key]
                                 )
-                            // }
+                            }
                                 
                             
                         }
