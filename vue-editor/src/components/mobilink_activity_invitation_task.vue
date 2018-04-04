@@ -422,7 +422,7 @@
         methods: {
             initInvitationTask: function(){
                 var vm = this;
-                /*vm.userId = 108;*/
+                // vm.userId = 108;
                  vm.userId = themeDisplay.getUserId();
                 /** */
                 Promise.all([vm.getInvitationTask(),vm.activeGetEmployeesTask()]).then(function() {
@@ -560,15 +560,22 @@
                     var serializable = response.data
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            for(var keys in vm.invitationTaskItems){
-                                if(serializable.data[key].roleId != vm.invitationTaskItems[keys].roleId){
-                                    vm.hostingIdItemsTask.push(
-                                        serializable.data[key]
-                                    );
-                                    break;
-                                    
-                                }
-                            }
+                            // if(vm.invitationTaskItems.length!=0){
+                            //     for(var keys in vm.invitationTaskItems){
+                            //         if(serializable.data[key].roleId != vm.invitationTaskItems[keys].roleId){
+                                        vm.hostingIdItemsTask.push(
+                                            serializable.data[key]
+                                        );
+                            //             break;
+                                        
+                            //         }
+                            //     }
+                            // } else {
+                            //     vm.hostingIdItemsTask.push(
+                            //         serializable.data[key]
+                            //     );
+                            // }
+                            
                             
                         }
                     }
@@ -596,14 +603,20 @@
                     var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            for(var keys in vm.invitationTaskItems){
-                                if(serializable.data[key].mappingUser.userId != vm.invitationTaskItems[keys].toUserId){
-                                    vm.employeeItemsTask.push(
-                                        serializable.data[key]
-                                    )
-                                    break;
-                                }
-                            }
+                            // if(vm.invitationTaskItems.length!=0){
+                            //     for(var keys in vm.invitationTaskItems){
+                            //         if(serializable.data[key].mappingUser.userId != vm.invitationTaskItems[keys].toUserId){
+                                        vm.employeeItemsTask.push(
+                                            serializable.data[key]
+                                        )
+                            //             break;
+                            //         }
+                            //     }
+                            // } else {
+                            //     vm.employeeItemsTask.push(
+                            //         serializable.data[key]
+                            //     )
+                            // }
                             
                         }
                     };
@@ -641,15 +654,21 @@
                     var serializable = response.data
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
+                        //     if(vm.invitationTaskItems.length!=0){
+                        //         for(var keys in vm.invitationTaskItems){
+                        //             if(serializable.data[key].userMappingId == vm.invitationTaskItems[keys].toUserId){
+                                        vm.contactItemsTask.push(
+                                            serializable.data[key]
+                                        )
+                        //                 break;
+                        //             }
+                        //         }
+                        //     } else {
+                        //         vm.contactItemsTask.push(
+                        //             serializable.data[key]
+                        //         )
+                        //     }
                             
-                            for(var keys in vm.invitationTaskItems){
-                                if(serializable.data[key].userMappingId == vm.invitationTaskItems[keys].toUserId){
-                                    vm.contactItemsTask.push(
-                                        serializable.data[key]
-                                    )
-                                    break;
-                                }
-                            }
                         }
                     }
                 })

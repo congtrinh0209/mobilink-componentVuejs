@@ -72,7 +72,7 @@
             
             <v-expansion-panel expand v-for="(item,index) in mainItems" :key="item.leader.employeeId">
                 <v-expansion-panel-content :value="item==mainItems[0]">
-                    <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0" style="font-family: sans-serif">
+                    <div slot="header" @click="getListActivitySource(item.activityItems[0].activityId,index,0)" class="custome-panel-heading-with-icon mr-2 pl-0" style="font-family: sans-serif">
                         <b v-if="radioGroup == 'leader'">{{item.leader.title}} {{ item.leader.fullName }} - {{ item.leader.jobTitle }}</b>
                         <b v-if="radioGroup == 'activityCat'">{{item.leader.itemName}}</b>
                     </div>
@@ -84,7 +84,7 @@
                                     <v-card>
                                         <v-list class="py-0">
                                             <v-list-group class="listGroup py-0" v-for="(item1,index1) in item.activityItems" :value="item1.activityId==item.activityItems[0].activityId" v-bind:key="item1.activityId">
-                                                <v-list-tile slot="item" class="px-0" @click="getListActivitySource(item1.activityId,index,index1,$event)">
+                                                <v-list-tile slot="item" class="px-0" @click="getListActivitySource(item1.activityId,index,index1)">
                                                     <v-list-tile-content class="px-0 pl-2">
                                                         <v-list-tile-title class="item_group" >
                                                             <b>{{ parseDateView(new Date(item1.startDate))}}</b> - {{item1.resultNote}}
@@ -466,9 +466,8 @@
                 }
             },
             /** get list source group*/
-            getListActivitySource: function(class_pk,indexGroup,index,event){
+            getListActivitySource: function(class_pk,indexGroup,index){
                 var vm =this;
-                console.log(event);
                 var paramsGetSource = {
                     
                 };
