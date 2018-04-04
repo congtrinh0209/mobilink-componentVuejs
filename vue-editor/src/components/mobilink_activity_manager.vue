@@ -84,48 +84,48 @@
                                     <v-card>
                                         <v-list class="py-0">
                                             <v-list-group class="listGroup py-0" v-for="(item1,index1) in item.activityItems" :value="item1.activityId==item.activityItems[0].activityId" v-bind:key="item1.activityId">
-                                                    <v-list-tile slot="item" class="px-0" @click="getListActivitySource(item1.activityId,index,index1,$event)">
-                                                        <v-list-tile-content class="px-0 pl-2">
-                                                            <v-list-tile-title class="item_group" >
-                                                                <b>{{ parseDateView(new Date(item1.startDate))}}</b> - {{item1.resultNote}}
-                                                            </v-list-tile-title>
-                                                        </v-list-tile-content>
+                                                <v-list-tile slot="item" class="px-0" @click="getListActivitySource(item1.activityId,index,index1,$event)">
+                                                    <v-list-tile-content class="px-0 pl-2">
+                                                        <v-list-tile-title class="item_group" >
+                                                            <b>{{ parseDateView(new Date(item1.startDate))}}</b> - {{item1.resultNote}}
+                                                        </v-list-tile-title>
+                                                    </v-list-tile-content>
 
-                                                        <v-list-tile-action class="pr-2">
-                                                            <v-icon>keyboard_arrow_down</v-icon>
-                                                        </v-list-tile-action>
-                                                    </v-list-tile>
-                                                    
-                                                    <!-- end -->
-                                                    <v-list-tile-content>
-                                                        <v-data-table id="subTableActivity"
-                                                        hide-headers
-                                                        :items="item.activitySourceItems[index1]"
-                                                        item-key="activityId"
-                                                        hide-actions
-                                                        >
-                                                            <template slot="items" scope="props">
-                                                                
-                                                                <tr v-bind:class="{'active': props.index%2==1}">
-                                                                    <td class="text-xs-center py-2" style="width: 5%">{{props.index + 1}}</td>
-                                                                    <td class="text-xs-center py-2" style="width: 30%" :title="props.item.subject">{{ props.item.subject }}</td>
-                                                                    <td class="text-xs-center py-2" style="width: 20%" :title="props.item.hosting ">{{ props.item.hosting }}</td>
-                                                                    <td class="text-xs-center py-2" style="width: 12%">{{parseDateView(new Date(props.item.endDate))}}</td>
-                                                                    <td class="text-xs-center" style="width: 13%">
-                                                                        <v-chip style="display: inline-block;text-align: center;width:90%" label outline :color="getColor(props.item.state)">
-                                                                            <span>{{props.item.stateName}}</span>
-                                                                        </v-chip>
-                                                                        
-                                                                    </td>
-                                                                    <td class="text-xs-center py-2" style="width: 20%" :title="props.item.resultNote">{{ props.item.resultNote }}</td>
-                                                                </tr>
-                                                                
-                                                            </template>
-                                                        </v-data-table>
-                                                        
-                                                    </v-list-tile-content>  
+                                                    <v-list-tile-action class="pr-2">
+                                                        <v-icon>keyboard_arrow_down</v-icon>
+                                                    </v-list-tile-action>
+                                                </v-list-tile>
                                                 
-                                                    <!-- end -->
+                                                <!-- end -->
+                                                <v-list-tile-content>
+                                                    <v-data-table id="subTableActivity"
+                                                    hide-headers
+                                                    :items="item.activitySourceItems[index1]"
+                                                    item-key="activityId"
+                                                    hide-actions
+                                                    >
+                                                        <template slot="items" scope="props">
+                                                            
+                                                            <tr v-bind:class="{'active': props.index%2==1}">
+                                                                <td class="text-xs-center py-2" style="width: 5%">{{props.index + 1}}</td>
+                                                                <td class="text-xs-center py-2" style="width: 30%" :title="props.item.subject">{{ props.item.subject }}</td>
+                                                                <td class="text-xs-center py-2" style="width: 20%" :title="props.item.hosting ">{{ props.item.hosting }}</td>
+                                                                <td class="text-xs-center py-2" style="width: 12%">{{parseDateView(new Date(props.item.endDate))}}</td>
+                                                                <td class="text-xs-center" style="width: 13%">
+                                                                    <v-chip style="display: inline-block;text-align: center;width:90%" label outline :color="getColor(props.item.state)">
+                                                                        <span>{{props.item.stateName}}</span>
+                                                                    </v-chip>
+                                                                    
+                                                                </td>
+                                                                <td class="text-xs-center py-2" style="width: 20%" :title="props.item.resultNote">{{ props.item.resultNote }}</td>
+                                                            </tr>
+                                                            
+                                                        </template>
+                                                    </v-data-table>
+                                                    
+                                                </v-list-tile-content>  
+                                                
+                                                <!-- end -->
                                             </v-list-group>
                                             
                                         </v-list>
@@ -185,7 +185,6 @@
                 timeEnd:'',
                 timeEndMin:'',
                 timeStartMax:'',
-                mainItems: [],
                 subItems: [],
                 paramsGet: {},
                 mainHeaders: [
@@ -340,6 +339,7 @@
             callGetActivity: function(){
                 var vm = this;
                 vm.activityListItems=[];
+                vm.mainItems =[];
                 var configGetActivity = {
                     params: vm.paramsGet,
                     headers: {
@@ -529,7 +529,13 @@
                     case 1:
                         color = "red";
                         break;
+                    case 3:
+                        color = "red";
+                        break;
                     case 4:
+                        color = "blue";
+                        break;
+                    case 5:
                         color = "blue";
                         break;
                     case 7:
@@ -568,7 +574,7 @@
         transform: rotate(-180deg);
     }
     #activity_manager .list--group__header--active{
-        background-color: #eee!important
+        background-color: #cbddf7!important
     }
     #activity_manager .header-menu div{
         text-align: center;

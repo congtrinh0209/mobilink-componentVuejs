@@ -135,15 +135,15 @@
 
                 <!--  -->
                 <v-flex xs12 sm2>
-                    <v-subheader class="px-0 pl-3 pt-3">Thẻ nhãn</v-subheader>
+                    <v-subheader class="px-0 pl-3 pt-3">Hoạt động</v-subheader>
                 </v-flex>
-                <v-flex xs12 sm4 class="pr-2" id="labelTxt">
+                <v-flex xs12 sm4 class="pr-2" id="activityTypeTextxt">
                     <v-select 
-                        v-bind:items="labelItems"
-                        v-model="labelS"
+                        v-bind:items="activityTypeItems"
+                        v-model="activityType"
                         clearable
-                        item-text="name"
-                        item-value="labelId"
+                        item-text="itemName"
+                        item-value="itemCode"
                         autocomplete
 
                         hide-selected
@@ -219,7 +219,7 @@
                     </td>
 
                     <td class="text-xs-center">
-                        <v-chip style="display: inline-block;text-align: center;width:90%" label outline :color="getColor(props.item.state)"><span>{{getState(props.item.state)}}</span></v-chip>
+                        <v-chip style="display: inline-block;text-align: center;width:90%" label outline :color="getColor(props.item.state)"><span>{{props.item.statusName}}</span></v-chip>
 
                     </td>
 
@@ -258,7 +258,6 @@
             hosting:'',
             manager:'',
             project:'',
-            label:'',
             location:'',
             fromdate:'',
             todate:''
@@ -289,8 +288,14 @@
                 contact:'',
                 managerItems:[],
                 managerS:'',
-                labelItems:[],
-                labelS:'',
+                activityTypeItems:[
+                    {itemName: 'Cuộc họp, hội nghị', itemCode: 'EVENT'},
+                    {itemName: 'Giao nhiệm vụ', itemCode: 'TASK'},
+                    {itemName: 'Đề xuất, kiến nghị', itemCode: 'REQUEST'},
+                    {itemName: 'Kế hoạch công tác', itemCode: 'PLAN'},
+                    {itemName: 'Yêu cầu hỗ trợ', itemCode: 'TICKET'}
+                ],
+                activityType:'',
                 viewAdvancedSearch: false,
                 startDate:'...',
                 endDate: '...',
@@ -417,24 +422,7 @@
                 .catch(function (error) {
                     console.log(error)
                 })
-                    /* Load data thẻ nhãn */
 
-                axios.get( endPoint + 'labels', config)
-                .then(function (response) {
-                    var serializable = response.data
-                    if (serializable.hasOwnProperty('data')) {
-                        for (var key in serializable.data) {
-                            vm.labelItems.push({
-                                name: serializable.data[key].name,
-                                labelId: serializable.data[key].labelId
-                            })
-                            
-                        }
-                    }
-                })
-                .catch(function (error) {
-                    console.log(error)
-                })
                 /* Load data địa chỉ*/
                 axios.get( endPoint + 'locations', config)
                 .then(function (response) {
@@ -471,47 +459,20 @@
                 })
             },
             /** */
-            getState: function(item){
-                var state;
-                switch (item) {
-                    case 1:
-                        state = "Mới";
-                        break;
-                    case 2:
-                        state = "Xin chỉ đạo";
-                        break;
-                    case 3:
-                        state = "Chờ thực hiện";
-                        break;
-                    case 4:
-                        state = "Đang thực hiện";
-                        break;
-                    case 5:
-                        state = "Chờ xác nhận";
-                        break;
-                    case 6:
-                        state = "Đang theo dõi";
-                        break;
-                    case 7:
-                        state = "Đã kết thúc";
-                        break;
-                    case 8:
-                        state = "Đã hủy";
-                        break;
-                    case 9:
-                        state = "Không xử lý";
-                        break;
-                        
-                }
-                return state
-            },
+            
             getColor: function(item){
                 var color;
                 switch (item) {
                     case 1:
                         color = "red";
                         break;
+                    case 3:
+                        color = "red";
+                        break;
                     case 4:
+                        color = "blue";
+                        break;
+                    case 5:
                         color = "blue";
                         break;
                     case 7:
@@ -618,7 +579,7 @@
                 vm.hostingId = vm.hosting?vm.hosting:'';
                 vm.managerS = vm.manager?vm.manager:'';
                 vm.projectS = vm.project?vm.project:'';
-                vm.labelS = vm.label?vm.label:'';
+                vm.activityType = vm.type?vm.type:'';
                 vm.locationS = vm.location?vm.location:'';
                 vm.timeStart = vm.fromdate?new Date (vm.fromdate.slice(0,4)+'-'+vm.fromdate.slice(4,6)+'-'+ vm.fromdate.slice(6,8)):'';
                 vm.timeEnd = vm.todate?new Date (vm.todate.slice(0,4)+'-'+vm.todate.slice(4,6)+'-'+ vm.todate.slice(6,8)):'';
@@ -646,7 +607,7 @@
                     paramsTableActivity.hosting = vm.hostingId?vm.hostingId:'';
                     paramsTableActivity.manager = vm.managerS?vm.managerS:'';
                     paramsTableActivity.project = vm.projectS?vm.projectS:'';
-                    paramsTableActivity.label = vm.labelS?vm.labelS:'';
+                    paramsTableActivity.type = vm.activityType?vm.activityType:'';
                     paramsTableActivity.location = vm.locationS?vm.locationS:'';
                     paramsTableActivity.fromdate = vm.parseDateFormat(vm.timeStart);
                     paramsTableActivity.todate = vm.parseDateFormat(vm.timeEnd);
@@ -677,7 +638,7 @@
                     console.log(error);
                     vm.tableListItems = [];
                 });
-                // console.log(vm)
+                console.log(vm)
             },
             /**get text search */
             getTxtSearch: function(){
@@ -701,35 +662,36 @@
                         return item.locationId == vm.locationS;
                     })[0].location
                 };
-                // if(vm.managerS){
-                //     var arr = vm.managerItems;
-                //     var managerT = arr.filter(function(item) {
-                //         return item.mappingUser.userId == vm.managerS;
-                //     }).fullName
-                // };
+                if(vm.managerS){
+                    var arr = vm.managerItems;
+                    var managerT = arr.filter(function(item) {
+                        return item.employeeId == vm.managerS;
+                    })[0].fullName
+                };
                 if(vm.projectS){
                     var arr = vm.projectItems;
                     var projectT = arr.filter(function(item) {
                         return item.projectId == vm.projectS;
                     })[0].projectName
                 };
-                if(vm.labelS){
-                    var arr = vm.labelItems;
-                    var labelT = arr.filter(function(item) {
-                        return item.labelId == vm.labelS;
-                    })[0].name
+                if(vm.activityType){
+                    var arr = vm.activityTypeItems;
+                    var activityTypeText = arr.filter(function(item) {
+                        return item.itemCode == vm.activityType;
+                    })[0].itemName
                 };
                 var textShow = {
+                    'Từ ngày:': vm.startDate,
+                    'Đến ngày:': vm.endDate,
                     'Trạng thái:' : stateT,
                     'Đơn vị tổ chức:' : hostingT,
                     'Địa chỉ:' : locationT,
-                    // 'Người chủ trì/ phụ trách:': managerT,
+                    'Người chủ trì/ phụ trách:': managerT,
                     'Dự án/chương trình:' : projectT,
-                    'Thẻ nhãn:' :labelT,
-                    'Từ ngày:': vm.startDate,
-                    'Đến ngày:': vm.endDate
+                    'Hoạt động:' :activityTypeText
+                    
                 };
-                console.log(textShow);
+                
                 vm.textResult = '';
                 for(var key in textShow){
                     if(textShow[key]){
@@ -741,7 +703,7 @@
             },
             /** search by key */
             search_by_key: function(){
-                console.log("run");
+                
                 var vm = this;
                 vm.keyS = true;
                 vm.keyValue = vm.search;
@@ -751,7 +713,7 @@
             },
             /** search by keyOwn */
             search_by_keyOwn: function(){
-                console.log("run");
+                
                 var vm = this;
                 vm.keyS = true;
                 vm.keyValue = vm.keySearch;
@@ -761,7 +723,7 @@
                 vm.status = '';
                 vm.hostingId = '';
                 vm.managerS = '';
-                vm.labelS = '';
+                vm.activityType = '';
                 vm.locationS = '';
                 vm.getTableList();
                 
@@ -845,6 +807,7 @@
     }
     #activitySearch .row-header .input-group .input-group__input{
         background-color: #ffffff!important;
+        margin-top: 0px!important;
         padding-left: 3px!important;
         border-radius: 2px!important;
         color: #3486D7 !important;

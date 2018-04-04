@@ -1,5 +1,5 @@
 <template>
-    <div id="activity_invitation_task" v-if="opening_state_prop == 3 || opening_state_prop == 4 ">
+    <div id="activity_invitation_task" v-if="opening_state_prop == 0||opening_state_prop == 3 || opening_state_prop == 4 ">
         <v-dialog class="application theme--light progessLoading" v-model="dialog_loading" persistent max-width="50px">
             <v-card>
                 <v-progress-circular v-bind:size="25" indeterminate color="primary"></v-progress-circular>
@@ -561,7 +561,7 @@
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
                             for(var keys in vm.invitationTaskItems){
-                                if(serializable.data[key].roleId == vm.invitationTaskItems[keys].roleId){
+                                if(serializable.data[key].roleId != vm.invitationTaskItems[keys].roleId){
                                     vm.hostingIdItemsTask.push(
                                         serializable.data[key]
                                     );
@@ -597,7 +597,7 @@
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
                             for(var keys in vm.invitationTaskItems){
-                                if(serializable.data[key].mappingUser.userId == vm.invitationTaskItems[keys].toUserId){
+                                if(serializable.data[key].mappingUser.userId != vm.invitationTaskItems[keys].toUserId){
                                     vm.employeeItemsTask.push(
                                         serializable.data[key]
                                     )

@@ -1,6 +1,6 @@
 <template>
 
-    <div id="activity_invitation" v-if="opening_state_prop==1 || opening_state_prop==4 || opening_state_prop==7 " >
+    <div id="activity_invitation" v-if="opening_state_prop == 0||opening_state_prop==1 || opening_state_prop==4 || opening_state_prop==7 " >
                 
         <v-dialog class="application theme--light progessLoading" v-model="dialog_loading" persistent max-width="50px">
             <v-card>
@@ -23,7 +23,7 @@
                 color="teal lighten-3"
                 dark
             >   
-                <div class="ml-2" v-if="opening_state_prop == 1">Giấy mời: {{invitationCount}} ({{availableCount}} sẵn sàng)</div>
+                <div class="ml-2" v-if="opening_state_prop == 0||opening_state_prop == 1">Giấy mời: {{invitationCount}} ({{availableCount}} sẵn sàng)</div>
                 <div class="ml-2" v-if="opening_state_prop == 4">Giấy mời: {{invitationCount}} ({{checkinCount}} có mặt)</div>
                 <div class="ml-2" v-if="opening_state_prop == 7 ">Giấy mời: {{invitationCount}} ({{checkinCount}} có mặt)</div>
                 <v-spacer></v-spacer>
@@ -37,11 +37,11 @@
                             <span :v-model="userIdNote">{{userIdNote}}</span>
                         </v-tooltip>
                         
-                        <v-btn v-if="opening_state_prop == 1" class="mx-0" small color="success" v-on:click.stop="checkAvailable('ready')" style="padding-left: 6px;padding-right: 6px">
+                        <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" class="mx-0" small color="success" v-on:click.stop="checkAvailable('ready')" style="padding-left: 6px;padding-right: 6px">
                             <v-icon style="color: white" v-if="typeAvailable == 1" >check</v-icon>
                             Sẵn sàng
                         </v-btn>
-                        <v-btn v-if="opening_state_prop == 1" small class="text-white mx-1" v-on:click.stop="checkAvailable('busy')" color="error">
+                        <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" small class="text-white mx-1" v-on:click.stop="checkAvailable('busy')" color="error">
                             <v-icon style="color: white" v-if="typeAvailable == 2" >check</v-icon>
                             Tôi bận
                         </v-btn>
@@ -130,7 +130,7 @@
                                                             </v-flex>
                                                             <v-flex xs6 sm3>
                                                                 <div class="right">
-                                                                    <v-chip v-if="opening_state_prop == 1" label outline color="primary" class="mr-2 mt-2">{{item.role.statistic.available}}/{{item.role.statistic.invitation}}</v-chip>
+                                                                    <v-chip v-if="opening_state_prop == 0||opening_state_prop == 1" label outline color="primary" class="mr-2 mt-2">{{item.role.statistic.available}}/{{item.role.statistic.invitation}}</v-chip>
                                                                     <v-chip v-if="opening_state_prop == 4 || opening_state_prop == 7" label outline color="primary" class="mr-2 mt-2">{{item.role.statistic.checkin}}/{{item.role.statistic.invitation}}</v-chip>
                                                                     <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager' || permission_prop == 'owner'" 
                                                                     @click.stop="updateInvitation('DELETE',item.role.activityInvitationId,index,itemInvGroup)">
@@ -206,7 +206,7 @@
                                                                         <span>{{subItem.userNote}}</span>
                                                                     </v-tooltip>
                                                                     
-                                                                    <span v-if="opening_state_prop == 1" style="color:green" class="mr-2" v-html="bindAvailableText(subItem.available)"></span>
+                                                                    <span v-if="opening_state_prop == 0||opening_state_prop == 1" style="color:green" class="mr-2" v-html="bindAvailableText(subItem.available)"></span>
                                                                     <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 7"
                                                                     :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
                                                                      v-on:click.stop="managerCheckin(subItem)" outline small class="text-white mx-1" color="indigo">
@@ -391,7 +391,7 @@
                                                                         <span>{{item.userNote}}</span>
                                                                     </v-tooltip>
                                                                     
-                                                                    <span v-if="opening_state_prop == 1" class="mr-2" style="color:green" v-html="bindAvailableText(item.available)"></span>
+                                                                    <span v-if="opening_state_prop == 0||opening_state_prop == 1" class="mr-2" style="color:green" v-html="bindAvailableText(item.available)"></span>
 
                                                                     <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 7" 
                                                                     :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
@@ -651,7 +651,7 @@
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
                             for(var keys in vm.invitationItems){
-                                if(serializable.data[key].roleId == vm.invitationItems[keys].roleId){
+                                if(serializable.data[key].roleId != vm.invitationItems[keys].roleId){
                                     vm.hostingIdItems.push(
                                         serializable.data[key]
                                     );
@@ -688,7 +688,7 @@
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
                             for(var keys in vm.invitationItems){
-                                if(serializable.data[key].mappingUser.userId == vm.invitationItems[keys].toUserId){
+                                if(serializable.data[key].mappingUser.userId != vm.invitationItems[keys].toUserId){
                                     vm.employeeItems.push(
                                         serializable.data[key]
                                     )
