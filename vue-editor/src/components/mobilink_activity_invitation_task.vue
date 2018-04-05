@@ -7,10 +7,10 @@
                 
         </v-dialog>
 
-        <v-alert type="success" icon="check_circle" class="alertInvitation" transition="slide-y-transition" v-model="alertSuccess">
+        <v-alert type="success" icon="check_circle" class="alertInvitation" dismissible transition="slide-y-transition" v-model="alertSuccess">
             {{text_success}}
         </v-alert>
-        <v-alert type="error" icon="check_circle" class="alertInvitation" transition="slide-y-transition" v-model="alertError">
+        <v-alert type="error" icon="check_circle" class="alertInvitation" dismissible transition="slide-y-transition" v-model="alertError">
             {{text_error}}
         </v-alert>
 
@@ -20,10 +20,10 @@
                 color="teal lighten-3"
                 dark
             >
-                <div class="ml-2">Thành phần: {{availableCount}}/ {{invitationCount}}  sẵn sàng</div>
+                <div class="ml-1">Thành phần: {{availableCount}}/ {{invitationCount}}  sẵn sàng</div>
                 <v-spacer></v-spacer>
                 
-                <v-flex v-if="mineInv">
+                <v-flex v-if="mineInv" style="margin-right:0px!important">
                     <div class="right">
                         <v-tooltip top>
                             <v-btn icon slot="activator" class="text-white mx-0 my-0"  @click.stop="showAddNote(invitationUserId,userIdNote)">
@@ -92,8 +92,8 @@
                                 
                                 <v-flex xs12 sm12>
                                     <v-card>
-                                        <v-list >
-                                            <v-list-group v-for="(item, index) in itemInvGroupTask" :value="item.active" v-bind:key="item.role.resourceInvitationId">
+                                        <v-list class="py-0">
+                                            <v-list-group class="py-0" v-for="(item, index) in itemInvGroupTask" :value="item.active" v-bind:key="item.role.resourceInvitationId">
                                                 <!-- Phần danh sách tổ chức/ đơn vị -->
                                                 <v-list-tile slot="item" class="px-0">
                                                     <v-list-tile-content class="px-0">
@@ -219,7 +219,7 @@
                     </div>
                     
                     <v-card class="pl-2 pr-1">
-                        <v-card-text class="px-0 pt-0">
+                        <v-card-text class="px-0 py-0">
                             <v-layout row wrap class="mx-0">
                                 <v-flex class="layout wrap" v-if="showAdd2">
                                     <v-flex xs12 sm8>
@@ -329,7 +329,7 @@
                                 <v-flex xs12 sm12>
                                     <v-card>
                                         <!-- Phần danh sách cá nhân theo danh bạ -->
-                                        <v-list >
+                                        <v-list class="py-0">
                                             <v-list-tile v-for="(item,index) in itemInvContactTask" v-bind:key="item.resourceInvitationId">
                                                 <v-list-tile-content class="mt-2">
                                                     <v-list-tile-title>
@@ -474,20 +474,20 @@
                 // vm.userId = 108;
                  vm.userId = themeDisplay.getUserId();
                 /** */
-                Promise.all([vm.getInvitationTask(),vm.activeGetEmployeesTask()]).then(function() {
+                Promise.all([vm.getInvitationTask()]).then(function() {
                     vm.getWorkingUnitTask();
                     vm.getUserContact();
                     vm.getEmployeesTask()
                 }, function() {
                     console.log("error")
                 });
-                /*vm.getWorkingUnitTask();
-                vm.getUserContact();
-                vm.getInvitationTask();
+                // vm.getWorkingUnitTask();
+                // vm.getUserContact();
+                // vm.getInvitationTask();
                 
                 setTimeout(function(){
                     vm.activeGetEmployeesTask();
-                },4000);*/
+                },4000);
                 console.log(vm._props);
                 console.log('userId:'+ vm.userId)
             },
@@ -1220,12 +1220,9 @@
         z-index: 122!important;
         position: fixed;
         top: 0;
-        left: 50%;
-        transform: translate(-50%, 0);
+        right: 20px;
     }
-    #activity_invitation_task .toolbar__title{
-        font-size: 13px!important;
-    }
+    
     #activity_invitation_task .btn__content {
         padding-left: 0px!important;
         padding-right: 0px!important;

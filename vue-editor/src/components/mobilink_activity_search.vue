@@ -20,7 +20,7 @@
                         v-on:keyup.enter="search_by_keyOwn"
                         v-model="keySearch"
                     ></v-text-field>
-                    <v-btn v-on:click.native="advancedSearch" class="px-0">
+                    <v-btn v-on:click.native="advancedSearch" class="px-0" style="height: 30px">
                         Tìm kiếm nâng cao
                     </v-btn>
  
@@ -681,14 +681,14 @@
                     })[0].itemName
                 };
                 var textShow = {
-                    'Từ ngày:': vm.startDate,
-                    'Đến ngày:': vm.endDate,
-                    'Trạng thái:' : stateT,
-                    'Đơn vị tổ chức:' : hostingT,
-                    'Địa chỉ:' : locationT,
-                    'Người chủ trì/ phụ trách:': managerT,
-                    'Dự án/chương trình:' : projectT,
-                    'Hoạt động:' :activityTypeText
+                    'Từ ngày: ': vm.startDate,
+                    'Đến ngày: ': vm.endDate,
+                    'Trạng thái: ' : stateT,
+                    'Đơn vị tổ chức: ' : hostingT,
+                    'Địa chỉ: ' : locationT,
+                    'Người chủ trì/ phụ trách: ': managerT,
+                    'Dự án/chương trình: ' : projectT,
+                    'Hoạt động: ' :activityTypeText
                     
                 };
                 
@@ -796,6 +796,7 @@
 </script>
 
 <style>
+    
     #activitySearch .row-header {
         background-color: #3486D7!important;
         color: #ffffff!important;
@@ -822,7 +823,7 @@
         top: 0px!important
     }
     #activitySearch #table_search table thead{
-        background-color: #82dad5!important;
+        background-color: #fff!important;
     }
     #activitySearch #table_search table thead tr th{
         border: 1px solid #ddd !important;

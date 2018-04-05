@@ -19,7 +19,7 @@
             <v-flex xs12 sm1 class="mt-2">
                 <v-subheader class="px-0">Từ ngày: </v-subheader>
             </v-flex>
-            <v-flex xs12 sm3 class="pr-3 pl-4">
+            <v-flex xs12 sm3 class="mr-3 pl-4">
                 <date-picker @change="changeDate" class="mt-3" v-model="timeStart" 
                 v-bind:not-after="timeStartMax" lang="vi" type="date" format="dd/MM/yyyy"></date-picker>
             </v-flex>
@@ -552,6 +552,7 @@
 </script>
 
 <style>
+
     #activity_manager .navTable{
         background-color: #96c1ec!important;
     }
@@ -559,7 +560,6 @@
         max-width: 150px !important;
     }
     #activity_manager .header-menu{
-        background-color: #82dad5!important;
         height: 40px;
     }
     #activity_manager .listGroup .list__tile:hover{
