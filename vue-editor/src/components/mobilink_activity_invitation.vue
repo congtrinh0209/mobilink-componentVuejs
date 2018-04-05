@@ -23,9 +23,9 @@
                 color="teal lighten-3"
                 dark
             >   
-                <div class="ml-2" v-if="opening_state_prop == 0||opening_state_prop == 1">Giấy mời: {{invitationCount}} ({{availableCount}} sẵn sàng)</div>
-                <div class="ml-2" v-if="opening_state_prop == 4">Giấy mời: {{invitationCount}} ({{checkinCount}} có mặt)</div>
-                <div class="ml-2" v-if="opening_state_prop == 7 ">Giấy mời: {{invitationCount}} ({{checkinCount}} có mặt)</div>
+                <div class="ml-2" v-if="opening_state_prop == 0||opening_state_prop == 1">Giấy mời: {{availableCount}}/ {{invitationCount}} sẵn sàng</div>
+                <div class="ml-2" v-if="opening_state_prop == 4">Giấy mời: {{checkinCount}}/ {{invitationCount}} có mặt</div>
+                <div class="ml-2" v-if="opening_state_prop == 7 ">Giấy mời: {{checkinCount}}/ {{invitationCount}} có mặt</div>
                 <v-spacer></v-spacer>
                 
                 <v-flex v-if="mineInv">
@@ -130,8 +130,14 @@
                                                             </v-flex>
                                                             <v-flex xs6 sm3>
                                                                 <div class="right">
-                                                                    <v-chip v-if="opening_state_prop == 0||opening_state_prop == 1" label outline color="primary" class="mr-2 mt-2">{{item.role.statistic.available}}/{{item.role.statistic.invitation}}</v-chip>
-                                                                    <v-chip v-if="opening_state_prop == 4 || opening_state_prop == 7" label outline color="primary" class="mr-2 mt-2">{{item.role.statistic.checkin}}/{{item.role.statistic.invitation}}</v-chip>
+                                                                    <v-chip v-if="opening_state_prop == 0||opening_state_prop == 1" label outline color="primary" class="mr-2 mt-2">
+                                                                        {{item.role.statistic.available}}/{{item.role.statistic.invitation}}
+                                                                    </v-chip>
+
+                                                                    <v-chip v-if="opening_state_prop == 4 || opening_state_prop == 7" label outline color="primary" class="mr-2 mt-2">
+                                                                        {{item.role.statistic.checkin}}/{{item.role.statistic.invitation}}
+                                                                    </v-chip>
+
                                                                     <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager' || permission_prop == 'owner'" 
                                                                     @click.stop="updateInvitation('DELETE',item.role.resourceInvitationId,index,itemInvGroup)">
                                                                         <v-icon color="red darken-3">clear</v-icon>
@@ -207,9 +213,11 @@
                                                                     </v-tooltip>
                                                                     
                                                                     <span v-if="opening_state_prop == 0||opening_state_prop == 1" style="color:green" class="mr-2" v-html="bindAvailableText(subItem.available)"></span>
+
                                                                     <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 7"
                                                                     :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
-                                                                     v-on:click.stop="managerCheckin(subItem)" outline small class="text-white mx-1" color="indigo">
+                                                                    v-on:click.stop="managerCheckin(subItem)" outline small class="text-white mx-1" color="indigo"
+                                                                    >
                                                                         <v-icon color="indigo" v-if="subItem.checkin" >check</v-icon>
                                                                         Có mặt
                                                                     </v-btn>
@@ -513,7 +521,6 @@
                 // vm.userId = 108;
                 vm.userId = themeDisplay.getUserId();
                 Promise.all([vm.getInvitation()]).then(function() {
-                    // vm.activeGetEmployees();
                     vm.getWorkingUnit();
                     vm.getUserContact();
                     vm.getEmployees()
@@ -524,11 +531,13 @@
                 // vm.getWorkingUnit();
                 // vm.getUserContact();
                 // vm.getInvitation(); 
-                setTimeout(function(){
-                    vm.activeGetEmployees();
-                },4000);
+
+                // setTimeout(function(){
+                //     vm.activeGetEmployees();
+                // },4000);
                 console.log(vm._props);
-                console.log('userId:'+ vm.userId)
+                console.log('userId:'+ vm.userId);
+                
             },
             /* Load data invitation */
             getInvitation: function(){
@@ -604,7 +613,8 @@
                                 }
                             }
                         }
-                        
+                        vm.activeGetEmployees();
+                        console.log('roleIdleader: '+ vm.roleIdUser)
                     } else {
                         vm.invitationItems = []
                     }
@@ -716,9 +726,8 @@
                 })
 
             },
-            /**run get employees */
+            /**get roleId leader đơn vị */
             activeGetEmployees: function(){
-                /*console.log("activeGetEmployees");*/
                 var vm = this;
                 for(var keys in vm.itemInvGroup){
                     if(vm.itemInvGroup[keys].user_leader){
@@ -754,7 +763,7 @@
                                     if(
                                         (serializable.data[key].userMappingId!=0&&serializable.data[key].userMappingId==vm.invitationItems[keys].toUserId) ||
                                         (serializable.data[key].userMappingId==0&&serializable.data[key].email==vm.invitationItems[keys].email)
-                                        ){
+                                    ){
                                         itemInv = false;
                                         break;
                                     }
@@ -807,8 +816,12 @@
                 } else if(type == "DELETE") {
                     axios.delete(urlUpdate, configPutInvitation)
                     .then(function (response) {
-                        items.splice(index,1);
-                        vm.show_alert('success','Xóa giấy mời thành công')
+                        // items.splice(index,1);
+                        setTimeout(function(){
+                            vm.getInvitation();
+                            vm.show_alert('success','Xóa giấy mời thành công')
+                        },1000) ;
+                        
                     })
                     .catch(function (error) {
                         

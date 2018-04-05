@@ -108,8 +108,8 @@
                                                             
                                                             <tr v-bind:class="{'active': props.index%2==1}">
                                                                 <td class="text-xs-center py-2" style="width: 5%">{{props.index + 1}}</td>
-                                                                <td class="text-xs-center py-2" style="width: 30%" :title="props.item.subject">{{ props.item.subject }}</td>
-                                                                <td class="text-xs-center py-2" style="width: 20%" :title="props.item.hosting ">{{ props.item.hosting }}</td>
+                                                                <td class="py-2" style="width: 30%" :title="props.item.subject">{{ props.item.subject }}</td>
+                                                                <td class="py-2" style="width: 20%" :title="props.item.hosting ">{{ props.item.hosting }}</td>
                                                                 <td class="text-xs-center py-2" style="width: 12%">{{parseDateView(new Date(props.item.endDate))}}</td>
                                                                 <td class="text-xs-center" style="width: 13%">
                                                                     <v-chip style="display: inline-block;text-align: center;width:90%" label outline :color="getColor(props.item.state)">
@@ -117,7 +117,7 @@
                                                                     </v-chip>
                                                                     
                                                                 </td>
-                                                                <td class="text-xs-center py-2" style="width: 20%" :title="props.item.resultNote">{{ props.item.resultNote }}</td>
+                                                                <td class="py-2" style="width: 20%" :title="props.item.resultNote">{{ props.item.resultNote }}</td>
                                                             </tr>
                                                             
                                                         </template>

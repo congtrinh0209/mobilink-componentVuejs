@@ -105,7 +105,9 @@
                                                             </v-flex>
                                                             <v-flex xs6 sm3>
                                                                 <div class="right">
-                                                                    <v-chip label outline color="primary" class="mr-2 mt-2">{{item.role.statistic.available}}/{{item.role.statistic.invitation}}</v-chip>
+                                                                    <v-chip label outline color="primary" class="mr-2 mt-2">
+                                                                        {{item.role.statistic.available}}/{{item.role.statistic.invitation}}
+                                                                    </v-chip>
                                                                     
                                                                     <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager' || permission_prop == 'owner'" 
                                                                     @click.stop="updateInvitationTask('DELETE',item.role.resourceInvitationId,index,itemInvGroupTask)">
@@ -472,7 +474,7 @@
             initInvitationTask: function(){
                 var vm = this;
                 // vm.userId = 108;
-                 vm.userId = themeDisplay.getUserId();
+                vm.userId = themeDisplay.getUserId();
                 /** */
                 Promise.all([vm.getInvitationTask()]).then(function() {
                     vm.getWorkingUnitTask();
@@ -485,9 +487,9 @@
                 // vm.getUserContact();
                 // vm.getInvitationTask();
                 
-                setTimeout(function(){
-                    vm.activeGetEmployeesTask();
-                },4000);
+                // setTimeout(function(){
+                //     vm.activeGetEmployeesTask();
+                // },4000);
                 console.log(vm._props);
                 console.log('userId:'+ vm.userId)
             },
@@ -564,7 +566,8 @@
                                 }
                             }
                         }
-                        
+                        vm.activeGetEmployeesTask();
+                        console.log('roleIdleader: '+ vm.roleIdUser)
                     } else {
                         vm.invitationTaskItems = []
                     }
@@ -762,12 +765,15 @@
                 } else if(type == "DELETE") {
                     axios.delete(urlUpdate, configPutInvitation)
                     .then(function (response) {
-                        items.splice(index,1);
-                        vm.show_alert('success','Xóa giấy mời thành công')
+                        // items.splice(index,1);
+                        setTimeout(function(){
+                            vm.getInvitationTask();
+                            vm.show_alert('success','Xóa thành công')
+                        },1000) ;
                     })
                     .catch(function (error) {
                         
-                        vm.show_alert('error','Xóa giấy mời thất bại')
+                        vm.show_alert('error','Xóa thất bại')
                     });
                 }
             },
@@ -1185,13 +1191,13 @@
                     setTimeout(function(){
                         vm.getInvitationTask();
                         vm.dialog_loading = false;
-                        vm.show_alert('success','Thêm mới giấy mời thành công');
+                        vm.show_alert('success','Giao nhiệm vụ thành công');
                     },3000) ;
                     
     
                 })
                 .catch(function (error) {
-                    vm.show_alert('error','Thêm mới giấy mời thất bại')
+                    vm.show_alert('error','Giao nhiệm vụ thất bại')
                 });
                 /*console.log("run add contact invitation")*/
             }

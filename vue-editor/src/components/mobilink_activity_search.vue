@@ -219,7 +219,7 @@
                     </td>
 
                     <td class="text-xs-center">
-                        <v-chip style="display: inline-block;text-align: center;width:90%" label outline :color="getColor(props.item.state)"><span>{{props.item.statusName}}</span></v-chip>
+                        <v-chip style="display: inline-block;text-align: center;width:90%" label outline :color="getColor(props.item.state)"><span>{{props.item.stateName}}</span></v-chip>
 
                     </td>
 
