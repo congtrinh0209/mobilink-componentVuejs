@@ -118,7 +118,7 @@
                                 <v-flex xs12 sm12>
                                     <v-card>
                                         <v-list >
-                                            <v-list-group v-for="(item, index) in itemInvGroup" :value="item.active" v-bind:key="item.role.activityInvitationId">
+                                            <v-list-group v-for="(item, index) in itemInvGroup" :value="item.active" v-bind:key="item.role.resourceInvitationId">
                                                 <!-- Phần danh sách tổ chức/ đơn vị -->
                                                 <v-list-tile slot="item" class="px-0">
                                                     <v-list-tile-content class="px-0">
@@ -133,7 +133,7 @@
                                                                     <v-chip v-if="opening_state_prop == 0||opening_state_prop == 1" label outline color="primary" class="mr-2 mt-2">{{item.role.statistic.available}}/{{item.role.statistic.invitation}}</v-chip>
                                                                     <v-chip v-if="opening_state_prop == 4 || opening_state_prop == 7" label outline color="primary" class="mr-2 mt-2">{{item.role.statistic.checkin}}/{{item.role.statistic.invitation}}</v-chip>
                                                                     <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager' || permission_prop == 'owner'" 
-                                                                    @click.stop="updateInvitation('DELETE',item.role.activityInvitationId,index,itemInvGroup)">
+                                                                    @click.stop="updateInvitation('DELETE',item.role.resourceInvitationId,index,itemInvGroup)">
                                                                         <v-icon color="red darken-3">clear</v-icon>
                                                                     </v-btn> 
                                                                 </div>
@@ -177,15 +177,15 @@
                                                 <!-- end -->
 
                                                 <!-- Phần danh sách cá nhân trong tổ chức/ đơn vị -->
-                                                <v-list-tile v-for="(subItem, index) in item.items" v-bind:key="subItem.activityInvitationId">
+                                                <v-list-tile v-for="(subItem, index) in item.items" v-bind:key="subItem.resourceInvitationId">
                                                     <v-list-tile-content class="mt-2">
                                                         <v-flex xs12 class="layout wrap">
                                                             
                                                             <v-flex xs12 sm6 class="pt-1">
                                                                 <v-list-tile-title>
                                                                     <toggle-button class="mr-1 mt-2" 
-                                                                    @change="updatePresenterUserGroup($event,subItem.activityInvitationId,subItem)"
-                                                                    :value="bindPresenter(subItem.presenter)"
+                                                                    @change="updatePresenterUserGroup($event,subItem.resourceInvitationId,subItem)"
+                                                                    :value="bindPresenter(subItem.right)"
                                                                     :disabled="(permission_prop=='manager'||permission_prop=='owner'|| item.user_leader == userId)?false:true"
                                                                     title_checked = "Thành viên"
                                                                     title_unchecked = "Theo dõi"
@@ -215,7 +215,7 @@
                                                                     </v-btn>
 
                                                                     <v-btn v-if="permission_prop=='manager' ||permission_prop=='owner' || item.user_leader == userId" icon title="Xóa" class="mx-0"
-                                                                     @click.stop="updateInvitation('DELETE',subItem.activityInvitationId,index,item.items)">
+                                                                     @click.stop="updateInvitation('DELETE',subItem.resourceInvitationId,index,item.items)">
                                                                         <v-icon color="red darken-3">clear</v-icon>
                                                                     </v-btn>
                                                                 </div> 
@@ -362,7 +362,7 @@
                                     <v-card>
                                         <!-- Phần danh sách cá nhân theo danh bạ -->
                                         <v-list >
-                                            <v-list-tile v-for="(item,index) in itemInvContact" v-bind:key="item.activityInvitationId">
+                                            <v-list-tile v-for="(item,index) in itemInvContact" v-bind:key="item.resourceInvitationId">
                                                 <v-list-tile-content class="mt-2">
                                                     <v-list-tile-title>
                                                         <v-flex xs12 class="layout wrap">
@@ -371,8 +371,8 @@
                                                                 <v-list-tile-title>
                                                                     <toggle-button class="mr-1 mt-2"
                                                                     :disabled="(permission_prop=='manager'||permission_prop=='owner')?false:true"
-                                                                    :value="bindPresenter(item.presenter)"
-                                                                    @change="updatePresenterUserGroup($event,item.activityInvitationId,item)"
+                                                                    :value="bindPresenter(item.right)"
+                                                                    @change="updatePresenterUserGroup($event,item.resourceInvitationId,item)"
                                                                     title_checked = "Thành viên"
                                                                     title_unchecked = "Theo dõi"
                                                                     :labels="{checked: 'TV', unchecked: 'TD'}"
@@ -401,7 +401,7 @@
                                                                     </v-btn>
 
                                                                     <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager'|| permission_prop == 'owner'"
-                                                                     @click.stop="updateInvitation('DELETE',item.activityInvitationId,index,itemInvContact)">
+                                                                     @click.stop="updateInvitation('DELETE',item.resourceInvitationId,index,itemInvContact)">
                                                                         <v-icon color="red darken-3">clear</v-icon>
                                                                     </v-btn> 
                                                                 </div>
@@ -566,7 +566,7 @@
                             if(item.mine == true){
                                 vm.mineInv = true;
                                 vm.userIdNote = item.userNote;
-                                vm.invitationUserId = item.activityInvitationId;
+                                vm.invitationUserId = item.resourceInvitationId;
                                 vm.typeAvailable = item.available;
                                 vm.typeCheckin = item.checkin
                             }
@@ -829,10 +829,12 @@
                     }else if(vm.hostingId.type == "jobpos"){
                         typeRole = 1
                     };
+                    dataPostInvitation.append('className', vm.class_name);
+                    dataPostInvitation.append('classPK', vm.class_pk);
                     dataPostInvitation.append('invitationType', typeRole);
                     dataPostInvitation.append('roleId', vm.hostingId.roleId);
                     dataPostInvitation.append('fullName', vm.hostingId.roleName);
-                    dataPostInvitation.append('presenter', presenterPostGroup);
+                    dataPostInvitation.append('right', presenterPostGroup);
                 } 
                 else if(type == 'UserUnit'&&vm.employee){
                     vm.valid = true;
@@ -841,14 +843,15 @@
                     if(vm.presenterAddUserUnit == true){
                         presenterPostUserUnit = 1
                     } else {presenterPostUserUnit = 0};
-                    
+                    dataPostInvitation.append('className', vm.class_name);
+                    dataPostInvitation.append('classPK', vm.class_pk);
                     dataPostInvitation.append('invitationType', 3);
                     dataPostInvitation.append('roleId', vm.roleIdUser);
                     dataPostInvitation.append('toUserId', vm.employee.mappingUser.userId);
                     dataPostInvitation.append('fullName', vm.employee.fullName);
                     dataPostInvitation.append('email', vm.employee.email);
                     dataPostInvitation.append('telNo', vm.employee.telNo);
-                    dataPostInvitation.append('presenter', presenterPostUserUnit);
+                    dataPostInvitation.append('right', presenterPostUserUnit);
                 }
                 else if(type == 'UserContact'&&vm.contact){
                     vm.valid = true;
@@ -858,9 +861,11 @@
                         presenterPostUser = 1
                     } else {presenterPostUser = 0};
                     dataPostInvitation.append('invitationType', 2);
+                    dataPostInvitation.append('className', vm.class_name);
+                    dataPostInvitation.append('classPK', vm.class_pk);
                     dataPostInvitation.append('fullName', vm.contact[0].fullName);
                     dataPostInvitation.append('telNo', vm.contact[0].telNo);
-                    dataPostInvitation.append('presenter', presenterPostUser);
+                    dataPostInvitation.append('right', presenterPostUser);
                     if(vm.contact.userMappingId){
                         dataPostInvitation.append('toUserId', vm.contact[0].userMappingId);
                     } else {
@@ -886,7 +891,7 @@
                             vm.getInvitation();
                             vm.dialog_loading = false;
                             vm.show_alert('success','Thêm giấy mời thành công');
-                        },3000) ;
+                        },2000) ;
                         vm.valid = false;
                         if(type == 'GROUP'){
                             var roleAdded = vm.hostingId.roleId;
@@ -968,7 +973,7 @@
             submitUpdatePresenter: function(invId,presenter,items){
                 var vm = this;
                 var dataUpdateInvitation  =new URLSearchParams();
-                dataUpdateInvitation.append('presenter', presenter);
+                dataUpdateInvitation.append('right', presenter);
                 var urlUpdate = vm.end_point + "resourceinvitations/"+invId;
                 var paramsPutInvitation = {
                     
@@ -1112,7 +1117,7 @@
 
                 var dataUpdateAvailable  =new URLSearchParams();
                 dataUpdateAvailable.append('checkin', typeCheckManager);
-                var urlUpdate = vm.end_point + "resourceinvitations/"+item.activityInvitationId;
+                var urlUpdate = vm.end_point + "resourceinvitations/"+item.resourceInvitationId;
                 var paramsPutInvitation = {
                     
                 };
@@ -1209,7 +1214,7 @@
                 dataPostInvitation.append('fullName', name);
                 dataPostInvitation.append('telNo', tel);
                 dataPostInvitation.append('email', email);
-                dataPostInvitation.append('presenter', presenterPostUser);
+                dataPostInvitation.append('right', presenterPostUser);
                 var paramsPostInvitation = {
                     
                 };
