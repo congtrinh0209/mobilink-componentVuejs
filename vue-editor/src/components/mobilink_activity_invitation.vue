@@ -289,7 +289,6 @@
                                             </v-card-title>
 
                                             <v-card-text>
-                                                
                                                 <!-- Template activity add contact --> 
                                                 <v-form v-model="valid" ref="form" lazy-validation >
                                                     <v-layout wrap >
@@ -749,7 +748,10 @@
                                 var itemInv = true;
                                 for(var keys in vm.invitationItems){
                                     
-                                    if(serializable.data[key].userMappingId == vm.invitationItems[keys].toUserId){
+                                    if(
+                                        (serializable.data[key].userMappingId!=0&&serializable.data[key].userMappingId==vm.invitationItems[keys].toUserId) ||
+                                        (serializable.data[key].userMappingId==0&&serializable.data[key].email==vm.invitationItems[keys].email)
+                                        ){
                                         itemInv = false;
                                         break;
                                     }
@@ -866,7 +868,7 @@
                     dataPostInvitation.append('fullName', vm.contact[0].fullName);
                     dataPostInvitation.append('telNo', vm.contact[0].telNo);
                     dataPostInvitation.append('right', presenterPostUser);
-                    if(vm.contact.userMappingId){
+                    if(vm.contact[0].userMappingId!=0){
                         dataPostInvitation.append('toUserId', vm.contact[0].userMappingId);
                     } else {
                         dataPostInvitation.append('email', vm.contact[0].email);
@@ -1011,7 +1013,7 @@
             },
             addUserContact:function(){
                 var vm = this;
-                
+                console.log(vm);
                 var contactList = vm.contactItems;
                 var checkContact = true;
                 for(var key in contactList){
@@ -1030,6 +1032,7 @@
                         },100);
                     },200)
                 } else {
+                    console.log(vm);
                     vm.postInvitation('UserContact')
                 };
                 
@@ -1170,7 +1173,7 @@
                         }
                     };
                     var paramsAddContact = new URLSearchParams()
-
+                    
                     paramsAddContact.append('fullName', vm.fullNameCot?vm.fullNameCot:'')
                     paramsAddContact.append('email', vm.emailCot?vm.emailCot:'')
                     paramsAddContact.append('telNo', vm.telNoCot?vm.telNoCot:'')
@@ -1210,7 +1213,8 @@
                     presenterPostUser = 1
                 } else {presenterPostUser = 0};
                 dataPostInvitation.append('invitationType', 2);
-
+                dataPostInvitation.append('className', vm.class_name);
+                dataPostInvitation.append('classPK', vm.class_pk);
                 dataPostInvitation.append('fullName', name);
                 dataPostInvitation.append('telNo', tel);
                 dataPostInvitation.append('email', email);

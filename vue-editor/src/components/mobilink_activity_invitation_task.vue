@@ -258,19 +258,68 @@
                                             </v-card-title>
 
                                             <v-card-text>
-                                                <jx-mobilink-activity-contact
-                                                ref="activity_contact_ref"
-                                                :group_id="group_id"
-                                                :end_point= "end_point" 
-                                                :name="contactInput"
-                                                @add-contact = 'addContact'
-                                                ></jx-mobilink-activity-contact>
+                                                <!-- Template activity add contact --> 
+                                                <v-form v-model="valid" ref="form" lazy-validation >
+                                                    <v-layout wrap >
+                                                        
+                                                        <!--  -->
+                                                        <v-flex xs12 sm3 class="mt-2">
+                                                            <v-subheader class="px-0">Tên cá nhân/ tổ chức *</v-subheader>
+                                                        </v-flex>
+                                                        <v-flex xs12 sm9>
+                                                            <v-text-field
+                                                                placeholder = ''
+                                                                v-model="fullNameCot"
+                                                                clearable="true"
+                                                                :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
+                                                                required
+                                                            ></v-text-field>
+                                                        </v-flex>
+                                                        <!--  -->
+                                                        <v-flex xs12 sm3 class="mt-2">
+                                                            <v-subheader class="px-0">Email *</v-subheader>
+                                                        </v-flex>
+                                                        <v-flex xs12 sm9>
+                                                            <v-text-field
+                                                                placeholder = ''
+                                                                v-model="emailCot"
+                                                                clearable="true"
+                                                                :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
+                                                                required
+                                                            ></v-text-field>
+                                                        </v-flex>
+                                                        <!--  -->
+                                                        <v-flex xs12 sm3 class="mt-2">
+                                                            <v-subheader class="px-0">Số điện thoại</v-subheader>
+                                                        </v-flex>
+                                                        <v-flex xs12 sm9>
+                                                            <v-text-field
+                                                                placeholder = ''
+                                                                v-model="telNoCot"
+                                                                clearable="true"
+                                                            ></v-text-field>
+                                                        </v-flex>
+                                                        <!--  -->
+                                                        <v-flex xs12 sm3 class="mt-2">
+                                                            <v-subheader class="px-0">Cơ quan/ địa chỉ</v-subheader>
+                                                        </v-flex>
+                                                        <v-flex xs12 sm9>
+                                                            <v-text-field
+                                                                placeholder = ''
+                                                                v-model="companyName"
+                                                                clearable="true"
+                                                            ></v-text-field>
+                                                        </v-flex>
+                                                        
+                                                    </v-layout>
+                                                </v-form>
+                                                <!-- end -->
                                             </v-card-text>
 
                                             <v-card-actions>
                                                 <v-spacer></v-spacer>
                                                 <v-btn class="mr-3" color="primary"  @click.native="dialog_add_contact= false">Hủy</v-btn>
-                                                <v-btn color="primary" @click.native="addContactInfo" >Thêm vào liên lạc</v-btn>
+                                                <v-btn color="primary" @click.native="submitAddContactTask" >Thêm vào liên lạc</v-btn>
                                             </v-card-actions>
                                         </v-card>
                                     </v-dialog>
@@ -659,7 +708,10 @@
                             if(vm.invitationTaskItems.length!=0){
                                 var itemInv = true;
                                 for(var keys in vm.invitationTaskItems){
-                                    if(serializable.data[key].userMappingId == vm.invitationTaskItems[keys].toUserId){
+                                    if(
+                                        (serializable.data[key].userMappingId!=0 &&serializable.data[key].userMappingId == vm.invitationTaskItems[keys].toUserId)||
+                                        (serializable.data[key].userMappingId==0 &&serializable.data[key].email == vm.invitationTaskItems[keys].email)
+                                        ){
                                         itemInv = false;
                                         break;
                                     }
@@ -774,7 +826,7 @@
                     dataPostInvitation.append('fullName', vm.contact[0].fullName);
                     dataPostInvitation.append('telNo', vm.contact[0].telNo);
                     dataPostInvitation.append('right', presenterPostUser);
-                    if(vm.contact.userMappingId){
+                    if(vm.contact[0].userMappingId!=0){
                         dataPostInvitation.append('toUserId', vm.contact[0].userMappingId);
                     } else {
                         dataPostInvitation.append('email', vm.contact[0].email);
@@ -1073,7 +1125,7 @@
                         }
                     };
                     var paramsAddContact = new URLSearchParams()
-
+                    
                     paramsAddContact.append('fullName', vm.fullNameCot?vm.fullNameCot:'')
                     paramsAddContact.append('email', vm.emailCot?vm.emailCot:'')
                     paramsAddContact.append('telNo', vm.telNoCot?vm.telNoCot:'')
@@ -1112,7 +1164,8 @@
                     presenterPostUser = 1
                 } else {presenterPostUser = 0};
                 dataPostInvitation.append('invitationType', 2);
-
+                dataPostInvitation.append('className', vm.class_name);
+                dataPostInvitation.append('classPK', vm.class_pk);
                 dataPostInvitation.append('fullName', name);
                 dataPostInvitation.append('telNo', tel);
                 dataPostInvitation.append('email', email);

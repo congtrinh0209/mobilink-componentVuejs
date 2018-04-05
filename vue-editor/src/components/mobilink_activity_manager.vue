@@ -87,7 +87,7 @@
                                                 <v-list-tile slot="item" class="px-0" @click="getListActivitySource(item1.activityId,index,index1)">
                                                     <v-list-tile-content class="px-0 pl-2">
                                                         <v-list-tile-title class="item_group" >
-                                                            <b>{{ parseDateView(new Date(item1.startDate))}}</b> - {{item1.resultNote}}
+                                                            <b>{{ parseDateView(new Date(item1.startDate))}}</b> - {{item1.subject}}
                                                         </v-list-tile-title>
                                                     </v-list-tile-content>
 
