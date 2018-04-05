@@ -169,6 +169,7 @@
 
         <v-data-table
         id = "table_search"
+        no-data-text="Không có dữ liệu"
         :headers="headersTable"
         :items="tableListItems"
         :pagination.sync="pagination"

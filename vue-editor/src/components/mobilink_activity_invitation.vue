@@ -17,7 +17,7 @@
         </v-alert>
         
         <div style="position: relative; overflow: hidden;">
-            <!-- <v-progress-circular v-if="loadingInv" indeterminate color="primary"></v-progress-circular> -->
+           
             <v-toolbar
                 absolute
                 color="teal lighten-3"
@@ -216,7 +216,7 @@
 
                                                                     <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 7"
                                                                     :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
-                                                                    v-on:click.stop="managerCheckin(subItem)" outline small class="text-white mx-1" color="indigo"
+                                                                    v-on:click.stop="managerCheckin(subItem,item)" outline small class="text-white mx-1" color="indigo"
                                                                     >
                                                                         <v-icon color="indigo" v-if="subItem.checkin" >check</v-icon>
                                                                         Có mặt
@@ -402,7 +402,7 @@
 
                                                                     <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 7" 
                                                                     :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
-                                                                    v-on:click.stop="managerCheckin(item)"  outline small class="text-white mx-1" color="indigo">
+                                                                    v-on:click.stop="managerCheckin(item,null)"  outline small class="text-white mx-1" color="indigo">
                                                                         <v-icon color="indigo" v-if="item.checkin" >check</v-icon>
                                                                         Có mặt
                                                                     </v-btn>
@@ -1126,11 +1126,11 @@
                     setTimeout(function(){
                         vm.getInvitation();
                         vm.dialog_loading = false;
-                        vm.show_alert('success','Cập nhật thất bại');
+                        vm.show_alert('error','Cập nhật thất bại');
                     },1000) ;
                 })
             },
-            managerCheckin: function(item){
+            managerCheckin: function(item,itemUnit){
                 var vm =this;
                 var typeCheckManager;
                 typeCheckManager=!item.checkin;
@@ -1149,12 +1149,15 @@
                 };
                 axios.put(urlUpdate, dataUpdateAvailable, configPutInvitation)
                 .then(function (response) {
+                    vm.show_alert('success','Cập nhật thành công');
                     item.checkin = typeCheckManager;
                     if(typeCheckManager == true){
                         vm.checkinCount+=1;
-                    } else {vm.checkinCount-=1;}
-                    
-                    vm.show_alert('success','Cập nhật thành công')
+                        if(itemUnit){itemUnit.role.statistic.checkin+=1}
+                    } else {
+                        vm.checkinCount-=1;
+                        if(itemUnit){itemUnit.role.statistic.checkin-=1}
+                    }
                 })
                 .catch(function (error) {
                     vm.show_alert('error','Cập nhật thất bại')
@@ -1251,12 +1254,12 @@
                     setTimeout(function(){
                         vm.getInvitation();
                         vm.dialog_loading = false;
-                        vm.show_alert('success','Thêm mới giấy mời thành công');
+                        vm.show_alert('success','Thêm giấy mời thành công');
                     },3000) ;
                     
                 })
                 .catch(function (error) {
-                    vm.show_alert('error','Thêm mới giấy mời thất bại')
+                    vm.show_alert('error','Thêm giấy mời thất bại')
                 });
                 /*console.log("run add contact invitation")*/
             }
@@ -1298,7 +1301,6 @@
         padding: 0!important;
     }
     #activity_invitation .list__tile__title{
-
         height: 100%!important;
     }
     #activity_invitation .list__tile__content{
@@ -1337,7 +1339,8 @@
         pointer-events: none!important
     }
     #activity_invitation .progessLoading{
-        text-align: center
+        text-align: center;
+        margin: 0 auto
     }
     #activity_invitation .input-group .input-group--selection-controls{
         display: none!important;
