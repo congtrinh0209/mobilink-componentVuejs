@@ -451,56 +451,6 @@
                     ></v-text-field>
                 </v-flex>
                 <!--  -->
-                <!-- <v-flex xs12 sm2>
-                    <v-subheader class="px-0">Ngày yêu cầu </v-subheader>
-                </v-flex>
-                <v-flex xs12 sm4>
-                    <date-picker class="mt-2" v-model="timeStart" placeholder="Ngày yêu cầu" @confirm = "changeDate" v-bind:not-before="timeStartMin" :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" lang="vi" type="datetime" format="dd/MM/yyyy HH:mm" confirm="true"></date-picker>
-                </v-flex> -->
-                <!--  -->
-                <!-- <v-flex xs12 sm2 class="pl-4">
-                    <v-subheader class="px-0">Hạn xử lý </v-subheader>
-                </v-flex>
-                <v-flex xs12 sm4>
-                    <date-picker class="mt-2" v-model="timeEnd" placeholder="Hạn xử lý" v-bind:not-before="timeEndMin" :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" lang="vi" type="datetime" format="dd/MM/yyyy HH:mm" confirm="true"></date-picker>
-                </v-flex> -->
-                
-                <!-- <v-flex xs12 sm2 class="pl-4">
-                    <v-subheader class="px-0">Quy trình </v-subheader>
-                </v-flex>
-                <v-flex xs12 sm4>
-                    <v-select
-                        v-bind:items="processItems"
-                        v-model="process"
-                        clearable
-                        @change="chooseProcessTicket"
-                        item-text="subject"
-                        item-value="activityId"
-                        autocomplete
-                        return-object
-                        hide-selected
-                    ></v-select>
-                </v-flex> -->
-                
-                <!--  -->
-                
-                <!--  -->
-                <!-- <v-flex xs12 sm2 class="pl-4">
-                    <v-subheader class="px-0">Người phụ trách </v-subheader>
-                </v-flex>
-                <v-flex xs12 sm4>
-                    <v-select
-                        v-bind:items="managerItems"
-                        v-model="manager"
-                        clearable
-                        item-text="fullName"
-                        item-value="employeeId"
-                        autocomplete
-                        return-object
-                        hide-selected
-                    ></v-select>
-                </v-flex> -->
-
             </v-layout>
         </v-form>
         <!-- end -->
