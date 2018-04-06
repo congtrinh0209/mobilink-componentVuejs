@@ -39,13 +39,32 @@
                         <v-btn small class="text-white mx-1" v-on:click.stop="checkAvailable('busy')" color="error">
                             <v-icon style="color: white" v-if="typeAvailable == 2" >check</v-icon>
                             Tôi bận
-                        </v-btn>
-                        
-                        
+                        </v-btn>  
                     </div>
                     
                 </v-flex>
-                
+                <!--  -->
+                <v-dialog v-model="dialog_add_note" persistent max-width="500px">
+                    <v-card>
+                        <v-card-text>
+                            <v-container grid-list-md>
+                                <v-layout wrap>
+                                    <v-flex xs12>
+                                        <v-text-field v-model="note_text" label="Nhập nội dung" multi-line="true"
+                                            
+                                        ></v-text-field>
+                                    </v-flex>
+                                </v-layout>
+                            </v-container>
+                        </v-card-text>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn color="darken-1" flat @click.native="dialog_add_note = false">Hủy</v-btn>
+                            <v-btn color="darken-1" flat @click.native="submitAddNote(idAddNote,note_text,itemsNote)">Lưu</v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </v-dialog>
+
             </v-toolbar>
             <!-- Phần đơn vị/ Nhóm trong cơ quan-->
             <v-expansion-panel style="padding-top:65px" expand>

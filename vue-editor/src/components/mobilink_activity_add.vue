@@ -18,7 +18,7 @@
                 </v-flex>
                 <!--  -->
                 <v-flex xs12 sm2 class="mt-2">
-                    <v-subheader class="px-0">Thời gian bắt đầu *</v-subheader>
+                    <v-subheader class="px-0">Thời gian bắt đầu </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4>
                     <date-picker class="mt-3"
@@ -35,7 +35,7 @@
                 </v-flex>
                 <!--  -->
                 <v-flex xs12 sm2 class="pl-3 mt-2">
-                    <v-subheader class="px-0">Thời gian kết thúc *</v-subheader>
+                    <v-subheader class="px-0">Thời gian kết thúc </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4>
                     <date-picker class="mt-3" 
@@ -70,7 +70,7 @@
                 </v-flex>
                 <!--  -->
                 <v-flex xs12 sm2>
-                    <v-subheader class="px-0">Đơn vị tổ chức </v-subheader>
+                    <v-subheader class="px-0">Đơn vị tham mưu </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4>
                     <v-select
@@ -86,7 +86,7 @@
                 </v-flex>
                 <!--  -->
                 <v-flex xs12 sm2 class="pl-3">
-                    <v-subheader class="px-0">Người chủ trì </v-subheader>
+                    <v-subheader class="px-0">Lãnh đạo chủ trì </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4>
                     <v-select
@@ -120,23 +120,6 @@
                 </v-flex>
 
                 <!--  -->
-                <!-- <v-flex xs12 sm2>
-                    <v-subheader class="px-0">Lĩnh vực/ thẻ nhãn </v-subheader>
-                </v-flex>
-                <v-flex xs12 sm4>
-                    <v-select
-                        v-bind:items="labelItems"
-                        v-model="label"
-                        clearable
-                        item-text="name"
-                        item-value="labelId"
-                        autocomplete
-                        return-object
-                        hide-selected
-
-                    ></v-select>
-                </v-flex> -->
-                <!--  -->
                 <v-flex xs12 sm2>
                     <v-subheader class="px-0">Nội dung</v-subheader>
                 </v-flex>
@@ -169,7 +152,7 @@
                 </v-flex>
                 <!--  -->
                 <v-flex xs12 sm2 class="mt-2">
-                    <v-subheader class="px-0">Ngày bắt đầu *</v-subheader>
+                    <v-subheader class="px-0">Ngày bắt đầu </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4>
                     <date-picker class="mt-3" 
@@ -215,7 +198,7 @@
                 <v-flex xs12 sm2 class="pl-2">
                     <v-subheader class="px-0">Người phụ trách </v-subheader>
                 </v-flex>
-                <v-flex xs12 sm4 class="pl-2">
+                <v-flex xs12 sm4 class="">
                     <v-select
                         v-bind:items="managerItems"
                         v-model="manager"
@@ -282,76 +265,168 @@
         </v-form>
         <!-- end -->
 
-        <!-- Template activity add process-->
-        <v-form v-model="valid" ref="form" lazy-validation v-if="type_activity == 'process'" >
+        <!-- Template activity add plan-->
+        <v-form v-model="valid" ref="form" lazy-validation v-if="type_activity == 'plans'" >
             <v-layout wrap >
-                <v-flex xs12 sm2>
-                    <v-subheader class="px-0">Số hiệu quy trình *</v-subheader>
-                </v-flex>
-                <v-flex xs12 sm4>
-                    <v-text-field
-                        placeholder="Số hiệu quy trình "
-                        v-model="processCode"
-                        :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
-                        required
-                    ></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm12></v-flex>
                 <!--  -->
                 <v-flex xs12 sm2>
-                    <v-subheader class="px-0">Tên quy trình *</v-subheader>
+                    <v-subheader class="px-0">Tên kế hoạch *</v-subheader>
                 </v-flex>
                 <v-flex xs12 sm10>
                     <v-text-field
-                        placeholder="Tên quy trình "
-                        v-model="processName"
+                        placeholder="Tên kế hoạch "
+                        v-model="planName"
                         :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
                         required
                     ></v-text-field>
                 </v-flex>
                 <!--  -->
+                <v-flex xs12 sm2 class="mt-2">
+                    <v-subheader class="px-0">Ngày bắt đầu </v-subheader>
+                </v-flex>
+                <v-flex xs12 sm4>
+                    <date-picker class="mt-3" 
+                    v-model="timeStart" 
+                    placeholder="Ngày bắt đầu" 
+                    @confirm = "changeDate" 
+                    v-bind:not-before="timeStartMin" 
+                    :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" 
+                    lang="vi" type="datetime" format="dd/MM/yyyy HH:mm" 
+                    confirm="true"
+                    :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
+                    required
+                    ></date-picker>
+                </v-flex>
+                <!--  -->
+                <v-flex xs12 sm2 class="pl-2 mt-2">
+                    <v-subheader class="px-0">Ngày kết thúc </v-subheader>
+                </v-flex>
+                <v-flex xs12 sm4>
+                    <date-picker class="mt-3" v-model="timeEnd" placeholder="Ngày kết thúc" 
+                    v-bind:not-before="timeEndMin" :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" lang="vi" 
+                    type="datetime" format="dd/MM/yyyy HH:mm" confirm="true"></date-picker>
+                </v-flex>
+                <!--  -->
                 <v-flex xs12 sm2>
-                    <v-subheader class="px-0">Loại hoạt động </v-subheader>
+                    <v-subheader class="px-0">Đơn vị quản lý *</v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4>
                     <v-select
-                        v-bind:items="processTypeItems"
-                        v-model="processType"
-                        item-text="itemName"
-                        item-value="itemCode"
-                        autocomplete
-                        placeholder="Chọn loại hoạt động"
-                        return-object
-                        hide-selected
-                        :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
-                        required
-                    ></v-select>
-                </v-flex>
-                <!--  -->
-                
-                <v-flex xs12 sm2 class="pl-1">
-                    <v-subheader class="px-0">Đơn vị chủ trì/ tổ chức </v-subheader>
-                </v-flex>
-                <v-flex xs12 sm4 class="pl-2">
-                    <v-select
                         v-bind:items="hostingIdItems"
                         v-model="hostingId"
-                        clearable
                         item-text="name"
                         item-value="workingUnitId"
                         autocomplete
                         return-object
                         hide-selected
+                        clearable
+                        :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
+                        required
                     ></v-select>
                 </v-flex>
+                <!--  -->
+                <v-flex xs12 sm2 class="pl-2">
+                    <v-subheader class="px-0">Người phụ trách </v-subheader>
+                </v-flex>
+                <v-flex xs12 sm4 class="">
+                    <v-select
+                        v-bind:items="managerItems"
+                        v-model="manager"
+                        clearable
+                        item-text="fullName"
+                        item-value="employeeId"
+                        autocomplete
+                        return-object
+                        hide-selected
+                    ></v-select>
+                </v-flex>
+                <!--  -->
+                <v-flex xs12 sm2>
+                    <v-subheader class="px-0">Lĩnh vực </v-subheader>
+                </v-flex>
+                <v-flex xs12 sm4>
+                    <v-select
+                        v-bind:items="planTypeItems"
+                        v-model="planType"
+                        item-text="itemName"
+                        item-value="itemCode"
+                        autocomplete
+                        placeholder="Chọn lĩnh vực"
+                        return-object
+                        hide-selected
+                        clearable
+                    ></v-select>
+                </v-flex>
+                <!--  -->
+                <!--  -->
+                <v-flex xs12 sm2 class="pl-2">
+                    <v-subheader class="px-0">Độ ưu tiên </v-subheader>
+                </v-flex>
+                <v-flex xs12 sm4>
+                    <v-select
+                        v-bind:items="priorityItems"
+                        v-model="priority"
+                        item-text="itemName"
+                        item-value="itemCode"
+                        autocomplete
+                        placeholder="Chọn mức độ ưu tiên"
+                        return-object
+                        hide-selected
+                        clearable
+                    ></v-select>
+                </v-flex>
+
+                <!--  -->
+                <v-flex xs12 sm2>
+                    <v-subheader class="px-0">Nội dung</v-subheader>
+                </v-flex>
+                <v-flex xs12 sm10>
+                    <v-text-field
+                        placeholder="Nội dung "
+                        v-model="content"
+                        multi-line
+                    ></v-text-field>
+                </v-flex>
             </v-layout>
+            
         </v-form>
         <!-- end -->
 
         <!-- Template activity add requests-->
         <v-form v-model="valid" ref="form" lazy-validation v-if="type_activity == 'requests'" >
             <v-layout wrap >
-                
+                <!--  -->
+                <v-flex xs12 sm2>
+                    <v-subheader class="px-0">Loại yêu cầu </v-subheader>
+                </v-flex>
+                <v-flex xs12 sm4>
+                    <v-select
+                        v-bind:items="requestTypeItems"
+                        v-model="requestType"
+                        item-text="itemName"
+                        item-value="itemCode"
+                        autocomplete
+                        return-object
+                        hide-selected
+                        clearable
+                    ></v-select>
+                </v-flex>
+                <!--  -->
+                <v-flex xs12 sm2>
+                    <v-subheader class="px-0">Đơn vị xử lý </v-subheader>
+                </v-flex>
+                <v-flex xs12 sm4>
+                    <v-select
+                        v-bind:items="hostingIdItems"
+                        v-model="hostingId"
+                        item-text="name"
+                        item-value="workingUnitId"
+                        autocomplete
+                        return-object
+                        hide-selected
+                        clearable
+                    ></v-select>
+                </v-flex>
                 <!--  -->
                 <v-flex xs12 sm2>
                     <v-subheader class="px-0">Chủ đề *</v-subheader>
@@ -389,23 +464,7 @@
                 <v-flex xs12 sm4>
                     <date-picker class="mt-2" v-model="timeEnd" placeholder="Hạn xử lý" v-bind:not-before="timeEndMin" :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" lang="vi" type="datetime" format="dd/MM/yyyy HH:mm" confirm="true"></date-picker>
                 </v-flex> -->
-                <!--  -->
-                <v-flex xs12 sm2>
-                    <v-subheader class="px-0">Loại yêu cầu </v-subheader>
-                </v-flex>
-                <v-flex xs12 sm4>
-                    <v-select
-                        v-bind:items="requestTypeItems"
-                        v-model="requestType"
-                        item-text="itemName"
-                        item-value="itemCode"
-                        autocomplete
-                        return-object
-                        hide-selected
-                        clearable
-                    ></v-select>
-                </v-flex>
-                <!--  -->
+                
                 <!-- <v-flex xs12 sm2 class="pl-4">
                     <v-subheader class="px-0">Quy trình </v-subheader>
                 </v-flex>
@@ -424,21 +483,7 @@
                 </v-flex> -->
                 
                 <!--  -->
-                <v-flex xs12 sm2 class="pl-4">
-                    <v-subheader class="px-0">Đơn vị xử lý </v-subheader>
-                </v-flex>
-                <v-flex xs12 sm4>
-                    <v-select
-                        v-bind:items="hostingIdItems"
-                        v-model="hostingId"
-                        item-text="name"
-                        item-value="workingUnitId"
-                        autocomplete
-                        return-object
-                        hide-selected
-                        clearable
-                    ></v-select>
-                </v-flex>
+                
                 <!--  -->
                 <!-- <v-flex xs12 sm2 class="pl-4">
                     <v-subheader class="px-0">Người phụ trách </v-subheader>
@@ -455,6 +500,85 @@
                         hide-selected
                     ></v-select>
                 </v-flex> -->
+
+            </v-layout>
+        </v-form>
+        <!-- end -->
+
+        <!-- Template activity add tickets-->
+        <v-form v-model="valid" ref="form" lazy-validation v-if="type_activity == 'tickets'" >
+            <v-layout wrap >
+
+                <v-flex xs12 sm2>
+                    <v-subheader class="px-0">Tên đề xuất *</v-subheader>
+                </v-flex>
+                <v-flex xs12 sm10>
+                    <v-text-field
+                        placeholder=""
+                        v-model="ticketName"
+                        :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
+                        required
+                    ></v-text-field>
+                </v-flex>
+                <!--  -->
+                <v-flex xs12 sm2>
+                    <v-subheader class="px-0">Ngày đề xuất</v-subheader>
+                </v-flex>
+                <v-flex xs12 sm4>
+                    <date-picker class="mt-2" v-model="timeStart" placeholder="Ngày yêu cầu" @confirm = "changeDate" v-bind:not-before="timeStartMin" :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" lang="vi" type="datetime" format="dd/MM/yyyy HH:mm" confirm="true"></date-picker>
+                </v-flex> 
+                <!--  -->
+                <v-flex xs12 sm2 class="pl-4">
+                    <v-subheader class="px-0">Hạn xử lý </v-subheader>
+                </v-flex>
+                <v-flex xs12 sm4>
+                    <date-picker class="mt-2" v-model="timeEnd" placeholder="Hạn xử lý" v-bind:not-before="timeEndMin" :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" lang="vi" type="datetime" format="dd/MM/yyyy HH:mm" confirm="true"></date-picker>
+                </v-flex>
+                
+                <!--  -->
+                <v-flex xs12 sm2>
+                    <v-subheader class="px-0">Đơn vị xử lý * </v-subheader>
+                </v-flex>
+                <v-flex xs12 sm4>
+                    <v-select
+                        v-bind:items="hostingIdItems"
+                        v-model="hostingId"
+                        item-text="name"
+                        item-value="workingUnitId"
+                        autocomplete
+                        return-object
+                        hide-selected
+                        clearable
+                    ></v-select>
+                </v-flex>
+                <!--  -->
+                <v-flex xs12 sm2>
+                    <v-subheader class="px-0">Loại đề xuất </v-subheader>
+                </v-flex>
+                <v-flex xs12 sm4>
+                    <v-select
+                        v-bind:items="ticketTypeItems"
+                        v-model="ticketType"
+                        item-text="itemName"
+                        item-value="itemCode"
+                        autocomplete
+                        return-object
+                        hide-selected
+                        clearable
+                    ></v-select>
+                </v-flex>
+                <!--  -->
+                
+                <v-flex xs12 sm2>
+                    <v-subheader class="px-0">Mô tả</v-subheader>
+                </v-flex>
+                <v-flex xs12 sm10>
+                    <v-text-field
+                        placeholder="Mô tả "
+                        v-model="contentTicket"
+                        multi-line
+                    ></v-text-field>
+                </v-flex>
 
             </v-layout>
         </v-form>
@@ -506,6 +630,13 @@
                 taskParentItems:[],
                 taskParent:'',
                 managerItems:[],
+                planName: '',
+                planTypeItems: [],
+                planType:'',
+                ticketName:'',
+                ticketTypeItems: [],
+                ticketType: '',
+                contentTicket: '',
                 manager:'',
                 processCode:'',
                 processName:'',
@@ -672,24 +803,6 @@
                             console.log(error)
                         });
 
-                        /* Load data quy trình*/
-                        axios.get( endPoint + 'activities', configProcess)
-                        .then(function (response) {
-                            var serializable = response.data
-                            if (serializable.hasOwnProperty('data')) {
-                                for (var key in serializable.data) {
-                                    vm.processItems.push({
-                                        subject: serializable.data[key].subject,
-                                        activityId: serializable.data[key].activityId
-                                    })
-                                    
-                                }
-                            }
-                        })
-                        .catch(function (error) {
-                            console.log(error)
-                        });
-
                         /* Load data địa điểm*/
                         axios.get( endPoint + 'locations', config)
                         .then(function (response) {
@@ -708,32 +821,7 @@
                         .catch(function (error) {
                             console.log(error)
                         })
-                        /* Load data thẻ nhãn */
-                        var paramsLabels = {
-                            scope: "activity"
-                        };
-                        const configLabels = {
-                            params: paramsLabels,
-                            headers: {
-                                'groupId': vm.group_id
-                            }
-                        };
-                        axios.get( endPoint + 'labels', configLabels)
-                        .then(function (response) {
-                            var serializable = response.data
-                            if (serializable.hasOwnProperty('data')) {
-                                for (var key in serializable.data) {
-                                    vm.labelItems.push({
-                                        name: serializable.data[key].name,
-                                        labelId: serializable.data[key].labelId
-                                    })
-                                    
-                                }
-                            }
-                        })
-                        .catch(function (error) {
-                            console.log(error)
-                        })
+
                         /* Load data contact */
                         axios.get( endPoint + 'contacts', configContact)
                         .then(function (response) {
@@ -798,23 +886,6 @@
                                     vm.taskTypeItems.push({
                                         itemName: serializable.data[key].itemName,
                                         itemCode: serializable.data[key].itemCode
-                                    })
-                                    
-                                }
-                            }
-                        })
-                        .catch(function (error) {
-                            console.log(error)
-                        });
-                        /* Load data quy trình*/
-                        axios.get( endPoint + 'activities', configProcessTask)
-                        .then(function (response) {
-                            var serializable = response.data
-                            if (serializable.hasOwnProperty('data')) {
-                                for (var key in serializable.data) {
-                                    vm.processItems.push({
-                                        subject: serializable.data[key].subject,
-                                        activityId: serializable.data[key].activityId
                                     })
                                     
                                 }
@@ -911,15 +982,30 @@
                         .catch(function (error) {
                             console.log(error)
                         });
-                        /* Load data quy trình request*/
-                        axios.get( endPoint + 'activities', configProcessRequest)
+                        
+                        vm.getCurrentDate();
+                    }
+                /* Get API for PLANS */
+                    else if (vm.type_activity == 'plans') {
+                        var paramsTypePlan = {
+                            parent: 'PLAN'
+                        };
+                        const configTypePlan = {
+                            params: paramsTypePlan,
+                            headers: {
+                                'groupId': vm.group_id
+                            }
+                        };
+                        
+                        /* LOAD data loại yêu cầu */
+                        axios.get( endPoint + 'dictcollections/ACTIVITY_TYPE/dictitems', configTypePlan)
                         .then(function (response) {
                             var serializable = response.data
                             if (serializable.hasOwnProperty('data')) {
                                 for (var key in serializable.data) {
-                                    vm.processItems.push({
-                                        subject: serializable.data[key].subject,
-                                        activityId: serializable.data[key].activityId
+                                    vm.planTypeItems.push({
+                                        itemName: serializable.data[key].itemName,
+                                        itemCode: serializable.data[key].itemCode
                                     })
                                     
                                 }
@@ -929,10 +1015,40 @@
                             console.log(error)
                         });
 
-                        
                         vm.getCurrentDate();
                     }
-                    
+                /* Get API for TICKETS */
+                    else if (vm.type_activity == 'tickets') {
+                        var paramsTypeTicket = {
+                            parent: 'TICKET'
+                        };
+                        const configTypeTicket = {
+                            params: paramsTypeTicket,
+                            headers: {
+                                'groupId': vm.group_id
+                            }
+                        };
+                        
+                        /* LOAD data loại yêu cầu */
+                        axios.get( endPoint + 'dictcollections/ACTIVITY_TYPE/dictitems', configTypeTicket)
+                        .then(function (response) {
+                            var serializable = response.data
+                            if (serializable.hasOwnProperty('data')) {
+                                for (var key in serializable.data) {
+                                    vm.ticketTypeItems.push({
+                                        itemName: serializable.data[key].itemName,
+                                        itemCode: serializable.data[key].itemCode
+                                    })
+                                    
+                                }
+                            }
+                        })
+                        .catch(function (error) {
+                            console.log(error)
+                        });
+
+                        vm.getCurrentDate();
+                    }    
                 })
             },
             formatDate (date) {
@@ -950,7 +1066,7 @@
                 var timeEnd = new Date();
                 if(vm.type_activity == 'events'){
                     timeEnd.setHours(timeEnd.getHours() + 2);
-                } else if(vm.type_activity == 'tasks' || vm.type_activity == 'requests'){
+                } else if(vm.type_activity == 'tasks' || vm.type_activity == 'tickets'|| vm.type_activity == 'plans'){
                     timeEnd.setHours(timeEnd.getHours() + 24);
                 };
                 vm.timeEnd = vm.roundDate(30,timeEnd);
@@ -1047,12 +1163,6 @@
                     )
                     .then(function (response) {
                         vm.dataForm = response.data;
-                        /*var fixLabel = vm.label?vm.label.labelId:'';
-                        var classPK = response.data.activityId;
-                        console.log(fixLabel);
-                        if(fixLabel){
-                            vm.addResourceLabel(vm.className, classPK, fixLabel)
-                        }*/
                         vm.$emit('call-back-add', vm.dataForm);
                     })
                     .catch(function (error) {
@@ -1060,31 +1170,6 @@
                     })
                 }
                 
-            },
-            addResourceLabel: function(className,classPK,labelId){
-                console.log("run add resourcelabel");
-                var vm = this;
-                const configPostAddResourceLabel = {
-                    headers: {
-                        'groupId': vm.group_id
-                    }
-                };
-
-                var paramsAddResourceLabel = new URLSearchParams();
-                paramsAddResourceLabel.append('className', className)
-                paramsAddResourceLabel.append('classPK', classPK)
-                paramsAddResourceLabel.append('labelId', labelId)
-                axios.post(vm.end_point + 'resourcelabels',
-                    paramsAddResourceLabel,
-                    configPostAddResourceLabel
-                )
-                .then(function (response) {
-                    console.log(response)
-                })
-                .catch(function (error) {
-                    console.log(error)
-                })
-
             },
             submitAddTasks: function () {
                 if (this.$refs.form.validate()) {
@@ -1128,29 +1213,37 @@
                 }
                 
             },
-
-            submitAddProcess: function () {
+            submitAddPlans: function () {
                 if (this.$refs.form.validate()) {
                     var vm = this;
                 
-                    const configPostAddProcess = {
+                    const configPostAddPlan = {
                         headers: {
                             'groupId': vm.group_id
                         }
                     };
-                    
-                    var paramsAddProcess = new URLSearchParams()
-                    
-                    paramsAddProcess.append('isTemplate', true)
-                    paramsAddProcess.append('activityCat', vm.processType?vm.processType.itemCode:"")
-                    
-                    paramsAddProcess.append('subject', vm.processName?vm.processName:"")
-                    paramsAddProcess.append('hostingId', vm.hostingId?vm.hostingId.workingUnitId:"")
-                    paramsAddProcess.append('hosting', vm.hostingId?vm.hostingId.name:'')
-                    
+                    /** */
+                    var startDatePlan = vm.parseDateFormat(vm.timeStart);
+                    var endDatePlan = vm.parseDateFormat(vm.timeEnd);
+
+                    var paramsAddPlan = new URLSearchParams()
+
+                    paramsAddPlan.append('isTemplate', false)
+                    paramsAddPlan.append('activityType', "PLAN")
+                    paramsAddPlan.append('activityCat', vm.planType?vm.planType.itemCode:"")
+                    paramsAddPlan.append('priority', vm.priority?vm.priority.itemCode:"")
+                    paramsAddPlan.append('subject', vm.planName?vm.planName:"")
+                    paramsAddPlan.append('hostingId', vm.hostingId?vm.hostingId.workingUnitId:"")
+                    paramsAddPlan.append('hosting', vm.hostingId?vm.hostingId.name:'')
+                    paramsAddPlan.append('leaderId', vm.manager?vm.manager.employeeId:"")
+
+                    paramsAddPlan.append('startDate', startDatePlan)
+                    paramsAddPlan.append('endDate', endDatePlan)
+                    paramsAddPlan.append('description', vm.content?vm.content:"")
+                
                     axios.post(vm.end_point + 'activities',
-                        paramsAddProcess,
-                        configPostAddProcess
+                        paramsAddPlan,
+                        configPostAddPlan
                     )
                     .then(function (response) {
                         vm.dataForm = response.data;
@@ -1162,7 +1255,6 @@
                 }
                 
             },
-
             submitAddRequests: function () {
                 if (this.$refs.form.validate()) {
                     var vm = this;
@@ -1173,28 +1265,58 @@
                         }
                     };
                     /** */
-                    /*var startDateTicket = vm.parseDateFormat(vm.timeStart);
-                    var endDateTicket = vm.parseDateFormat(vm.timeEnd);*/
-
                     var paramsAddRequest = new URLSearchParams()
 
                     paramsAddRequest.append('isTemplate', false)
                     paramsAddRequest.append('activityType', "REQUEST")
                     paramsAddRequest.append('activityCat', vm.requestType?vm.requestType.itemCode:"")
-
-                    /*paramsAddRequest.append('templateNo', vm.templateNo?vm.templateNo:"")*/
                     paramsAddRequest.append('subject', vm.topicRequest?vm.topicRequest:"")
-                    
                     paramsAddRequest.append('hostingId', vm.hostingId?vm.hostingId.workingUnitId:"")
                     paramsAddRequest.append('hosting', vm.hostingId?vm.hostingId.name:'')
-                    /*paramsAddRequest.append('leaderId', vm.manager?vm.manager.employeeId:"")
-                    paramsAddRequest.append('startDate', startDateTicket)
-                    paramsAddRequest.append('endDate', endDateTicket)*/
                     paramsAddRequest.append('description', vm.contentRequest?vm.contentRequest:"")
                 
                     axios.post(vm.end_point + 'activities',
                         paramsAddRequest,
                         configPostAddRequest
+                    )
+                    .then(function (response) {
+                        vm.dataForm = response.data;
+                        vm.$emit('call-back-add', vm.dataForm);
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+                }
+                
+            },
+            submitAddTickets: function () {
+                if (this.$refs.form.validate()) {
+                    var vm = this;
+                
+                    const configPostAddTicket = {
+                        headers: {
+                            'groupId': vm.group_id
+                        }
+                    };
+                    /** */
+                    var startDateTicket = vm.parseDateFormat(vm.timeStart);
+                    var endDateTicket = vm.parseDateFormat(vm.timeEnd);
+
+                    var paramsAddTicket = new URLSearchParams()
+
+                    paramsAddTicket.append('isTemplate', false)
+                    paramsAddTicket.append('activityType', "TICKET")
+                    paramsAddTicket.append('activityCat', vm.ticketType?vm.ticketType.itemCode:"")
+                    paramsAddTicket.append('subject', vm.ticketName?vm.ticketName:"")
+                    paramsAddTicket.append('hostingId', vm.hostingId?vm.hostingId.workingUnitId:"")
+                    paramsAddTicket.append('hosting', vm.hostingId?vm.hostingId.name:'')
+                    paramsAddTicket.append('startDate', startDateTicket)
+                    paramsAddTicket.append('endDate', endDateTicket)
+                    paramsAddTicket.append('description', vm.contentTicket?vm.contentTicket:"")
+                
+                    axios.post(vm.end_point + 'activities',
+                        paramsAddTicket,
+                        configPostAddTicket
                     )
                     .then(function (response) {
                         vm.dataForm = response.data;
@@ -1214,8 +1336,10 @@
                     vm.submitAddEvents()
                 } else if (vm.type_activity == 'tasks') {
                     vm.submitAddTasks()
-                } else if(vm.type_activity == 'process') {
-                    vm.submitAddProcess()
+                } else if (vm.type_activity == 'plans') {
+                    vm.submitAddPlans()
+                } else if(vm.type_activity == 'tickets') {
+                    vm.submitAddTickets()
                 } else if (vm.type_activity == 'requests') {
                     vm.submitAddRequests()
                 }

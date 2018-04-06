@@ -69,8 +69,8 @@
                         </v-card-text>
                         <v-card-actions>
                             <v-spacer></v-spacer>
-                            <v-btn color="blue darken-1" flat @click.native="dialog_add_note = false">Hủy</v-btn>
-                            <v-btn color="blue darken-1" flat @click.native="submitAddNote(idAddNote,note_text,itemsNote)">Lưu</v-btn>
+                            <v-btn color="darken-1" flat @click.native="dialog_add_note = false">Hủy</v-btn>
+                            <v-btn color="darken-1" flat @click.native="submitAddNote(idAddNote,note_text,itemsNote)">Lưu</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
