@@ -23,7 +23,7 @@
                 <div class="ml-1">Thành phần: {{availableCount}}/ {{invitationCount}}  sẵn sàng</div>
                 <v-spacer></v-spacer>
                 
-                <v-flex v-if="mineInv" style="margin-right:0px!important">
+                <v-flex v-if="mineInv" style="position: absolute;right:0">
                     <div class="right">
                         <v-tooltip top>
                             <v-btn icon slot="activator" class="text-white mx-0 my-0"  @click.stop="showAddNote(invitationUserId,userIdNote)">
@@ -177,9 +177,9 @@
                                                     <v-list-tile-content class="mt-2">
                                                         <v-flex xs12 class="layout wrap">
                                                             
-                                                            <v-flex xs12 sm6 class="pt-1">
+                                                            <v-flex class="pt-2">
                                                                 <v-list-tile-title>
-                                                                    <toggle-button class="mr-1 mt-2" 
+                                                                    <toggle-button class="mr-1 mt-1" 
                                                                     @change="updatePresenterUserGroupTask($event,subItem.resourceInvitationId,subItem)"
                                                                     :value="bindPresenter(subItem.right)"
                                                                     :disabled="(permission_prop=='manager'||permission_prop=='owner'|| item.user_leader == userId)?false:true"
@@ -193,7 +193,7 @@
                                                                 </v-list-tile-title>
                                                             </v-flex>
 
-                                                            <v-flex xs12 sm6 class="pt-1">
+                                                            <v-flex>
                                                                 <div class="right">
                                                                     <v-tooltip top>
                                                                         <v-btn icon slot="activator" class="text-white mx-0 my-0" >
@@ -201,7 +201,22 @@
                                                                         </v-btn>
                                                                         <span>{{subItem.userNote}}</span>
                                                                     </v-tooltip>
-                                                                    
+
+                                                                    <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" class="mx-0" small color="success"
+                                                                    :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
+                                                                    v-on:click.stop="checkAvailable('ready',subItem,item)" style="padding-left: 6px;padding-right: 6px"
+                                                                    >
+                                                                        <v-icon style="color: white" v-if="subItem.available == 1" >check</v-icon>
+                                                                        Sẵn sàng
+                                                                    </v-btn>
+                                                                    <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" small class="text-white mx-0" 
+                                                                    :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
+                                                                    v-on:click.stop="checkAvailable('busy',subItem,item)" color="error"
+                                                                    >
+                                                                        <v-icon style="color: white" v-if="subItem.available == 2" >check</v-icon>
+                                                                        Bận
+                                                                    </v-btn>
+
                                                                     <span style="color:green" class="mr-2" v-html="bindAvailableText(subItem.available)"></span>
                                                                     
                                                                     <v-btn v-if="permission_prop=='manager' ||permission_prop=='owner' || item.user_leader == userId" icon title="Xóa" class="mx-0"
@@ -1247,7 +1262,14 @@
         top: 0;
         right: 20px;
     }
-    
+    #activity_invitation_task button{
+        min-width: 0px;
+        margin: 6px 0;
+        text-transform: none;
+    }
+    #activity_invitation_task button .icon{
+        font-size: 18px!important;
+    }
     #activity_invitation_task .btn__content {
         padding-left: 0px!important;
         padding-right: 0px!important;

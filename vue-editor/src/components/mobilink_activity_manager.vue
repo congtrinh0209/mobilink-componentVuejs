@@ -323,7 +323,7 @@
                             vm.getListActivitySource(vm.mainItems[0].activityItems[0].activityId,0,0)
                         } else if(vm.radioGroup=='leader') {
                             vm.getListItemGroup(vm.managerItems);
-                            vm.getListActivityItemsGroup(vm.activityCatItems);
+                            vm.getListActivityItemsGroup(vm.managerItems);
                             vm.getListActivitySource(vm.mainItems[0].activityItems[0].activityId,0,0)
                         };
                         
@@ -352,15 +352,19 @@
                     var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            vm.activityListItems.push(serializable.data[key])
+                            if(serializable.data[key].activityType == 'EVENT' ||serializable.data[key].activityType == 'TASK'){
+                                vm.activityListItems.push(serializable.data[key])
+                            }
+                            
                         };
+
                         if(vm.radioGroup=='activityCat'){
                             vm.getListItemGroup(vm.activityCatItems);
                             vm.getListActivityItemsGroup(vm.activityCatItems);
                             vm.getListActivitySource(vm.mainItems[0].activityItems[0].activityId,0,0)
                         } else if(vm.radioGroup=='leader') {
                             vm.getListItemGroup(vm.managerItems);
-                            vm.getListActivityItemsGroup(vm.activityCatItems);
+                            vm.getListActivityItemsGroup(vm.managerItems);
                             vm.getListActivitySource(vm.mainItems[0].activityItems[0].activityId,0,0)
                         };
                         

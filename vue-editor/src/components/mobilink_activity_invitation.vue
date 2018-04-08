@@ -34,14 +34,14 @@
                             <v-btn icon slot="activator" class="text-white mx-0 my-0"  @click.stop="showAddNote(userLogin)">
                                 <v-icon class="iconCmm" >comment</v-icon>
                             </v-btn>
-                            <span v-if="userLogin.userNote!=''">{{userLogin.userNote}}</span>
+                            <span>{{userLogin.userNote}}</span>
                         </v-tooltip>
                         
-                        <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" class="mx-0" small color="success" v-on:click.stop="checkAvailable('ready',userLogin)" style="padding-left: 6px;padding-right: 6px">
+                        <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" class="mx-0" small color="success" v-on:click.stop="checkAvailable('ready',userLogin,null)" style="padding-left: 6px;padding-right: 6px">
                             <v-icon style="color: white" v-if="userLogin.available == 1" >check</v-icon>
                             Sẵn sàng
                         </v-btn>
-                        <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" small class="text-white mx-1" v-on:click.stop="checkAvailable('busy',userLogin)" color="error">
+                        <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" small class="text-white mx-1" v-on:click.stop="checkAvailable('busy',userLogin,null)" color="error">
                             <v-icon style="color: white" v-if="userLogin.available == 2" >check</v-icon>
                             Tôi bận
                         </v-btn>
@@ -72,7 +72,7 @@
                         <v-card-actions>
                             <v-spacer></v-spacer>
                             <v-btn color="darken-1" flat @click.native="dialog_add_note = false">Hủy</v-btn>
-                            <v-btn color="darken-1" flat @click.native="submitAddNote(userLogin,note_text)">Lưu</v-btn>
+                            <v-btn color="darken-1" flat @click.native="submitAddNote(note_text)">Lưu</v-btn>
                         </v-card-actions>
                     </v-card>
                 </v-dialog>
@@ -157,7 +157,7 @@
                                                 <!-- end -->
 
                                                 <!-- Phần thêm cá nhân trong tổ chức/ đơn vị -->
-                                                <div v-if="item.role.invitationType == 0 && item.user_leader == userId" class="layout wrap mx-0 mb-2">
+                                                <div v-if="item.role.invitationType == 0 && item.user_leader.mine == true" class="layout wrap mx-0 mb-2">
                                                     <toggle-button class="mr-1 mt-4"
                                                     
                                                     v-model="presenterAddUserUnit"
@@ -194,7 +194,7 @@
                                                                     <toggle-button class="mr-1 mt-1" 
                                                                     @change="updatePresenterUserGroup($event,subItem.resourceInvitationId,subItem)"
                                                                     :value="bindPresenter(subItem.right)"
-                                                                    :disabled="(permission_prop=='manager'||permission_prop=='owner'|| item.user_leader == userId)?false:true"
+                                                                    :disabled="(permission_prop=='manager'||permission_prop=='owner'|| item.user_leader.toUserId ==userLogin.toUserId)?false:true"
                                                                     title_checked = "Thành viên"
                                                                     title_unchecked = "Theo dõi"
                                                                     :labels="{checked: 'TV', unchecked: 'TD'}"
@@ -208,10 +208,12 @@
                                                             <v-flex class="">
                                                                 <div class="right">
                                                                     <v-tooltip top>
-                                                                        <v-btn icon slot="activator" class="text-white mx-0 my-0" >
+                                                                        <v-btn icon slot="activator" :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
+                                                                        @click.stop="showAddNote(subItem)" class="text-white mx-0 my-0"
+                                                                        >
                                                                             <v-icon class="iconCmm" >comment</v-icon>
                                                                         </v-btn>
-                                                                        <span v-if="subItem.userNote">{{subItem.userNote}}</span>
+                                                                        <span >{{subItem.userNote}}</span>
                                                                     </v-tooltip>
 
                                                                     <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" class="mx-0" small color="success"
@@ -239,7 +241,7 @@
                                                                         Có mặt
                                                                     </v-btn>
 
-                                                                    <v-btn v-if="permission_prop=='manager' ||permission_prop=='owner' || item.user_leader == userId" icon title="Xóa" class="mx-0"
+                                                                    <v-btn v-if="permission_prop=='manager' ||permission_prop=='owner' || item.user_leader.toUserId == userLogin.toUserId" icon title="Xóa" class="mx-0"
                                                                      @click.stop="updateInvitation('DELETE',subItem.resourceInvitationId,index,item.items)">
                                                                         <v-icon color="red darken-3">clear</v-icon>
                                                                     </v-btn>
@@ -391,9 +393,9 @@
                                                     <v-list-tile-title>
                                                         <v-flex xs12 class="layout wrap">
 
-                                                            <v-flex xs12 sm6 class="pt-1">
-                                                                <v-list-tile-title>
-                                                                    <toggle-button class="mr-1 mt-2"
+                                                            <v-flex>
+                                                                <v-list-tile-title class="pt-2">
+                                                                    <toggle-button class="mr-1 mt-1"
                                                                     :disabled="(permission_prop=='manager'||permission_prop=='owner')?false:true"
                                                                     :value="bindPresenter(item.right)"
                                                                     @change="updatePresenterUserGroup($event,item.resourceInvitationId,item)"
@@ -406,16 +408,34 @@
                                                                 </v-list-tile-title>
                                                             </v-flex>
                                                             
-                                                            <v-flex xs12 sm6>
+                                                            <v-flex>
                                                                 <div class="right">
                                                                     <v-tooltip top>
-                                                                        <v-btn icon slot="activator" class="text-white mx-0 my-0" >
+                                                                        <v-btn icon slot="activator" :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
+                                                                        @click.stop="showAddNote(item)" class="text-white mx-0 my-0" 
+                                                                        >
                                                                             <v-icon class="iconCmm" >comment</v-icon>
                                                                         </v-btn>
-                                                                        <span v-if="item.userNote">{{item.userNote}}</span>
+                                                                        <span >{{item.userNote}}</span>
                                                                     </v-tooltip>
                                                                     
-                                                                    <span v-if="opening_state_prop == 0||opening_state_prop == 1" class="mr-2" style="color:green" v-html="bindAvailableText(item.available)"></span>
+                                                                    <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" class="mx-0" small color="success"
+                                                                    :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
+                                                                    v-on:click.stop="checkAvailable('ready',item,null)" style="padding-left: 6px;padding-right: 6px"
+                                                                    >
+                                                                        <v-icon style="color: white" v-if="item.available == 1" >check</v-icon>
+                                                                        Sẵn sàng
+                                                                    </v-btn>
+                                                                    <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" small class="text-white mx-0" 
+                                                                    :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
+                                                                    v-on:click.stop="checkAvailable('busy',item,null)" color="error"
+                                                                    >
+                                                                        <v-icon style="color: white" v-if="item.available == 2" >check</v-icon>
+                                                                        Bận
+                                                                    </v-btn>
+
+                                                                    <!-- <span v-if="opening_state_prop == 0||opening_state_prop == 1" class="mr-2" style="color:green"
+                                                                    v-html="bindAvailableText(item.available)"></span> -->
 
                                                                     <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 7" 
                                                                     :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
@@ -540,8 +560,7 @@
                 // vm.userId = themeDisplay.getUserId();
                 Promise.all([vm.getInvitation()]).then(function() {
                     vm.getWorkingUnit();
-                    vm.getUserContact();
-                    vm.getEmployees()
+                    vm.getUserContact()
                 }, function() {
                     console.log("error")
                 });
@@ -615,14 +634,14 @@
                                 let item = vm.invitationItems[key];
                                 let itemGroups = vm.itemInvGroup[keys].role;
                                 if(item.roleId==itemGroups.roleId&&item.invitationType==4 ){
-                                    vm.itemInvGroup[keys].user_leader = item.toUserId
+                                    vm.itemInvGroup[keys].user_leader = item
                                 } else{
                                     
                                 }
                             }
                         }
-                        vm.activeGetEmployees();
-                        console.log('roleIdleader: '+ vm.roleIdUser)
+                        vm.getEmployees();
+                        console.log(vm)
                     } else {
                         vm.invitationItems = []
                     }
@@ -696,8 +715,8 @@
             getEmployees: function(){
                 var vm = this;
                 var paramsGetEmployee = {
-                    'workingunit': vm.working_unit_prop,
-                    'active': true
+                    'class': 'employee',
+                    'role': vm.userLogin.roleId
                 };
                 const configGetEmployee = {
                     params: paramsGetEmployee,
@@ -705,7 +724,7 @@
                         'groupId': vm.group_id
                     }
                 };
-                axios.get( vm.end_point + 'employees', configGetEmployee)
+                axios.get( vm.end_point + 'users', configGetEmployee)
                 .then(function (response) {
                     var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
@@ -713,7 +732,7 @@
                             if(vm.invitationItems.length!=0){
                                 var itemInv = true;
                                 for(var keys in vm.invitationItems){
-                                    if(serializable.data[key].mappingUser.userId == vm.invitationItems[keys].toUserId){
+                                    if(serializable.data[key].userId == vm.invitationItems[keys].toUserId){
                                         itemInv = false;
                                         break;
                                     }
@@ -735,17 +754,17 @@
 
             },
             /**get roleId leader đơn vị */
-            activeGetEmployees: function(){
-                var vm = this;
-                for(var keys in vm.itemInvGroup){
-                    if(vm.itemInvGroup[keys].user_leader){
-                        if(vm.itemInvGroup[keys].user_leader == vm.userId){
-                            vm.roleIdUser = vm.itemInvGroup[keys].role.roleId;
-                        }
-                    }
+            // activeGetEmployees: function(){
+            //     var vm = this;
+            //     for(var keys in vm.itemInvGroup){
+            //         if(vm.itemInvGroup[keys].user_leader){
+            //             if(vm.itemInvGroup[keys].user_leader == vm.userId){
+            //                 vm.roleIdUser = vm.itemInvGroup[keys].role.roleId;
+            //             }
+            //         }
                     
-                }
-            },
+            //     }
+            // },
             /**get contact */
             getUserContact: function(){
                 /*console.log("getUserContact");*/
@@ -957,18 +976,18 @@
                 
             },
             /**Phần cập nhật noteUser của cá nhân */
-            showAddNote: function(userLogin){
+            showAddNote: function(item){
                 var vm =this;
                 vm.dialog_add_note = true;
-                vm.note_text = userLogin.userNote;
-                vm.idAddNote = userLogin.resourceInvitationId;
-                
+                vm.note_text = item.userNote;
+                vm.idAddNote = item.resourceInvitationId;
+                vm.itemsNote = item
             },
-            submitAddNote: function(userLogin,note){
+            submitAddNote: function(note){
                 var vm = this;
                 var dataUpdateInvitation  =new URLSearchParams();
                 dataUpdateInvitation.append('userNote', note);
-                var urlUpdate = vm.end_point + "resourceinvitations/"+userLogin.resourceInvitationId;
+                var urlUpdate = vm.end_point + "resourceinvitations/"+vm.idAddNote;
                 var paramsPutInvitation = {
                     
                 };
@@ -981,8 +1000,7 @@
                 axios.put(urlUpdate, dataUpdateInvitation, configPutInvitation)
                 .then(function (response) {
                     vm.dialog_add_note = false;
-                    userLogin.userNote = response.data.userNote;
-                    
+                    vm.itemsNote.userNote = response.data.userNote;
                 })
                 .catch(function (error) {
                     
@@ -1085,6 +1103,9 @@
                 };
                 axios.put(urlUpdate, dataUpdateAvailable, configPutInvitation)
                 .then(function (response) {
+                    if(item == null){
+                        vm.getInvitation()
+                    }
                     vm.show_alert('success','Cập nhật thành công');
                     if(typeCheck == 'ready'){
                         subItem.available = 1;
