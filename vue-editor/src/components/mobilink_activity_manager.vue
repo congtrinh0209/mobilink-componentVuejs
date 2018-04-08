@@ -172,8 +172,8 @@
         data () {
             return {
                 class_name: 'org.mobilink.activitymgt.model.Activity',
-                group_id: themeDisplay.getScopeGroupId()/*20147*/,
-                end_point: '/o/v2/mobilink/'/*"http://127.0.0.1:8081/api/"*/,
+                group_id: themeDisplay.getScopeGroupId(),
+                end_point: '/o/v2/mobilink/',
                 mainItems: [],
                 userId: '',
                 activityListItems:[],
@@ -299,6 +299,7 @@
                 vm.activityListItems=[];
                 var paramsGetActivity = {
                     sort:'startDate',
+                    type: 'EVENT'
                 };
                 vm.paramsGet = paramsGetActivity;
                 var configGetActivity = {
@@ -312,10 +313,8 @@
                     var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            if(serializable.data[key].activityType == 'EVENT' ||serializable.data[key].activityType == 'TASK'){
-                                vm.activityListItems.push(serializable.data[key])
-                            }
-                            
+                            vm.activityListItems.push(serializable.data[key])
+
                         };
                         if(vm.radioGroup=='activityCat'){
                             vm.getListItemGroup(vm.activityCatItems);
@@ -352,9 +351,7 @@
                     var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            if(serializable.data[key].activityType == 'EVENT' ||serializable.data[key].activityType == 'TASK'){
-                                vm.activityListItems.push(serializable.data[key])
-                            }
+                            vm.activityListItems.push(serializable.data[key])
                             
                         };
 

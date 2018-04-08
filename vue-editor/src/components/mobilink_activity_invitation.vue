@@ -45,8 +45,8 @@
                             <v-icon style="color: white" v-if="userLogin.available == 2" >check</v-icon>
                             Tôi bận
                         </v-btn>
-                        <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 7" small class="text-white mx-1" v-on:click.stop="checkin()" color="indigo">
-                            <v-icon style="color: white" v-if="typeCheckin" >check</v-icon>
+                        <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 7" small class="text-white mx-1" v-on:click.stop="checkin(userLogin)" color="indigo">
+                            <v-icon style="color: white" v-if="userLogin.checkin" >check</v-icon>
                             Tôi có mặt
                         </v-btn>
                         <v-btn icon title="Tải lại" @click="initInvitation" class="mx-0 px-0">
@@ -157,7 +157,7 @@
                                                 <!-- end -->
 
                                                 <!-- Phần thêm cá nhân trong tổ chức/ đơn vị -->
-                                                <div v-if="item.role.invitationType == 0 && item.user_leader.mine == true" class="layout wrap mx-0 mb-2">
+                                                <div v-if="item.role.invitationType == 0 && item.leader" class="layout wrap mx-0 mb-2">
                                                     <toggle-button class="mr-1 mt-4"
                                                     
                                                     v-model="presenterAddUserUnit"
@@ -171,7 +171,7 @@
                                                         placeholder="Cá nhân trong đơn vị/nhóm"
                                                         :items="employeeItems"
                                                         item-text="fullName"
-                                                        item-value="employeeId"
+                                                        item-value="userId"
                                                         v-model="employee"
                                                         return-object
                                                         autocomplete
@@ -194,7 +194,7 @@
                                                                     <toggle-button class="mr-1 mt-1" 
                                                                     @change="updatePresenterUserGroup($event,subItem.resourceInvitationId,subItem)"
                                                                     :value="bindPresenter(subItem.right)"
-                                                                    :disabled="(permission_prop=='manager'||permission_prop=='owner'|| item.user_leader.toUserId ==userLogin.toUserId)?false:true"
+                                                                    :disabled="(permission_prop=='manager'||permission_prop=='owner'|| item.leader)?false:true"
                                                                     title_checked = "Thành viên"
                                                                     title_unchecked = "Theo dõi"
                                                                     :labels="{checked: 'TV', unchecked: 'TD'}"
@@ -241,7 +241,7 @@
                                                                         Có mặt
                                                                     </v-btn>
 
-                                                                    <v-btn v-if="permission_prop=='manager' ||permission_prop=='owner' || item.user_leader.toUserId == userLogin.toUserId" icon title="Xóa" class="mx-0"
+                                                                    <v-btn v-if="permission_prop=='manager' ||permission_prop=='owner' || item.leader" icon title="Xóa" class="mx-0"
                                                                      @click.stop="updateInvitation('DELETE',subItem.resourceInvitationId,index,item.items)">
                                                                         <v-icon color="red darken-3">clear</v-icon>
                                                                     </v-btn>
@@ -633,8 +633,9 @@
                             for (var key in vm.invitationItems) {
                                 let item = vm.invitationItems[key];
                                 let itemGroups = vm.itemInvGroup[keys].role;
-                                if(item.roleId==itemGroups.roleId&&item.invitationType==4 ){
-                                    vm.itemInvGroup[keys].user_leader = item
+                                if(item.roleId==itemGroups.roleId&&item.invitationType==4&&item.mine==true ){
+                                    vm.itemInvGroup[keys].user_leader = item;
+                                    vm.itemInvGroup[keys].leader = true
                                 } else{
                                     
                                 }
@@ -893,7 +894,7 @@
                     dataPostInvitation.append('classPK', vm.class_pk);
                     dataPostInvitation.append('invitationType', 3);
                     dataPostInvitation.append('roleId', vm.roleIdUser);
-                    dataPostInvitation.append('toUserId', vm.employee.mappingUser.userId);
+                    dataPostInvitation.append('toUserId', vm.employee.userId);
                     dataPostInvitation.append('fullName', vm.employee.fullName);
                     dataPostInvitation.append('email', vm.employee.email);
                     dataPostInvitation.append('telNo', vm.employee.telNo);
@@ -953,7 +954,7 @@
                         if(type == 'UserUnit'){
                             var employeeAdded = vm.employee.employeeId;
                             var employeeAfAdded = vm.employeeItems.filter(function(item) {
-                                return item.employeeId != employeeAdded;
+                                return item.userId != employeeAdded;
                             });
                             vm.employeeItems = employeeAfAdded;
                             vm.employee = ''
@@ -1083,10 +1084,12 @@
             /** */
             checkAvailable: function(typeCheck,subItem,item){
                 var vm =this;
-                if(typeCheck == 'ready'){
+                if(typeCheck == 'ready' && subItem.available!=1){
                     vm.typeAvailable = 1
-                } else if(typeCheck == 'busy'){
+                } else if(typeCheck == 'busy' && subItem.available!=2){
                     vm.typeAvailable = 2
+                } else if((typeCheck == 'ready' && subItem.available==1)||(typeCheck == 'busy' && subItem.available==2)){
+                    vm.typeAvailable = 0
                 };
 
                 var dataUpdateAvailable  =new URLSearchParams();
@@ -1104,31 +1107,38 @@
                 axios.put(urlUpdate, dataUpdateAvailable, configPutInvitation)
                 .then(function (response) {
                     if(item == null){
-                        vm.getInvitation()
+                        vm.getInvitation();
+                        vm.show_alert('success','Cập nhật thành công');
+                    } else{
+                        vm.show_alert('success','Cập nhật thành công');
+                        if(typeCheck == 'ready' && subItem.available!=1){
+                            subItem.available = 1;
+                            item.role.statistic.available+=1;
+                            vm.availableCount+=1
+                        } else if(typeCheck == 'busy' && subItem.available!=2){
+                            subItem.available = 2;
+                            item.role.statistic.available-=1
+                            vm.availableCount-=1
+                        } else if((typeCheck == 'ready' && subItem.available==1)||(typeCheck == 'busy' && subItem.available==2)){
+                            subItem.available = 0;
+                            item.role.statistic.available-=1
+                            vm.availableCount-=1
+                        };
                     }
-                    vm.show_alert('success','Cập nhật thành công');
-                    if(typeCheck == 'ready'){
-                        subItem.available = 1;
-                        item.role.statistic.available+=1;
-                        vm.availableCount+=1
-                    } else if(typeCheck == 'busy'){
-                        subItem.available = 2;
-                        item.role.statistic.available-=1
-                        vm.availableCount-=1
-                    };
+                    
                 })
                 .catch(function (error) {
                     vm.show_alert('error','Cập nhật thất bại');
                 });
 
             },
-            checkin: function(){
+            checkin: function(item){
                 var vm =this;
                 vm.typeCheckin=!vm.typeCheckin;
 
                 var dataUpdateAvailable  =new URLSearchParams();
                 dataUpdateAvailable.append('checkin', vm.typeCheckin);
-                var urlUpdate = vm.end_point + "resourceinvitations/"+vm.invitationUserId;
+                var urlUpdate = vm.end_point + "resourceinvitations/"+ item.resourceInvitationId;
                 var paramsPutInvitation = {
                     
                 };
@@ -1331,6 +1341,9 @@
     #activity_invitation .expansion-panel__header{
         padding-left: 10px!important;
         padding-right: 10px!important;
+    }
+    #activity_invitation .wrap_invitation ul .list--group{
+        padding: 0!important;
     }
     #activity_invitation .list__tile{
         padding: 0!important;
