@@ -3,7 +3,7 @@
     <div id="activity_invitation" v-if="opening_state_prop == 0||opening_state_prop==1 || opening_state_prop==4 || opening_state_prop==7 " >
                 
         <v-dialog class="application theme--light progessLoading" v-model="dialog_loading" persistent max-width="50px">
-            <v-card>
+            <v-card style="text-align: center;padding-top: 5px;">
                 <v-progress-circular v-bind:size="25" indeterminate color="primary"></v-progress-circular>
             </v-card>
                 
@@ -30,7 +30,7 @@
                 
                 <v-flex v-if="mineInv" style="position: absolute;right:0">
                     <div>
-                        <v-tooltip top>
+                        <v-tooltip top :disabled="(userLogin.userNote?false:true)">
                             <v-btn icon slot="activator" class="text-white mx-0 my-0"  @click.stop="showAddNote(userLogin)">
                                 <v-icon class="iconCmm" >comment</v-icon>
                             </v-btn>
@@ -178,7 +178,7 @@
                                                         :clearable="true"
                                                         ></v-select>
                                                     </v-flex>
-                                                    <v-btn @click.stop="postInvitation('UserUnit')" small outline color="primary" class="mx-0 ml-1 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
+                                                    <v-btn @click.stop="postInvitation('UserUnit',item.role.roleId)" small outline color="primary" class="mx-0 ml-1 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
                                                         Mời
                                                     </v-btn>
                                                 </div>
@@ -207,7 +207,7 @@
 
                                                             <v-flex class="">
                                                                 <div class="right">
-                                                                    <v-tooltip top>
+                                                                    <v-tooltip top :disabled="(subItem.userNote?false:true)">
                                                                         <v-btn icon slot="activator" :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
                                                                         @click.stop="showAddNote(subItem)" class="text-white mx-0 my-0"
                                                                         >
@@ -410,7 +410,7 @@
                                                             
                                                             <v-flex>
                                                                 <div class="right">
-                                                                    <v-tooltip top>
+                                                                    <v-tooltip top :disabled="(item.userNote?false:true)">
                                                                         <v-btn icon slot="activator" :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
                                                                         @click.stop="showAddNote(item)" class="text-white mx-0 my-0" 
                                                                         >
@@ -556,8 +556,8 @@
             
             initInvitation: function(){
                 var vm = this;
-                vm.userId = 108;
-                // vm.userId = themeDisplay.getUserId();
+                // vm.userId = 108;
+                vm.userId = themeDisplay.getUserId();
                 Promise.all([vm.getInvitation()]).then(function() {
                     vm.getWorkingUnit();
                     vm.getUserContact()
@@ -604,7 +604,9 @@
                             /**check mine */
                             if(item.mine == true){
                                 vm.mineInv = true;
-                                vm.userLogin = item
+                                vm.userLogin = item;
+                                console.log('userLogin: ');
+                                console.log(vm.userLogin)
                             }
                             /** push đơn vị, nhóm*/
                             if(item.invitationType == 0 ||item.invitationType == 1) {
@@ -635,14 +637,16 @@
                                 let itemGroups = vm.itemInvGroup[keys].role;
                                 if(item.roleId==itemGroups.roleId&&item.invitationType==4&&item.mine==true ){
                                     vm.itemInvGroup[keys].user_leader = item;
-                                    vm.itemInvGroup[keys].leader = true
+                                    vm.itemInvGroup[keys].leader = true;
+                                    console.log('user_leader:');
+                                    console.log(vm.itemInvGroup[keys].user_leader)
                                 } else{
                                     
                                 }
                             }
                         }
                         vm.getEmployees();
-                        console.log(vm)
+                        // console.log(vm)
                     } else {
                         vm.invitationItems = []
                     }
@@ -859,9 +863,8 @@
             },
             
             /**POST invitation */
-            postInvitation: function(type){
+            postInvitation: function(type,roleId){
                 var vm = this;
-                console.log(vm);
                 
                 if(type == 'GROUP'&&vm.hostingId){
                     vm.valid = true;
@@ -893,11 +896,11 @@
                     dataPostInvitation.append('className', vm.class_name);
                     dataPostInvitation.append('classPK', vm.class_pk);
                     dataPostInvitation.append('invitationType', 3);
-                    dataPostInvitation.append('roleId', vm.roleIdUser);
+                    dataPostInvitation.append('roleId', roleId);
                     dataPostInvitation.append('toUserId', vm.employee.userId);
                     dataPostInvitation.append('fullName', vm.employee.fullName);
-                    dataPostInvitation.append('email', vm.employee.email);
-                    dataPostInvitation.append('telNo', vm.employee.telNo);
+                    dataPostInvitation.append('email', vm.employee.contactEmail);
+                    dataPostInvitation.append('telNo', vm.employee.contactTelNo);
                     dataPostInvitation.append('right', presenterPostUserUnit);
                 }
                 else if(type == 'UserContact'&&vm.contact){
@@ -1386,10 +1389,7 @@
     .pointerEvent{
         pointer-events: none!important
     }
-    #activity_invitation .progessLoading{
-        text-align: center;
-        margin: 0 auto
-    }
+
     #activity_invitation .input-group .input-group--selection-controls{
         display: none!important;
     }

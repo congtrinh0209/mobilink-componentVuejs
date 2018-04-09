@@ -1,7 +1,7 @@
 <template>
     <div id="activity_invitation_task" v-if="opening_state_prop == 0||opening_state_prop == 3 || opening_state_prop == 4 ">
         <v-dialog class="application theme--light progessLoading" v-model="dialog_loading" persistent max-width="50px">
-            <v-card>
+            <v-card style="text-align: center;padding-top: 5px;">
                 <v-progress-circular v-bind:size="25" indeterminate color="primary"></v-progress-circular>
             </v-card>
                 
@@ -25,7 +25,7 @@
                 
                 <v-flex v-if="mineInv" style="position: absolute;right:0">
                     <div class="right">
-                        <v-tooltip top>
+                        <v-tooltip top :disabled="(userLogin.userNote?false:true)">
                             <v-btn icon slot="activator" class="text-white mx-0 my-0"  @click.stop="showAddNote(userLogin)">
                                 <v-icon class="iconCmm" >comment</v-icon>
                             </v-btn>
@@ -112,7 +112,7 @@
 
                                 </v-flex>
                                 
-                                <v-flex xs12 sm12>
+                                <v-flex xs12 sm12 class="wrap_invitation">
                                     <v-card>
                                         <v-list class="py-0">
                                             <v-list-group class="py-0" v-for="(item, index) in itemInvGroupTask" :value="item.active" v-bind:key="item.role.resourceInvitationId">
@@ -162,14 +162,14 @@
                                                         placeholder="Cá nhân trong đơn vị/nhóm"
                                                         :items="employeeItemsTask"
                                                         item-text="fullName"
-                                                        item-value="employeeId"
+                                                        item-value="userId"
                                                         v-model="employeeTask"
                                                         return-object
                                                         autocomplete
                                                         :clearable="true"
                                                         ></v-select>
                                                     </v-flex>
-                                                    <v-btn @click.stop="postInvitationTask('UserUnit')" small outline color="primary" class="mx-0 ml-1 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
+                                                    <v-btn @click.stop="postInvitationTask('UserUnit',item.role.roleId)" small outline color="primary" class="mx-0 ml-1 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
                                                         Giao
                                                     </v-btn>
                                                 </div>
@@ -198,7 +198,7 @@
 
                                                             <v-flex>
                                                                 <div class="right">
-                                                                    <v-tooltip top>
+                                                                    <v-tooltip top :disabled="(subItem.userNote?false:true)">
                                                                         <v-btn icon slot="activator" :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
                                                                         @click.stop="showAddNote(subItem)" class="text-white mx-0 my-0" >
                                                                             <v-icon class="iconCmm" >comment</v-icon>
@@ -392,7 +392,7 @@
                                                             
                                                             <v-flex>
                                                                 <div class="right">
-                                                                    <v-tooltip top>
+                                                                    <v-tooltip top :disabled="(item.userNote?false:true)">
                                                                         <v-btn icon slot="activator" :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
                                                                          @click.stop="showAddNote(item)" class="text-white mx-0 my-0" >
                                                                             <v-icon class="iconCmm" >comment</v-icon>
@@ -528,13 +528,13 @@
         methods: {
             initInvitationTask: function(){
                 var vm = this;
-                vm.userId = 108;
-                // vm.userId = themeDisplay.getUserId();
+                // vm.userId = 108;
+                vm.userId = themeDisplay.getUserId();
                 /** */
                 Promise.all([vm.getInvitationTask()]).then(function() {
                     vm.getWorkingUnitTask();
                     vm.getUserContact();
-                    vm.getEmployeesTask()
+                    
                 }, function() {
                     console.log("error")
                 });
@@ -582,7 +582,9 @@
                             /**check mine */
                             if(item.mine == true){
                                 vm.mineInv = true;
-                                vm.userLogin = item
+                                vm.userLogin = item;
+                                console.log('userLogin: ');
+                                console.log(vm.userLogin)
                             }
                             /** push đơn vị, nhóm*/
                             if(item.invitationType == 0 ||item.invitationType == 1) {
@@ -613,14 +615,16 @@
                                 let itemGroups = vm.itemInvGroupTask[keys].role;
                                 if(item.roleId==itemGroups.roleId&&item.invitationType==4&&item.mine==true){
                                     vm.itemInvGroupTask[keys].user_leader = item,
-                                    vm.itemInvGroupTask[keys].leader = true
+                                    vm.itemInvGroupTask[keys].leader = true;
+                                    console.log('user_leader:');
+                                    console.log(vm.itemInvGroupTask[keys].user_leader)
                                 } else{
                                     
                                 }
                             }
                         }
-                        vm.activeGetEmployeesTask();
-                        console.log('roleIdleader: '+ vm.roleIdUser)
+                        vm.getEmployeesTask();
+                        
                     } else {
                         vm.invitationTaskItems = []
                     }
@@ -711,7 +715,7 @@
                             if(vm.invitationTaskItems.length!=0){
                                 var itemInv = true;
                                 for(var keys in vm.invitationTaskItems){
-                                    if(serializable.data[key].mappingUser.userId == vm.invitationTaskItems[keys].toUserId){
+                                    if(serializable.data[key].userId == vm.invitationTaskItems[keys].toUserId){
                                         itemInv = false;
                                         break;
                                     }
@@ -733,16 +737,6 @@
                     console.log(error)
                 })
 
-            },
-            /**run get employees */
-            activeGetEmployeesTask: function(){
-                var vm = this;
-                for(var keys in vm.itemInvGroupTask){
-                    if(vm.itemInvGroupTask[keys].user_leader&&vm.itemInvGroupTask[keys].user_leader == vm.userId){
-                        vm.roleIdUser = vm.itemInvGroupTask[keys].role.roleId;
-                        
-                    }
-                }
             },
             /**get contact */
             getUserContact: function(){
@@ -832,7 +826,7 @@
             },
             
             /**POST invitation */
-            postInvitationTask: function(type){
+            postInvitationTask: function(type,roleId){
                 var vm = this;
                 /*console.log(vm);*/
                 if(type == 'GROUP'&&vm.hostingIdTask){
@@ -865,11 +859,11 @@
                     dataPostInvitation.append('className', vm.class_name);
                     dataPostInvitation.append('classPK', vm.class_pk);
                     dataPostInvitation.append('invitationType', 3);
-                    dataPostInvitation.append('roleId', vm.roleIdUser);
-                    dataPostInvitation.append('toUserId', vm.employeeTask.mappingUser.userId);
+                    dataPostInvitation.append('roleId', roleId);
+                    dataPostInvitation.append('toUserId', vm.employeeTask.userId);
                     dataPostInvitation.append('fullName', vm.employeeTask.fullName);
-                    dataPostInvitation.append('email', vm.employeeTask.email);
-                    dataPostInvitation.append('telNo', vm.employeeTask.telNo);
+                    dataPostInvitation.append('email', vm.employeeTask.contactEmail);
+                    dataPostInvitation.append('telNo', vm.employeeTask.contactTelNo);
                     dataPostInvitation.append('right', presenterPostUserUnit);
                 }
                 else if(type == 'UserContact'&&vm.contact){
@@ -919,14 +913,12 @@
                             });
                             vm.hostingIdItemsTask = hostingAfAdded;
                             vm.hostingIdTask = '';
-                            setTimeout(function(){
-                                vm.activeGetEmployeesTask();
-                            },4000);
+                            
                         };
                         if(type == 'UserUnit'){
                             var employeeAdded = vm.employeeTask.employeeId;
                             var employeeAfAdded = vm.employeeItemsTask.filter(function(item) {
-                                return item.employeeId != employeeAdded;
+                                return item.userId != employeeAdded;
                             });
                             vm.employeeItemsTask = employeeAfAdded;
                             vm.employeeTask = ''
@@ -1310,6 +1302,9 @@
         padding-left: 10px!important;
         padding-right: 10px!important;
     }
+    #activity_invitation_task .wrap_invitation ul .list--group{
+        padding: 0!important;
+    }
     #activity_invitation_task .list__tile{
         padding: 0!important;
     }
@@ -1352,10 +1347,6 @@
     .pointerEvent{
         pointer-events: none!important
     }
-    #activity_invitation_task .progessLoading{
-        text-align: center
-    }
-
     
 </style>
 
