@@ -23,26 +23,29 @@
                 <div class="ml-1">Thành phần: {{availableCount}}/ {{invitationCount}}  sẵn sàng</div>
                 <v-spacer></v-spacer>
                 
-                <v-flex v-if="mineInv" style="position: absolute;right:0">
-                    <div class="right">
-                        <v-tooltip top :disabled="(userLogin.userNote?false:true)">
-                            <v-btn icon slot="activator" class="text-white mx-0 my-0"  @click.stop="showAddNote(userLogin)">
-                                <v-icon class="iconCmm" >comment</v-icon>
+                <v-flex v-if="mineInv">
+                    <div style="position: absolute;right:0">
+                        <span v-if="mineInv">
+                            <v-tooltip top :disabled="(userLogin.userNote?false:true)">
+                                <v-btn icon slot="activator" class="text-white mx-0 my-0"  @click.stop="showAddNote(userLogin)">
+                                    <v-icon class="iconCmm" >comment</v-icon>
+                                </v-btn>
+                                <span >{{userLogin.userNote}}</span>
+                            </v-tooltip>
+                            
+                            <v-btn class="mx-0" small color="success" v-on:click.stop="checkAvailable('ready',userLogin,null)" style="padding-left: 6px;padding-right: 6px">
+                                <v-icon style="color: white" v-if="userLogin.available == 1"  >check</v-icon>
+                                Sẵn sàng
                             </v-btn>
-                            <span >{{userLogin.userNote}}</span>
-                        </v-tooltip>
-                        
-                        <v-btn class="mx-0" small color="success" v-on:click.stop="checkAvailable('ready',userLogin,null)" style="padding-left: 6px;padding-right: 6px">
-                            <v-icon style="color: white" v-if="userLogin.available == 1"  >check</v-icon>
-                            Sẵn sàng
-                        </v-btn>
-                        <v-btn small class="text-white mx-1" v-on:click.stop="checkAvailable('busy',userLogin,null)" color="error">
-                            <v-icon style="color: white" v-if="userLogin.available == 2" >check</v-icon>
-                            Tôi bận
-                        </v-btn>
+                            <v-btn small class="text-white mx-1" v-on:click.stop="checkAvailable('busy',userLogin,null)" color="error">
+                                <v-icon style="color: white" v-if="userLogin.available == 2" >check</v-icon>
+                                Tôi bận
+                            </v-btn>
+                              
+                        </span>
                         <v-btn icon title="Tải lại" @click="initInvitationTask" class="mx-0 px-0">
                             <v-icon color="white darken-3">refresh</v-icon>
-                        </v-btn>   
+                        </v-btn> 
                     </div>
                     
                 </v-flex>
@@ -183,7 +186,7 @@
                                                             <v-flex class="pt-2">
                                                                 <v-list-tile-title>
                                                                     <toggle-button class="mr-1 mt-1" 
-                                                                    @change="updatePresenterUserGroupTask($event,subItem.resourceInvitationId,subItem)"
+                                                                    @change="updatePresenterUserGroupTask($event,subItem.resourceInvitationId,item)"
                                                                     :value="bindPresenter(subItem.right)"
                                                                     :disabled="(permission_prop=='manager'||permission_prop=='owner'|| item.leader)?false:true"
                                                                     title_checked = "Thực hiện"
@@ -380,7 +383,7 @@
                                                                     <toggle-button class="mr-1 mt-1"
                                                                     :disabled="(permission_prop=='manager'||permission_prop=='owner')?false:true"
                                                                     :value="bindPresenter(item.right)"
-                                                                    @change="updatePresenterUserGroupTask($event,item.resourceInvitationId,item)"
+                                                                    @change="updatePresenterUserGroupTask($event,item.resourceInvitationId,itemInvContactTask)"
                                                                     title_checked = "Thực hiện"
                                                                     title_unchecked = "Phối hợp"
                                                                     :labels="{checked: 'TH', unchecked: 'PH'}"
@@ -538,13 +541,7 @@
                 }, function() {
                     console.log("error")
                 });
-                // vm.getWorkingUnitTask();
-                // vm.getUserContact();
-                // vm.getInvitationTask();
-                
-                // setTimeout(function(){
-                //     vm.activeGetEmployeesTask();
-                // },4000);
+
                 console.log(vm._props);
                 console.log('userId:'+ vm.userId)
             },
@@ -558,7 +555,7 @@
                 vm.itemInvContactTask = [];
 
                 var paramsGetInvitation = {
-                    
+                    sort: 'createDate_Number'
                 };
                 const configGetInvitation = {
                     params: paramsGetInvitation,
@@ -814,7 +811,7 @@
                     .then(function (response) {
                         // items.splice(index,1);
                         setTimeout(function(){
-                            vm.getInvitationTask();
+                            vm.initInvitationTask();
                             vm.show_alert('success','Xóa thành công')
                         },1000) ;
                     })
@@ -862,7 +859,7 @@
                     dataPostInvitation.append('roleId', roleId);
                     dataPostInvitation.append('toUserId', vm.employeeTask.userId);
                     dataPostInvitation.append('fullName', vm.employeeTask.fullName);
-                    dataPostInvitation.append('email', vm.employeeTask.contactEmail);
+                    dataPostInvitation.append('email', vm.employeeTask.email);
                     dataPostInvitation.append('telNo', vm.employeeTask.contactTelNo);
                     dataPostInvitation.append('right', presenterPostUserUnit);
                 }
@@ -901,7 +898,7 @@
                     .then(function (response) {
                         vm.dialog_loading = true;
                         setTimeout(function(){
-                            vm.getInvitationTask();
+                            vm.initInvitationTask();
                             vm.dialog_loading = false;
                             vm.show_alert('success','Giao nhiệm vụ thành công');
                         },2000) ;
@@ -981,7 +978,13 @@
                 if(event.value == true){
                     presenterChange = 1
                 }else {presenterChange = 0};
-                vm.submitUpdatePresenterTask(invId,presenterChange,items)
+
+                if(vm.permission_prop=='manager'||vm.permission_prop=='owner'|| items.leader){
+                    vm.submitUpdatePresenterTask(invId,presenterChange,items)
+                } else {
+                    return false
+                }
+                
             },
             submitUpdatePresenterTask: function(invId,presenter,items){
                 var vm = this;
@@ -1070,8 +1073,11 @@
                 axios.put(urlUpdate, dataUpdateAvailable, configPutInvitation)
                 .then(function (response) {
                     if(item == null){
-                        vm.getInvitationTask();
-                        vm.show_alert('success','Cập nhật thành công');
+                        setTimeout(function(){
+                            vm.getInvitationTask();
+                            vm.show_alert('success','Cập nhật thành công');
+                        },1000) ;
+
                     } else{
                         vm.show_alert('success','Cập nhật thành công');
                         if(typeCheck == 'ready' && subItem.available!=1){
@@ -1247,10 +1253,10 @@
                 .then(function (response) {
                     vm.dialog_loading = true;
                     setTimeout(function(){
-                        vm.getInvitationTask();
+                        vm.initInvitationTask();
                         vm.dialog_loading = false;
                         vm.show_alert('success','Giao nhiệm vụ thành công');
-                    },3000) ;
+                    },2000) ;
                     
     
                 })

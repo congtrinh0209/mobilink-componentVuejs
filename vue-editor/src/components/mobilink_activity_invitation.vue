@@ -28,32 +28,36 @@
                 <div class="ml-2" v-if="opening_state_prop == 7 ">Giấy mời: {{checkinCount}}/ {{invitationCount}} có mặt</div>
                 
                 
-                <v-flex v-if="mineInv" style="position: absolute;right:0">
-                    <div>
-                        <v-tooltip top :disabled="(userLogin.userNote?false:true)">
-                            <v-btn icon slot="activator" class="text-white mx-0 my-0"  @click.stop="showAddNote(userLogin)">
-                                <v-icon class="iconCmm" >comment</v-icon>
+                <v-flex>
+                    <div style="position: absolute;right:0;top:10px">
+                        <span v-if="mineInv">
+                            <v-tooltip top :disabled="(userLogin.userNote?false:true)">
+                                <v-btn icon slot="activator" class="text-white mx-0 my-0"  @click.stop="showAddNote(userLogin)">
+                                    <v-icon class="iconCmm" >comment</v-icon>
+                                </v-btn>
+                                <span>{{userLogin.userNote}}</span>
+                            </v-tooltip>
+                            
+                            <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" class="mx-0" small color="success" v-on:click.stop="checkAvailable('ready',userLogin,null)" style="padding-left: 6px;padding-right: 6px">
+                                <v-icon style="color: white" v-if="userLogin.available == 1" >check</v-icon>
+                                Sẵn sàng
                             </v-btn>
-                            <span>{{userLogin.userNote}}</span>
-                        </v-tooltip>
-                        
-                        <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" class="mx-0" small color="success" v-on:click.stop="checkAvailable('ready',userLogin,null)" style="padding-left: 6px;padding-right: 6px">
-                            <v-icon style="color: white" v-if="userLogin.available == 1" >check</v-icon>
-                            Sẵn sàng
-                        </v-btn>
-                        <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" small class="text-white mx-1" v-on:click.stop="checkAvailable('busy',userLogin,null)" color="error">
-                            <v-icon style="color: white" v-if="userLogin.available == 2" >check</v-icon>
-                            Tôi bận
-                        </v-btn>
-                        <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 7" small class="text-white mx-1" v-on:click.stop="checkin(userLogin)" color="indigo">
-                            <v-icon style="color: white" v-if="userLogin.checkin" >check</v-icon>
-                            Tôi có mặt
-                        </v-btn>
+                            <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" small class="text-white mx-1" v-on:click.stop="checkAvailable('busy',userLogin,null)" color="error">
+                                <v-icon style="color: white" v-if="userLogin.available == 2" >check</v-icon>
+                                Tôi bận
+                            </v-btn>
+                            <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 7" small class="text-white mx-1" v-on:click.stop="checkin(userLogin)" color="indigo">
+                                <v-icon style="color: white" v-if="userLogin.checkin" >check</v-icon>
+                                Tôi có mặt
+                            </v-btn>
+                            
+                        </span>
+
                         <v-btn icon title="Tải lại" @click="initInvitation" class="mx-0 px-0">
                             <v-icon color="white darken-3">refresh</v-icon>
-                        </v-btn> 
+                        </v-btn>
                     </div>
-                    
+                     
                 </v-flex>
                 <!--  -->
                 <v-dialog v-model="dialog_add_note" persistent max-width="500px">
@@ -192,7 +196,7 @@
                                                             <v-flex>
                                                                 <v-list-tile-title class="pt-2">
                                                                     <toggle-button class="mr-1 mt-1" 
-                                                                    @change="updatePresenterUserGroup($event,subItem.resourceInvitationId,subItem)"
+                                                                    @change="updatePresenterUserGroup($event,subItem.resourceInvitationId,item)"
                                                                     :value="bindPresenter(subItem.right)"
                                                                     :disabled="(permission_prop=='manager'||permission_prop=='owner'|| item.leader)?false:true"
                                                                     title_checked = "Thành viên"
@@ -398,7 +402,7 @@
                                                                     <toggle-button class="mr-1 mt-1"
                                                                     :disabled="(permission_prop=='manager'||permission_prop=='owner')?false:true"
                                                                     :value="bindPresenter(item.right)"
-                                                                    @change="updatePresenterUserGroup($event,item.resourceInvitationId,item)"
+                                                                    @change="updatePresenterUserGroup($event,item.resourceInvitationId,itemInvContact)"
                                                                     title_checked = "Thành viên"
                                                                     title_unchecked = "Theo dõi"
                                                                     :labels="{checked: 'TV', unchecked: 'TD'}"
@@ -556,8 +560,8 @@
             
             initInvitation: function(){
                 var vm = this;
-                // vm.userId = 108;
-                vm.userId = themeDisplay.getUserId();
+                vm.userId = 108;
+                // vm.userId = themeDisplay.getUserId();
                 Promise.all([vm.getInvitation()]).then(function() {
                     vm.getWorkingUnit();
                     vm.getUserContact()
@@ -580,7 +584,7 @@
                 vm.itemInvContact = [];
 
                 var paramsGetInvitation = {
-                    
+                    sort: 'createDate_Number'
                 };
                 const configGetInvitation = {
                     params: paramsGetInvitation,
@@ -696,7 +700,8 @@
                                 var itemInv = true;
                                 for(var keys in vm.invitationItems){
                                     if(serializable.data[key].roleId == vm.invitationItems[keys].roleId){
-                                        itemInv = false
+                                        itemInv = false;
+                                        break
                                     }
                                 };
                                 if(itemInv){
@@ -850,7 +855,7 @@
                     .then(function (response) {
                         // items.splice(index,1);
                         setTimeout(function(){
-                            vm.getInvitation();
+                            vm.initInvitation();
                             vm.show_alert('success','Xóa giấy mời thành công')
                         },1000) ;
                         
@@ -899,7 +904,7 @@
                     dataPostInvitation.append('roleId', roleId);
                     dataPostInvitation.append('toUserId', vm.employee.userId);
                     dataPostInvitation.append('fullName', vm.employee.fullName);
-                    dataPostInvitation.append('email', vm.employee.contactEmail);
+                    dataPostInvitation.append('email', vm.employee.email);
                     dataPostInvitation.append('telNo', vm.employee.contactTelNo);
                     dataPostInvitation.append('right', presenterPostUserUnit);
                 }
@@ -938,7 +943,7 @@
                     .then(function (response) {
                         vm.dialog_loading = true;
                         setTimeout(function(){
-                            vm.getInvitation();
+                            vm.initInvitation();
                             vm.dialog_loading = false;
                             vm.show_alert('success','Thêm giấy mời thành công');
                         },2000) ;
@@ -950,9 +955,7 @@
                             });
                             vm.hostingIdItems = hostingAfAdded;
                             vm.hostingId = '';
-                            setTimeout(function(){
-                                vm.activeGetEmployees();
-                            },4000);
+                            
                         };
                         if(type == 'UserUnit'){
                             var employeeAdded = vm.employee.employeeId;
@@ -1017,7 +1020,13 @@
                 if(event.value == true){
                     presenterChange = 1
                 }else {presenterChange = 0};
-                vm.submitUpdatePresenter(invId,presenterChange,items)
+
+                if(vm.permission_prop=='manager'||vm.permission_prop=='owner'|| items.leader){
+                    vm.submitUpdatePresenter(invId,presenterChange,items)
+                } else {
+                    return false
+                }
+                
             },
             submitUpdatePresenter: function(invId,presenter,items){
                 var vm = this;
@@ -1110,8 +1119,11 @@
                 axios.put(urlUpdate, dataUpdateAvailable, configPutInvitation)
                 .then(function (response) {
                     if(item == null){
-                        vm.getInvitation();
-                        vm.show_alert('success','Cập nhật thành công');
+                        setTimeout(function(){
+                            vm.getInvitation();
+                            vm.show_alert('success','Cập nhật thành công');
+                        },1000) ;
+
                     } else{
                         vm.show_alert('success','Cập nhật thành công');
                         if(typeCheck == 'ready' && subItem.available!=1){
@@ -1122,11 +1134,14 @@
                             subItem.available = 2;
                             item.role.statistic.available-=1
                             vm.availableCount-=1
-                        } else if((typeCheck == 'ready' && subItem.available==1)||(typeCheck == 'busy' && subItem.available==2)){
+                        } else if(typeCheck == 'ready' && subItem.available==1){
                             subItem.available = 0;
                             item.role.statistic.available-=1
                             vm.availableCount-=1
+                        } else if(typeCheck == 'busy' && subItem.available==2){
+                            subItem.available = 0;
                         };
+                        
                     }
                     
                 })
@@ -1292,10 +1307,10 @@
                 .then(function (response) {
                     vm.dialog_loading = true;
                     setTimeout(function(){
-                        vm.getInvitation();
+                        vm.initInvitation();
                         vm.dialog_loading = false;
                         vm.show_alert('success','Thêm giấy mời thành công');
-                    },3000) ;
+                    },2000) ;
                     
                 })
                 .catch(function (error) {
