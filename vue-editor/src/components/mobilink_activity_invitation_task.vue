@@ -15,14 +15,10 @@
         </v-alert>
 
         <div style="position: relative; overflow: hidden;">
-            <v-expansion-panel expand class="header-group">
+            <v-expansion-panel expand class="header-group expansion-blue">
                <v-expansion-panel-content value="true">
                     <div slot="header" class="custome-panel-heading-with-icon">
-                        <v-toolbar
-                            absolute
-                            color="teal lighten-3"
-                            dark
-                        >
+                        <v-toolbar absolute>
                             <div class="ml-1" style="flex: none">Thành phần: {{availableCount}}/ {{invitationCount}}  sẵn sàng</div>
                                                         
                             <div style="flex: none" class="ml-2">
@@ -37,16 +33,16 @@
                                         
                                         <v-btn class="mx-0" small color="success" v-on:click.stop="checkAvailable('ready',userLogin,null)" style="padding-left: 6px;padding-right: 6px">
                                             <v-icon style="color: white!important" v-if="userLogin.available == 1"  >check</v-icon>
-                                            Sẵn sàng
+                                            <span style="color: white!important">Sẵn sàng</span>
                                         </v-btn>
                                         <v-btn small class="text-white mx-1" v-on:click.stop="checkAvailable('busy',userLogin,null)" color="error">
                                             <v-icon style="color: white!important" v-if="userLogin.available == 2" >check</v-icon>
-                                            Tôi bận
+                                            <span style="color: white!important">Tôi bận</span>
                                         </v-btn>
                                         
                                     </span>
 
-                                    <v-icon title="Tải lại" @click.stop="initInvitationTask" class="mx-0 px-0" style="color: white!important">refresh</v-icon>
+                                    <v-icon title="Tải lại" @click.stop="initInvitationTask" class="mx-0 px-0" >refresh</v-icon>
                                 </div>
                                 
                             </div>
@@ -77,10 +73,10 @@
 
                     <v-card>
                         <!-- Phần đơn vị/ Nhóm trong cơ quan-->
-                        <v-expansion-panel style="padding-top:2px" expand>
+                        <v-expansion-panel style="padding-top:2px" expand class="sub-panel">
                             <v-expansion-panel-content value="true">
                                 <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0">
-                                    <div>Đơn vị/ Nhóm trong cơ quan</div>
+                                    <div class="color-subpanel">Đơn vị/ Nhóm trong cơ quan</div>
 
                                     <v-icon class="btn-add mx-0 my-0" v-if="permission_prop == 'manager'|| permission_prop == 'owner'"
                                         v-on:click.stop="show_Add1Task" grey darken-4>
@@ -255,10 +251,10 @@
                         
 
                         <!-- Phần cá nhân theo danh bạ -->
-                        <v-expansion-panel expand>
+                        <v-expansion-panel expand class="sub-panel">
                             <v-expansion-panel-content value="true">
                                 <div slot="header" class="custome-panel-heading-with-icon pl-0 mr-2">
-                                    <div>Cá nhân/ Tổ chức theo danh bạ</div>
+                                    <div class="color-subpanel">Cá nhân/ Tổ chức theo danh bạ</div>
 
                                     <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add2Task" v-if="permission_prop == 'manager'|| permission_prop == 'owner'" grey darken-4>
                                         add_circle
@@ -1303,6 +1299,8 @@
     }
     #activity_invitation_task nav .toolbar__content {
         height: 50px!important;
+        background-color: #e1f5fe!important;
+        color: #0091ea!important
     }
     #activity_invitation_task button .icon{
         font-size: 18px!important;
@@ -1310,6 +1308,15 @@
     #activity_invitation_task .header-group .header__icon{
         z-index: 500;
         padding-top: 3px;
+    }
+    #activity_invitation_task .sub-panel .expansion-panel__header{    
+        background-color: #f6f6f6!important;
+    }
+    #activity_invitation_task .color-subpanel{
+        color: #2a2a2a!important
+    }
+    #activity_invitation_task .sub-panel .expansion-panel__header i{
+        color: #939393!important
     }
     #activity_invitation_task .btn__content {
         padding-left: 0px!important;
@@ -1319,6 +1326,11 @@
         padding-left: 10px!important;
         padding-right: 10px!important;
     }
+    #activity_invitation_task nav .toolbar--absolute{
+        background-color: #e1f5fe!important;
+        color: #0091ea!important
+    }
+
     #activity_invitation_task .wrap_invitation ul .list--group{
         padding: 0!important;
     }

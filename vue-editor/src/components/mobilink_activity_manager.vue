@@ -16,6 +16,7 @@
                     </v-radio>
                 </v-radio-group>
             </v-flex>
+
             <v-flex xs12 sm1 class="mt-2">
                 <v-subheader class="px-0">Từ ngày: </v-subheader>
             </v-flex>
@@ -23,6 +24,7 @@
                 <date-picker @change="changeDate" class="mt-3" v-model="timeStart" 
                 v-bind:not-after="timeStartMax" lang="vi" type="date" format="dd/MM/yyyy"></date-picker>
             </v-flex>
+
             <v-flex xs12 sm1 class="mt-2">
                 <v-subheader class="px-0">Đến ngày: </v-subheader>
             </v-flex>
@@ -70,9 +72,9 @@
                 <div style="width:20%"><p>Ghi chú</p></div>
             </v-layout>
             
-            <v-expansion-panel expand v-for="(item,index) in mainItems" :key="item.leader.employeeId">
+            <v-expansion-panel expand class="expansion-blue" v-for="(item,index) in mainItems" :key="item.leader.employeeId">
                 <v-expansion-panel-content :value="item==mainItems[0]">
-                    <div slot="header" @click="getListActivitySource(item.activityItems[0].activityId,index,0)" class="custome-panel-heading-with-icon mr-2 pl-0" style="font-family: sans-serif">
+                    <div slot="header"  @click="getListActivitySource(item.activityItems[0].activityId,index,0)" class="custome-panel-heading-with-icon mr-2 pl-0" style="font-family: sans-serif">
                         <b v-if="radioGroup == 'leader'">{{item.leader.title}} {{ item.leader.fullName }} - {{ item.leader.jobTitle }}</b>
                         <b v-if="radioGroup == 'activityCat'">{{item.leader.itemName}}</b>
                     </div>
@@ -87,11 +89,15 @@
                                                 <v-list-tile slot="item" class="px-0" @click="getListActivitySource(item1.activityId,index,index1)">
                                                     <v-list-tile-content class="px-0 pl-2">
                                                         <v-list-tile-title class="item_group">
-                                                            <b>{{ parseDateView(new Date(item1.startDate))}}</b> - {{item1.subject}}
+                                                            <span title="Chi tiết cuộc họp" class="icon_view" @click.stop="activityDetail(item1,index1)">
+                                                                <b>{{ parseDateView(new Date(item1.startDate))}}</b> - {{item1.subject}}
+                                                            </span>
+                                                            
                                                         </v-list-tile-title>
                                                     </v-list-tile-content>
 
-                                                    <v-list-tile-action class="pr-2">
+                                                    <v-list-tile-action class="pr-2" style="flex-direction: row">
+                                                        <v-icon title="Kết luận cuộc họp" class="icon_view mr-3" @click="getListActivitySource(item1.activityId,index,index1)">remove_red_eye</v-icon>
                                                         <v-icon>keyboard_arrow_down</v-icon>
                                                     </v-list-tile-action>
                                                 </v-list-tile>
@@ -160,26 +166,22 @@
         created () {
             var vm = this;
             vm.$nextTick(function () {
+
                 Promise.all([vm.getManager(), vm.getActivityCat()]).then(function() {
                     vm.getActivity()
                 }, function() {
                     console.log("error")
                 });
-                /*vm.getManager();
-                vm.getActivityCat();
-                setTimeout(function(){
-                    vm.getActivity()
-                },1000)*/
-                
+
             })
         },
         
         data () {
             return {
-                // class_name: 'org.mobilink.activitymgt.model.Activity',
-                group_id: 20147,
-                // group_id: themeDisplay.getScopeGroupId(),
-                end_point: 'http://127.0.0.1:8081/api/',
+                class_name: 'org.mobilink.activitymgt.model.Activity',
+                // group_id: 20147,
+                group_id: themeDisplay.getScopeGroupId(),
+                // end_point: 'http://127.0.0.1:8081/api/',
                 end_point: '/o/v2/mobilink/',
                 mainItems: [],
                 userId: '',
@@ -303,10 +305,16 @@
             getActivity: function(){
                 /*console.log("run get getActivity");*/
                 var vm = this;
+                var date = new Date();
+                vm.timeStart = new Date(date.getFullYear(), date.getMonth(), 1);
+                vm.timeEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+
                 vm.activityListItems=[];
                 var paramsGetActivity = {
                     sort:'startDate',
-                    type: 'EVENT'
+                    type: 'EVENT',
+                    fromdate: vm.timeStart?vm.parseDateFormat(vm.timeStart):null,
+                    todate: vm.timeEnd?vm.parseDateFormat(vm.timeEnd):null
                 };
                 vm.paramsGet = paramsGetActivity;
                 var configGetActivity = {
@@ -352,8 +360,15 @@
                 var vm = this;
                 vm.activityListItems=[];
                 vm.mainItems =[];
+
+                var paramsGetActivity = {
+                    sort:'startDate',
+                    type: 'EVENT',
+                    fromdate: vm.timeStart?vm.parseDateFormat(vm.timeStart):null,
+                    todate: vm.timeEnd?vm.parseDateFormat(vm.timeEnd):null
+                };
                 var configGetActivity = {
-                    params: vm.paramsGet,
+                    params: paramsGetActivity,
                     headers: {
                         groupId: vm.group_id
                     }
@@ -390,10 +405,6 @@
             /**Lọc theo leader */
             changeGroup: function(){
                 var vm = this;
-                vm.timeStart = '';
-                vm.timeEnd= '';
-                vm.activityCat = '';
-                vm.manager = '';
                 vm.getActivity()
             },
             changeDate: function(){
@@ -401,8 +412,6 @@
                 setTimeout(function(){
                     vm.timeEndMin = vm.timeStart?new Date(vm.timeStart):'';
                     vm.timeStartMax = vm.timeEnd?new Date(vm.timeEnd):'';
-                    vm.paramsGet.fromdate = vm.timeStart?vm.parseDateFormat(vm.timeStart):null;
-                    vm.paramsGet.todate = vm.timeEnd?vm.parseDateFormat(vm.timeEnd):null;
                     vm.callGetActivity()
                 },200)
                 
@@ -568,7 +577,7 @@
 <style>
 
     #activity_manager .navTable{
-        background-color: #96c1ec!important;
+        background-color: #fff!important;
     }
     #activity_manager .groupRadido .radio{
         max-width: 150px !important;
@@ -599,6 +608,9 @@
         border: 1px solid #ddd !important;
         padding: 8px 5px!important;
     }
+    #activity_manager #list-content .expansion-panel{
+        border-bottom: 2px solid #e7e7e7;
+    }
     #activity_manager #list-content table tr td{
         overflow: hidden;
         text-overflow: ellipsis; 
@@ -608,6 +620,9 @@
     }
     #activity_manager #list-content table tr td:nth-child(5){
         padding: 0px 5px!important;
+    }
+    #activity_manager .icon_view:hover{
+        color: blue
     }
     #activity_manager #list-content .list--group__container{
         border: 1px solid #ddd !important;

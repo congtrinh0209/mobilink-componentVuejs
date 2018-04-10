@@ -17,10 +17,10 @@
         </v-alert>
         
         <div style="position: relative; overflow: hidden;">
-           <v-expansion-panel expand class="header-group">
+           <v-expansion-panel expand class="header-group expansion-blue">
                <v-expansion-panel-content value="true">
                     <div slot="header" class="custome-panel-heading-with-icon">
-                        <v-toolbar absolute color="teal lighten-3" dark>   
+                        <v-toolbar absolute >   
                             <div class="ml-2" style="flex: none" v-if="opening_state_prop == 0||opening_state_prop == 1">Giấy mời: {{availableCount}}/ {{invitationCount}} sẵn sàng</div>
                             <div class="ml-2" style="flex: none" v-if="opening_state_prop == 4">Giấy mời: {{checkinCount}}/ {{invitationCount}} có mặt</div>
                             <div class="ml-2" style="flex: none" v-if="opening_state_prop == 7 ">Giấy mời: {{checkinCount}}/ {{invitationCount}} có mặt</div>
@@ -37,20 +37,20 @@
                                         
                                         <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" class="mx-0" small color="success" v-on:click.stop="checkAvailable('ready',userLogin,null)" style="padding-left: 6px;padding-right: 6px">
                                             <v-icon style="color: white!important" v-if="userLogin.available == 1" >check</v-icon>
-                                            Sẵn sàng
+                                            <span style="color: white!important">Sẵn sàng</span>
                                         </v-btn>
                                         <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" small class="text-white mx-1" v-on:click.stop="checkAvailable('busy',userLogin,null)" color="error">
                                             <v-icon style="color: white!important" v-if="userLogin.available == 2" >check</v-icon>
-                                            Tôi bận
+                                            <span style="color: white!important">Tôi bận</span>
                                         </v-btn>
                                         <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 7" small class="text-white mx-1" v-on:click.stop="checkin(userLogin)" color="indigo">
                                             <v-icon style="color: white!important" v-if="userLogin.checkin" >check</v-icon>
-                                            Tôi có mặt
+                                            <span style="color: white!important">Tôi có mặt</span>
                                         </v-btn>
                                         
                                     </span>
 
-                                    <v-icon title="Tải lại" @click.stop="initInvitation" class="mx-0 px-0" style="color: white!important">refresh</v-icon>
+                                    <v-icon title="Tải lại" @click.stop="initInvitation" class="mx-0 px-0">refresh</v-icon>
 
                                 </div>
                                 
@@ -81,10 +81,10 @@
 
                     <v-card>
                        <!-- Phần đơn vị/ Nhóm trong cơ quan-->
-                        <v-expansion-panel style="padding-top:2px" expand>
+                        <v-expansion-panel style="padding-top:2px" expand class="sub-panel">
                             <v-expansion-panel-content value="true">
                                 <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0">
-                                    <div>Đơn vị/ Nhóm trong cơ quan</div>
+                                    <div class="color-subpanel">Đơn vị/ Nhóm trong cơ quan</div>
                                     
                                     <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add1" v-if="permission_prop == 'manager'|| permission_prop == 'owner'" grey darken-4>
                                         add_circle
@@ -95,7 +95,7 @@
                                 <v-card class="">
                                     <v-card-text class="px-0 py-0">
                                         <v-layout row wrap class="mx-0">
-                                            <v-flex class="mb-3 layout wrap" v-if="showAdd1">
+                                            <v-flex class="mb-3 pl-2 layout wrap" v-if="showAdd1">
                                                 <v-flex xs12 sm8>
                                                     <v-select class="selectBoder pt-3"
                                                     placeholder="Chọn đơn vị/nhóm"
@@ -272,10 +272,10 @@
                         </v-expansion-panel>
                         
                         <!-- Phần cá nhân theo danh bạ -->
-                        <v-expansion-panel expand>
+                        <v-expansion-panel expand class="sub-panel">
                             <v-expansion-panel-content value="true">
                                 <div slot="header" class="custome-panel-heading-with-icon pl-0 mr-2">
-                                    <div>Cá nhân/ Tổ chức theo danh bạ</div>
+                                    <div class="color-subpanel">Cá nhân/ Tổ chức theo danh bạ</div>
 
                                     <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add2" v-if="permission_prop == 'manager'|| permission_prop == 'owner'" grey darken-4>
                                         add_circle
@@ -1334,7 +1334,10 @@
     }
     #activity_invitation nav .toolbar__content {
         height: 50px!important;
+        background-color: #e1f5fe!important;
+        color: #0091ea!important
     }
+
     #activity_invitation button{
         min-width: 0px;
         margin: 6px 0;
@@ -1371,6 +1374,15 @@
     #activity_invitation .item_group:hover{
         color: blue;
         cursor: pointer;
+    }
+    #activity_invitation .sub-panel .expansion-panel__header{    
+        background-color: #f6f6f6!important;
+    }
+    #activity_invitation .color-subpanel{
+        color: #2a2a2a!important
+    }
+    #activity_invitation .sub-panel .expansion-panel__header i{
+        color: #939393!important
     }
     #activity_invitation .chip {
         max-height: 30px!important
