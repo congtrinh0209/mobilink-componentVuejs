@@ -86,7 +86,7 @@
                                             <v-list-group class="listGroup py-0" v-for="(item1,index1) in item.activityItems" :value="item1.activityId==item.activityItems[0].activityId" v-bind:key="item1.activityId">
                                                 <v-list-tile slot="item" class="px-0" @click="getListActivitySource(item1.activityId,index,index1)">
                                                     <v-list-tile-content class="px-0 pl-2">
-                                                        <v-list-tile-title class="item_group" >
+                                                        <v-list-tile-title class="item_group">
                                                             <b>{{ parseDateView(new Date(item1.startDate))}}</b> - {{item1.subject}}
                                                         </v-list-tile-title>
                                                     </v-list-tile-content>
@@ -176,10 +176,10 @@
         
         data () {
             return {
-                class_name: 'org.mobilink.activitymgt.model.Activity',
-                // group_id: 20147,
-                group_id: themeDisplay.getScopeGroupId(),
-                // end_point: 'http://127.0.0.1:8081/api/',
+                // class_name: 'org.mobilink.activitymgt.model.Activity',
+                group_id: 20147,
+                // group_id: themeDisplay.getScopeGroupId(),
+                end_point: 'http://127.0.0.1:8081/api/',
                 end_point: '/o/v2/mobilink/',
                 mainItems: [],
                 userId: '',

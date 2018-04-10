@@ -17,462 +17,466 @@
         </v-alert>
         
         <div style="position: relative; overflow: hidden;">
-           
-            <v-toolbar
-                absolute
-                color="teal lighten-3"
-                dark
-            >   
-                <div class="ml-2" v-if="opening_state_prop == 0||opening_state_prop == 1">Giấy mời: {{availableCount}}/ {{invitationCount}} sẵn sàng</div>
-                <div class="ml-2" v-if="opening_state_prop == 4">Giấy mời: {{checkinCount}}/ {{invitationCount}} có mặt</div>
-                <div class="ml-2" v-if="opening_state_prop == 7 ">Giấy mời: {{checkinCount}}/ {{invitationCount}} có mặt</div>
-                
-                
-                <v-flex>
-                    <div style="position: absolute;right:0;top:2px">
-                        <span v-if="mineInv">
-                            <v-tooltip top :disabled="(userLogin.userNote?false:true)">
-                                <v-btn icon slot="activator" class="text-white mx-0 my-0"  @click.stop="showAddNote(userLogin)">
-                                    <v-icon class="iconCmm" >comment</v-icon>
-                                </v-btn>
-                                <span>{{userLogin.userNote}}</span>
-                            </v-tooltip>
+           <v-expansion-panel expand class="header-group">
+               <v-expansion-panel-content value="true">
+                    <div slot="header" class="custome-panel-heading-with-icon">
+                        <v-toolbar absolute color="teal lighten-3" dark>   
+                            <div class="ml-2" style="flex: none" v-if="opening_state_prop == 0||opening_state_prop == 1">Giấy mời: {{availableCount}}/ {{invitationCount}} sẵn sàng</div>
+                            <div class="ml-2" style="flex: none" v-if="opening_state_prop == 4">Giấy mời: {{checkinCount}}/ {{invitationCount}} có mặt</div>
+                            <div class="ml-2" style="flex: none" v-if="opening_state_prop == 7 ">Giấy mời: {{checkinCount}}/ {{invitationCount}} có mặt</div>
                             
-                            <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" class="mx-0" small color="success" v-on:click.stop="checkAvailable('ready',userLogin,null)" style="padding-left: 6px;padding-right: 6px">
-                                <v-icon style="color: white" v-if="userLogin.available == 1" >check</v-icon>
-                                Sẵn sàng
-                            </v-btn>
-                            <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" small class="text-white mx-1" v-on:click.stop="checkAvailable('busy',userLogin,null)" color="error">
-                                <v-icon style="color: white" v-if="userLogin.available == 2" >check</v-icon>
-                                Tôi bận
-                            </v-btn>
-                            <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 7" small class="text-white mx-1" v-on:click.stop="checkin(userLogin)" color="indigo">
-                                <v-icon style="color: white" v-if="userLogin.checkin" >check</v-icon>
-                                Tôi có mặt
-                            </v-btn>
-                            
-                        </span>
+                            <div style="flex: none" class="ml-2">
+                                <div >
+                                    <span v-if="mineInv">
+                                        <v-tooltip top :disabled="(userLogin.userNote?false:true)">
+                                            <v-btn icon slot="activator" class="text-white mx-0 my-0"  @click.stop="showAddNote(userLogin)">
+                                                <v-icon class="iconCmm" >comment</v-icon>
+                                            </v-btn>
+                                            <span>{{userLogin.userNote}}</span>
+                                        </v-tooltip>
+                                        
+                                        <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" class="mx-0" small color="success" v-on:click.stop="checkAvailable('ready',userLogin,null)" style="padding-left: 6px;padding-right: 6px">
+                                            <v-icon style="color: white!important" v-if="userLogin.available == 1" >check</v-icon>
+                                            Sẵn sàng
+                                        </v-btn>
+                                        <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" small class="text-white mx-1" v-on:click.stop="checkAvailable('busy',userLogin,null)" color="error">
+                                            <v-icon style="color: white!important" v-if="userLogin.available == 2" >check</v-icon>
+                                            Tôi bận
+                                        </v-btn>
+                                        <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 7" small class="text-white mx-1" v-on:click.stop="checkin(userLogin)" color="indigo">
+                                            <v-icon style="color: white!important" v-if="userLogin.checkin" >check</v-icon>
+                                            Tôi có mặt
+                                        </v-btn>
+                                        
+                                    </span>
 
-                        <v-btn icon title="Tải lại" @click="initInvitation" class="mx-0 px-0">
-                            <v-icon color="white darken-3">refresh</v-icon>
-                        </v-btn>
+                                    <v-icon title="Tải lại" @click.stop="initInvitation" class="mx-0 px-0" style="color: white!important">refresh</v-icon>
+
+                                </div>
+                                
+                            </div>
+                            <!--  -->
+                            <v-dialog v-model="dialog_add_note" persistent max-width="500px">
+                                <v-card>
+                                    <v-card-text>
+                                        <v-container grid-list-md>
+                                            <v-layout wrap>
+                                                <v-flex xs12>
+                                                    <v-text-field v-model="note_text" label="Nhập nội dung" multi-line="true"
+                                                        
+                                                    ></v-text-field>
+                                                </v-flex>
+                                            </v-layout>
+                                        </v-container>
+                                    </v-card-text>
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn color="darken-1" flat @click.native="dialog_add_note = false">Hủy</v-btn>
+                                        <v-btn color="darken-1" flat @click.native="submitAddNote(note_text)">Lưu</v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>
+                        </v-toolbar>
                     </div>
-                     
-                </v-flex>
-                <!--  -->
-                <v-dialog v-model="dialog_add_note" persistent max-width="500px">
+
                     <v-card>
-                        <v-card-text>
-                            <v-container grid-list-md>
-                                <v-layout wrap>
-                                    <v-flex xs12>
-                                        <v-text-field v-model="note_text" label="Nhập nội dung" multi-line="true"
-                                            
-                                        ></v-text-field>
-                                    </v-flex>
-                                </v-layout>
-                            </v-container>
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-spacer></v-spacer>
-                            <v-btn color="darken-1" flat @click.native="dialog_add_note = false">Hủy</v-btn>
-                            <v-btn color="darken-1" flat @click.native="submitAddNote(note_text)">Lưu</v-btn>
-                        </v-card-actions>
-                    </v-card>
-                </v-dialog>
-            </v-toolbar>
-            <!-- Phần đơn vị/ Nhóm trong cơ quan-->
-            <v-expansion-panel style="padding-top:50px" expand>
-                <v-expansion-panel-content value="true">
-                    <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0">
-                        <div>Đơn vị/ Nhóm trong cơ quan</div>
-                        <v-btn fab small grey lighten-3 class="btn-add mx-0 my-0" v-on:click.stop="show_Add1" v-if="permission_prop == 'manager'|| permission_prop == 'owner'">
-                            <v-icon grey darken-4>add</v-icon>
-                        </v-btn>
-                    </div>
-                    
-                    <v-card class="pl-2 pr-1">
-                        <v-card-text class="px-0 py-0">
-                            <v-layout row wrap class="mx-0">
-                                <v-flex class="mb-3 layout wrap" v-if="showAdd1">
-                                    <v-flex xs12 sm8>
-                                        <v-select class="selectBoder pt-3"
-                                        placeholder="Chọn đơn vị/nhóm"
-                                        :items="hostingIdItems"
-                                        v-model="hostingId"
-                                        item-value="roleId"
-                                        item-text="roleName"
-                                        return-object
-                                        required="true"
-                                        autocomplete
-                                        ></v-select>
-                                    </v-flex>
-
-                                    <toggle-button class="mx-1 mt-4"
+                       <!-- Phần đơn vị/ Nhóm trong cơ quan-->
+                        <v-expansion-panel style="padding-top:2px" expand>
+                            <v-expansion-panel-content value="true">
+                                <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0">
+                                    <div>Đơn vị/ Nhóm trong cơ quan</div>
                                     
-                                    v-model="presenterAddGroup"
-                                    title_checked = "Thành viên"
-                                    title_unchecked = "Theo dõi"
-                                    :labels="{checked: 'TV', unchecked: 'TD'}"
-                                    :color="{checked: '#7DCE94', unchecked: '#82C7EB'}"
-                                    :width="50"/>
-                                    <v-btn small outline color="primary" @click.stop="postInvitation('GROUP')" class="mx-0 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
-                                        Mời
-                                    </v-btn>
-
-                                </v-flex>
+                                    <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add1" v-if="permission_prop == 'manager'|| permission_prop == 'owner'" grey darken-4>
+                                        add_circle
+                                    </v-icon>
+                                    
+                                </div>
                                 
-                                <v-flex xs12 sm12 class="wrap_invitation">
-                                    <v-card>
-                                        <v-list class="py-0">
-                                            <v-list-group class="py-0" v-for="(item, index) in itemInvGroup" :value="item.active" v-bind:key="item.role.resourceInvitationId">
-                                                <!-- Phần danh sách tổ chức/ đơn vị -->
-                                                <v-list-tile slot="item" class="px-0">
-                                                    <v-list-tile-content class="px-0">
-                                                        <v-flex xs12 class="layout wrap">
-                                                            <v-flex xs6 sm9 class="pt-2">
-                                                                <v-list-tile-title class="item_group">
-                                                                    {{ item.role.fullName }}
-                                                                </v-list-tile-title>
-                                                            </v-flex>
-                                                            <v-flex xs6 sm3>
-                                                                <div class="right">
-                                                                    <v-chip v-if="opening_state_prop == 0||opening_state_prop == 1" label outline color="primary" class="mr-2 mt-2">
-                                                                        {{item.role.statistic.available}}/{{item.role.statistic.invitation}}
-                                                                    </v-chip>
+                                <v-card class="">
+                                    <v-card-text class="px-0 py-0">
+                                        <v-layout row wrap class="mx-0">
+                                            <v-flex class="mb-3 layout wrap" v-if="showAdd1">
+                                                <v-flex xs12 sm8>
+                                                    <v-select class="selectBoder pt-3"
+                                                    placeholder="Chọn đơn vị/nhóm"
+                                                    :items="hostingIdItems"
+                                                    v-model="hostingId"
+                                                    item-value="roleId"
+                                                    item-text="roleName"
+                                                    return-object
+                                                    required="true"
+                                                    autocomplete
+                                                    ></v-select>
+                                                </v-flex>
 
-                                                                    <v-chip v-if="opening_state_prop == 4 || opening_state_prop == 7" label outline color="primary" class="mr-2 mt-2">
-                                                                        {{item.role.statistic.checkin}}/{{item.role.statistic.invitation}}
-                                                                    </v-chip>
-
-                                                                    <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager' || permission_prop == 'owner'" 
-                                                                    @click.stop="updateInvitation('DELETE',item.role.resourceInvitationId,index,itemInvGroup)">
-                                                                        <v-icon color="red darken-3">clear</v-icon>
-                                                                    </v-btn> 
-                                                                </div>
-                                                            </v-flex>
-                                                            
-                                                        </v-flex>
-                                                        <v-divider xs12 class="my-0"></v-divider>
-                                                        
-                                                    </v-list-tile-content>
-                                                    
-                                                </v-list-tile>
+                                                <toggle-button class="mx-1 mt-4"
                                                 
-                                                <!-- end -->
+                                                v-model="presenterAddGroup"
+                                                title_checked = "Thành viên"
+                                                title_unchecked = "Theo dõi"
+                                                :labels="{checked: 'TV', unchecked: 'TD'}"
+                                                :color="{checked: '#7DCE94', unchecked: '#82C7EB'}"
+                                                :width="50"/>
+                                                <v-btn small outline color="primary" @click.stop="postInvitation('GROUP')" class="mx-0 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
+                                                    Mời
+                                                </v-btn>
 
-                                                <!-- Phần thêm cá nhân trong tổ chức/ đơn vị -->
-                                                <div v-if="item.role.invitationType == 0 && item.leader" class="layout wrap mx-0 mb-2">
-                                                    <toggle-button class="mr-1 mt-4"
-                                                    
-                                                    v-model="presenterAddUserUnit"
-                                                    title_checked = "Thành viên"
-                                                    title_unchecked = "Theo dõi"
-                                                    :labels="{checked: 'TV', unchecked: 'TD'}"
-                                                    :color="{checked: '#7DCE94', unchecked: '#82C7EB'}"
-                                                    :width="50"/>
-                                                    <v-flex xs12 sm8>
-                                                        <v-select class="selectBoder pt-3"
-                                                        placeholder="Cá nhân trong đơn vị/nhóm"
-                                                        :items="employeeItems"
-                                                        item-text="fullName"
-                                                        item-value="userId"
-                                                        v-model="employee"
-                                                        return-object
-                                                        autocomplete
-                                                        :clearable="true"
-                                                        ></v-select>
-                                                    </v-flex>
-                                                    <v-btn @click.stop="postInvitation('UserUnit',item.role.roleId)" small outline color="primary" class="mx-0 ml-1 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
-                                                        Mời
-                                                    </v-btn>
-                                                </div>
-                                                <!-- end -->
-
-                                                <!-- Phần danh sách cá nhân trong tổ chức/ đơn vị -->
-                                                <v-list-tile v-for="(subItem, index) in item.items" v-bind:key="subItem.resourceInvitationId">
-                                                    <v-list-tile-content class="mt-2">
-                                                        <v-flex xs12 class="layout wrap">
-                                                            
-                                                            <v-flex>
-                                                                <v-list-tile-title class="pt-2">
-                                                                    <toggle-button class="mr-1 mt-1" 
-                                                                    @change="updatePresenterUserGroup($event,subItem.resourceInvitationId,item)"
-                                                                    :value="bindPresenter(subItem.right)"
-                                                                    :disabled="(permission_prop=='manager'||permission_prop=='owner'|| item.leader)?false:true"
-                                                                    title_checked = "Thành viên"
-                                                                    title_unchecked = "Theo dõi"
-                                                                    :labels="{checked: 'TV', unchecked: 'TD'}"
-                                                                    :color="{checked: '#7DCE94', unchecked: '#82C7EB'}"
-                                                                    :width="50"/>
-
-                                                                    <span class="pt-2">{{ subItem.fullName }}</span>
-                                                                </v-list-tile-title>
-                                                            </v-flex>
-
-                                                            <v-flex class="">
-                                                                <div class="right">
-                                                                    <v-tooltip top :disabled="(subItem.userNote?false:true)">
-                                                                        <v-btn icon slot="activator" :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
-                                                                        @click.stop="showAddNote(subItem)" class="text-white mx-0 my-0"
-                                                                        >
-                                                                            <v-icon class="iconCmm" >comment</v-icon>
-                                                                        </v-btn>
-                                                                        <span >{{subItem.userNote}}</span>
-                                                                    </v-tooltip>
-
-                                                                    <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" class="mx-0" small color="success"
-                                                                    :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
-                                                                    v-on:click.stop="checkAvailable('ready',subItem,item)" style="padding-left: 6px;padding-right: 6px"
-                                                                    >
-                                                                        <v-icon style="color: white" v-if="subItem.available == 1" >check</v-icon>
-                                                                        Sẵn sàng
-                                                                    </v-btn>
-                                                                    <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" small class="text-white mx-0" 
-                                                                    :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
-                                                                    v-on:click.stop="checkAvailable('busy',subItem,item)" color="error"
-                                                                    >
-                                                                        <v-icon style="color: white" v-if="subItem.available == 2" >check</v-icon>
-                                                                        Bận
-                                                                    </v-btn>
-
-                                                                    <!-- <span v-if="opening_state_prop == 0||opening_state_prop == 1" style="color:green" class="mr-2" v-html="bindAvailableText(subItem.available)"></span> -->
-
-                                                                    <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 7"
-                                                                    :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
-                                                                    v-on:click.stop="managerCheckin(subItem,item)" outline small class="text-white mx-1" color="indigo"
-                                                                    >
-                                                                        <v-icon color="indigo" v-if="subItem.checkin" >check</v-icon>
-                                                                        Có mặt
-                                                                    </v-btn>
-
-                                                                    <v-btn v-if="permission_prop=='manager' ||permission_prop=='owner' || item.leader" icon title="Xóa" class="mx-0"
-                                                                     @click.stop="updateInvitation('DELETE',subItem.resourceInvitationId,index,item.items)">
-                                                                        <v-icon color="red darken-3">clear</v-icon>
-                                                                    </v-btn>
-                                                                </div> 
-                                                            </v-flex>
-                                                            
-                                                        </v-flex>
-
-                                                    </v-list-tile-content>  
-                                                </v-list-tile>
-                                                <!-- end -->
-                                                <v-divider class="mt-0"></v-divider>
-
-                                            </v-list-group>
-                                        </v-list>
-                                    </v-card>
-                                </v-flex>
-                            </v-layout>
-                        </v-card-text>
-                    </v-card>
-                </v-expansion-panel-content>
-            </v-expansion-panel>
-            <v-divider class="my-0"></v-divider>
-
-            <!-- Phần cá nhân theo danh bạ -->
-            <v-expansion-panel expand>
-                <v-expansion-panel-content value="true">
-                    <div slot="header" class="custome-panel-heading-with-icon pl-0 mr-2">
-                        <div>Cá nhân/ Tổ chức theo danh bạ</div>
-                        <v-btn fab small grey lighten-3 class="btn-add mx-0 my-0" v-on:click.stop="show_Add2" v-if="permission_prop == 'manager'|| permission_prop == 'owner'">
-                            <v-icon grey darken-4>add</v-icon>
-                        </v-btn>
-                    </div>
-                    
-                    <v-card class="pl-2 pr-1">
-                        <v-card-text class="px-0 py-0">
-                            <v-layout row wrap class="mx-0">
-                                <v-flex class="layout wrap" v-if="showAdd2">
-                                    <v-flex xs12 sm8>
-                                        <v-select class="selectBoder pt-3" id="selectContact"
-                                        placeholder="Cá nhân/ tổ chức theo danh bạ"
-                                        v-bind:items="contactItems"
-                                        @input="eventInput($event)"
-                                        hide-selected
-                                        tags
-                                        v-model="contact"
-                                        item-text="fullName"
-                                        item-value="contactId"
-                                        return-object
-                                        autocomplete
-                                        clearable
-                                        ></v-select>
-                                    </v-flex>
-
-                                    <toggle-button class="mx-1 mt-4"
-                                    v-model="presenterAddUser"
-                                    title_checked = "Thành viên"
-                                    title_unchecked = "Theo dõi"
-                                    :labels="{checked: 'TV', unchecked: 'TD'}"
-                                    :color="{checked: '#7DCE94', unchecked: '#82C7EB'}"
-                                    :width="50"/>
-
-                                    <v-btn small outline color="primary" @click="addUserContact" class="mx-0 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
-                                        Mời
-                                    </v-btn>
-
-                                    <!-- Phần dialog thêm mới liên lạc postInvitation('UserContact')-->
-                                    <v-dialog v-model="dialog_add_contact" persistent max-width="700px">
-                                        <v-card>
-                                            <v-card-title style="background-color: rgb(214, 233, 247)">
-                                                <span>Thêm liên lạc</span>
-                                            </v-card-title>
-
-                                            <v-card-text>
-                                                <!-- Template activity add contact --> 
-                                                <v-form v-model="valid" ref="form" lazy-validation >
-                                                    <v-layout wrap >
-                                                        
-                                                        <!--  -->
-                                                        <v-flex xs12 sm3 class="mt-2">
-                                                            <v-subheader class="px-0">Tên cá nhân/ tổ chức *</v-subheader>
-                                                        </v-flex>
-                                                        <v-flex xs12 sm9>
-                                                            <v-text-field
-                                                                placeholder = ''
-                                                                v-model="fullNameCot"
-                                                                clearable="true"
-                                                                :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
-                                                                required
-                                                            ></v-text-field>
-                                                        </v-flex>
-                                                        <!--  -->
-                                                        <v-flex xs12 sm3 class="mt-2">
-                                                            <v-subheader class="px-0">Email *</v-subheader>
-                                                        </v-flex>
-                                                        <v-flex xs12 sm9>
-                                                            <v-text-field
-                                                                placeholder = ''
-                                                                v-model="emailCot"
-                                                                clearable="true"
-                                                                :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
-                                                                required
-                                                            ></v-text-field>
-                                                        </v-flex>
-                                                        <!--  -->
-                                                        <v-flex xs12 sm3 class="mt-2">
-                                                            <v-subheader class="px-0">Số điện thoại</v-subheader>
-                                                        </v-flex>
-                                                        <v-flex xs12 sm9>
-                                                            <v-text-field
-                                                                placeholder = ''
-                                                                v-model="telNoCot"
-                                                                clearable="true"
-                                                            ></v-text-field>
-                                                        </v-flex>
-                                                        <!--  -->
-                                                        <v-flex xs12 sm3 class="mt-2">
-                                                            <v-subheader class="px-0">Cơ quan/ địa chỉ</v-subheader>
-                                                        </v-flex>
-                                                        <v-flex xs12 sm9>
-                                                            <v-text-field
-                                                                placeholder = ''
-                                                                v-model="companyName"
-                                                                clearable="true"
-                                                            ></v-text-field>
-                                                        </v-flex>
-                                                        
-                                                    </v-layout>
-                                                </v-form>
-                                                <!-- end -->
-                                            </v-card-text>
-
-                                            <v-card-actions>
-                                                <v-spacer></v-spacer>
-                                                <v-btn class="mr-3" color="primary"  @click.native="dialog_add_contact= false">Hủy</v-btn>
-                                                <v-btn color="primary" @click.native="submitAddContact" >Thêm vào liên lạc</v-btn>
-                                            </v-card-actions>
-                                        </v-card>
-                                    </v-dialog>
-                                    <!-- end -->
-                                </v-flex>
-                                
-                                <v-flex xs12 sm12>
-                                    <v-card>
-                                        <!-- Phần danh sách cá nhân theo danh bạ -->
-                                        <v-list class="py-0">
-                                            <v-list-tile v-for="(item,index) in itemInvContact" v-bind:key="item.resourceInvitationId">
-                                                <v-list-tile-content class="mt-2">
-                                                    <v-list-tile-title>
-                                                        <v-flex xs12 class="layout wrap">
-
-                                                            <v-flex>
-                                                                <v-list-tile-title class="pt-2">
-                                                                    <toggle-button class="mr-1 mt-1"
-                                                                    :disabled="(permission_prop=='manager'||permission_prop=='owner')?false:true"
-                                                                    :value="bindPresenter(item.right)"
-                                                                    @change="updatePresenterUserGroup($event,item.resourceInvitationId,itemInvContact)"
-                                                                    title_checked = "Thành viên"
-                                                                    title_unchecked = "Theo dõi"
-                                                                    :labels="{checked: 'TV', unchecked: 'TD'}"
-                                                                    :color="{checked: '#7DCE94', unchecked: '#82C7EB'}"
-                                                                    :width="50"/>
-                                                                    <span class="pt-2">{{ item.fullName }}</span>
-                                                                </v-list-tile-title>
-                                                            </v-flex>
-                                                            
-                                                            <v-flex>
-                                                                <div class="right">
-                                                                    <v-tooltip top :disabled="(item.userNote?false:true)">
-                                                                        <v-btn icon slot="activator" :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
-                                                                        @click.stop="showAddNote(item)" class="text-white mx-0 my-0" 
-                                                                        >
-                                                                            <v-icon class="iconCmm" >comment</v-icon>
-                                                                        </v-btn>
-                                                                        <span >{{item.userNote}}</span>
-                                                                    </v-tooltip>
-                                                                    
-                                                                    <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" class="mx-0" small color="success"
-                                                                    :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
-                                                                    v-on:click.stop="checkAvailable('ready',item,null)" style="padding-left: 6px;padding-right: 6px"
-                                                                    >
-                                                                        <v-icon style="color: white" v-if="item.available == 1" >check</v-icon>
-                                                                        Sẵn sàng
-                                                                    </v-btn>
-                                                                    <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" small class="text-white mx-0" 
-                                                                    :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
-                                                                    v-on:click.stop="checkAvailable('busy',item,null)" color="error"
-                                                                    >
-                                                                        <v-icon style="color: white" v-if="item.available == 2" >check</v-icon>
-                                                                        Bận
-                                                                    </v-btn>
-
-                                                                    <!-- <span v-if="opening_state_prop == 0||opening_state_prop == 1" class="mr-2" style="color:green"
-                                                                    v-html="bindAvailableText(item.available)"></span> -->
-
-                                                                    <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 7" 
-                                                                    :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
-                                                                    v-on:click.stop="managerCheckin(item,null)"  outline small class="text-white mx-1" color="indigo">
-                                                                        <v-icon color="indigo" v-if="item.checkin" >check</v-icon>
-                                                                        Có mặt
-                                                                    </v-btn>
-
-                                                                    <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager'|| permission_prop == 'owner'"
-                                                                     @click.stop="updateInvitation('DELETE',item.resourceInvitationId,index,itemInvContact)">
-                                                                        <v-icon color="red darken-3">clear</v-icon>
-                                                                    </v-btn> 
-                                                                </div>
-           
-                                                            </v-flex>
-                                                            
-                                                        </v-flex>
-                                                    </v-list-tile-title>
-
-                                                    <v-divider class="mt-0"></v-divider>
-                                                </v-list-tile-content>  
-                                            </v-list-tile>
+                                            </v-flex>
                                             
-                                        </v-list>
-                                        <!-- end -->
-                                    </v-card>
-                                </v-flex>
-                            </v-layout>
-                        </v-card-text>
+                                            <v-flex xs12 sm12 class="wrap_invitation">
+                                                <v-card>
+                                                    <v-list class="py-0">
+                                                        <v-list-group class="py-0" v-for="(item, index) in itemInvGroup" :value="item.active" v-bind:key="item.role.resourceInvitationId">
+                                                            <!-- Phần danh sách tổ chức/ đơn vị -->
+                                                            <v-list-tile slot="item" class="px-0">
+                                                                <v-list-tile-content class="px-0">
+                                                                    <v-flex xs12 class="layout wrap pl-2 pr-1" style="width: 100%!important">
+                                                                        <v-flex xs6 sm9 class="pt-2">
+                                                                            <v-list-tile-title class="item_group">
+                                                                                {{ item.role.fullName }}
+                                                                            </v-list-tile-title>
+                                                                        </v-flex>
+                                                                        <v-flex xs6 sm3>
+                                                                            <div class="right">
+                                                                                <v-chip v-if="opening_state_prop == 0||opening_state_prop == 1" label outline color="primary" class="mr-2 mt-2">
+                                                                                    {{item.role.statistic.available}}/{{item.role.statistic.invitation}}
+                                                                                </v-chip>
+
+                                                                                <v-chip v-if="opening_state_prop == 4 || opening_state_prop == 7" label outline color="primary" class="mr-2 mt-2">
+                                                                                    {{item.role.statistic.checkin}}/{{item.role.statistic.invitation}}
+                                                                                </v-chip>
+
+                                                                                <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager' || permission_prop == 'owner'" 
+                                                                                @click.stop="updateInvitation('DELETE',item.role.resourceInvitationId,index,itemInvGroup)">
+                                                                                    <v-icon color="red darken-3">clear</v-icon>
+                                                                                </v-btn> 
+                                                                            </div>
+                                                                        </v-flex>
+                                                                        
+                                                                    </v-flex>
+                                                                    <v-divider xs12 class="my-0"></v-divider>
+                                                                    
+                                                                </v-list-tile-content>
+                                                                
+                                                            </v-list-tile>
+                                                            
+                                                            <!-- end -->
+
+                                                            <!-- Phần thêm cá nhân trong tổ chức/ đơn vị -->
+                                                            <div v-if="item.role.invitationType == 0 && item.leader" class="layout wrap mx-0 mb-2 pl-2 pr-1">
+                                                                <toggle-button class="mr-1 mt-4"
+                                                                
+                                                                v-model="presenterAddUserUnit"
+                                                                title_checked = "Thành viên"
+                                                                title_unchecked = "Theo dõi"
+                                                                :labels="{checked: 'TV', unchecked: 'TD'}"
+                                                                :color="{checked: '#7DCE94', unchecked: '#82C7EB'}"
+                                                                :width="50"/>
+                                                                <v-flex xs12 sm8>
+                                                                    <v-select class="selectBoder pt-3"
+                                                                    placeholder="Cá nhân trong đơn vị/nhóm"
+                                                                    :items="employeeItems"
+                                                                    item-text="fullName"
+                                                                    item-value="userId"
+                                                                    v-model="employee"
+                                                                    return-object
+                                                                    autocomplete
+                                                                    :clearable="true"
+                                                                    ></v-select>
+                                                                </v-flex>
+                                                                <v-btn @click.stop="postInvitation('UserUnit',item.role.roleId)" small outline color="primary" class="mx-0 ml-1 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
+                                                                    Mời
+                                                                </v-btn>
+                                                            </div>
+                                                            <!-- end -->
+
+                                                            <!-- Phần danh sách cá nhân trong tổ chức/ đơn vị -->
+                                                            <v-list-tile v-for="(subItem, index) in item.items" v-bind:key="subItem.resourceInvitationId">
+                                                                <v-list-tile-content class="mt-2">
+                                                                    <v-flex xs12 class="layout wrap pl-2 pr-1" style="width: 100%!important">
+                                                                        
+                                                                        <v-flex>
+                                                                            <v-list-tile-title class="pt-2">
+                                                                                <toggle-button class="mr-1 mt-1" 
+                                                                                @change="updatePresenterUserGroup($event,subItem.resourceInvitationId,item)"
+                                                                                :value="bindPresenter(subItem.right)"
+                                                                                :disabled="(permission_prop=='manager'||permission_prop=='owner'|| item.leader)?false:true"
+                                                                                title_checked = "Thành viên"
+                                                                                title_unchecked = "Theo dõi"
+                                                                                :labels="{checked: 'TV', unchecked: 'TD'}"
+                                                                                :color="{checked: '#7DCE94', unchecked: '#82C7EB'}"
+                                                                                :width="50"/>
+
+                                                                                <span class="pt-2">{{ subItem.fullName }}</span>
+                                                                            </v-list-tile-title>
+                                                                        </v-flex>
+
+                                                                        <v-flex class="">
+                                                                            <div class="right">
+                                                                                <v-tooltip top :disabled="(subItem.userNote?false:true)">
+                                                                                    <v-btn icon slot="activator" :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
+                                                                                    @click.stop="showAddNote(subItem)" class="text-white mx-0 my-0"
+                                                                                    >
+                                                                                        <v-icon class="iconCmm" >comment</v-icon>
+                                                                                    </v-btn>
+                                                                                    <span >{{subItem.userNote}}</span>
+                                                                                </v-tooltip>
+
+                                                                                <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" class="mx-0" small color="success"
+                                                                                :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
+                                                                                v-on:click.stop="checkAvailable('ready',subItem,item)" style="padding-left: 6px;padding-right: 6px"
+                                                                                >
+                                                                                    <v-icon style="color: white" v-if="subItem.available == 1" >check</v-icon>
+                                                                                    Sẵn sàng
+                                                                                </v-btn>
+                                                                                <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" small class="text-white mx-0" 
+                                                                                :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
+                                                                                v-on:click.stop="checkAvailable('busy',subItem,item)" color="error"
+                                                                                >
+                                                                                    <v-icon style="color: white" v-if="subItem.available == 2" >check</v-icon>
+                                                                                    Bận
+                                                                                </v-btn>
+
+                                                                                <!-- <span v-if="opening_state_prop == 0||opening_state_prop == 1" style="color:green" class="mr-2" v-html="bindAvailableText(subItem.available)"></span> -->
+
+                                                                                <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 7"
+                                                                                :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
+                                                                                v-on:click.stop="managerCheckin(subItem,item)" outline small class="text-white mx-1" color="indigo"
+                                                                                >
+                                                                                    <v-icon color="indigo" v-if="subItem.checkin" >check</v-icon>
+                                                                                    Có mặt
+                                                                                </v-btn>
+
+                                                                                <v-btn v-if="permission_prop=='manager' ||permission_prop=='owner' || item.leader" icon title="Xóa" class="mx-0"
+                                                                                @click.stop="updateInvitation('DELETE',subItem.resourceInvitationId,index,item.items)">
+                                                                                    <v-icon color="red darken-3">clear</v-icon>
+                                                                                </v-btn>
+                                                                            </div> 
+                                                                        </v-flex>
+                                                                        
+                                                                    </v-flex>
+
+                                                                </v-list-tile-content>  
+                                                            </v-list-tile>
+                                                            <!-- end -->
+                                                            <v-divider class="mt-0"></v-divider>
+
+                                                        </v-list-group>
+                                                    </v-list>
+                                                </v-card>
+                                            </v-flex>
+                                        </v-layout>
+                                    </v-card-text>
+                                </v-card>
+                            </v-expansion-panel-content>
+                        </v-expansion-panel>
+                        
+                        <!-- Phần cá nhân theo danh bạ -->
+                        <v-expansion-panel expand>
+                            <v-expansion-panel-content value="true">
+                                <div slot="header" class="custome-panel-heading-with-icon pl-0 mr-2">
+                                    <div>Cá nhân/ Tổ chức theo danh bạ</div>
+
+                                    <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add2" v-if="permission_prop == 'manager'|| permission_prop == 'owner'" grey darken-4>
+                                        add_circle
+                                    </v-icon>
+                                </div>
+                                
+                                <v-card class="pl-2 pr-1">
+                                    <v-card-text class="px-0 py-0">
+                                        <v-layout row wrap class="mx-0">
+                                            <v-flex class="layout wrap" v-if="showAdd2">
+                                                <v-flex xs12 sm8>
+                                                    <v-select class="selectBoder pt-3" id="selectContact"
+                                                    placeholder="Cá nhân/ tổ chức theo danh bạ"
+                                                    v-bind:items="contactItems"
+                                                    @input="eventInput($event)"
+                                                    hide-selected
+                                                    tags
+                                                    v-model="contact"
+                                                    item-text="fullName"
+                                                    item-value="contactId"
+                                                    return-object
+                                                    autocomplete
+                                                    clearable
+                                                    ></v-select>
+                                                </v-flex>
+
+                                                <toggle-button class="mx-1 mt-4"
+                                                v-model="presenterAddUser"
+                                                title_checked = "Thành viên"
+                                                title_unchecked = "Theo dõi"
+                                                :labels="{checked: 'TV', unchecked: 'TD'}"
+                                                :color="{checked: '#7DCE94', unchecked: '#82C7EB'}"
+                                                :width="50"/>
+
+                                                <v-btn small outline color="primary" @click="addUserContact" class="mx-0 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
+                                                    Mời
+                                                </v-btn>
+
+                                                <!-- Phần dialog thêm mới liên lạc postInvitation('UserContact')-->
+                                                <v-dialog v-model="dialog_add_contact" persistent max-width="700px">
+                                                    <v-card>
+                                                        <v-card-title style="background-color: rgb(214, 233, 247)">
+                                                            <span>Thêm liên lạc</span>
+                                                        </v-card-title>
+
+                                                        <v-card-text>
+                                                            <!-- Template activity add contact --> 
+                                                            <v-form v-model="valid" ref="form" lazy-validation >
+                                                                <v-layout wrap >
+                                                                    
+                                                                    <!--  -->
+                                                                    <v-flex xs12 sm3 class="mt-2">
+                                                                        <v-subheader class="px-0">Tên cá nhân/ tổ chức *</v-subheader>
+                                                                    </v-flex>
+                                                                    <v-flex xs12 sm9>
+                                                                        <v-text-field
+                                                                            placeholder = ''
+                                                                            v-model="fullNameCot"
+                                                                            clearable="true"
+                                                                            :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
+                                                                            required
+                                                                        ></v-text-field>
+                                                                    </v-flex>
+                                                                    <!--  -->
+                                                                    <v-flex xs12 sm3 class="mt-2">
+                                                                        <v-subheader class="px-0">Email *</v-subheader>
+                                                                    </v-flex>
+                                                                    <v-flex xs12 sm9>
+                                                                        <v-text-field
+                                                                            placeholder = ''
+                                                                            v-model="emailCot"
+                                                                            clearable="true"
+                                                                            :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
+                                                                            required
+                                                                        ></v-text-field>
+                                                                    </v-flex>
+                                                                    <!--  -->
+                                                                    <v-flex xs12 sm3 class="mt-2">
+                                                                        <v-subheader class="px-0">Số điện thoại</v-subheader>
+                                                                    </v-flex>
+                                                                    <v-flex xs12 sm9>
+                                                                        <v-text-field
+                                                                            placeholder = ''
+                                                                            v-model="telNoCot"
+                                                                            clearable="true"
+                                                                        ></v-text-field>
+                                                                    </v-flex>
+                                                                    <!--  -->
+                                                                    <v-flex xs12 sm3 class="mt-2">
+                                                                        <v-subheader class="px-0">Cơ quan/ địa chỉ</v-subheader>
+                                                                    </v-flex>
+                                                                    <v-flex xs12 sm9>
+                                                                        <v-text-field
+                                                                            placeholder = ''
+                                                                            v-model="companyName"
+                                                                            clearable="true"
+                                                                        ></v-text-field>
+                                                                    </v-flex>
+                                                                    
+                                                                </v-layout>
+                                                            </v-form>
+                                                            <!-- end -->
+                                                        </v-card-text>
+
+                                                        <v-card-actions>
+                                                            <v-spacer></v-spacer>
+                                                            <v-btn class="mr-3" color="primary"  @click.native="dialog_add_contact= false">Hủy</v-btn>
+                                                            <v-btn color="primary" @click.native="submitAddContact" >Thêm vào liên lạc</v-btn>
+                                                        </v-card-actions>
+                                                    </v-card>
+                                                </v-dialog>
+                                                <!-- end -->
+                                            </v-flex>
+                                            
+                                            <v-flex xs12 sm12>
+                                                <v-card>
+                                                    <!-- Phần danh sách cá nhân theo danh bạ -->
+                                                    <v-list class="py-0">
+                                                        <v-list-tile v-for="(item,index) in itemInvContact" v-bind:key="item.resourceInvitationId">
+                                                            <v-list-tile-content class="mt-2">
+                                                                <v-list-tile-title>
+                                                                    <v-flex xs12 class="layout wrap">
+
+                                                                        <v-flex>
+                                                                            <v-list-tile-title class="pt-2">
+                                                                                <toggle-button class="mr-1 mt-1"
+                                                                                :disabled="(permission_prop=='manager'||permission_prop=='owner')?false:true"
+                                                                                :value="bindPresenter(item.right)"
+                                                                                @change="updatePresenterUserGroup($event,item.resourceInvitationId,itemInvContact)"
+                                                                                title_checked = "Thành viên"
+                                                                                title_unchecked = "Theo dõi"
+                                                                                :labels="{checked: 'TV', unchecked: 'TD'}"
+                                                                                :color="{checked: '#7DCE94', unchecked: '#82C7EB'}"
+                                                                                :width="50"/>
+                                                                                <span class="pt-2">{{ item.fullName }}</span>
+                                                                            </v-list-tile-title>
+                                                                        </v-flex>
+                                                                        
+                                                                        <v-flex>
+                                                                            <div class="right">
+                                                                                <v-tooltip top :disabled="(item.userNote?false:true)">
+                                                                                    <v-btn icon slot="activator" :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
+                                                                                    @click.stop="showAddNote(item)" class="text-white mx-0 my-0" 
+                                                                                    >
+                                                                                        <v-icon class="iconCmm" >comment</v-icon>
+                                                                                    </v-btn>
+                                                                                    <span >{{item.userNote}}</span>
+                                                                                </v-tooltip>
+                                                                                
+                                                                                <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" class="mx-0" small color="success"
+                                                                                :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
+                                                                                v-on:click.stop="checkAvailable('ready',item,null)" style="padding-left: 6px;padding-right: 6px"
+                                                                                >
+                                                                                    <v-icon style="color: white" v-if="item.available == 1" >check</v-icon>
+                                                                                    Sẵn sàng
+                                                                                </v-btn>
+                                                                                <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" small class="text-white mx-0" 
+                                                                                :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
+                                                                                v-on:click.stop="checkAvailable('busy',item,null)" color="error"
+                                                                                >
+                                                                                    <v-icon style="color: white" v-if="item.available == 2" >check</v-icon>
+                                                                                    Bận
+                                                                                </v-btn>
+
+                                                                                <!-- <span v-if="opening_state_prop == 0||opening_state_prop == 1" class="mr-2" style="color:green"
+                                                                                v-html="bindAvailableText(item.available)"></span> -->
+
+                                                                                <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 7" 
+                                                                                :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
+                                                                                v-on:click.stop="managerCheckin(item,null)"  outline small class="text-white mx-1" color="indigo">
+                                                                                    <v-icon color="indigo" v-if="item.checkin" >check</v-icon>
+                                                                                    Có mặt
+                                                                                </v-btn>
+
+                                                                                <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager'|| permission_prop == 'owner'"
+                                                                                @click.stop="updateInvitation('DELETE',item.resourceInvitationId,index,itemInvContact)">
+                                                                                    <v-icon color="red darken-3">clear</v-icon>
+                                                                                </v-btn> 
+                                                                            </div>
+                    
+                                                                        </v-flex>
+                                                                        
+                                                                    </v-flex>
+                                                                </v-list-tile-title>
+
+                                                                <v-divider class="mt-0"></v-divider>
+                                                            </v-list-tile-content>  
+                                                        </v-list-tile>
+                                                        
+                                                    </v-list>
+                                                    <!-- end -->
+                                                </v-card>
+                                            </v-flex>
+                                        </v-layout>
+                                    </v-card-text>
+                                </v-card>
+                            </v-expansion-panel-content>
+                        </v-expansion-panel>
                     </v-card>
-                </v-expansion-panel-content>
-            </v-expansion-panel>
+               </v-expansion-panel-content>
+           </v-expansion-panel>
 
         </div>
     </div>
@@ -1343,6 +1347,10 @@
     #activity_invitation .btn__content {
         padding-left: 0px!important;
         padding-right: 0px!important;
+    }
+    #activity_invitation .header-group .header__icon{
+        z-index: 500;
+        padding-top: 3px;
     }
     #activity_invitation .expansion-panel__header{
         padding-left: 10px!important;
