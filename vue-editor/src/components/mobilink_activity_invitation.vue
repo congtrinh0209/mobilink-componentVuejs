@@ -29,7 +29,7 @@
                 
                 
                 <v-flex>
-                    <div style="position: absolute;right:0;top:10px">
+                    <div style="position: absolute;right:0;top:2px">
                         <span v-if="mineInv">
                             <v-tooltip top :disabled="(userLogin.userNote?false:true)">
                                 <v-btn icon slot="activator" class="text-white mx-0 my-0"  @click.stop="showAddNote(userLogin)">
@@ -82,7 +82,7 @@
                 </v-dialog>
             </v-toolbar>
             <!-- Phần đơn vị/ Nhóm trong cơ quan-->
-            <v-expansion-panel style="padding-top:65px" expand>
+            <v-expansion-panel style="padding-top:50px" expand>
                 <v-expansion-panel-content value="true">
                     <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0">
                         <div>Đơn vị/ Nhóm trong cơ quan</div>
@@ -107,6 +107,7 @@
                                         autocomplete
                                         ></v-select>
                                     </v-flex>
+
                                     <toggle-button class="mx-1 mt-4"
                                     
                                     v-model="presenterAddGroup"
@@ -271,7 +272,7 @@
             <v-divider class="my-0"></v-divider>
 
             <!-- Phần cá nhân theo danh bạ -->
-            <v-expansion-panel expand class="mt-1">
+            <v-expansion-panel expand>
                 <v-expansion-panel-content value="true">
                     <div slot="header" class="custome-panel-heading-with-icon pl-0 mr-2">
                         <div>Cá nhân/ Tổ chức theo danh bạ</div>
@@ -560,15 +561,9 @@
             
             initInvitation: function(){
                 var vm = this;
-                vm.userId = 108;
-                // vm.userId = themeDisplay.getUserId();
-                Promise.all([vm.getInvitation()]).then(function() {
-                    vm.getWorkingUnit();
-                    vm.getUserContact()
-                }, function() {
-                    console.log("error")
-                });
-
+                // vm.userId = 108;
+                vm.userId = themeDisplay.getUserId();
+                vm.getInvitation();
                 console.log(vm._props);
                 console.log('userId:'+ vm.userId);
                 
@@ -648,13 +643,14 @@
                                     
                                 }
                             }
-                        }
-                        vm.getEmployees();
+                        };
                         // console.log(vm)
                     } else {
                         vm.invitationItems = []
                     }
-                    
+                    vm.getWorkingUnit();
+                    vm.getUserContact();
+                    vm.getEmployees();
                 })
                 .catch(function (error) {
                     console.log(error)
@@ -763,18 +759,7 @@
                 })
 
             },
-            /**get roleId leader đơn vị */
-            // activeGetEmployees: function(){
-            //     var vm = this;
-            //     for(var keys in vm.itemInvGroup){
-            //         if(vm.itemInvGroup[keys].user_leader){
-            //             if(vm.itemInvGroup[keys].user_leader == vm.userId){
-            //                 vm.roleIdUser = vm.itemInvGroup[keys].role.roleId;
-            //             }
-            //         }
-                    
-            //     }
-            // },
+
             /**get contact */
             getUserContact: function(){
                 /*console.log("getUserContact");*/
@@ -1342,6 +1327,9 @@
         position: fixed;
         top: 0;
         right: 20px;
+    }
+    #activity_invitation nav .toolbar__content {
+        height: 50px!important;
     }
     #activity_invitation button{
         min-width: 0px;

@@ -24,7 +24,7 @@
                 <v-spacer></v-spacer>
                 
                 <v-flex v-if="mineInv">
-                    <div style="position: absolute;right:0">
+                    <div style="position: absolute;right:0;top:2px">
                         <span v-if="mineInv">
                             <v-tooltip top :disabled="(userLogin.userNote?false:true)">
                                 <v-btn icon slot="activator" class="text-white mx-0 my-0"  @click.stop="showAddNote(userLogin)">
@@ -73,7 +73,7 @@
 
             </v-toolbar>
             <!-- Phần đơn vị/ Nhóm trong cơ quan-->
-            <v-expansion-panel style="padding-top:65px" expand>
+            <v-expansion-panel style="padding-top:50px" expand>
                 <v-expansion-panel-content value="true">
                     <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0">
                         <div>Đơn vị/ Nhóm trong cơ quan</div>
@@ -252,7 +252,7 @@
             <v-divider class="my-0"></v-divider>
 
             <!-- Phần cá nhân theo danh bạ -->
-            <v-expansion-panel expand class="mt-1">
+            <v-expansion-panel expand>
                 <v-expansion-panel-content value="true">
                     <div slot="header" class="custome-panel-heading-with-icon pl-0 mr-2">
                         <div>Cá nhân/ Tổ chức theo danh bạ</div>
@@ -534,13 +534,7 @@
                 // vm.userId = 108;
                 vm.userId = themeDisplay.getUserId();
                 /** */
-                Promise.all([vm.getInvitationTask()]).then(function() {
-                    vm.getWorkingUnitTask();
-                    vm.getUserContact();
-                    
-                }, function() {
-                    console.log("error")
-                });
+                vm.getInvitationTask();
 
                 console.log(vm._props);
                 console.log('userId:'+ vm.userId)
@@ -620,12 +614,13 @@
                                 }
                             }
                         }
-                        vm.getEmployeesTask();
                         
                     } else {
                         vm.invitationTaskItems = []
-                    }
-                    
+                    };
+                    vm.getWorkingUnitTask();
+                    vm.getUserContact();
+                    vm.getEmployeesTask();
                 })
                 .catch(function (error) {
                     console.log(error)
@@ -1296,6 +1291,9 @@
         min-width: 0px;
         margin: 6px 0;
         text-transform: none;
+    }
+    #activity_invitation_task nav .toolbar__content {
+        height: 50px!important;
     }
     #activity_invitation_task button .icon{
         font-size: 18px!important;
