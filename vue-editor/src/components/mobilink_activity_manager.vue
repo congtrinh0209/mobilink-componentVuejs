@@ -311,7 +311,7 @@
 
                 vm.activityListItems=[];
                 var paramsGetActivity = {
-                    sort:'startDate',
+                    sort:'startDate_Number',
                     type: 'EVENT',
                     fromdate: vm.timeStart?vm.parseDateFormat(vm.timeStart):null,
                     todate: vm.timeEnd?vm.parseDateFormat(vm.timeEnd):null

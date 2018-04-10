@@ -42,7 +42,7 @@
                                         
                                     </span>
 
-                                    <v-icon title="Tải lại" @click.stop="initInvitationTask" class="mx-0 px-0" >refresh</v-icon>
+                                    <v-icon title="Tải lại" @click.stop="initInvitationTask" style="position: absolute;top: 0;right: 0" class="mx-0 px-0" >refresh</v-icon>
                                 </div>
                                 
                             </div>
@@ -376,7 +376,7 @@
                                                         <v-list-tile v-for="(item,index) in itemInvContactTask" v-bind:key="item.resourceInvitationId">
                                                             <v-list-tile-content class="mt-2">
                                                                 <v-list-tile-title>
-                                                                    <v-flex xs12 class="layout wrap">
+                                                                    <v-flex xs12 class="layout wrap pl-2">
 
                                                                         <v-flex class="pt-2">
                                                                             <v-list-tile-title>

@@ -18,7 +18,7 @@
         
         <div style="position: relative; overflow: hidden;">
            <v-expansion-panel expand class="header-group expansion-blue">
-               <v-expansion-panel-content value="true">
+                <v-expansion-panel-content value="true">
                     <div slot="header" class="custome-panel-heading-with-icon">
                         <v-toolbar absolute >   
                             <div class="ml-2" style="flex: none" v-if="opening_state_prop == 0||opening_state_prop == 1">Giấy mời: {{availableCount}}/ {{invitationCount}} sẵn sàng</div>
@@ -50,7 +50,7 @@
                                         
                                     </span>
 
-                                    <v-icon title="Tải lại" @click.stop="initInvitation" class="mx-0 px-0">refresh</v-icon>
+                                    <v-icon title="Tải lại" @click.stop="initInvitation" style="position: absolute;top: 0;right: 0" class="mx-0 px-0">refresh</v-icon>
 
                                 </div>
                                 
@@ -1355,6 +1355,7 @@
         z-index: 500;
         padding-top: 3px;
     }
+
     #activity_invitation .expansion-panel__header{
         padding-left: 10px!important;
         padding-right: 10px!important;
