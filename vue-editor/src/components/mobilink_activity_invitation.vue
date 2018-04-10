@@ -19,6 +19,7 @@
         <div style="position: relative; overflow: hidden;">
            <v-expansion-panel expand class="header-group expansion-blue">
                 <v-expansion-panel-content value="true">
+
                     <div slot="header" class="custome-panel-heading-with-icon">
                         <v-toolbar absolute >   
                             <div class="ml-2" style="flex: none" v-if="opening_state_prop == 0||opening_state_prop == 1">Giấy mời: {{availableCount}}/ {{invitationCount}} sẵn sàng</div>
@@ -80,7 +81,7 @@
                     </div>
 
                     <v-card>
-                       <!-- Phần đơn vị/ Nhóm trong cơ quan-->
+                        <!-- Phần đơn vị/ Nhóm trong cơ quan-->
                         <v-expansion-panel style="padding-top:2px" expand class="sub-panel">
                             <v-expansion-panel-content value="true">
                                 <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0">
@@ -474,7 +475,22 @@
                                 </v-card>
                             </v-expansion-panel-content>
                         </v-expansion-panel>
+
+                        <!-- Phần thêm thành phần tham dự -->
+                        <v-form xs12 sm12 v-model="validAddInv" ref="form" class="formAddInvText px-2 py-2" lazy-validation style="position: relative">
+                            <v-text-field
+                            placeholder="Nhập thành phần tham dự"
+                            v-model="nameInv"
+                            multi-line
+                            :rules="[v => !!v || 'Nhập thành phần tham dự!']"
+                            required
+                            ></v-text-field>
+                            <v-btn small outline color="blue-grey" @click="addInvText(nameInv)">
+                                Lưu
+                            </v-btn>
+                        </v-form>
                     </v-card>
+
                </v-expansion-panel-content>
            </v-expansion-panel>
 
@@ -522,6 +538,8 @@
                 /** */
                 switch1: true,
                 valid: false,
+                nameInv:'',
+                validAddInv: false,
                 presenterAddUser:'',
                 presenterAddUserUnit:'',
                 presenterAddGroup:'',
@@ -565,8 +583,8 @@
             
             initInvitation: function(){
                 var vm = this;
-                // vm.userId = 108;
-                vm.userId = themeDisplay.getUserId();
+                vm.userId = 108;
+                // vm.userId = themeDisplay.getUserId();
                 vm.getInvitation();
                 console.log(vm._props);
                 console.log('userId:'+ vm.userId);
@@ -1039,6 +1057,30 @@
                     vm.show_alert('error','Cập nhật thất bại')
                 })
             },
+            /**Phần thêm thành phần tham dự */
+            addInvText: function(text){
+                if (this.$refs.form.validate()){
+                    var vm = this;
+                    var dataUpdateactivity  =new URLSearchParams();
+                    dataUpdateactivity.append('invitationText', text);
+                    var urlUpdate = vm.end_point + "activities/"+ vm.class_pk;
+                    
+                    const configPutInvitation = {
+                        headers: {
+                            'groupId': vm.group_id
+                        }
+                    };
+                            
+                    axios.put(urlUpdate, dataUpdateactivity, configPutInvitation)
+                    .then(function (response) {
+                        vm.show_alert('success','Cập nhật thành công')
+                        
+                    })
+                    .catch(function (error) {
+                        vm.show_alert('error','Cập nhật thất bại')
+                    })
+                }
+            },
             /** */
             showAddCot: function(){
                 var vm =this;
@@ -1337,7 +1379,17 @@
         background-color: #e1f5fe!important;
         color: #0091ea!important
     }
-
+    #activity_invitation .formAddInvText .input-group__input{
+        border: 1px solid #939393;
+        border-radius: 2px;
+        padding: 5px
+    }
+    #activity_invitation .formAddInvText button{
+        float: right;
+    }
+    #activity_invitation .formAddInvText .input-group__details {
+        display: none
+    }
     #activity_invitation button{
         min-width: 0px;
         margin: 6px 0;
