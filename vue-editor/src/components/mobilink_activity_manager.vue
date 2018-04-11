@@ -86,7 +86,7 @@
                                     <v-card>
                                         <v-list class="py-0">
                                             <v-list-group class="listGroup py-0" v-for="(item1,index1) in item.activityItems" :value="item1.activityId==item.activityItems[0].activityId" v-bind:key="item1.activityId">
-                                                <v-list-tile slot="item" class="px-0" @click="getListActivitySource(item1.activityId,index,index1)">
+                                                <v-list-tile slot="item" class="px-0" @click.stop="getListActivitySource(item1.activityId,index,index1)">
                                                     <v-list-tile-content class="px-0 pl-2">
                                                         <v-list-tile-title class="item_group">
                                                             <span title="Chi tiết cuộc họp" class="icon_view" @click.stop="activityDetail(item1,index1)">
@@ -97,7 +97,7 @@
                                                     </v-list-tile-content>
 
                                                     <v-list-tile-action class="pr-2" style="flex-direction: row">
-                                                        <v-icon title="Kết luận cuộc họp" class="icon_view mr-3" @click="getListActivitySource(item1.activityId,index,index1)">remove_red_eye</v-icon>
+                                                        <v-icon title="Kết luận cuộc họp" class="icon_view mr-3" @click.stop="getListActivitySource(item1.activityId,index,index1)">remove_red_eye</v-icon>
                                                         <v-icon>keyboard_arrow_down</v-icon>
                                                     </v-list-tile-action>
                                                 </v-list-tile>
@@ -106,7 +106,7 @@
                                                 <v-list-tile-content>
                                                     <v-data-table id="subTableActivity"
                                                     hide-headers
-                                                    no-data-text="Không có kết luận!"
+                                                    no-data-text="Không có kết luận"
                                                     :items="item.activitySourceItems[index1]"
                                                     item-key="activityId"
                                                     hide-actions
@@ -551,6 +551,9 @@
                     case 1:
                         color = "red";
                         break;
+                    case 2:
+                        color = "red";
+                        break;
                     case 3:
                         color = "red";
                         break;
@@ -560,11 +563,27 @@
                     case 5:
                         color = "blue";
                         break;
+                    case 6:
+                        color = "teal";
+                        break;
                     case 7:
                         color = "amber";
                         break;
                     case 8:
                         color = "grey";
+                        break;
+                    case 9:
+                        color = "pink";
+                        break;
+                    case 10:
+                        color = "cyan";
+                        break;
+                    case 11:
+                        color = "purple";
+                        break;
+                    case 12:
+                        color = "indigo";
+                        break;
                         
                 }
                 return color

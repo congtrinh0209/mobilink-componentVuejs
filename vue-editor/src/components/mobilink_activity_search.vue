@@ -5,7 +5,7 @@
             <v-layout wrap>
                 
                 <div class="row-header flex-break pl-2">
-                    <v-flex style="max-width:50%">
+                    <v-flex style="max-width:50%" class="py-1">
                         <div :title="textResult" style="overflow: hidden;max-width:90%;
                         text-overflow: ellipsis;
                         white-space: nowrap;">{{textResult}} </div>
@@ -220,7 +220,7 @@
                     </td>
 
                     <td class="text-xs-center">
-                        <v-chip style="display: inline-block;text-align: center;width:90%" label outline 
+                        <v-chip style="display: inline-block;text-align: center;width:90%;height:30px" label outline 
                         :color="getColor(props.item.state)">
                             <span>{{props.item.stateName}}</span>
                         </v-chip>
@@ -472,6 +472,9 @@
                     case 1:
                         color = "red";
                         break;
+                    case 2:
+                        color = "red";
+                        break;
                     case 3:
                         color = "red";
                         break;
@@ -481,11 +484,27 @@
                     case 5:
                         color = "blue";
                         break;
+                    case 6:
+                        color = "teal";
+                        break;
                     case 7:
                         color = "amber";
                         break;
                     case 8:
                         color = "grey";
+                        break;
+                    case 9:
+                        color = "pink";
+                        break;
+                    case 10:
+                        color = "cyan";
+                        break;
+                    case 11:
+                        color = "purple";
+                        break;
+                    case 12:
+                        color = "indigo";
+                        break;
                         
                 }
                 return color
@@ -521,44 +540,44 @@
                     {
                         text: '#',
                         align: 'left',
-                        sortable: true,
+                        sortable: false,
                         value: 'activityId'
                     },
                     { 
                         text: 'Ngày bắt đầu',
                         align: 'left',
-                        sortable: true,
+                        sortable: false,
                         value: 'time'
                     },
                     {
                         text: 'Hoạt động',
                         align: 'left',
-                        sortable: true,
+                        sortable: false,
                         value: 'subject'
                     },
                     {
                         text: 'Loại hoạt động',
                         align: 'left',
-                        sortable: true,
+                        sortable: false,
                         value: 'categoryName'
                     },
                     
                     {
                         text: 'Đơn vị thực hiện',
                         align: 'left',
-                        sortable: true,
+                        sortable: false,
                         value: 'hosting'
                     },
                     {
                         text: 'Người phụ trách',
                         align: 'left',
-                        sortable: true,
+                        sortable: false,
                         value: 'hosting'
                     },
                     {
                         text: 'Trạng thái',
                         align: 'left',
-                        sortable: true,
+                        sortable: false,
                         value: 'hosting'
                     },
                                         
@@ -820,7 +839,7 @@
         color: #3486D7 !important;
     }
     #activitySearch .row-header .input-group label{
-        margin-left: 10px!important;
+        font-weight: normal!important;
     }
     #activitySearch .row-header .input-group .input-group__details{
         display: none
@@ -828,11 +847,18 @@
     #activitySearch .row-header .input-group label{
         top: 0px!important
     }
+    #activitySearch .row-header button{
+        background-color: #01579b;
+        color: white;
+        text-transform: none;
+    }
+    
     #activitySearch #table_search table thead{
         background-color: #fff!important;
     }
     #activitySearch #table_search table thead tr th{
         border: 1px solid #ddd !important;
+        color: #000!important
     }
     #activitySearch #table_search table tbody td {
         border: 1px solid #ddd !important;

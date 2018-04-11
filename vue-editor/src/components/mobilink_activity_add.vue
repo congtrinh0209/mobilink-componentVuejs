@@ -12,7 +12,7 @@
                     <v-text-field
                         placeholder="Tên cuộc họp "
                         v-model="topic"
-                        :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
+                        :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
                         required
                     ></v-text-field>
                 </v-flex>
@@ -29,7 +29,7 @@
                     :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" 
                     type="datetime" format="dd/MM/yyyy HH:mm" 
                     confirm="true"
-                    :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
+                    :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
                     required
                     ></date-picker>
                 </v-flex>
@@ -45,7 +45,7 @@
                     :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" 
                     lang="vi" type="datetime" format="dd/MM/yyyy HH:mm" 
                     confirm="true"
-                    :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
+                    :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
                     required
                     ></date-picker>
                 </v-flex>
@@ -146,7 +146,7 @@
                     <v-text-field
                         placeholder="Tên nhiệm vụ "
                         v-model="taskname"
-                        :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
+                        :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
                         required
                     ></v-text-field>
                 </v-flex>
@@ -163,7 +163,7 @@
                     :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" 
                     lang="vi" type="datetime" format="dd/MM/yyyy HH:mm" 
                     confirm="true"
-                    :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
+                    :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
                     required
                     ></date-picker>
                 </v-flex>
@@ -190,7 +190,7 @@
                         return-object
                         hide-selected
                         clearable
-                        :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
+                        :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
                         required
                     ></v-select>
                 </v-flex>
@@ -276,7 +276,7 @@
                     <v-text-field
                         placeholder="Tên kế hoạch "
                         v-model="planName"
-                        :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
+                        :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
                         required
                     ></v-text-field>
                 </v-flex>
@@ -293,7 +293,7 @@
                     :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" 
                     lang="vi" type="datetime" format="dd/MM/yyyy HH:mm" 
                     confirm="true"
-                    :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
+                    :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
                     required
                     ></date-picker>
                 </v-flex>
@@ -320,7 +320,7 @@
                         return-object
                         hide-selected
                         clearable
-                        :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
+                        :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
                         required
                     ></v-select>
                 </v-flex>
@@ -435,7 +435,7 @@
                     <v-text-field
                         placeholder="Chủ đề "
                         v-model="topicRequest"
-                        :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
+                        :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
                         required
                     ></v-text-field>
                 </v-flex>
@@ -466,7 +466,7 @@
                     <v-text-field
                         placeholder=""
                         v-model="ticketName"
-                        :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
+                        :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
                         required
                     ></v-text-field>
                 </v-flex>

@@ -21,7 +21,7 @@
                         <v-toolbar absolute>
                             <div class="ml-1" style="flex: none">Thành phần: {{availableCount}}/ {{invitationCount}}  sẵn sàng</div>
                                                         
-                            <div style="flex: none" class="ml-2">
+                            <div style="flex: none;position:absolute;right:0" class="ml-2">
                                 <div>
                                     <span v-if="mineInv">
                                         <v-tooltip top :disabled="(userLogin.userNote?false:true)">
@@ -42,7 +42,7 @@
                                         
                                     </span>
 
-                                    <v-icon title="Tải lại" @click.stop="initInvitationTask" style="position: absolute;top: 0;right: 0" class="mx-0 px-0" >refresh</v-icon>
+                                    <v-icon title="Tải lại" @click.stop="initInvitationTask" class="mx-0 px-0" >refresh</v-icon>
                                 </div>
                                 
                             </div>
@@ -73,7 +73,7 @@
 
                     <v-card>
                         <!-- Phần đơn vị/ Nhóm trong cơ quan-->
-                        <v-expansion-panel style="padding-top:2px" expand class="sub-panel">
+                        <v-expansion-panel style="padding-top:30px" expand class="sub-panel">
                             <v-expansion-panel-content value="true">
                                 <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0">
                                     <div class="color-subpanel">Đơn vị/ Nhóm trong cơ quan</div>
@@ -314,7 +314,7 @@
                                                                             placeholder = ''
                                                                             v-model="fullNameCot"
                                                                             clearable="true"
-                                                                            :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
+                                                                            :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
                                                                             required
                                                                         ></v-text-field>
                                                                     </v-flex>
@@ -327,7 +327,7 @@
                                                                             placeholder = ''
                                                                             v-model="emailCot"
                                                                             clearable="true"
-                                                                            :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
+                                                                            :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
                                                                             required
                                                                         ></v-text-field>
                                                                     </v-flex>
@@ -536,8 +536,8 @@
         methods: {
             initInvitationTask: function(){
                 var vm = this;
-                // vm.userId = 108;
-                vm.userId = themeDisplay.getUserId();
+                vm.userId = 108;
+                // vm.userId = themeDisplay.getUserId();
                 console.log(vm._props);
                 console.log('userId:'+ vm.userId)
                 /** */
@@ -1297,6 +1297,9 @@
         margin: 6px 0;
         text-transform: none;
     }
+    #activity_invitation_task nav{
+        box-shadow: none!important
+    }
     #activity_invitation_task nav .toolbar__content {
         height: 50px!important;
         background-color: #e1f5fe!important;
@@ -1372,6 +1375,9 @@
     #activity_invitation_task .tooltip{
         opacity: 1!important;
         z-index: 0
+    }
+    #activity_invitation_task > div:nth-child(4) > ul > li > div.expansion-panel__header > div.header__icon{
+        display: none
     }
     .pointerEvent{
         pointer-events: none!important

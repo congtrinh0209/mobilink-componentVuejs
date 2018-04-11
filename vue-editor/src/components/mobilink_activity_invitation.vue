@@ -1,7 +1,22 @@
 <template>
 
     <div id="activity_invitation" v-if="opening_state_prop == 0||opening_state_prop==1 || opening_state_prop==4 || opening_state_prop==7 " >
-                
+        
+        <v-snackbar :timeout="3000" :top="true" :bottom="false" 
+            :right="true" :left="false" :multi-line="true" 
+            :vertical="false" v-model="snackbarSucc" class="snackbar-success" > 
+            <v-icon flat color="white">check_circle</v-icon> 
+                {{alertMess}}
+            <v-btn flat fab mini color="white" @click.native="snackbarSucc = false">Tắt</v-btn> 
+        </v-snackbar>
+        <v-snackbar :timeout="3000" :top="true" :bottom="false" 
+            :right="true" :left="false" :multi-line="true" 
+            :vertical="false" v-model="snackbarErr" class="snackbar-error" > 
+            <v-icon flat color="white">check_circle</v-icon> 
+                {{alertMess}}
+            <v-btn flat fab mini color="white" @click.native="snackbarErr = false">Tắt</v-btn> 
+        </v-snackbar>
+        
         <v-dialog class="application theme--light progessLoading" v-model="dialog_loading" persistent max-width="50px">
             <v-card style="text-align: center;padding-top: 5px;">
                 <v-progress-circular v-bind:size="25" indeterminate color="primary"></v-progress-circular>
@@ -9,12 +24,12 @@
                 
         </v-dialog>
 
-        <v-alert type="success" icon="check_circle" dismissible class="alertInvitation" transition="slide-y-transition" v-model="alertSuccess">
+        <!-- <v-alert type="success" icon="check_circle" dismissible class="alertInvitation" transition="slide-y-transition" v-model="alertSuccess">
             {{text_success}}
         </v-alert>
         <v-alert type="error" icon="check_circle" dismissible class="alertInvitation" transition="slide-y-transition" v-model="alertError">
             {{text_error}}
-        </v-alert>
+        </v-alert> -->
         
         <div style="position: relative; overflow: hidden;">
            <v-expansion-panel expand class="header-group expansion-blue">
@@ -26,7 +41,7 @@
                             <div class="ml-2" style="flex: none" v-if="opening_state_prop == 4">Giấy mời: {{checkinCount}}/ {{invitationCount}} có mặt</div>
                             <div class="ml-2" style="flex: none" v-if="opening_state_prop == 7 ">Giấy mời: {{checkinCount}}/ {{invitationCount}} có mặt</div>
                             
-                            <div style="flex: none" class="ml-2">
+                            <div style="flex: none;position:absolute;right:0" class="ml-2">
                                 <div >
                                     <span v-if="mineInv">
                                         <v-tooltip top :disabled="(userLogin.userNote?false:true)">
@@ -51,7 +66,7 @@
                                         
                                     </span>
 
-                                    <v-icon title="Tải lại" @click.stop="initInvitation" style="position: absolute;top: 0;right: 0" class="mx-0 px-0">refresh</v-icon>
+                                    <v-icon title="Tải lại" @click.stop="initInvitation" class="mx-0 px-0">refresh</v-icon>
 
                                 </div>
                                 
@@ -82,7 +97,7 @@
 
                     <v-card>
                         <!-- Phần đơn vị/ Nhóm trong cơ quan-->
-                        <v-expansion-panel style="padding-top:2px" expand class="sub-panel">
+                        <v-expansion-panel style="padding-top:30px" expand class="sub-panel">
                             <v-expansion-panel-content value="true">
                                 <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0">
                                     <div class="color-subpanel">Đơn vị/ Nhóm trong cơ quan</div>
@@ -336,7 +351,7 @@
                                                                             placeholder = ''
                                                                             v-model="fullNameCot"
                                                                             clearable="true"
-                                                                            :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
+                                                                            :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
                                                                             required
                                                                         ></v-text-field>
                                                                     </v-flex>
@@ -349,7 +364,7 @@
                                                                             placeholder = ''
                                                                             v-model="emailCot"
                                                                             clearable="true"
-                                                                            :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
+                                                                            :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
                                                                             required
                                                                         ></v-text-field>
                                                                     </v-flex>
@@ -480,6 +495,9 @@
                             <v-expansion-panel-content value="true">
                                 <div slot="header" class="custome-panel-heading-with-icon pl-0 mr-2">
                                     <div class="color-subpanel">Thành phần tham dự</div>
+                                    <v-icon class="btn-add mx-0 my-0" title="Sửa" v-on:click.stop="activeEdit = false" v-if="permission_prop == 'manager'|| permission_prop == 'owner'" grey darken-4>
+                                        create
+                                    </v-icon>
                                 </div>
                                 <v-card >
                                     <v-card-text class="px-0 py-0">
@@ -488,12 +506,17 @@
                                             placeholder="Nhập thành phần tham dự"
                                             v-model="nameInv"
                                             multi-line
-                                            :rules="[v => !!v || 'Nhập thành phần tham dự!']"
+                                            :readonly='activeEdit'
+                                            :rules="[v => !!v || 'Nhập thành phần tham dự']"
                                             required
                                             ></v-text-field>
-                                            <v-btn small outline color="blue-grey" @click="addInvText(nameInv)">
+                                            <v-btn v-if="activeEdit == false" small outline color="blue-grey" @click="addInvText(null)">
+                                                Xóa
+                                            </v-btn>
+                                            <v-btn class="mr-2" v-if="activeEdit == false" small outline color="blue-grey" @click="addInvText(nameInv)">
                                                 Lưu
                                             </v-btn>
+                                            
                                         </v-form>
                                     </v-card-text>
                                 </v-card>
@@ -536,8 +559,12 @@
         data () {
             return {
                 userId: '',
+                activeEdit: true,
                 alertSuccess: false,
+                alertMess:'',
                 alertError: false,
+                snackbarErr: false,
+                snackbarS
                 invitationUserId:'',
                 mineInv: false,
                 userLogin: {},
@@ -594,13 +621,15 @@
             
             initInvitation: function(){
                 var vm = this;
-                // vm.userId = 108;
-                vm.userId = themeDisplay.getUserId();
+                vm.userId = 108;
+                // vm.userId = themeDisplay.getUserId();
                 console.log(vm._props);
                 console.log('userId:'+ vm.userId);
                 vm.getInvitation();
+                vm.getInvText()
 
             },
+            
             /* Load data invitation */
             getInvitation: function(){
                 /*console.log("getInvitation");*/
@@ -862,8 +891,9 @@
                 if(type == "PUT"){
                     axios.put(urlUpdate, postData, configPutInvitation)
                     .then(function (response) {
+                        
                         vm.show_alert('success','Cập nhật thành công')
-                        vm.nameInv = ''
+                        
                     })
                     .catch(function (error) {
                         vm.show_alert('error','Cập nhật thất bại')
@@ -962,11 +992,13 @@
                         vm.dialog_loading = true;
                         setTimeout(function(){
                             vm.initInvitation();
+                            vm.getInvText();
                             vm.dialog_loading = false;
                             vm.show_alert('success','Thêm giấy mời thành công');
                         },2000) ;
                         vm.valid = false;
                         if(type == 'GROUP'){
+                            // vm.nameInv+=
                             var roleAdded = vm.hostingId.roleId;
                             var hostingAfAdded = vm.hostingIdItems.filter(function(item) {
                                 return item.roleId != roleAdded;
@@ -1068,12 +1100,35 @@
                     vm.show_alert('error','Cập nhật thất bại')
                 })
             },
+            /* Load thành phần tham dự */
+            getInvText: function(){
+                var vm = this;
+                var paramsGetInvText = {
+                    
+                };
+                const configGetInvText = {
+                    params: paramsGetInvText,
+                    headers: {
+                        'groupId': vm.group_id
+                    }
+                };
+                axios.get( vm.end_point + 'activities/' + vm.class_pk, configGetInvText)
+                .then(function (response) {
+                    console.log(response);
+                    var serializable = response.data
+                    vm.nameInv = serializable.invitation
+
+                })
+                .catch(function (error) {
+                    console.log(error)
+                })
+            },
             /**Phần thêm thành phần tham dự */
             addInvText: function(text){
-                if (this.$refs.form.validate()){
-                    var vm = this;
+                var vm = this;
+                if (this.$refs.form.validate()) {
                     var dataUpdateactivity  =new URLSearchParams();
-                    dataUpdateactivity.append('invitationText', text);
+                    dataUpdateactivity.append('invitation', text);
                     var urlUpdate = vm.end_point + "activities/"+ vm.class_pk;
                     
                     const configPutInvitation = {
@@ -1084,13 +1139,14 @@
                             
                     axios.put(urlUpdate, dataUpdateactivity, configPutInvitation)
                     .then(function (response) {
-                        vm.show_alert('success','Cập nhật thành công')
-                        
+                        vm.show_alert('success','Cập nhật thành công');
+                        vm.getInvText()
                     })
                     .catch(function (error) {
                         vm.show_alert('error','Cập nhật thất bại')
                     })
                 }
+
             },
             /** */
             showAddCot: function(){
@@ -1385,6 +1441,9 @@
         top: 0;
         right: 20px;
     }
+    #activity_invitation nav{
+        box-shadow: none!important
+    }
     #activity_invitation nav .toolbar__content {
         height: 50px!important;
         background-color: #e1f5fe!important;
@@ -1480,6 +1539,8 @@
     #activity_invitation .input-group .input-group--selection-controls{
         display: none!important;
     }
-    
+    #activity_invitation > div:nth-child(4) > ul > li > div.expansion-panel__header > div.header__icon{
+        display: none
+    }
 </style>
 
