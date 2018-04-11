@@ -229,7 +229,8 @@
 
                     <td class="text-xs-center">
 
-                        <v-icon color="red darken-3" v-if="props.item.permission=='owner'||props.item.permission=='manager'" icon @click="deleteActivity(props.item,props.index,tableListItems)">clear</v-icon>
+                        <v-icon color="red darken-3" v-if="props.item.permission=='owner'||props.item.permission=='manager'" icon 
+                        @click="deleteActivity(props.item,props.index,tableListItems)">clear</v-icon>
                     </td>
                 </tr>
             </template>

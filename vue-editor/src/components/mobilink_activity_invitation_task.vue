@@ -538,11 +538,11 @@
                 var vm = this;
                 // vm.userId = 108;
                 vm.userId = themeDisplay.getUserId();
-                /** */
-                vm.getInvitationTask();
-
                 console.log(vm._props);
                 console.log('userId:'+ vm.userId)
+                /** */
+                vm.getInvitationTask();
+                
             },
             /* Load data invitation */
             getInvitationTask: function(){
@@ -1306,7 +1306,7 @@
         font-size: 18px!important;
     }
     #activity_invitation_task .header-group .header__icon{
-        z-index: 500;
+        z-index: 120;
         padding-top: 3px;
     }
     #activity_invitation_task .sub-panel .expansion-panel__header{    

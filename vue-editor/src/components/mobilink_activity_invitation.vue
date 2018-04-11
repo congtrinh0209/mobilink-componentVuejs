@@ -462,7 +462,6 @@
                                                                     </v-flex>
                                                                 </v-list-tile-title>
 
-                                                                <v-divider class="mt-0"></v-divider>
                                                             </v-list-tile-content>  
                                                         </v-list-tile>
                                                         
@@ -477,18 +476,30 @@
                         </v-expansion-panel>
 
                         <!-- Phần thêm thành phần tham dự -->
-                        <v-form xs12 sm12 v-model="validAddInv" ref="form" class="formAddInvText px-2 py-2" lazy-validation style="position: relative">
-                            <v-text-field
-                            placeholder="Nhập thành phần tham dự"
-                            v-model="nameInv"
-                            multi-line
-                            :rules="[v => !!v || 'Nhập thành phần tham dự!']"
-                            required
-                            ></v-text-field>
-                            <v-btn small outline color="blue-grey" @click="addInvText(nameInv)">
-                                Lưu
-                            </v-btn>
-                        </v-form>
+                        <v-expansion-panel expand class="sub-panel">
+                            <v-expansion-panel-content value="true">
+                                <div slot="header" class="custome-panel-heading-with-icon pl-0 mr-2">
+                                    <div class="color-subpanel">Thành phần tham dự</div>
+                                </div>
+                                <v-card >
+                                    <v-card-text class="px-0 py-0">
+                                        <v-form xs12 sm12 v-model="validAddInv" ref="form" class="formAddInvText px-2 py-2" lazy-validation style="position: relative">
+                                            <v-text-field class="py-0"
+                                            placeholder="Nhập thành phần tham dự"
+                                            v-model="nameInv"
+                                            multi-line
+                                            :rules="[v => !!v || 'Nhập thành phần tham dự!']"
+                                            required
+                                            ></v-text-field>
+                                            <v-btn small outline color="blue-grey" @click="addInvText(nameInv)">
+                                                Lưu
+                                            </v-btn>
+                                        </v-form>
+                                    </v-card-text>
+                                </v-card>
+                            </v-expansion-panel-content>
+                        </v-expansion-panel>
+                        
                     </v-card>
 
                </v-expansion-panel-content>
@@ -583,12 +594,12 @@
             
             initInvitation: function(){
                 var vm = this;
-                vm.userId = 108;
-                // vm.userId = themeDisplay.getUserId();
-                vm.getInvitation();
+                // vm.userId = 108;
+                vm.userId = themeDisplay.getUserId();
                 console.log(vm._props);
                 console.log('userId:'+ vm.userId);
-                
+                vm.getInvitation();
+
             },
             /* Load data invitation */
             getInvitation: function(){
@@ -852,7 +863,7 @@
                     axios.put(urlUpdate, postData, configPutInvitation)
                     .then(function (response) {
                         vm.show_alert('success','Cập nhật thành công')
-                       
+                        vm.nameInv = ''
                     })
                     .catch(function (error) {
                         vm.show_alert('error','Cập nhật thất bại')
@@ -1404,7 +1415,7 @@
         padding-right: 0px!important;
     }
     #activity_invitation .header-group .header__icon{
-        z-index: 500;
+        z-index: 120;
         padding-top: 3px;
     }
 
