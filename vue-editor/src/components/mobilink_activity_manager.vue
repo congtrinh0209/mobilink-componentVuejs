@@ -106,7 +106,7 @@
                                                 <v-list-tile-content>
                                                     <v-data-table id="subTableActivity"
                                                     hide-headers
-                                                    no-data-text="Không có dữ liệu"
+                                                    no-data-text="Không có kết luận!"
                                                     :items="item.activitySourceItems[index1]"
                                                     item-key="activityId"
                                                     hide-actions
