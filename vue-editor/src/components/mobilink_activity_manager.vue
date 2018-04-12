@@ -171,12 +171,8 @@
         created () {
             var vm = this;
             vm.$nextTick(function () {
-
-                Promise.all([vm.getManager(), vm.getActivityCat()]).then(function() {
-                    vm.getActivity()
-                }, function() {
-                    console.log("error")
-                });
+                vm.getManager();
+                vm.getActivityCat()
 
             })
         },
@@ -267,7 +263,8 @@
                             )
                             
                         }
-                    }
+                    };
+                    vm.getActivity()
                 })
                 .catch(function (error) {
                     console.log(error)
@@ -643,7 +640,7 @@
         padding: 8px 5px!important;
     }
     #activity_manager .groupHeader p{
-        max-width: 100%;
+        max-width: 100%!important;
         overflow: hidden;
         text-overflow: ellipsis; 
         white-space: nowrap;
@@ -655,13 +652,13 @@
         color: blue
     }
     #activity_manager .icon_view{
-        max-width: 100%;
+        max-width: 100%!important;
         overflow: hidden;
         text-overflow: ellipsis; 
         white-space: nowrap;
     }
     #activity_manager .expansion-panel__container{
-        width: 100%!important
+        max-width: 100%!important
     }
     #activity_manager #list-content .list--group__container{
         border: 1px solid #ddd !important;

@@ -29,7 +29,7 @@
                         <v-toolbar class="my-0">
                             <div class="ml-1" style="flex: none">Thành phần: {{availableCount}}/ {{invitationCount}}  sẵn sàng</div>
                                                         
-                            <div style="flex: none;position:absolute;right:0" class="ml-2">
+                            <div style="flex: none;position:absolute;right:0;top:5px" class="ml-2">
                                 <div>
                                     <span v-if="mineInv">
                                         <v-tooltip top :disabled="(userLogin.userNote?false:true)">
@@ -492,6 +492,8 @@
                 alertMess:'',
                 snackbarErr: false,
                 snackbarSucc: false,
+                activeClick: false,
+                disableClick: 'disableClick',
                 invitationUserId:'',
                 mineInv: false,
                 userLogin: {},
@@ -545,8 +547,8 @@
         methods: {
             initInvitationTask: function(){
                 var vm = this;
-                vm.userId = 108;
-                // vm.userId = themeDisplay.getUserId();
+                // vm.userId = 108;
+                vm.userId = themeDisplay.getUserId();
                 console.log(vm._props);
                 console.log('userId:'+ vm.userId)
                 /** */

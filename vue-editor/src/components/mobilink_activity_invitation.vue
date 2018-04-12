@@ -34,7 +34,7 @@
                             <div class="ml-2" style="flex: none" v-if="opening_state_prop == 4">Giấy mời: {{checkinCount}}/ {{invitationCount}} có mặt</div>
                             <div class="ml-2" style="flex: none" v-if="opening_state_prop == 7 ">Giấy mời: {{checkinCount}}/ {{invitationCount}} có mặt</div>
                             
-                            <div style="flex: none;position:absolute;right:0" class="ml-2">
+                            <div style="flex: none;position:absolute;right:0;top:5px" class="ml-2">
                                 <div >
                                     <span v-if="mineInv">
                                         <v-tooltip top :disabled="(userLogin.userNote?false:true)">
@@ -46,16 +46,18 @@
                                         
                                         <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" class="mx-0" small color="success" 
                                         v-on:click.stop="checkAvailable('ready',userLogin,null)" style="padding-left: 6px;padding-right: 6px"
-                                         :disabled="loading"
+                                        :class="activeClick?disableClick:''"
                                         >
                                             <v-icon style="color: white!important" v-if="userLogin.available == 1" >check</v-icon>
                                             <span style="color: white!important">Sẵn sàng</span>
                                         </v-btn>
-                                        <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" small class="text-white mx-1" v-on:click.stop="checkAvailable('busy',userLogin,null)" color="error">
+                                        <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" small class="text-white mx-1" 
+                                        v-on:click.stop="checkAvailable('busy',userLogin,null)" :class="activeClick?disableClick:''" color="error">
                                             <v-icon style="color: white!important" v-if="userLogin.available == 2" >check</v-icon>
                                             <span style="color: white!important">Tôi bận</span>
                                         </v-btn>
-                                        <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 7" small class="text-white mx-1" v-on:click.stop="checkin(userLogin)" color="indigo">
+                                        <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 7" small class="text-white mx-1"
+                                         v-on:click.stop="checkin(userLogin)" :class="activeClick?disableClick:''" color="indigo">
                                             <v-icon style="color: white!important" v-if="userLogin.checkin" >check</v-icon>
                                             <span style="color: white!important">Tôi có mặt</span>
                                         </v-btn>
@@ -233,16 +235,17 @@
                                                                                     </v-btn>
                                                                                     <span >{{subItem.userNote}}</span>
                                                                                 </v-tooltip>
-
+                                                                                
                                                                                 <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" class="mx-0" small color="success"
-                                                                                :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
+                                                                                :class="(permission_prop!='manager'&&permission_prop!='owner')||activeClick? pointerEvent : ''"
+                                                                                
                                                                                 v-on:click.stop="checkAvailable('ready',subItem,item)" style="padding-left: 6px;padding-right: 6px"
                                                                                 >
                                                                                     <v-icon style="color: white" v-if="subItem.available == 1" >check</v-icon>
                                                                                     Sẵn sàng
                                                                                 </v-btn>
                                                                                 <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" small class="text-white mx-0" 
-                                                                                :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
+                                                                                :class="(permission_prop!='manager'&&permission_prop!='owner')||activeClick? pointerEvent : ''"
                                                                                 v-on:click.stop="checkAvailable('busy',subItem,item)" color="error"
                                                                                 >
                                                                                     <v-icon style="color: white" v-if="subItem.available == 2" >check</v-icon>
@@ -252,7 +255,7 @@
                                                                                 <!-- <span v-if="opening_state_prop == 0||opening_state_prop == 1" style="color:green" class="mr-2" v-html="bindAvailableText(subItem.available)"></span> -->
 
                                                                                 <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 7"
-                                                                                :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
+                                                                                :class="(permission_prop!='manager'&&permission_prop!='owner')||activeClick? pointerEvent : ''"
                                                                                 v-on:click.stop="managerCheckin(subItem,item)" outline small class="text-white mx-1" color="indigo"
                                                                                 >
                                                                                     <v-icon color="indigo" v-if="subItem.checkin" >check</v-icon>
@@ -456,7 +459,7 @@
                                                                                 v-html="bindAvailableText(item.available)"></span> -->
 
                                                                                 <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 7" 
-                                                                                :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
+                                                                                :class="(permission_prop!='manager'&&permission_prop!='owner')||activeClick? pointerEvent : ''"
                                                                                 v-on:click.stop="managerCheckin(item,null)"  outline small class="text-white mx-1" color="indigo">
                                                                                     <v-icon color="indigo" v-if="item.checkin" >check</v-icon>
                                                                                     Có mặt
@@ -573,8 +576,6 @@
                 typeAvailable: '',
                 typeCheckin: false,
                 contactInput:'',
-                loader: null,
-                loading: false,
                 /** */
                 switch1: true,
                 valid: false,
@@ -611,6 +612,8 @@
                 text_error:'Cập nhật thất bại',
                 text_success:'Cập nhật thành công',
                 pointerEvent: 'pointerEvent',
+                activeClick: false,
+                disableClick: 'disableClick',
                 dialog_loading: false,
                 // 
                 fullNameCot:'',
@@ -619,21 +622,13 @@
                 companyName:''
             }
         },
-        watch: {
-            loader () {
-            const l = this.loader
-            this[l] = !this[l]
-            setTimeout(() => (this[l] = false), 2000)
-            this.loader = null
-            }
-        },
         
         methods: {
             
             initInvitation: function(){
                 var vm = this;
-                vm.userId = 108;
-                // vm.userId = themeDisplay.getUserId();
+                // vm.userId = 108;
+                vm.userId = themeDisplay.getUserId();
                 console.log(vm._props);
                 console.log('userId:'+ vm.userId);
                 vm.getInvitation();
@@ -1212,7 +1207,7 @@
             /** */
             checkAvailable: function(typeCheck,subItem,item){
                 var vm =this;
-                vm.loader = 'loading'
+                vm.disableClickFunc();
                 if(typeCheck == 'ready' && subItem.available!=1){
                     vm.typeAvailable = 1
                 } else if(typeCheck == 'busy' && subItem.available!=2){
@@ -1274,7 +1269,7 @@
             checkin: function(item){
                 var vm =this;
                 vm.typeCheckin=!vm.typeCheckin;
-
+                vm.disableClickFunc();
                 var dataUpdateAvailable  =new URLSearchParams();
                 dataUpdateAvailable.append('checkin', vm.typeCheckin);
                 var urlUpdate = vm.end_point + "resourceinvitations/"+ item.resourceInvitationId;
@@ -1310,6 +1305,7 @@
             },
             managerCheckin: function(item,itemUnit){
                 var vm =this;
+                vm.disableClickFunc();
                 var typeCheckManager;
                 typeCheckManager=!item.checkin;
 
@@ -1434,6 +1430,13 @@
                     vm.snackbarErr = true;
                 });
                 /*console.log("run add contact invitation")*/
+            },
+            disableClickFunc: function(){
+                var vm = this;
+                vm.activeClick = true;
+                setTimeout(function(){
+                    vm.activeClick = false;
+                },2000)
             }
         }
 
@@ -1476,7 +1479,9 @@
         margin: 6px 0;
         text-transform: none;
     }
-
+    #activity_invitation .disableClick{
+        pointer-events: none;
+    }
     #activity_invitation button .icon{
         font-size: 18px!important;
     }

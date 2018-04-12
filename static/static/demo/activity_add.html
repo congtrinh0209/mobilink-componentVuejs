@@ -5,8 +5,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1.0">
   <title>Activities</title>
-  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
   
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
+  <script type="text/javascript" src="../js/add_support.js"></script>
   <!-- vuejs -->
   <script type="text/javascript" src="../js/axios.min.js"></script>
   <script type="text/javascript" src="../js/vue.min.js"></script>
@@ -32,7 +33,7 @@
         <jx-mobilink-activity-add ref="activityAddRef"
         group_id="20147"
         id='1'
-        type_activity="tickets"
+        type_activity="events"
         end_point= "http://127.0.0.1:8081/api/"
         @call-back-add = "dataForm = $event"
         ></jx-mobilink-activity-add>

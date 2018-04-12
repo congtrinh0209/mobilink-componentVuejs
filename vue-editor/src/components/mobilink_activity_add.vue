@@ -1069,7 +1069,11 @@
             parseDateFormat : function(fullDate){
                 var date;
                 if(fullDate){
-                    date = fullDate.getFullYear()+(fullDate.getMonth()+1).toString().padStart(2, '0')+fullDate.getDate().toString().padStart(2, '0')+fullDate.getHours().toString().padStart(2, '0')+fullDate.getMinutes().toString().padStart(2, '0');
+                    date = fullDate.getFullYear()+
+                        (fullDate.getMonth()+1).toString().padStart(2, '0')
+                        +fullDate.getDate().toString().padStart(2, '0')
+                        +fullDate.getHours().toString().padStart(2, '0')
+                        +fullDate.getMinutes().toString().padStart(2, '0');
                 } else {
                     date = ""
                 }
