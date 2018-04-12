@@ -24,19 +24,12 @@
                 
         </v-dialog>
 
-        <!-- <v-alert type="success" icon="check_circle" dismissible class="alertInvitation" transition="slide-y-transition" v-model="alertSuccess">
-            {{text_success}}
-        </v-alert>
-        <v-alert type="error" icon="check_circle" dismissible class="alertInvitation" transition="slide-y-transition" v-model="alertError">
-            {{text_error}}
-        </v-alert> -->
-        
         <div style="position: relative; overflow: hidden;">
            <v-expansion-panel expand class="header-group expansion-blue">
                 <v-expansion-panel-content value="true">
 
                     <div slot="header" class="custome-panel-heading-with-icon">
-                        <v-toolbar absolute >   
+                        <v-toolbar class="my-0">   
                             <div class="ml-2" style="flex: none" v-if="opening_state_prop == 0||opening_state_prop == 1">Giấy mời: {{availableCount}}/ {{invitationCount}} sẵn sàng</div>
                             <div class="ml-2" style="flex: none" v-if="opening_state_prop == 4">Giấy mời: {{checkinCount}}/ {{invitationCount}} có mặt</div>
                             <div class="ml-2" style="flex: none" v-if="opening_state_prop == 7 ">Giấy mời: {{checkinCount}}/ {{invitationCount}} có mặt</div>
@@ -51,7 +44,10 @@
                                             <span>{{userLogin.userNote}}</span>
                                         </v-tooltip>
                                         
-                                        <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" class="mx-0" small color="success" v-on:click.stop="checkAvailable('ready',userLogin,null)" style="padding-left: 6px;padding-right: 6px">
+                                        <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" class="mx-0" small color="success" 
+                                        v-on:click.stop="checkAvailable('ready',userLogin,null)" style="padding-left: 6px;padding-right: 6px"
+                                         :disabled="loading"
+                                        >
                                             <v-icon style="color: white!important" v-if="userLogin.available == 1" >check</v-icon>
                                             <span style="color: white!important">Sẵn sàng</span>
                                         </v-btn>
@@ -97,7 +93,7 @@
 
                     <v-card>
                         <!-- Phần đơn vị/ Nhóm trong cơ quan-->
-                        <v-expansion-panel style="padding-top:30px" expand class="sub-panel">
+                        <v-expansion-panel  expand class="sub-panel">
                             <v-expansion-panel-content value="true">
                                 <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0">
                                     <div class="color-subpanel">Đơn vị/ Nhóm trong cơ quan</div>
@@ -411,7 +407,7 @@
                                                     <!-- Phần danh sách cá nhân theo danh bạ -->
                                                     <v-list class="py-0">
                                                         <v-list-tile v-for="(item,index) in itemInvContact" v-bind:key="item.resourceInvitationId">
-                                                            <v-list-tile-content class="mt-2">
+                                                            <v-list-tile-content>
                                                                 <v-list-tile-title>
                                                                     <v-flex xs12 class="layout wrap">
 
@@ -495,8 +491,13 @@
                             <v-expansion-panel-content value="true">
                                 <div slot="header" class="custome-panel-heading-with-icon pl-0 mr-2">
                                     <div class="color-subpanel">Thành phần tham dự</div>
-                                    <v-icon class="btn-add mx-0 my-0" title="Sửa" v-on:click.stop="activeEdit = false" v-if="permission_prop == 'manager'|| permission_prop == 'owner'" grey darken-4>
+                                    <v-icon class="btn-add mx-0 my-0" title="Sửa" v-on:click.stop="activeEdit = false" 
+                                    v-if="(permission_prop == 'manager'|| permission_prop == 'owner')&& activeEdit==true" grey darken-4>
                                         create
+                                    </v-icon>
+                                    <v-icon class="btn-add mx-0 my-0" title="Hủy" v-on:click.stop="activeEdit = true" 
+                                    v-if="(permission_prop == 'manager'|| permission_prop == 'owner')&&activeEdit==false" grey darken-4>
+                                        cancel
                                     </v-icon>
                                 </div>
                                 <v-card >
@@ -555,16 +556,15 @@
                 vm.initInvitation()
             })
         },
-        
         data () {
             return {
                 userId: '',
                 activeEdit: true,
                 alertSuccess: false,
-                alertMess:'',
                 alertError: false,
+                alertMess:'',
                 snackbarErr: false,
-                snackbarS
+                snackbarSucc: false,
                 invitationUserId:'',
                 mineInv: false,
                 userLogin: {},
@@ -573,6 +573,8 @@
                 typeAvailable: '',
                 typeCheckin: false,
                 contactInput:'',
+                loader: null,
+                loading: false,
                 /** */
                 switch1: true,
                 valid: false,
@@ -617,6 +619,15 @@
                 companyName:''
             }
         },
+        watch: {
+            loader () {
+            const l = this.loader
+            this[l] = !this[l]
+            setTimeout(() => (this[l] = false), 2000)
+            this.loader = null
+            }
+        },
+        
         methods: {
             
             initInvitation: function(){
@@ -891,12 +902,13 @@
                 if(type == "PUT"){
                     axios.put(urlUpdate, postData, configPutInvitation)
                     .then(function (response) {
-                        
-                        vm.show_alert('success','Cập nhật thành công')
-                        
+                        vm.alertMess = 'Cập nhật thành công';
+                        vm.snackbarSucc = true                        
                     })
                     .catch(function (error) {
-                        vm.show_alert('error','Cập nhật thất bại')
+                        vm.alertMess = 'Cập nhật thất bại';
+                        vm.snackbarErr = true   
+                       
                     })
                 } else if(type == "DELETE") {
                     axios.delete(urlUpdate, configPutInvitation)
@@ -904,13 +916,14 @@
                         // items.splice(index,1);
                         setTimeout(function(){
                             vm.initInvitation();
-                            vm.show_alert('success','Xóa giấy mời thành công')
+                            vm.alertMess = 'Xóa giấy mời thành công';
+                            vm.snackbarSucc = true     
                         },1000) ;
                         
                     })
                     .catch(function (error) {
-                        
-                        vm.show_alert('error','Xóa giấy mời thất bại')
+                        vm.alertMess = 'Xóa giấy mời thất bại';
+                        vm.snackbarErr = true
                     });
                 }
             },
@@ -994,11 +1007,12 @@
                             vm.initInvitation();
                             vm.getInvText();
                             vm.dialog_loading = false;
-                            vm.show_alert('success','Thêm giấy mời thành công');
+                            vm.alertMess = 'Thêm giấy mời thành công';
+                            vm.snackbarSucc = true   
                         },2000) ;
                         vm.valid = false;
                         if(type == 'GROUP'){
-                            // vm.nameInv+=
+                            
                             var roleAdded = vm.hostingId.roleId;
                             var hostingAfAdded = vm.hostingIdItems.filter(function(item) {
                                 return item.roleId != roleAdded;
@@ -1027,7 +1041,8 @@
                         
                     })
                     .catch(function (error) {
-                        vm.show_alert('error','Thêm giấy mời thất bại')
+                        vm.alertMess = 'Thêm giấy mời thất bại';
+                        vm.snackbarErr = true  
                     })
                 }
                 
@@ -1094,10 +1109,12 @@
                 };
                 axios.put(urlUpdate, dataUpdateInvitation, configPutInvitation)
                 .then(function (response) {
-                    vm.show_alert('success','Cập nhật thành công')
+                    vm.alertMess = 'Cập nhật thành công';
+                    vm.snackbarSucc = true  
                 })
                 .catch(function (error) {
-                    vm.show_alert('error','Cập nhật thất bại')
+                    vm.alertMess = 'Cập nhật thất bại';
+                    vm.snackbarErr = true  
                 })
             },
             /* Load thành phần tham dự */
@@ -1114,7 +1131,6 @@
                 };
                 axios.get( vm.end_point + 'activities/' + vm.class_pk, configGetInvText)
                 .then(function (response) {
-                    console.log(response);
                     var serializable = response.data
                     vm.nameInv = serializable.invitation
 
@@ -1139,11 +1155,13 @@
                             
                     axios.put(urlUpdate, dataUpdateactivity, configPutInvitation)
                     .then(function (response) {
-                        vm.show_alert('success','Cập nhật thành công');
+                        vm.alertMess = 'Cập nhật thành công';
+                        vm.snackbarSucc = true 
                         vm.getInvText()
                     })
                     .catch(function (error) {
-                        vm.show_alert('error','Cập nhật thất bại')
+                        vm.alertMess = 'Cập nhật thất bại';
+                        vm.snackbarErr = true 
                     })
                 }
 
@@ -1194,6 +1212,7 @@
             /** */
             checkAvailable: function(typeCheck,subItem,item){
                 var vm =this;
+                vm.loader = 'loading'
                 if(typeCheck == 'ready' && subItem.available!=1){
                     vm.typeAvailable = 1
                 } else if(typeCheck == 'busy' && subItem.available!=2){
@@ -1219,11 +1238,14 @@
                     if(item == null){
                         setTimeout(function(){
                             vm.getInvitation();
-                            vm.show_alert('success','Cập nhật thành công');
+                            vm.alertMess = 'Cập nhật thành công';
+                            vm.snackbarSucc = true
+
                         },1000) ;
 
                     } else{
-                        vm.show_alert('success','Cập nhật thành công');
+                        vm.alertMess = 'Cập nhật thành công';
+                        vm.snackbarSucc = true;
                         if(typeCheck == 'ready' && subItem.available!=1){
                             subItem.available = 1;
                             item.role.statistic.available+=1;
@@ -1244,7 +1266,8 @@
                     
                 })
                 .catch(function (error) {
-                    vm.show_alert('error','Cập nhật thất bại');
+                    vm.alertMess = 'Cập nhật thất bại';
+                    vm.snackbarErr = true
                 });
 
             },
@@ -1270,7 +1293,8 @@
                     setTimeout(function(){
                         vm.getInvitation();
                         vm.dialog_loading = false;
-                        vm.show_alert('success','Cập nhật thành công');
+                        vm.alertMess = 'Cập nhật thành công';
+                        vm.snackbarSucc = true
                     },1000) ;
 
                 })
@@ -1279,7 +1303,8 @@
                     setTimeout(function(){
                         vm.getInvitation();
                         vm.dialog_loading = false;
-                        vm.show_alert('error','Cập nhật thất bại');
+                        vm.alertMess = 'Cập nhật thất bại';
+                        vm.snackbarErr = true
                     },1000) ;
                 })
             },
@@ -1302,7 +1327,8 @@
                 };
                 axios.put(urlUpdate, dataUpdateAvailable, configPutInvitation)
                 .then(function (response) {
-                    vm.show_alert('success','Cập nhật thành công');
+                    vm.alertMess = 'Cập nhật thành công';
+                    vm.snackbarSucc = true;
                     item.checkin = typeCheckManager;
                     if(typeCheckManager == true){
                         vm.checkinCount+=1;
@@ -1313,7 +1339,8 @@
                     }
                 })
                 .catch(function (error) {
-                    vm.show_alert('error','Cập nhật thất bại')
+                    vm.alertMess = 'Cập nhật thất bại';
+                    vm.snackbarErr = true;
                 })
             },
             show_Add1: function(){
@@ -1324,18 +1351,7 @@
                 var vm =this;
                 vm.showAdd2 =!vm.showAdd2
             },
-            show_alert: function(type,text){
-                var vm = this;
-                if(type=='success'){
-                    vm.text_success = text;
-                    vm.alertSuccess = true;
-                    setTimeout(function(){vm.alertSuccess = false},2000)
-                } else {
-                    vm.text_error = text;
-                    vm.alertError = true;
-                    setTimeout(function(){vm.alertError = false},2000)
-                }
-            },
+
             submitAddContact: function(){
                 if (this.$refs.form.validate()) {
                     var vm = this;
@@ -1407,12 +1423,15 @@
                     setTimeout(function(){
                         vm.initInvitation();
                         vm.dialog_loading = false;
-                        vm.show_alert('success','Thêm giấy mời thành công');
+                        vm.alertMess = 'Thêm giấy mời thành công';
+                        vm.snackbarSucc = true;
+                       
                     },2000) ;
                     
                 })
                 .catch(function (error) {
-                    vm.show_alert('error','Thêm giấy mời thất bại')
+                    vm.alertMess = 'Thêm giấy mời thất bại';
+                    vm.snackbarErr = true;
                 });
                 /*console.log("run add contact invitation")*/
             }
@@ -1432,15 +1451,7 @@
 	   -webkit-flex: 1; /* Safari 6.1+ */
 	   flex: 1;
 	}
-    #activity_invitation .alertInvitation{
-        width: 30%!important;
-        height: 75px!important;
-        min-width: 300px!important;
-        z-index: 122!important;
-        position: fixed;
-        top: 0;
-        right: 20px;
-    }
+
     #activity_invitation nav{
         box-shadow: none!important
     }
@@ -1465,6 +1476,7 @@
         margin: 6px 0;
         text-transform: none;
     }
+
     #activity_invitation button .icon{
         font-size: 18px!important;
     }
@@ -1475,12 +1487,15 @@
     }
     #activity_invitation .header-group .header__icon{
         z-index: 120;
-        padding-top: 3px;
     }
 
     #activity_invitation .expansion-panel__header{
         padding-left: 10px!important;
         padding-right: 10px!important;
+    }
+    #activity_invitation > div:nth-child(4) > ul > li > div.expansion-panel__header{
+        padding: 0!important;
+        padding-right: 5px!important
     }
     #activity_invitation .wrap_invitation ul .list--group{
         padding: 0!important;
@@ -1541,6 +1556,10 @@
     }
     #activity_invitation > div:nth-child(4) > ul > li > div.expansion-panel__header > div.header__icon{
         display: none
+    }
+    #activity_invitation .overlay .overlay--active{
+        max-width: 100%!important;
+        max-height: 100%!important
     }
 </style>
 

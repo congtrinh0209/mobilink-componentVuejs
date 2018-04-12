@@ -74,9 +74,12 @@
             
             <v-expansion-panel expand class="expansion-blue" v-for="(item,index) in mainItems" :key="item.leader.employeeId">
                 <v-expansion-panel-content :value="item==mainItems[0]">
-                    <div slot="header"  @click="getListActivitySource(item.activityItems[0].activityId,index,0)" class="custome-panel-heading-with-icon mr-2 pl-0" style="font-family: sans-serif">
-                        <b v-if="radioGroup == 'leader'">{{item.leader.title}} {{ item.leader.fullName }} - {{ item.leader.jobTitle }}</b>
-                        <b v-if="radioGroup == 'activityCat'">{{item.leader.itemName}}</b>
+                    <div slot="header"  @click="getListActivitySource(item.activityItems[0].activityId,index,0)" 
+                    class="custome-panel-heading-with-icon groupHeader mr-2 pl-0" style="width: 90%;font-family: sans-serif">
+                        <p v-if="radioGroup == 'leader'" :title="item.leader.title + item.leader.fullName + '-' + item.leader.jobTitle" class="my-0">
+                            {{item.leader.title}} {{ item.leader.fullName }} - {{ item.leader.jobTitle }}
+                        </p>
+                        <p v-if="radioGroup == 'activityCat'" :title="item.leader.itemName" class="my-0">{{item.leader.itemName}}</p>
                     </div>
                     
                     <v-card class="">
@@ -85,20 +88,22 @@
                             <v-flex xs12 sm12>
                                     <v-card>
                                         <v-list class="py-0">
-                                            <v-list-group class="listGroup py-0" v-for="(item1,index1) in item.activityItems" :value="item1.activityId==item.activityItems[0].activityId" v-bind:key="item1.activityId">
-                                                <v-list-tile slot="item" class="px-0" @click.stop="getListActivitySource(item1.activityId,index,index1)">
+                                            <v-list-group class="listGroup py-0" v-for="(item1,index1) in item.activityItems" 
+                                            :value="item1.activityId==item.activityItems[0].activityId" v-bind:key="item1.activityId">
+                                                <v-list-tile slot="item" class="px-0">
                                                     <v-list-tile-content class="px-0 pl-2">
                                                         <v-list-tile-title class="item_group">
-                                                            <span title="Chi tiết cuộc họp" class="icon_view" @click.stop="activityDetail(item1,index1)">
+                                                            <p :title="item1.subject" class="icon_view py-0" @click.stop="activityDetail(item1,index1)">
                                                                 <b>{{ parseDateView(new Date(item1.startDate))}}</b> - {{item1.subject}}
-                                                            </span>
+                                                            </p>
                                                             
                                                         </v-list-tile-title>
                                                     </v-list-tile-content>
 
-                                                    <v-list-tile-action class="pr-2" style="flex-direction: row">
-                                                        <v-icon title="Kết luận cuộc họp" class="icon_view mr-3" @click.stop="getListActivitySource(item1.activityId,index,index1)">remove_red_eye</v-icon>
-                                                        <v-icon>keyboard_arrow_down</v-icon>
+                                                    <v-list-tile-action class="pr-2" style="flex-direction: row"
+                                                    title="Xem kết luận cuộc họp" @click="getListActivitySource(item1.activityId,index,index1)"
+                                                    >
+                                                        <v-icon >keyboard_arrow_down</v-icon>
                                                     </v-list-tile-action>
                                                 </v-list-tile>
                                                 
@@ -116,7 +121,7 @@
                                                             <tr v-bind:class="{'active': props.index%2==1}">
                                                                 <td class="text-xs-center py-2" style="width: 5%">{{props.index + 1}}</td>
                                                                 <td class="py-2" style="width: 30%" :title="props.item.subject">
-                                                                    <a href="javascript:;" v-on:click="activityDetail(props.item,props.index)">
+                                                                    <a href="javascript:;" v-on:click.stop="activityDetail(props.item,props.index)">
                                                                         <span>{{ props.item.subject }}</span>
                                                                     </a>
                                                                     
@@ -637,11 +642,26 @@
         border: 1px solid #ddd !important;
         padding: 8px 5px!important;
     }
+    #activity_manager .groupHeader p{
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis; 
+        white-space: nowrap;
+    }
     #activity_manager #list-content table tr td:nth-child(5){
         padding: 0px 5px!important;
     }
     #activity_manager .icon_view:hover{
         color: blue
+    }
+    #activity_manager .icon_view{
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis; 
+        white-space: nowrap;
+    }
+    #activity_manager .expansion-panel__container{
+        width: 100%!important
     }
     #activity_manager #list-content .list--group__container{
         border: 1px solid #ddd !important;

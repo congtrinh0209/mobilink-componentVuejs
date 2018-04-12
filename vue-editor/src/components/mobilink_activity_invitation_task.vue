@@ -7,18 +7,26 @@
                 
         </v-dialog>
 
-        <v-alert type="success" icon="check_circle" class="alertInvitation" dismissible transition="slide-y-transition" v-model="alertSuccess">
-            {{text_success}}
-        </v-alert>
-        <v-alert type="error" icon="check_circle" class="alertInvitation" dismissible transition="slide-y-transition" v-model="alertError">
-            {{text_error}}
-        </v-alert>
+        <v-snackbar :timeout="3000" :top="true" :bottom="false" 
+            :right="true" :left="false" :multi-line="true" 
+            :vertical="false" v-model="snackbarSucc" class="snackbar-success" > 
+            <v-icon flat color="white">check_circle</v-icon> 
+                {{alertMess}}
+            <v-btn flat fab mini color="white" @click.native="snackbarSucc = false">Tắt</v-btn> 
+        </v-snackbar>
+        <v-snackbar :timeout="3000" :top="true" :bottom="false" 
+            :right="true" :left="false" :multi-line="true" 
+            :vertical="false" v-model="snackbarErr" class="snackbar-error" > 
+            <v-icon flat color="white">check_circle</v-icon> 
+                {{alertMess}}
+            <v-btn flat fab mini color="white" @click.native="snackbarErr = false">Tắt</v-btn> 
+        </v-snackbar>
 
         <div style="position: relative; overflow: hidden;">
             <v-expansion-panel expand class="header-group expansion-blue">
                <v-expansion-panel-content value="true">
                     <div slot="header" class="custome-panel-heading-with-icon">
-                        <v-toolbar absolute>
+                        <v-toolbar class="my-0">
                             <div class="ml-1" style="flex: none">Thành phần: {{availableCount}}/ {{invitationCount}}  sẵn sàng</div>
                                                         
                             <div style="flex: none;position:absolute;right:0" class="ml-2">
@@ -73,7 +81,7 @@
 
                     <v-card>
                         <!-- Phần đơn vị/ Nhóm trong cơ quan-->
-                        <v-expansion-panel style="padding-top:30px" expand class="sub-panel">
+                        <v-expansion-panel expand class="sub-panel">
                             <v-expansion-panel-content value="true">
                                 <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0">
                                     <div class="color-subpanel">Đơn vị/ Nhóm trong cơ quan</div>
@@ -374,7 +382,7 @@
                                                     <!-- Phần danh sách cá nhân theo danh bạ -->
                                                     <v-list class="py-0">
                                                         <v-list-tile v-for="(item,index) in itemInvContactTask" v-bind:key="item.resourceInvitationId">
-                                                            <v-list-tile-content class="mt-2">
+                                                            <v-list-tile-content >
                                                                 <v-list-tile-title>
                                                                     <v-flex xs12 class="layout wrap pl-2">
 
@@ -431,7 +439,7 @@
                                                                     </v-flex>
                                                                 </v-list-tile-title>
 
-                                                                <v-divider class="mt-0"></v-divider>
+                                                                
                                                             </v-list-tile-content>  
                                                         </v-list-tile>
                                                         
@@ -481,8 +489,9 @@
         data () {
             return {
                 userId: '',
-                alertSuccess: false,
-                alertError: false,
+                alertMess:'',
+                snackbarErr: false,
+                snackbarSucc: false,
                 invitationUserId:'',
                 mineInv: false,
                 userLogin: {},
@@ -1176,13 +1185,11 @@
             show_alert: function(type,text){
                 var vm = this;
                 if(type=='success'){
-                    vm.text_success = text;
-                    vm.alertSuccess = true;
-                    setTimeout(function(){vm.alertSuccess = false},2000)
+                    vm.alertMess = text;
+                    vm.snackbarSucc = true  
                 } else {
-                    vm.text_error = text;
-                    vm.alertError = true;
-                    setTimeout(function(){vm.alertError = false},2000)
+                    vm.alertMess = text;
+                    vm.snackbarErr = true 
                 }
             },
             submitAddContactTask: function(){
@@ -1283,15 +1290,6 @@
 	   flex: 1;
 	}
 
-    #activity_invitation_task .alertInvitation{
-        width: 30%!important;
-        height: 75px!important;
-        min-width: 300px!important;
-        z-index: 122!important;
-        position: fixed;
-        top: 0;
-        right: 20px;
-    }
     #activity_invitation_task button{
         min-width: 0px;
         margin: 6px 0;
@@ -1310,7 +1308,6 @@
     }
     #activity_invitation_task .header-group .header__icon{
         z-index: 120;
-        padding-top: 3px;
     }
     #activity_invitation_task .sub-panel .expansion-panel__header{    
         background-color: #f6f6f6!important;
@@ -1328,6 +1325,10 @@
     #activity_invitation_task .expansion-panel__header{
         padding-left: 10px!important;
         padding-right: 10px!important;
+    }
+    #activity_invitation_task > div:nth-child(4) > ul > li > div.expansion-panel__header{
+        padding: 0!important;
+        padding-right: 5px!important
     }
     #activity_invitation_task nav .toolbar--absolute{
         background-color: #e1f5fe!important;
