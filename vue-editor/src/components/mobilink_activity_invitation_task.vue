@@ -141,7 +141,7 @@
                                                                                     {{item.role.statistic.available}}/{{item.role.statistic.invitation}}
                                                                                 </v-chip>
                                                                                 
-                                                                                <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager' || permission_prop == 'owner'" 
+                                                                                <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager' || permission_prop == 'owner'|| permission_prop == 'leader'|| permission_prop == 'hoster'" 
                                                                                 @click.stop="updateInvitationTask('DELETE',item.role.resourceInvitationId,index,itemInvGroupTask)">
                                                                                     <v-icon color="red darken-3">clear</v-icon>
                                                                                 </v-btn> 
@@ -195,7 +195,7 @@
                                                                                 <toggle-button class="mr-1 mt-1" 
                                                                                 @change="updatePresenterUserGroupTask($event,subItem.resourceInvitationId,item)"
                                                                                 :value="bindPresenter(subItem.right)"
-                                                                                :disabled="(permission_prop=='manager'||permission_prop=='owner'|| item.leader)?false:true"
+                                                                                :disabled="(permission_prop=='manager'||permission_prop=='owner'|| permission_prop == 'leader'|| permission_prop == 'hoster'|| item.leader)?false:true"
                                                                                 title_checked = "Thực hiện"
                                                                                 title_unchecked = "Phối hợp"
                                                                                 :labels="{checked: 'TH', unchecked: 'PH'}"
@@ -390,7 +390,7 @@
                                                                         <v-flex class="pt-2">
                                                                             <v-list-tile-title>
                                                                                 <toggle-button class="mr-1 mt-1"
-                                                                                :disabled="(permission_prop=='manager'||permission_prop=='owner')?false:true"
+                                                                                :disabled="(permission_prop=='manager'||permission_prop=='owner'|| permission_prop == 'leader'|| permission_prop == 'hoster')?false:true"
                                                                                 :value="bindPresenter(item.right)"
                                                                                 @change="updatePresenterUserGroupTask($event,item.resourceInvitationId,itemInvContactTask)"
                                                                                 title_checked = "Thực hiện"
@@ -429,7 +429,7 @@
 
                                                                                 <!-- <span class="mr-2" style="color:green" v-html="bindAvailableText(item.available)"></span> -->
 
-                                                                                <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager'|| permission_prop == 'owner'"
+                                                                                <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager'|| permission_prop == 'owner'|| permission_prop == 'leader'|| permission_prop == 'hoster'"
                                                                                 @click.stop="updateInvitationTask('DELETE',item.resourceInvitationId,index,itemInvContactTask)">
                                                                                     <v-icon color="red darken-3">clear</v-icon>
                                                                                 </v-btn> 

@@ -162,7 +162,7 @@
                                                                                     {{item.role.statistic.checkin}}/{{item.role.statistic.invitation}}
                                                                                 </v-chip>
 
-                                                                                <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager' || permission_prop == 'owner'" 
+                                                                                <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager' || permission_prop == 'owner'|| permission_prop == 'leader'|| permission_prop == 'hoster'" 
                                                                                 @click.stop="updateInvitation('DELETE',item.role.resourceInvitationId,index,itemInvGroup)">
                                                                                     <v-icon color="red darken-3">clear</v-icon>
                                                                                 </v-btn> 
@@ -216,7 +216,7 @@
                                                                                 <toggle-button class="mr-1 mt-1" 
                                                                                 @change="updatePresenterUserGroup($event,subItem.resourceInvitationId,item)"
                                                                                 :value="bindPresenter(subItem.right)"
-                                                                                :disabled="(permission_prop=='manager'||permission_prop=='owner'|| item.leader)?false:true"
+                                                                                :disabled="(permission_prop=='manager'||permission_prop=='owner'|| permission_prop == 'leader'|| permission_prop == 'hoster'|| item.leader)?false:true"
                                                                                 title_checked = "Thành viên"
                                                                                 title_unchecked = "Theo dõi"
                                                                                 :labels="{checked: 'TV', unchecked: 'TD'}"
@@ -420,7 +420,7 @@
                                                                         <v-flex>
                                                                             <v-list-tile-title class="pt-2">
                                                                                 <toggle-button class="mr-1 mt-1"
-                                                                                :disabled="(permission_prop=='manager'||permission_prop=='owner')?false:true"
+                                                                                :disabled="(permission_prop=='manager'||permission_prop=='owner'|| permission_prop == 'leader'|| permission_prop == 'hoster')?false:true"
                                                                                 :value="bindPresenter(item.right)"
                                                                                 @change="updatePresenterUserGroup($event,item.resourceInvitationId,itemInvContact)"
                                                                                 title_checked = "Thành viên"
@@ -468,7 +468,7 @@
                                                                                     Có mặt
                                                                                 </v-btn>
 
-                                                                                <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager'|| permission_prop == 'owner'"
+                                                                                <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager'|| permission_prop == 'owner'|| permission_prop == 'leader'|| permission_prop == 'hoster'"
                                                                                 @click.stop="updateInvitation('DELETE',item.resourceInvitationId,index,itemInvContact)">
                                                                                     <v-icon color="red darken-3">clear</v-icon>
                                                                                 </v-btn> 
@@ -498,11 +498,11 @@
                                 <div slot="header" class="custome-panel-heading-with-icon pl-0 mr-2">
                                     <div class="color-subpanel">Thành phần tham dự</div>
                                     <v-icon class="btn-add mx-0 my-0" title="Sửa" v-on:click.stop="activeEdit = false" 
-                                    v-if="(permission_prop == 'manager'|| permission_prop == 'owner'|| permission_prop == 'leader')&& activeEdit==true" grey darken-4>
+                                    v-if="(permission_prop == 'manager'|| permission_prop == 'owner'|| permission_prop == 'leader'|| permission_prop == 'hoster')&& activeEdit==true" grey darken-4>
                                         create
                                     </v-icon>
                                     <v-icon class="btn-add mx-0 my-0" title="Hủy" v-on:click.stop="activeEdit = true" 
-                                    v-if="(permission_prop == 'manager'|| permission_prop == 'owner' || permission_prop == 'leader')&&activeEdit==false" grey darken-4>
+                                    v-if="(permission_prop == 'manager'|| permission_prop == 'owner' || permission_prop == 'leader'|| permission_prop == 'hoster')&&activeEdit==false" grey darken-4>
                                         cancel
                                     </v-icon>
                                 </div>
