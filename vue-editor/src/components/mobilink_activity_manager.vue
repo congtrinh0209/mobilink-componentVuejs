@@ -75,13 +75,15 @@
             <v-expansion-panel expand class="expansion-blue" v-for="(item,index) in mainItems" :key="item.leader.employeeId">
                 <v-expansion-panel-content :value="item==mainItems[0]">
                     <div slot="header"  @click="getListActivitySource(item.activityItems[0].activityId,index,0)" 
-                    class="custome-panel-heading-with-icon groupHeader mr-2 pl-0" style="width: 90%;font-family: sans-serif">
+                    class="groupHeader mr-2 pl-0" style="width: 90%;font-family: sans-serif">
                         <p v-if="radioGroup == 'leader'" :title="item.leader.title + item.leader.fullName + '-' + item.leader.jobTitle" class="my-0">
                             {{item.leader.title}} {{ item.leader.fullName }} - {{ item.leader.jobTitle }}
                         </p>
                         <p v-if="radioGroup == 'activityCat'" :title="item.leader.itemName" class="my-0">{{item.leader.itemName}}</p>
                     </div>
-                    
+                    <v-btn slot="actions" icon @click="getListActivitySource(item.activityItems[0].activityId,index,0)">
+                        <v-icon>keyboard_arrow_down</v-icon>
+                    </v-btn>
                     <v-card class="">
                         <v-card-text class="px-0 py-0">
                             <v-layout row wrap class="mx-0">
@@ -644,7 +646,9 @@
         text-overflow: ellipsis; 
         white-space: nowrap;
     }
-
+    #activity_manager .expansion-panel__container>.expansion-panel__header{   
+        padding: 0 10px 0 20px;
+    }
     #activity_manager #list-content table tr td:nth-child(5){
         padding: 0px 5px!important;
     }
