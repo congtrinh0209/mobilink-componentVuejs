@@ -100,7 +100,7 @@
                                 <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0">
                                     <div class="color-subpanel">Đơn vị/ Nhóm trong cơ quan</div>
                                     
-                                    <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add1" v-if="permission_prop == 'manager'|| permission_prop == 'owner'" grey darken-4>
+                                    <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add1" v-if="permission_prop == 'manager'|| permission_prop == 'owner' || permission_prop == 'leader'" grey darken-4>
                                         add_circle
                                     </v-icon>
                                     
@@ -292,7 +292,7 @@
                                 <div slot="header" class="custome-panel-heading-with-icon pl-0 mr-2">
                                     <div class="color-subpanel">Cá nhân/ Tổ chức theo danh bạ</div>
 
-                                    <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add2" v-if="permission_prop == 'manager'|| permission_prop == 'owner'" grey darken-4>
+                                    <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add2" v-if="permission_prop == 'manager'|| permission_prop == 'owner'|| permission_prop == 'leader'" grey darken-4>
                                         add_circle
                                     </v-icon>
                                 </div>
