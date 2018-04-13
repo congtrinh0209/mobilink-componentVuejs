@@ -1,11 +1,27 @@
 <template>
 
     <div id="activity_manager">
-        <v-layout wrap class="navTable px-3 py-1 pb-2">
-            <v-flex xs2 sm1>
+        <v-layout wrap class="navTable px-3 py-2">
+            <v-flex xs12 sm1>
+                <v-subheader class="px-0">Từ ngày: </v-subheader>
+            </v-flex>
+            <v-flex xs12 sm2 class="mr-3">
+                <date-picker @change="changeDate" class="mt-2" v-model="timeStart" 
+                v-bind:not-after="timeStartMax" lang="vi" type="date" format="dd/MM/yyyy"></date-picker>
+            </v-flex>
+
+            <v-flex xs12 sm1>
+                <v-subheader class="px-0">Đến ngày: </v-subheader>
+            </v-flex>
+            <v-flex xs12 sm2>
+                <date-picker @change="changeDate" class="mt-2" v-model="timeEnd" 
+                v-bind:not-before="timeEndMin" lang="vi" type="date" format="dd/MM/yyyy"></date-picker>
+            </v-flex>
+            
+            <v-flex xs2 sm1 class="ml-3">
                 <v-subheader class="px-0">Nhóm theo: </v-subheader>
             </v-flex>
-            <v-flex xs10 sm11 class="pt-2 pl-4">
+            <v-flex xs10 sm4 class="pt-2 pl-2">
                 <v-radio-group v-model="radioGroup" @change="changeGroup" row class="py-0 groupRadido">
                     <v-radio class="my-0" label="Lãnh đạo" color="secondary"
                         value="leader">
@@ -15,22 +31,6 @@
                         value="activityCat">
                     </v-radio>
                 </v-radio-group>
-            </v-flex>
-
-            <v-flex xs12 sm1 class="mt-2">
-                <v-subheader class="px-0">Từ ngày: </v-subheader>
-            </v-flex>
-            <v-flex xs12 sm3 class="mr-3 pl-4">
-                <date-picker @change="changeDate" class="mt-3" v-model="timeStart" 
-                v-bind:not-after="timeStartMax" lang="vi" type="date" format="dd/MM/yyyy"></date-picker>
-            </v-flex>
-
-            <v-flex xs12 sm1 class="mt-2">
-                <v-subheader class="px-0">Đến ngày: </v-subheader>
-            </v-flex>
-            <v-flex xs12 sm3>
-                <date-picker @change="changeDate" class="mt-3" v-model="timeEnd" 
-                v-bind:not-before="timeEndMin" lang="vi" type="date" format="dd/MM/yyyy"></date-picker>
             </v-flex>
 
             <v-flex xs12 sm4 class="pt-3 pr-3" style="display:none">
@@ -93,7 +93,7 @@
                                                 <v-list-tile slot="item" class="px-0">
                                                     <v-list-tile-content class="px-0 pl-2">
                                                         <v-list-tile-title class="item_group">
-                                                            <p :title="item1.subject" class="icon_view py-0" @click.stop="activityDetail(item1,index1)">
+                                                            <p :title="item1.subject" class="icon_view my-0 py-0" @click.stop="activityDetail(item1,index1)">
                                                                 <b>{{ parseDateView(new Date(item1.startDate))}}</b> - {{item1.subject}}
                                                             </p>
                                                             
@@ -103,7 +103,9 @@
                                                     <v-list-tile-action class="pr-2" style="flex-direction: row"
                                                     title="Xem kết luận cuộc họp" @click="getListActivitySource(item1.activityId,index,index1)"
                                                     >
-                                                        <v-icon >keyboard_arrow_down</v-icon>
+                                                        <v-btn icon>
+                                                            <v-icon>keyboard_arrow_down</v-icon>
+                                                        </v-btn>
                                                     </v-list-tile-action>
                                                 </v-list-tile>
                                                 
@@ -606,10 +608,7 @@
     #activity_manager .header-menu{
         height: 40px;
     }
-    #activity_manager .listGroup .list__tile:hover{
-        cursor: pointer;
-        color: blue
-    }
+
     #activity_manager #subTableActivity td a:hover {
         color: blue!important
     }
@@ -645,13 +644,16 @@
         text-overflow: ellipsis; 
         white-space: nowrap;
     }
+
     #activity_manager #list-content table tr td:nth-child(5){
         padding: 0px 5px!important;
     }
     #activity_manager .icon_view:hover{
-        color: blue
+        color: blue;
+        cursor: pointer;
     }
     #activity_manager .icon_view{
+        display: inline-block;
         max-width: 100%!important;
         overflow: hidden;
         text-overflow: ellipsis; 
