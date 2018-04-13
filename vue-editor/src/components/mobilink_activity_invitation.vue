@@ -100,7 +100,9 @@
                                 <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0">
                                     <div class="color-subpanel">Đơn vị/ Nhóm trong cơ quan</div>
                                     
-                                    <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add1" v-if="permission_prop == 'manager'|| permission_prop == 'owner' || permission_prop == 'leader'" grey darken-4>
+                                    <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add1" 
+                                    v-if="permission_prop == 'manager'|| permission_prop == 'owner' || permission_prop == 'leader'|| permission_prop == 'hoster'"
+                                    grey darken-4>
                                         add_circle
                                     </v-icon>
                                     
@@ -292,7 +294,8 @@
                                 <div slot="header" class="custome-panel-heading-with-icon pl-0 mr-2">
                                     <div class="color-subpanel">Cá nhân/ Tổ chức theo danh bạ</div>
 
-                                    <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add2" v-if="permission_prop == 'manager'|| permission_prop == 'owner'|| permission_prop == 'leader'" grey darken-4>
+                                    <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add2" 
+                                    v-if="permission_prop == 'manager'|| permission_prop == 'owner'|| permission_prop == 'leader'|| permission_prop == 'hoster'" grey darken-4>
                                         add_circle
                                     </v-icon>
                                 </div>
@@ -495,17 +498,17 @@
                                 <div slot="header" class="custome-panel-heading-with-icon pl-0 mr-2">
                                     <div class="color-subpanel">Thành phần tham dự</div>
                                     <v-icon class="btn-add mx-0 my-0" title="Sửa" v-on:click.stop="activeEdit = false" 
-                                    v-if="(permission_prop == 'manager'|| permission_prop == 'owner')&& activeEdit==true" grey darken-4>
+                                    v-if="(permission_prop == 'manager'|| permission_prop == 'owner'|| permission_prop == 'leader')&& activeEdit==true" grey darken-4>
                                         create
                                     </v-icon>
                                     <v-icon class="btn-add mx-0 my-0" title="Hủy" v-on:click.stop="activeEdit = true" 
-                                    v-if="(permission_prop == 'manager'|| permission_prop == 'owner')&&activeEdit==false" grey darken-4>
+                                    v-if="(permission_prop == 'manager'|| permission_prop == 'owner' || permission_prop == 'leader')&&activeEdit==false" grey darken-4>
                                         cancel
                                     </v-icon>
                                 </div>
                                 <v-card >
                                     <v-card-text class="px-0 py-0">
-                                        <v-form xs12 sm12 v-model="validAddInv" ref="form" class="formAddInvText px-2 py-2" lazy-validation style="position: relative">
+                                        <v-form xs12 sm12 v-model="validAddInv" ref="formInvText" class="formAddInvText px-2 py-2" lazy-validation style="position: relative">
                                             <v-text-field class="py-0"
                                             placeholder="Nhập thành phần tham dự"
                                             v-model="nameInv"
@@ -757,7 +760,7 @@
                 };
                 axios.get( vm.end_point + 'resourceroles/'+vm.class_name+'/'+vm.class_pk, configGetWorkingUnit)
                 .then(function (response) {
-                    var serializable = response.data
+                    var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
                             if(vm.invitationItems.length!=0){
@@ -1137,7 +1140,7 @@
             /**Phần thêm thành phần tham dự */
             addInvText: function(text){
                 var vm = this;
-                if (this.$refs.form.validate()) {
+                if (this.$refs.formInvText.validate()) {
                     var dataUpdateactivity  =new URLSearchParams();
                     dataUpdateactivity.append('invitation', text);
                     var urlUpdate = vm.end_point + "activities/"+ vm.class_pk;

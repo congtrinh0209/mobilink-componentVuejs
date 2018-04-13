@@ -92,7 +92,7 @@
                         v-model="managerS"
                         clearable
                         item-text="fullName"
-                        item-value="employeeId"
+                        item-value="userId"
                         autocomplete
                         
                         hide-selected
@@ -403,25 +403,23 @@
                     console.log(error)
                 })
                 /* Load data employees */
-                var paramsEmployees = {
-                    active: true
+                var paramsGetEmployee = {
+                    'class': 'employee'
                 };
-                const configEmployees = {
-                    params: paramsEmployees,
+                const configGetEmployee = {
+                    params: paramsGetEmployee,
                     headers: {
                         'groupId': vm.group_id
                     }
                 };
-                axios.get( endPoint + 'employees', configEmployees)
+                axios.get( vm.end_point + 'users', configGetEmployee)
                 .then(function (response) {
-                    var serializable = response.data
+                    var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            vm.managerItems.push({
-                                fullName: serializable.data[key].fullName,
-                                employeeId: serializable.data[key].mappingUser?serializable.data[key].mappingUser.userId:''
-                            })
-                            
+                            vm.managerItems.push(
+                                serializable.data[key]
+                            )
                         }
                     }
                 })
@@ -690,7 +688,7 @@
                 if(vm.managerS){
                     var arr = vm.managerItems;
                     var managerT = arr.filter(function(item) {
-                        return item.employeeId == vm.managerS;
+                        return item.userId == vm.managerS;
                     })[0].fullName
                 };
                 if(vm.projectS){
@@ -842,6 +840,9 @@
         font-weight: normal!important;
     }
     #activitySearch .row-header .input-group .input-group__details{
+        display: none
+    }
+    #activitySearch table tfoot{
         display: none
     }
     #activitySearch .row-header .input-group label{

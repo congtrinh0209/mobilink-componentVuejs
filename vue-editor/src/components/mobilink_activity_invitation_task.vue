@@ -86,7 +86,7 @@
                                 <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0">
                                     <div class="color-subpanel">Đơn vị/ Nhóm trong cơ quan</div>
 
-                                    <v-icon class="btn-add mx-0 my-0" v-if="permission_prop == 'manager'|| permission_prop == 'owner' || permission_prop == 'leader'"
+                                    <v-icon class="btn-add mx-0 my-0" v-if="permission_prop == 'manager'|| permission_prop == 'owner' || permission_prop == 'leader'|| permission_prop == 'hoster'"
                                         v-on:click.stop="show_Add1Task" grey darken-4>
                                         add_circle
                                     </v-icon>
@@ -95,7 +95,7 @@
                                 <v-card class="">
                                     <v-card-text class="px-0 py-0">
                                         <v-layout row wrap class="mx-0">
-                                            <v-flex class="mb-3 layout wrap" v-if="showAdd1">
+                                            <v-flex class="mb-3 layout wrap pl-2" v-if="showAdd1">
                                                 <v-flex xs12 sm8>
                                                     <v-select class="selectBoder pt-3"
                                                     placeholder="Chọn đơn vị/nhóm"
@@ -265,7 +265,7 @@
                                     <div class="color-subpanel">Cá nhân/ Tổ chức theo danh bạ</div>
 
                                     <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add2Task" 
-                                    v-if="permission_prop == 'manager'|| permission_prop == 'owner'|| permission_prop == 'leader'" grey darken-4>
+                                    v-if="permission_prop == 'manager'|| permission_prop == 'owner'|| permission_prop == 'leader'|| permission_prop == 'hoster'" grey darken-4>
                                         add_circle
                                     </v-icon>
                                 </div>
@@ -273,7 +273,7 @@
                                 <v-card class="">
                                     <v-card-text class="px-0 py-0">
                                         <v-layout row wrap class="mx-0">
-                                            <v-flex class="layout wrap" v-if="showAdd2">
+                                            <v-flex class="layout wrap pl-2" v-if="showAdd2">
                                                 <v-flex xs12 sm8>
                                                     <v-select class="selectBoder pt-3" id="selectContact"
                                                     placeholder="Cá nhân/ tổ chức theo danh bạ"
