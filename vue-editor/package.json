@@ -17,6 +17,7 @@
     "lint": "eslint --ext .js,.vue src test/unit/specs"
   },
   "dependencies": {
+    "@dattn/dnd-grid": "0.0.13",
     "@types/tinycolor2": "^1.4.0",
     "axios": "^0.17.1",
     "babel-polyfill": "^6.26.0",
