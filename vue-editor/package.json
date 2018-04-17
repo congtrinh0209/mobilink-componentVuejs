@@ -31,7 +31,7 @@
     "vuejs-dialog": "^0.4.5"
   },
   "peerDependencies": {
-    "vue": ">=2.1"
+    "vue": ">=2.3"
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",

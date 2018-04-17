@@ -35,12 +35,22 @@ import VuejsDialog from 'vuejs-dialog'
 import FullCalendar from './components/fullCalendar.vue'
 import EventCard from './components/eventCard.vue'
 import DatePicker from './components/mobilink_datepicker.vue'
-import Container from './components/Container'
-import Box from './components/Box'
-import * as utils from './components/utils'
+import DashBoard from './components/mobilink_dashboard.vue'
 import MultiLanguage from './common/vue-multilanguage'
 import language from './lang/language'
-
+// 
+const components = require('./components')
+module.exports = components
+const initComponent = (component) => {
+    component.install = Vue => Vue.component(component.name, component)
+    if (typeof window !== 'undefined' && window.Vue) {
+        window.Vue.use(component)
+    }
+}
+for (let key in components) {
+    initComponent(components[key])
+}
+// 
 const uploader = {
   version: /* eslint-disable no-undef */ __VERSION__,
   install
@@ -50,7 +60,6 @@ if (typeof window !== 'undefined' && window.Vue) {
   window.Vue.use(VuejsDialog)
   window.Vue.use(MultiLanguage, language)
   window.Vue.use(install)
-  window.Vue.use(utils)
 }
 
 export default uploader
@@ -95,6 +104,5 @@ function install (Vue) {
   Vue.component(EventCard.name, EventCard)
   Vue.component(DatePicker.name, DatePicker)
   Vue.component(ToggleButton.name, ToggleButton)
-  Vue.component(Box.name, Box)
-  Vue.component(Container.name, Container)
+  Vue.component(DashBoard.name, DashBoard)
 }
