@@ -192,7 +192,7 @@
                                                                     <v-select class="selectBoder pt-3"
                                                                     placeholder="Cá nhân trong đơn vị/nhóm"
                                                                     :items="employeeItems"
-                                                                    item-text="fullName"
+                                                                    item-text="fullNameSelect"
                                                                     item-value="userId"
                                                                     v-model="employee"
                                                                     return-object
@@ -222,8 +222,11 @@
                                                                                 :labels="{checked: 'TV', unchecked: 'TD'}"
                                                                                 :color="{checked: '#7DCE94', unchecked: '#82C7EB'}"
                                                                                 :width="50"/>
-
-                                                                                <span class="pt-2">{{ subItem.fullName }}</span>
+                                                                                <v-tooltip top>
+                                                                                    <span class="pt-2" slot="activator">{{ subItem.fullName }}</span>
+                                                                                    <span>Email:{{ subItem.email }} - Tel:{{ subItem.telNo }}</span>
+                                                                                </v-tooltip>
+                                                                                <!-- <span class="pt-2">{{ subItem.fullName }}</span> -->
                                                                             </v-list-tile-title>
                                                                         </v-flex>
 
@@ -312,7 +315,7 @@
                                                     hide-selected
                                                     tags
                                                     v-model="contact"
-                                                    item-text="fullName"
+                                                    item-text="fullNameSelect"
                                                     item-value="contactId"
                                                     return-object
                                                     autocomplete
@@ -428,7 +431,11 @@
                                                                                 :labels="{checked: 'TV', unchecked: 'TD'}"
                                                                                 :color="{checked: '#7DCE94', unchecked: '#82C7EB'}"
                                                                                 :width="50"/>
-                                                                                <span class="pt-2">{{ item.fullName }}</span>
+                                                                                <v-tooltip top>
+                                                                                    <span class="pt-2" slot="activator">{{ item.fullName }}</span>
+                                                                                    <span>Email:{{ item.email }} - Tel:{{ item.telNo }}</span>
+                                                                                </v-tooltip>
+                                                                                
                                                                             </v-list-tile-title>
                                                                         </v-flex>
                                                                         
@@ -806,6 +813,8 @@
                     var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
+                            serializable.data[key].fullNameSelect = serializable.data[key].fullName+'-'+serializable.data[key].email;
+                            
                             if(vm.invitationItems.length!=0){
                                 var itemInv = true;
                                 for(var keys in vm.invitationItems){
@@ -849,6 +858,7 @@
                     var serializable = response.data
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
+                            serializable.data[key].fullNameSelect = serializable.data[key].fullName+'-'+serializable.data[key].email;
                             if(vm.invitationItems.length!=0){
                                 var itemInv = true;
                                 for(var keys in vm.invitationItems){
@@ -869,8 +879,7 @@
                                 vm.contactItems.push(
                                     serializable.data[key]
                                 )
-                            }
-                                
+                            }  
                             
                         }
                     }

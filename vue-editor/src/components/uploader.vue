@@ -76,9 +76,6 @@
       filesSubmitted (files, fileList) {
         this.files = this.uploader.files
         this.fileList = this.uploader.fileList
-        console.log(11111111111111111)
-        console.log('>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-        console.log(this.pause_start)
         if (!this.pause_start) {
           this.uploader.upload()
         }

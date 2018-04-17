@@ -1,7 +1,7 @@
 <template>
   <div>
     
-  <v-carousel interval="2000">
+  <v-carousel interval="30000">
     <v-carousel-item v-for="item in items" v-bind:key="item.albumFileId" v-bind:src="item.src" ></v-carousel-item>
   </v-carousel>
   <v-btn block flat class="my-0 grey lighten-3" v-on:click.native="showAlbumFileUploadDialog()">

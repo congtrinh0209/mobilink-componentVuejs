@@ -171,7 +171,7 @@
                                                                     <v-select class="selectBoder pt-3"
                                                                     placeholder="Cá nhân trong đơn vị/nhóm"
                                                                     :items="employeeItemsTask"
-                                                                    item-text="fullName"
+                                                                    item-text="fullNameSelect"
                                                                     item-value="userId"
                                                                     v-model="employeeTask"
                                                                     return-object
@@ -282,7 +282,7 @@
                                                     hide-selected
                                                     tags
                                                     v-model="contact"
-                                                    item-text="fullName"
+                                                    item-text="fullNameSelect"
                                                     item-value="contactId"
                                                     return-object
                                                     autocomplete
@@ -721,6 +721,7 @@
                     var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
+                            serializable.data[key].fullNameSelect = serializable.data[key].fullName+'-'+serializable.data[key].email;
                             if(vm.invitationTaskItems.length!=0){
                                 var itemInv = true;
                                 for(var keys in vm.invitationTaskItems){
@@ -763,7 +764,9 @@
                 .then(function (response) {
                     var serializable = response.data
                     if (serializable.hasOwnProperty('data')) {
+                        
                         for (var key in serializable.data) {
+                            serializable.data[key].fullNameSelect = serializable.data[key].fullName+'-'+serializable.data[key].email;
                             if(vm.invitationTaskItems.length!=0){
                                 var itemInv = true;
                                 for(var keys in vm.invitationTaskItems){
