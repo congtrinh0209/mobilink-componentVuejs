@@ -1,5 +1,5 @@
 <template>
-  <div class="uploader-drop" :class="dropClass" ref="drop" v-show="support">
+  <div class="uploader-drop text-right" :class="dropClass" ref="drop" v-show="support">
     <slot></slot>
   </div>
 </template>

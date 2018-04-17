@@ -1,7 +1,7 @@
 <template>
   <div class="uploader-list">
     <v-tabs :scrollable="false">
-      <v-tabs-bar class="grey-mobilink-panel" dark>
+      <v-tabs-bar class="grey-mobilink-panel hidden" dark>
         <v-tabs-item :href="'#tab-file_upload-detail-1'+id">
           <v-badge color="grey darken-1">
             <span slot="badge">{{file_attact_list_file.length}}</span>
@@ -26,12 +26,12 @@
       <v-tabs-items>
         <v-tabs-content :id="'tab-file_upload-detail-1'+id" reverse-transition="slide-y-transition" transition="slide-y-transition">
           <uploader-drop v-if="permission === 'write' || permission === 'owner'">
-            <uploader-btn> <v-icon>file_upload</v-icon> Tải lên</uploader-btn>
+            <uploader-btn> <v-icon>file_upload</v-icon> Chọn file</uploader-btn>
+            <button class="uploader-btn" @click.prevent.stop="dropboxPicer()" v-if="extensions_upload == 'true'"><i class="fa fa-dropbox"></i> DropBox</button>
+            <button class="uploader-btn" @click.prevent.stop="googlePicker()" v-if="extensions_upload == 'true'"><i class="fa fa-google"></i> GoogleDrive</button>
             <p style="
                 position: absolute;
                 top: 15px;
-                width: 100%;
-                text-align: center;
                 color: #b3adad;
             ">hoặc kéo thả tài liệu vào đây để tải lên</p>
           </uploader-drop>
@@ -67,7 +67,7 @@
                   </v-btn>
                   <span>{{item.modifiedDate | datetime}}</span>
                   <v-btn v-if="permission === 'write' || permission === 'owner'" flat icon v-on:click.native.prevent="singleFileUpload(item)"><v-icon>file_upload</v-icon></v-btn>
-                  <v-btn v-if="permission === 'write' || permission === 'owner'" flat icon color="red darken-3" v-on:click.native="fileAttactUploadRemove(item, index)"><v-icon>clear</v-icon></v-btn>
+                  <v-btn v-if="permission === 'write' || permission === 'owner'" flat icon v-on:click.native="fileAttactUploadRemove(item, index)"><v-icon color="red darken-3">clear</v-icon></v-btn>
                   <input type="file" :id="'inputfile_'+item.fileAttachId" style="display:none" v-on:change="singleFileUploadInput($event, item, index)"/>
                 </div>
               </div>
@@ -85,7 +85,7 @@
                 <div class="flex xs12 sm4 text-right">
                   <span>{{item.modifiedDate | datetime}}</span>
                   <v-btn target="_blank" :href="item.sourceUrl" flat icon class="py-0 pr-0"><v-icon>file_download</v-icon></v-btn>
-                  <v-btn v-if="permission === 'write' || permission === 'owner'" flat icon color="red darken-3" v-on:click.native="fileAttactRemove(item, index)"><v-icon>clear</v-icon></v-btn>
+                  <v-btn v-if="permission === 'write' || permission === 'owner'" flat icon v-on:click.native="fileAttactRemove(item, index)"><v-icon color="red darken-3">clear</v-icon></v-btn>
                 </div>
               </div>
             </li>
@@ -102,7 +102,7 @@
                 <div class="flex xs12 sm4 text-right">
                   <span>{{item.modifiedDate | datetime}}</span>
                   <v-btn target="_blank" :href="item.sourceUrl" flat icon class="py-0 pr-0"><v-icon>file_download</v-icon></v-btn>
-                  <v-btn v-if="permission === 'write' || permission === 'owner'" flat icon color="red darken-3" v-on:click.native="fileAttactRemove(item, index)"><v-icon>clear</v-icon></v-btn>
+                  <v-btn v-if="permission === 'write' || permission === 'owner'" flat icon v-on:click.native="fileAttactRemove(item, index)"><v-icon color="red darken-3">clear</v-icon></v-btn>
                 </div>
               </div>
             </li>
@@ -165,6 +165,7 @@
       class_name: '',
       group_id: 0,
       file_attach_api: '',
+      resourceusers_get_api: '',
       extensions_upload: 'true',
       permission: 'read'
     },
@@ -277,9 +278,24 @@
           responseType: 'blob'
         }
         axios.get(vm.file_attach_api + '/' + item.fileAttachId, config).then(function (response) {
+          
+          var fileName = response.headers['content-disposition'];
+          fileName = fileName.split('=')[1];
+          fileName = fileName.substring(1, fileName.length-1);
+
+          var a = document.createElement("a");
+          document.body.appendChild(a);
+          a.style = "display: none";
           var url = window.URL.createObjectURL(response.data)
+          a.href = url;
+          a.download = fileName;
+          a.click();
+          window.URL.revokeObjectURL(url);
+
+
+          //var url = window.URL.createObjectURL(response.data)
           item['download_loading'] = false
-          window.open(url)
+          //window.open(url)
         })
           .catch(function (error) {
             console.log(error)
@@ -305,6 +321,8 @@
         params.append('fileName', file.name)
         params.append('className', vm.class_name)
         params.append('classPK', vm.class_pk)
+        /** TODO: giao dien them o check file chinh hay file phu luc */
+        params.append('appendix', true)
         axios.put(vm.file_attach_api + '/' + item.fileAttachId,
           params,
           config
@@ -551,11 +569,71 @@
       },
       pickerCallback: function (data) {
         var url = 'nothing';
-        if (data[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
-            var doc = data[google.picker.Response.DOCUMENTS][0];
-            url = doc[google.picker.Document.URL];
-            console.log(url)
+        var vm = this;
+        const config = {
+          headers: {
+            'groupId': vm.group_id
+          }
         }
+        if (data[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
+          var doc = data[google.picker.Response.DOCUMENTS][0];
+          url = doc[google.picker.Document.URL];
+          var fileName = doc.name;
+          var params = new URLSearchParams()
+          params.append('className', vm.class_name)
+          params.append('classPK', vm.class_pk)
+          params.append('source', 'google')
+          params.append('sourceUrl', url)
+          params.append('fileName', fileName)
+          axios.post(vm.file_attach_api,
+            params,
+            config
+          )
+          .then(function (response) {
+            vm.apistatedropbox = 1
+            vm.pickerFileMessageSuccess = 'Tải tài liệu thành công!'
+            vm.file_attact_list_linkG.push(response.data)
+          })
+          .catch(function (error) {
+            console.log(error)
+            vm.apistatedropbox = 2
+            vm.pickerFileMessageError = 'Tải tài liệu thất bại!'
+            setTimeout(
+              function(){ 
+                vm.apistatedropbox = 0
+              }, 
+            3000)
+          })
+        }
+        
+        axios.get(vm.resourceusers_get_api + '/' + vm.class_name + '/' + vm.class_pk + '?selected=true&sort=fullName', config)
+          .then(function (response) {
+            var serializable = response.data
+            if (serializable.hasOwnProperty('data')) {
+              if (data[google.picker.Response.ACTION] == google.picker.Action.PICKED) {
+                var doc = data[google.picker.Response.DOCUMENTS][0];
+                url = doc[google.picker.Document.URL];
+                var fileID = doc[google.picker.Document.ID];
+                var role = "reader";
+                var type = "user";
+                vm.followers = serializable.data
+                for (var key in vm.followers) {
+                  var emailAddress = vm.followers[key].email;
+                  if(emailAddress.length > 0) {
+                    var request1 = gapi.client.request({
+                      "path": "https://www.googleapis.com/drive/v3/files/" + fileID + "/permissions",
+                      "method": "POST",
+                      "headers": { "Content-Type": "application/json", "Authorization": "Bearer " + window.oauthToken },
+                      "body": { "role": role, "type": type, "emailAddress": emailAddress }
+                    }); request1.execute(function(resp) { console.log(resp); });
+                  }
+                }
+              }
+            }
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
       },
       createPicker: function (viewId, setOAuthToken) {
         var vm = this
@@ -624,5 +702,12 @@
   }
   ul.ul-with-border li {
     padding-right: 15px;
+  }
+  .uploader-btn i.material-icons.icon{
+    font-size: 17px;
+  }
+  body .uploader-drop {
+    border-left: 0;
+    border-right: 0;
   }
 </style>

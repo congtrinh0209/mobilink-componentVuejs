@@ -1,133 +1,13 @@
 <template>
-<v-form v-model="valid" ref="form" lazy-validation v-on:submit.prevent="preventDefaultDenine()">
+
+<div :id="'docfile_add_'+id" class="mobilink__docfile__add layout wrap">
   <v-alert outline color="error" icon="warning" :value="apistate=== 2">
     {{messageError}}
   </v-alert>
-  <div :id="'docfile_add_'+id" class="mobilink__docfile__add layout wrap">
-
-      <v-flex xs12 sm2 class="hidden_fak_temp" v-if="is_template == 'false'">
-        <v-subheader class="px-0">Loại sổ:</v-subheader>
-      </v-flex>
-      <v-flex xs12 sm4 class="hidden_fak_temp" v-if="is_template == 'false'">
-        <v-radio-group v-model="register" row @change="registerChange($event)">
-          <v-radio label="khác" value="0" ></v-radio>
-          <v-radio label="đi" value="1" ></v-radio>
-          <v-radio label="đến" value="2"></v-radio>
-        </v-radio-group>
-      </v-flex>
-       <v-flex xs12 sm2 class="hidden_fak_temp" v-if="is_template == 'false'">
-        <v-subheader class="pr-0">Sổ theo dõi:</v-subheader>
-      </v-flex>
-      <v-flex xs12 sm4 class="layout so__theo__doi hidden_fak_temp" v-if="is_template == 'false'">
-        <div class="flex xs12" style="
-            display: flex;
-            display: -webkit-flex;
-        ">
-          <v-select
-            v-bind:items="templateNoItems"
-            v-model="templateNo"
-            item-text="subject"
-            item-value="templateNo"
-            autocomplete
-            hide-selected
-            return-object
-            @change="templateNoChange($event)"
-          ></v-select>
-          <v-text-field
-          v-if="is_so_den"
-          class="so__den flex sm3 pl-2"
-          placeholder="Số đến"
-          v-model="seqNumDen"
-        ></v-text-field>
-        
-        </div>
-      </v-flex>
-      <v-flex xs12 sm2 v-if="is_template == 'false'">
-        <v-subheader class="px-0">Số/Ký hiệu:</v-subheader>
-      </v-flex>
-      <v-flex xs6 sm4 class="layout format_italic_source" v-if="is_template == 'false'">
-        <v-text-field
-          class="flex sm3"
-          placeholder="Số"
-          v-model="codeNo"
-          append-icon="remove"
-        ></v-text-field>
-        <v-text-field
-          class="flex"
-          placeholder="Ký hiệu"
-          v-model="codeNotation"
-        ></v-text-field>
-      </v-flex>
-
-      <v-flex xs12 sm2 v-if="is_template == 'false'">
-        <v-subheader class="pr-0">Loại văn bản:</v-subheader>
-      </v-flex>
-      <v-flex xs12 sm4 v-if="is_template == 'false'">
-        <v-select
-          v-bind:items="documentCatItems"
-          v-model="documentCat"
-          item-text="text"
-          item-value="value"
-          autocomplete
-          return-object
-          hide-selected
-        ></v-select>
-      </v-flex>
-
-      <v-flex xs12 sm2 v-if="is_template == 'false'">
-        <v-subheader class="px-0">Ngày ban hành:</v-subheader>
-      </v-flex>
-      
-      <v-flex xs12 sm4 v-if="is_template == 'false'">
-        <v-menu
-          lazy
-          :close-on-content-click="true"
-          v-model="promulgationDateMenu"
-          transition="scale-transition"
-          offset-y
-          full-width
-          :nudge-top="40"
-          max-width="290px"
-          min-width="290px"
-        >
-          <v-text-field
-            slot="activator"
-            placeholder="ngày ...tháng ... năm ..."
-            v-model="promulgationDate"
-            @blur="promulgationDateMd = parseDate(promulgationDate)"
-          ></v-text-field>
-          <v-date-picker v-model="promulgationDateMd" @input="promulgationDate = formatDate($event)" autosave locale="vi">
-          </v-date-picker>
-        </v-menu>
-      </v-flex>
-
-      <v-flex xs12 sm2 v-if="is_template == 'false'">
-        <v-subheader class="pr-0">Ngày phát hành:</v-subheader>
-      </v-flex>
-      
-      <v-flex xs12 sm4 v-if="is_template == 'false'">
-        <v-menu
-          lazy
-          :close-on-content-click="true"
-          v-model="registerDateMenu"
-          transition="scale-transition"
-          offset-y
-          full-width
-          :nudge-top="40"
-          max-width="290px"
-          min-width="290px"
-        >
-          <v-text-field
-            slot="activator"
-            placeholder="ngày ...tháng ... năm ..."
-            v-model="registerDate"
-            @blur="registerDateMd = parseDate(registerDate)"
-          ></v-text-field>
-          <v-date-picker v-model="registerDateMd" @input="registerDate = formatDate($event)" autosave locale="vi">
-          </v-date-picker>
-        </v-menu>
-      </v-flex>
-      
+  <!-- Template activity add events --> 
+  <v-form v-model="valid" ref="form" lazy-validation v-if="register_type == '0'" >
+    <v-layout wrap >
+      <!-- Trích yếu -->
       <v-flex xs12 sm2 v-if="is_template == 'false'">
         <v-subheader class="px-0 input-group--required"><label>Trích yếu: </label> </v-subheader>
       </v-flex>
@@ -139,68 +19,7 @@
           required
         ></v-text-field>
       </v-flex>
-
-      <v-flex xs12 sm2 v-if="is_template == 'false'">
-        <v-subheader class="px-0">Cơ quan ban hành:</v-subheader>
-      </v-flex>
-      <v-flex xs12 sm4 v-if="is_template == 'false'">
-        <v-select
-          v-bind:items="issuerCodeItems"
-          v-model="issuerCode"
-          item-text="itemName"
-          item-value="itemCode"
-          autocomplete
-          hide-selected
-        ></v-select>
-      </v-flex>
-
-      <v-flex xs12 sm2 v-if="is_template == 'false'">
-        <v-subheader class="pr-0">Người ký:</v-subheader>
-      </v-flex>
-      <v-flex xs12 sm4 v-if="is_template == 'false'">
-        <v-text-field
-          placeholder="cập nhật tên người ký ... "
-          v-model="signerInfo"
-        ></v-text-field>
-      </v-flex>
-
-      <v-flex xs12 sm2 class="hidden_fak_temp" v-if="is_template == 'false'">
-        <v-subheader class="px-0">Trạng thái:</v-subheader>
-      </v-flex>
-      <v-flex xs12 sm4 class="hidden_fak_temp" v-if="is_template == 'false'">
-        <v-radio-group v-model="status" row>
-          <v-radio label="Không phải xử lý" value="0" ></v-radio>
-          <v-radio label="Phải xử lý" value="1"></v-radio>
-        </v-radio-group>
-      </v-flex>
-
-      <v-flex xs12 sm2 class="hidden_fak_temp" v-if="is_template == 'false'">
-        <v-subheader class="pr-0">Hạn xử lý:</v-subheader>
-      </v-flex>
-      
-      <v-flex xs12 sm4 class="hidden_fak_temp" v-if="is_template == 'false'">
-        <v-menu
-          lazy
-          :close-on-content-click="true"
-          v-model="dueDateMenu"
-          transition="scale-transition"
-          offset-y
-          full-width
-          :nudge-top="40"
-          max-width="290px"
-          min-width="290px"
-        >
-          <v-text-field
-            slot="activator"
-            placeholder="ngày ...tháng ... năm ..."
-            v-model="dueDate"
-            @blur="dueDateMd = parseDate(dueDate)"
-          ></v-text-field>
-          <v-date-picker v-model="dueDateMd" @input="dueDate = formatDate($event)" autosave locale="vi">
-          </v-date-picker>
-        </v-menu>
-      </v-flex>
-
+      <!-- Thư mục lưu trữ -->
       <v-flex xs12 sm2 v-if="is_template == 'false'">
         <v-subheader class="px-0 input-group--required"><label>Thư mục lưu trữ: </label></v-subheader>
       </v-flex>
@@ -235,53 +54,11 @@
           </template>
         </v-select>
       </v-flex>
-        
-      <v-flex xs12 sm2 class="hidden_fak_temp" v-if="is_template == 'false'">
-        <v-subheader class="px-0">Tóm tắt nội dung:</v-subheader>
-      </v-flex>
-      <v-flex xs12 sm10 class="hidden_fak_temp">
-        <v-text-field
-          placeholder="Nội dung"
-          textarea
-          rows="2"
-          v-model="content"
-        ></v-text-field>
-      </v-flex>
-    
-      <v-flex xs12 sm2 v-if="is_template == 'true'">
-        <v-subheader class="px-0">Loại sổ:</v-subheader>
-      </v-flex>
-      <v-flex xs12 sm4 v-if="is_template == 'true'">
-        <v-radio-group v-model="register" row @change="registerChange($event)">
-          <v-radio label="khác" value="0" ></v-radio>
-          <v-radio label="đi" value="1" ></v-radio>
-          <v-radio label="đến" value="2"></v-radio>
-        </v-radio-group>
-      </v-flex>
-       <v-flex xs12 sm2 v-if="is_template == 'true'">
-        <v-subheader class="pr-0">Số hiệu sổ:</v-subheader>
-      </v-flex>
-      <v-flex xs12 sm4 v-if="is_template == 'true'">
-          <v-text-field
-          v-model="templateNoTemplate"
-        ></v-text-field>
-      </v-flex>
-
-      <v-flex xs12 sm2 v-if="is_template == 'true'">
-        <v-subheader class="px-0">Tên sổ:</v-subheader>
-      </v-flex>
-      <v-flex xs12 sm10 v-if="is_template == 'true'">
-        <v-text-field
-          placeholder="Tiêu đề "
-          v-model="subject"
-          required
-        ></v-text-field>
-      </v-flex>
-
-      <v-flex xs12 sm2 v-if="is_template == 'true'">
+      <!-- Số/ký hiệu -->
+      <v-flex xs12 sm2 v-if="is_template == 'false'">
         <v-subheader class="px-0">Số/Ký hiệu:</v-subheader>
       </v-flex>
-      <v-flex xs6 sm4 class="layout format_italic_source" v-if="is_template == 'true'">
+      <v-flex xs6 sm4 class="layout format_italic_source" v-if="is_template == 'false'">
         <v-text-field
           class="flex sm3"
           placeholder="Số"
@@ -294,11 +71,37 @@
           v-model="codeNotation"
         ></v-text-field>
       </v-flex>
-
-      <v-flex xs12 sm2 v-if="is_template == 'true'">
+      <!-- Ngày ban hành -->
+      <v-flex xs12 sm2 v-if="is_template == 'false'">
+        <v-subheader class="px-0">Ngày ban hành:</v-subheader>
+      </v-flex>
+      <v-flex xs12 sm4 v-if="is_template == 'false'">
+        <v-menu
+          lazy
+          :close-on-content-click="true"
+          v-model="promulgationDateMenu"
+          transition="scale-transition"
+          offset-y
+          full-width
+          :nudge-top="40"
+          max-width="290px"
+          min-width="290px"
+        >
+          <v-text-field
+            slot="activator"
+            placeholder="ngày ...tháng ... năm ..."
+            v-model="promulgationDate"
+            @blur="promulgationDateMd = parseDate(promulgationDate)"
+          ></v-text-field>
+          <v-date-picker v-model="promulgationDateMd" @input="promulgationDate = formatDate($event)" autosave locale="vi">
+          </v-date-picker>
+        </v-menu>
+      </v-flex>
+      <!-- Loại văn bản -->
+      <v-flex xs12 sm2 v-if="is_template == 'false'">
         <v-subheader class="pr-0">Loại văn bản:</v-subheader>
       </v-flex>
-      <v-flex xs12 sm4 v-if="is_template == 'true'">
+      <v-flex xs12 sm4 v-if="is_template == 'false'">
         <v-select
           v-bind:items="documentCatItems"
           v-model="documentCat"
@@ -309,37 +112,241 @@
           hide-selected
         ></v-select>
       </v-flex>
+      <!-- Cơ quan ban hành -->
+      <v-flex xs12 sm2 v-if="is_template == 'false'">
+        <v-subheader class="px-0">Cơ quan ban hành:</v-subheader>
+      </v-flex>
+      <v-flex xs12 sm4 v-if="is_template == 'false'">
+        <v-select
+          v-bind:items="issuerCodeItems"
+          v-model="issuerCode"
+          item-text="itemName"
+          item-value="itemCode"
+          autocomplete
+          hide-selected
+        ></v-select>
+      </v-flex>
+      <!--  -->
+      <uploader :options="optionsForm" ref="docfileformupload" class="uploader-example mt-3 mb-2 text-left flex" v-if="is_upload == 'true'">
+        <uploader-unsupport></uploader-unsupport>
+        <uploader-list 
+          id="404"
+          developer-key='AIzaSyAouTfMdrvMHjAwvF9RVsvwsuN1WSzGjmM'
+          client-id='790244148120-0grj2n5evkij0kqqthkbtgb18i0gup1j.apps.googleusercontent.com'
+          view-id='DOCS'
+          :class_name="class_name"
+          :class_pk="class_pk"
+          :group_id="groupId"
+          :file_attach_api="file_attach_api"
+          extensions_upload="false"
+          permission="write"
+        ></uploader-list>
+      </uploader>
+    </v-layout>
+  </v-form>
 
-      <v-flex xs12 sm2 v-if="is_template == 'true'">
-        <v-subheader class="px-0">Tóm tắt nội dung:</v-subheader>
-      </v-flex>
-      <v-flex xs12 sm10 v-if="is_template == 'true'">
+
+    <!-- <v-flex xs12 sm2 class="hidden_fak_temp" v-if="is_template == 'false'">
+      <v-subheader class="px-0">Loại sổ:</v-subheader>
+    </v-flex>
+    <v-flex xs12 sm4 class="hidden_fak_temp" v-if="is_template == 'false'">
+      <v-radio-group v-model="register" row @change="registerChange($event)">
+        <v-radio label="khác" value="0" ></v-radio>
+        <v-radio label="đi" value="1" ></v-radio>
+        <v-radio label="đến" value="2"></v-radio>
+      </v-radio-group>
+    </v-flex>
+      <v-flex xs12 sm2 class="hidden_fak_temp" v-if="is_template == 'false'">
+      <v-subheader class="pr-0">Sổ theo dõi:</v-subheader>
+    </v-flex>
+    <v-flex xs12 sm4 class="layout so__theo__doi hidden_fak_temp" v-if="is_template == 'false'">
+      <div class="flex xs12" style="
+          display: flex;
+          display: -webkit-flex;
+      ">
+        <v-select
+          v-bind:items="templateNoItems"
+          v-model="templateNo"
+          item-text="subject"
+          item-value="templateNo"
+          autocomplete
+          hide-selected
+          return-object
+          @change="templateNoChange($event)"
+        ></v-select>
         <v-text-field
-          placeholder="Nội dung"
-          textarea
-          rows="2"
-          v-model="content"
-        ></v-text-field>
-      </v-flex>
+        v-if="is_so_den"
+        class="so__den flex sm3 pl-2"
+        placeholder="Số đến"
+        v-model="seqNumDen"
+      ></v-text-field>
       
-    <uploader :options="optionsForm" ref="docfileformupload" class="uploader-example mt-3 mb-2 text-left flex" v-if="is_upload == 'true'">
-      <uploader-unsupport></uploader-unsupport>
-      <uploader-list 
-        id="404"
-        developer-key='AIzaSyAouTfMdrvMHjAwvF9RVsvwsuN1WSzGjmM'
-        client-id='790244148120-0grj2n5evkij0kqqthkbtgb18i0gup1j.apps.googleusercontent.com'
-        view-id='DOCS'
-        :class_name="class_name"
-        :class_pk="class_pk"
-        :group_id="groupId"
-        :file_attach_api="file_attach_api"
-        extensions_upload="false"
-        permission="write"
-      ></uploader-list>
-    </uploader>
+      </div>
+    </v-flex>
+
+    <v-flex xs12 sm2 v-if="is_template == 'false'">
+      <v-subheader class="pr-0">Ngày phát hành:</v-subheader>
+    </v-flex>
     
-  </div>
-</v-form>
+    <v-flex xs12 sm4 v-if="is_template == 'false'">
+      <v-menu
+        lazy
+        :close-on-content-click="true"
+        v-model="registerDateMenu"
+        transition="scale-transition"
+        offset-y
+        full-width
+        :nudge-top="40"
+        max-width="290px"
+        min-width="290px"
+      >
+        <v-text-field
+          slot="activator"
+          placeholder="ngày ...tháng ... năm ..."
+          v-model="registerDate"
+          @blur="registerDateMd = parseDate(registerDate)"
+        ></v-text-field>
+        <v-date-picker v-model="registerDateMd" @input="registerDate = formatDate($event)" autosave locale="vi">
+        </v-date-picker>
+      </v-menu>
+    </v-flex>
+
+    <v-flex xs12 sm2 v-if="is_template == 'false'">
+      <v-subheader class="pr-0">Người ký:</v-subheader>
+    </v-flex>
+    <v-flex xs12 sm4 v-if="is_template == 'false'">
+      <v-text-field
+        placeholder="cập nhật tên người ký ... "
+        v-model="signerInfo"
+      ></v-text-field>
+    </v-flex>
+
+    <v-flex xs12 sm2 class="hidden_fak_temp" v-if="is_template == 'false'">
+      <v-subheader class="px-0">Trạng thái:</v-subheader>
+    </v-flex>
+    <v-flex xs12 sm4 class="hidden_fak_temp" v-if="is_template == 'false'">
+      <v-radio-group v-model="status" row>
+        <v-radio label="Không phải xử lý" value="0" ></v-radio>
+        <v-radio label="Phải xử lý" value="1"></v-radio>
+      </v-radio-group>
+    </v-flex>
+
+    <v-flex xs12 sm2 class="hidden_fak_temp" v-if="is_template == 'false'">
+      <v-subheader class="pr-0">Hạn xử lý:</v-subheader>
+    </v-flex>
+    
+    <v-flex xs12 sm4 class="hidden_fak_temp" v-if="is_template == 'false'">
+      <v-menu
+        lazy
+        :close-on-content-click="true"
+        v-model="dueDateMenu"
+        transition="scale-transition"
+        offset-y
+        full-width
+        :nudge-top="40"
+        max-width="290px"
+        min-width="290px"
+      >
+        <v-text-field
+          slot="activator"
+          placeholder="ngày ...tháng ... năm ..."
+          v-model="dueDate"
+          @blur="dueDateMd = parseDate(dueDate)"
+        ></v-text-field>
+        <v-date-picker v-model="dueDateMd" @input="dueDate = formatDate($event)" autosave locale="vi">
+        </v-date-picker>
+      </v-menu>
+    </v-flex>
+  
+    <v-flex xs12 sm2 class="hidden_fak_temp" v-if="is_template == 'false'">
+      <v-subheader class="px-0">Tóm tắt nội dung:</v-subheader>
+    </v-flex>
+    <v-flex xs12 sm10 class="hidden_fak_temp">
+      <v-text-field
+        placeholder="Nội dung"
+        textarea
+        rows="2"
+        v-model="content"
+      ></v-text-field>
+    </v-flex>
+  
+    <v-flex xs12 sm2 v-if="is_template == 'true'">
+      <v-subheader class="px-0">Loại sổ:</v-subheader>
+    </v-flex>
+    <v-flex xs12 sm4 v-if="is_template == 'true'">
+      <v-radio-group v-model="register" row @change="registerChange($event)">
+        <v-radio label="khác" value="0" ></v-radio>
+        <v-radio label="đi" value="1" ></v-radio>
+        <v-radio label="đến" value="2"></v-radio>
+      </v-radio-group>
+    </v-flex>
+      <v-flex xs12 sm2 v-if="is_template == 'true'">
+      <v-subheader class="pr-0">Số hiệu sổ:</v-subheader>
+    </v-flex>
+    <v-flex xs12 sm4 v-if="is_template == 'true'">
+        <v-text-field
+        v-model="templateNoTemplate"
+      ></v-text-field>
+    </v-flex>
+
+    <v-flex xs12 sm2 v-if="is_template == 'true'">
+      <v-subheader class="px-0">Tên sổ:</v-subheader>
+    </v-flex>
+    <v-flex xs12 sm10 v-if="is_template == 'true'">
+      <v-text-field
+        placeholder="Tiêu đề "
+        v-model="subject"
+        required
+      ></v-text-field>
+    </v-flex>
+
+    <v-flex xs12 sm2 v-if="is_template == 'true'">
+      <v-subheader class="px-0">Số/Ký hiệu:</v-subheader>
+    </v-flex>
+    <v-flex xs6 sm4 class="layout format_italic_source" v-if="is_template == 'true'">
+      <v-text-field
+        class="flex sm3"
+        placeholder="Số"
+        v-model="codeNo"
+        append-icon="remove"
+      ></v-text-field>
+      <v-text-field
+        class="flex"
+        placeholder="Ký hiệu"
+        v-model="codeNotation"
+      ></v-text-field>
+    </v-flex>
+
+    <v-flex xs12 sm2 v-if="is_template == 'true'">
+      <v-subheader class="pr-0">Loại văn bản:</v-subheader>
+    </v-flex>
+    <v-flex xs12 sm4 v-if="is_template == 'true'">
+      <v-select
+        v-bind:items="documentCatItems"
+        v-model="documentCat"
+        item-text="text"
+        item-value="value"
+        autocomplete
+        return-object
+        hide-selected
+      ></v-select>
+    </v-flex>
+
+    <v-flex xs12 sm2 v-if="is_template == 'true'">
+      <v-subheader class="px-0">Tóm tắt nội dung:</v-subheader>
+    </v-flex>
+    <v-flex xs12 sm10 v-if="is_template == 'true'">
+      <v-text-field
+        placeholder="Nội dung"
+        textarea
+        rows="2"
+        v-model="content"
+      ></v-text-field>
+    </v-flex> -->
+
+  
+</div>
+
 </template>
 
 <script>
@@ -354,7 +361,12 @@ export default {
     group_id: null,
     is_template: 'false',
     is_upload: 'false',
-    file_attach_api: '/o/v2/mobilink/fileattachs',
+    register_type:null,
+
+    // file_attach_api: '/o/v2/mobilink/fileattachs',
+    file_attach_api: 'http://127.0.0.1:8081/api/fileattachs',
+    end_poind:'http://127.0.0.1:8081/api/',
+    // end_poind:'/o/v2/mobilink/',
     workspace_cur: 0,
     current_user_id: 0
   },
@@ -367,7 +379,7 @@ export default {
         }
       }
       vm.workspaceAdd = []
-      axios.get('/o/v2/mobilink/workspaces?editable=true', config)
+      axios.get(vm.end_poind+'workspaces?editable=true', config)
       .then(function (response) {
         var serializable = response.data
         if (serializable.hasOwnProperty('data')) {
@@ -397,7 +409,7 @@ export default {
       if (vm.is_template) {
       } else {
         
-        axios.get('/o/v2/mobilink/docfiles?register=0&template=1', config)
+        axios.get(vm.end_poind+'docfiles?register=0&template=1', config)
         .then(function (response) {
           var serializable = response.data
           if (serializable.hasOwnProperty('data')) {
@@ -409,7 +421,7 @@ export default {
         })
       }
 
-      axios.get('/o/v2/mobilink/dictcollections/DOCUMENT_TYPE/dictitems?sort=treeIndex', config)
+      axios.get(vm.end_poind+'dictcollections/DOCUMENT_TYPE/dictitems?sort=treeIndex', config)
       .then(function (response) {
         var serializable = response.data
         if (serializable.hasOwnProperty('data')) {
@@ -431,7 +443,7 @@ export default {
         console.log(error)
       })
 
-      axios.get('/o/v2/mobilink/dictcollections/GOVERMENT_AGENCY/dictitems' + '?level=0', config)
+      axios.get(vm.end_poind+'dictcollections/GOVERMENT_AGENCY/dictitems' + '?level=0', config)
       .then(function (response) {
         var serializable = response.data
         if (serializable.hasOwnProperty('data')) {
@@ -442,7 +454,7 @@ export default {
         console.log(error)
       })
       vm.workspaceAdd = []
-      axios.get('/o/v2/mobilink/workspaces?editable=true', config)
+      axios.get(vm.end_poind+'workspaces?editable=true', config)
       .then(function (response) {
         var serializable = response.data
         if (serializable.hasOwnProperty('data')) {
@@ -472,7 +484,7 @@ export default {
       seqNumDen: null,
       is_so_den: false,
       optionsForm: {
-        target: '/o/v2/mobilink/fileattachs/upload/'+this.class_name+'/0/'+this.group_id,
+        target: this.end_poind+'fileattachs/upload/'+this.class_name+'/0/'+this.group_id,
         chunkSize: 100*1024*1024,
         headers: {
           'groupId': this.group_id
@@ -602,7 +614,7 @@ export default {
         console.log(vm.$refs['docfileformupload'].fileList != null && vm.$refs['docfileformupload'].fileList.length > 0)
 
         if (vm.$refs['docfileformupload'].fileList != null && vm.$refs['docfileformupload'].fileList.length > 0) {
-          axios.post('/o/v2/mobilink/docfiles',
+          axios.post(vm.end_poind+'docfiles',
             params,
             config
           )
@@ -614,7 +626,7 @@ export default {
             paramsApi2.append('workspaces', JSON.stringify(vm.workspaceAdd))
             paramsApi2.append('className', vm.class_name)
             paramsApi2.append('classPK', response.data.docFileId)
-            axios.post('/o/v2/mobilink/resourceworkspaces/update',
+            axios.post(vm.end_poind+'resourceworkspaces/update',
               paramsApi2,
               config
             )
@@ -634,7 +646,7 @@ export default {
             paramsApi2.append('workspaces', JSON.stringify(vm.workspaceAdd))
             paramsApi2.append('className', vm.class_name)
             paramsApi2.append('classPK', response.data.docFileId)
-            axios.post('/o/v2/mobilink/resourceworkspaces/update',
+            axios.post(vm.end_poind+'resourceworkspaces/update',
               paramsApi2,
               config
             )
@@ -717,7 +729,7 @@ export default {
         }
       }
       vm.templateNoItems = []
-      axios.get('/o/v2/mobilink/docfiles?template=1&register='+item+'&sort=subject', config)
+      axios.get(vm.end_poind+'docfiles?template=1&register='+item+'&sort=subject', config)
         .then(function (response) {
           var serializable = response.data
           if (serializable.hasOwnProperty('data')) {

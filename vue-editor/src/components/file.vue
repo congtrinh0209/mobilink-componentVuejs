@@ -40,7 +40,7 @@
         </div>
         <div class="uploader-file-actions">
           <span class="uploader-file-pause" @click="pause"></span>
-          <span class="uploader-file-resume" @click="resume">️</span>
+          <span class="uploader-file-resume" @click="resume">ï¸</span>
           <span class="uploader-file-retry" @click="retry"></span>
           <span class="uploader-file-remove" @click="remove"></span>
         </div>
@@ -350,7 +350,7 @@
     margin-right: 8px;
   }
   .uploader-file-icon::before {
-    content: "📃";
+    content: "ðŸ“ƒ";
     display: block;
     height: 100%;
     font-size: 24px;
@@ -358,19 +358,19 @@
     text-indent: 0;
   }
   .uploader-file-icon[icon="folder"]::before {
-    content: "📂";
+    content: "ðŸ“‚";
   }
   .uploader-file-icon[icon="image"]::before {
-    content: "📊";
+    content: "ðŸ“Š";
   }
   .uploader-file-icon[icon="video"]::before {
-    content: "📹";
+    content: "ðŸ“¹";
   }
   .uploader-file-icon[icon="audio"]::before {
-    content: "🎵";
+    content: "ðŸŽµ";
   }
   .uploader-file-icon[icon="document"]::before {
-    content: "📋";
+    content: "ðŸ“‹";
   }
   .uploader-file-size {
     width: 13%;

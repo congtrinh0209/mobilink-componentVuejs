@@ -1,23 +1,48 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>vuejx</title>
-  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
-  <link href="../css/main.css" rel="stylesheet">
-  <!-- vuejs -->
-  <script type="text/javascript" src="../js/axios.min.js"></script>
-  <script type="text/javascript" src="../js/vue.min.js"></script>
-  <script type="text/javascript" src="../js/vue-jx-lib.js?t=12"></script>
-  <script type="text/javascript" src="../js/vuejx.min.js"></script>
-  <script type="text/javascript" src="../js/vuejx_dev.js"></script>
-  <script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.js"></script>
-
-  <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
-  <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
-
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>Add Docfile</title>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
+    <!-- vuejs -->
+    <script type="text/javascript" src="../js/add_support.js"></script>
+    <script type="text/javascript" src="../js/axios.min.js"></script>
+    <script type="text/javascript" src="../js/vue.min.js"></script>
+    <script type="text/javascript" src="../js/vuejx.min.js"></script>
+    <script type="text/javascript" src="../js/vuejx_dev.js"></script>
+    <script type="text/javascript" src="../js/moment-with-locales.min.js"></script>
+    <script type="text/javascript" src="../js/moment.min.js"></script>
+    <script type="text/javascript" src="../../../vue-editor/dist/vue-jx-lib.js?"></script>
+    <script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.js"></script>
+    <!-- <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script> -->
+    <script type="text/javascript" src="../js/vuetify017.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/js/jquery-comments.js"></script>
+    <script type="text/javascript" src="../js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="../js/locales/bootstrap-datetimepicker.fr.js"></script>
+    
+    <!-- <link href="../css/vuetify017.css" rel="stylesheet"> -->
+    <link href="http://dhtn.longbien.gov.vn/o/mentions-web/css/mentions.css" rel="stylesheet" type="text/css">
+    <link href="http://dhtn.longbien.gov.vn/o/dynamic-data-mapping-form-renderer/css/main.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/aui.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/frontend-css-web/main.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/orgin.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/page/dist/page.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/page/dist/nav.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/component/dist/list_header.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/component/dist/input.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/component/dist/button.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/component/dist/select.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/component/dist/table.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/component/dist/tabmenu.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/component/dist/navigation_drawer.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/component/dist/mycomponent.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/jquery-comments.css" rel="stylesheet">
+    
+    <!-- <link href="../css/th.css" rel="stylesheet"> -->
+    
 </head>
 
 <body>
@@ -27,13 +52,19 @@
     <v-app>
         
         <!--  -->
-        <jx-mobilink-docfile-add
+        <jx-mobilink-docfile-add 
         id="1"
+        end_poind='http://127.0.0.1:8081/api/'
         class_name="org.mobilink.backend.document.model.DocFile"
         class_pk="2202"
         group_id="20143"
-        :is_template="true"
+        is_template="false"
         is_upload = "true"
+        file_attach_api="/o/v2/mobilink/fileattachs"
+        ref="uploadcom1"
+        register_type="0"
+        workspace_cur="1"
+        current_user_id="3"
         ></jx-mobilink-docfile-add>
 <!--	
 	<jx-mobilink-docfile-add
