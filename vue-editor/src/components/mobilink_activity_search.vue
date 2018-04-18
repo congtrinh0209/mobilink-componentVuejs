@@ -259,6 +259,7 @@
             group_id: '',
             end_point: '',
             search:'',
+            searchUrl: null,
             category:'',
             state:'',
             hosting:'',
@@ -269,7 +270,14 @@
             todate:''
         },
         created () {
-            
+            var vm = this;
+            vm.$nextTick(function () {
+                console.log(vm._props);
+                var url = vm.searchUrl?(new URL(vm.searchUrl)).searchParams:null;
+                if(url&&url.get("search")=='true'){
+                    vm.search_advanced()
+                }
+            })
         },
         
         data () {
@@ -385,24 +393,6 @@
 
                 };
                 
-                /* Load data đơn vị tổ chức/ chủ trì */
-                axios.get( endPoint + 'workingunits', config)
-                .then(function (response) {
-                    var serializable = response.data
-                    if (serializable.hasOwnProperty('data')) {
-                        for (var key in serializable.data) {
-                            vm.hostingIdItems.push({
-                                name: serializable.data[key].name,
-                                workingUnitId: serializable.data[key].workingUnitId
-                            })
-                            
-                        }
-                    }
-                })
-                .catch(function (error) {
-                    console.log(error)
-                })
-                /* Load data employees */
                 var paramsGetEmployee = {
                     'class': 'employee'
                 };
@@ -412,55 +402,62 @@
                         'groupId': vm.group_id
                     }
                 };
-                axios.get( vm.end_point + 'users', configGetEmployee)
-                .then(function (response) {
-                    var serializable = response.data;
+
+                axios.all([
+                    axios.get(vm.end_point + 'workingunits', config),
+                    axios.get( vm.end_point + 'users', configGetEmployee),
+                    axios.get( vm.end_point + 'locations', config),
+                    axios.get( vm.end_point + 'projects', config)
+                ])
+                .then(axios.spread(function(workingUnitRespones, userRespones, locationRespones,projectsRespone) {
+                    var serializable = workingUnitRespones.data;
+                    var serializable1 = userRespones.data;
+                    var serializable2 = locationRespones.data;
+                    var serializable3 = projectsRespone.data;
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
+                            vm.hostingIdItems.push({
+                                name: serializable.data[key].name,
+                                workingUnitId: serializable.data[key].workingUnitId
+                            })
+                            
+                        }
+                    }
+                    if (serializable1.hasOwnProperty('data')) {
+                        for (var key in serializable1.data) {
                             vm.managerItems.push(
-                                serializable.data[key]
+                                serializable1.data[key]
                             )
                         }
                     }
-                })
-                .catch(function (error) {
-                    console.log(error)
-                })
-
-                /* Load data địa chỉ*/
-                axios.get( endPoint + 'locations', config)
-                .then(function (response) {
-                    var serializable = response.data;
-                    if (serializable.hasOwnProperty('data')) {
-                        for (var key in serializable.data) {
+                    if (serializable2.hasOwnProperty('data')) {
+                        for (var key in serializable2.data) {
                             vm.locationItems.push({
-                                location: serializable.data[key].location,
-                                locationId: serializable.data[key].locationId,
+                                location: serializable2.data[key].location,
+                                locationId: serializable2.data[key].locationId,
                             })
                             
                         }
                     }
-                })
-                .catch(function (error) {
-                    console.log(error)
-                })
-                    /* Load data dự án chương trình*/
-                axios.get( endPoint + 'projects', config)
-                .then(function (response) {
-                    var serializable = response.data
-                    if (serializable.hasOwnProperty('data')) {
-                        for (var key in serializable.data) {
+                    if (serializable3.hasOwnProperty('data')) {
+                        for (var key in serializable3.data) {
                             vm.projectItems.push({
-                                projectName: serializable.data[key].projectName,
-                                projectId: serializable.data[key].projectId
+                                projectName: serializable3.data[key].projectName,
+                                projectId: serializable3.data[key].projectId
                             })
                             
                         }
+                    };
+                    if(!vm.keyS){
+                        vm.bindAdvanceSearch();
+                        vm.getTableList();
+                        vm.viewAdvancedSearch = false;
+                        setTimeout(function(){
+                            vm.getTxtSearch();
+                        },500)
                     }
-                })
-                .catch(function (error) {
-                    console.log(error)
-                })
+                    
+                }))
             },
             /** */
             
@@ -534,6 +531,7 @@
             /**onload function */
             init: function(){
                 var vm = this;
+                console.log(vm._props);
                 vm.headersTable= [
                     {
                         text: '#',
@@ -596,16 +594,30 @@
             },
             /**bind props */
             bindAdvanceSearch: function(){
+                console.log("run bind");
                 var vm =this;
-
-                vm.status = vm.state?vm.state:'';
-                vm.hostingId = vm.hosting?vm.hosting:'';
-                vm.managerS = vm.manager?vm.manager:'';
-                vm.projectS = vm.project?vm.project:'';
-                vm.activityType = vm.type?vm.type:'';
-                vm.locationS = vm.location?vm.location:'';
-                vm.timeStart = vm.fromdate?new Date (vm.fromdate.slice(0,4)+'-'+vm.fromdate.slice(4,6)+'-'+ vm.fromdate.slice(6,8)):'';
-                vm.timeEnd = vm.todate?new Date (vm.todate.slice(0,4)+'-'+vm.todate.slice(4,6)+'-'+ vm.todate.slice(6,8)):'';
+                var url = vm.searchUrl?(new URL(vm.searchUrl)).searchParams:null;
+                if(url&&url.get("search")=='true'){
+                    vm.status = (url.has("state")?url.get("state"):'')?Number(url.get("state")):'';
+                    vm.hostingId = (url.has("hosting")?url.get("hosting"):'')?Number(url.get("hosting")):'';
+                    vm.managerS = (url.has("manager")?url.get("manager"):'')?Number(url.get("manager")):'';
+                    vm.projectS = (url.has("project")?url.get("project"):'')?Number(url.get("project")):'';
+                    vm.activityType = url.has("type")?url.get("type"):'';
+                    vm.locationS = (url.has("location")?url.get("location"):'')?Number(url.get("location")):'';
+                    vm.timeStart = url.has("fromdate")?new Date (url.get("fromdate").slice(0,4)+'-'+url.get("fromdate").slice(4,6)+'-'+ url.get("fromdate").slice(6,8)):'';
+                    vm.timeEnd = url.has("todate")?new Date (url.get("todate").slice(0,4)+'-'+url.get("todate").slice(4,6)+'-'+ url.get("todate").slice(6,8)):'';
+                    
+                } else {
+                    vm.status = vm.state?vm.state:'';
+                    vm.hostingId = vm.hosting?vm.hosting:'';
+                    vm.managerS = vm.manager?vm.manager:'';
+                    vm.projectS = vm.project?vm.project:'';
+                    vm.activityType = vm.type?vm.type:'';
+                    vm.locationS = vm.location?vm.location:'';
+                    vm.timeStart = vm.fromdate?new Date (vm.fromdate.slice(0,4)+'-'+vm.fromdate.slice(4,6)+'-'+ vm.fromdate.slice(6,8)):'';
+                    vm.timeEnd = vm.todate?new Date (vm.todate.slice(0,4)+'-'+vm.todate.slice(4,6)+'-'+ vm.todate.slice(6,8)):'';
+                }
+                
             },
             /**filter get text search */
             filterText: function(arr,key,value){
@@ -618,7 +630,7 @@
                 var vm = this;
                 var endPoint = vm.end_point;
                 var paramsTableActivity = {
-                    sort:'startDate',
+                    sort:'startDate_Number',
                     order:true
                 };
                 if(vm.keyS){
@@ -714,8 +726,11 @@
                     'Hoạt động: ' :activityTypeText
                     
                 };
+                var url = vm.searchUrl?(new URL(vm.searchUrl)).searchParams:null;
+                if(url&&url.get("search")=='true'&&url.has("keywords")){
+                    vm.textResult = 'Từ khóa:'+url.get("keywords");
+                } else {vm.textResult = ''}
                 
-                vm.textResult = '';
                 for(var key in textShow){
                     if(textShow[key]){
                         var txt = key+textShow[key]+'; ';
@@ -757,12 +772,6 @@
                 vm.keyS = false;
                 vm.init();
                 vm.getDataFormS();
-                vm.bindAdvanceSearch();
-                vm.getTableList();
-                vm.viewAdvancedSearch = false;
-                setTimeout(function(){
-                    vm.getTxtSearch();
-                },500)
             },
             /** search advancedOwn */
             search_advancedOwn: function(){
