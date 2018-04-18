@@ -18,10 +18,26 @@
           </v-list>
         </v-menu>
       </div>
+      <v-expansion-panel expand>
+        <v-expansion-panel-content value="true">
+          <div slot="header">
+              <div class="flex xs12 pl-3 nav__btn__custom">
+                <v-btn block flat class="mx-0 my-0 px-0">
+                  <v-icon>storage </v-icon>
+                  Thư mục lưu trữ
+                </v-btn>
+              </div>
+          </div>
+          <v-card>
+            <v-card-text>
+              <div class="flex xs12 pl-3" jx-bind="workspace0Filter" class="workspace0Filter"></div>
 
-      <div class="flex xs12 pl-3" jx-bind="workspace0Filter" class="workspace0Filter"></div>
-
-      <div class="flex xs12 pl-3 hidden_fak_temp" jx-bind="docFileTemplateFilter"></div>
+              <div class="flex xs12 pl-3 hidden_fak_temp" jx-bind="docFileTemplateFilter"></div>
+            </v-card-text>
+          </v-card>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+      
 
       <div class="flex xs12 pl-3 nav__btn__custom">
         <v-btn block flat class="mx-0 my-0 px-0" v-on:click.native="filterDocFileChangeBTN('me')">
@@ -190,7 +206,7 @@
             <div style="width: 100%;">
               <div v-if="khoDuLieuListFolderItems.length > 0" class="mb-2">
               </div>
-              <div v-if="!no_list_access && khoDuLieuListFolderItems.length > 0 && khoDuLieuListItems.length > 0">
+              <div v-if="!no_list_access && khoDuLieuListFolderItems.length > 0 ">
               	Tài liệu: 
                 <br>
               </div>

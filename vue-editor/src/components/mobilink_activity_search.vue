@@ -594,7 +594,6 @@
             },
             /**bind props */
             bindAdvanceSearch: function(){
-                console.log("run bind");
                 var vm =this;
                 var url = vm.searchUrl?(new URL(vm.searchUrl)).searchParams:null;
                 if(url&&url.get("search")=='true'){
