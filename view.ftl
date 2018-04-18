@@ -77,7 +77,7 @@
                   </v-breadcrumbs-item>
                 </v-breadcrumbs>
               </div>
-              <div v-show="isSearch">Kết quả tìm kiếm</div>
+              <div v-show="isSearch" class="pl-2">Kết quả tìm kiếm</div>
             </div>
             <!-- Search -->
             <div class="flex w-100-xs" style="
@@ -194,7 +194,7 @@
               	Tài liệu: 
                 <br>
               </div>
-              <div v-if="!no_list_access && khoDuLieuListItems.length > 0" class="layout wrap" jx-bind="khoDuLieuList">
+              <div v-if="!no_list_access" class="layout wrap" jx-bind="khoDuLieuList">
 
               </div>
             </div>
@@ -694,6 +694,7 @@
               vm.no_list_access = false;
               vm.breadWorkspace = true;
               vm.viewFirst = false;
+              vm.isSearch = false;
               vm.txtPersonShare = false;
               vm.currentListPage = true;
               vm.detailModel = config.item;
@@ -803,6 +804,7 @@
               vm.no_list_access = false;
               vm.breadWorkspace = false;
               vm.viewFirst = false;
+              vm.isSearch = false;
               vm.txtPersonShare = false;
               if (config.item.children != null || config.item.parent.name === 'root') {
               	vm.docFileTempID = 0;
@@ -837,6 +839,7 @@
               vm.keywordsSearch = "";
               vm.breadWorkspace = false;
               vm.viewFirst = false;
+              vm.isSearch = false;
               vm.txtPersonShare = true;
               vm.khoDuLieuListpage = 1;
               vm.no_list_access = false;
@@ -845,12 +848,12 @@
               vm.detailModel['register'] = "";
               if (data === 'me') {
                 setTimeout(function(){
-                  $('.row-header .txtPersonShare').innerHTML = "Tài liệu của tôi";
+                  $('.row-header .txtPersonShare')[0].innerHTML = "Tài liệu của tôi";
                 },100)
               	vm.detailModel['userId'] = themeDisplay.getUserId();
               } else if (data === 'share') {
                 setTimeout(function(){
-                  $('.row-header .txtPersonShare').innerHTML = "Tài liệu được chia sẻ";
+                  $('.row-header .txtPersonShare')[0].innerHTML = "Tài liệu được chia sẻ";
                 },100)
                 vm.detailModel['me'] = true;
               	vm.detailModel['userId'] = 0;
@@ -1233,6 +1236,12 @@
                   align: 'left',
                   sortable: true,
                   value: 'name'
+                },
+                {
+                  text: '',
+                  align: 'left',
+                  sortable: false,
+                  value: ''
                 }
               ];
               
@@ -1337,6 +1346,12 @@
                   align: 'left',
                   sortable: true,
                   value: 'name'
+                },
+                {
+                  text: '',
+                  align: 'left',
+                  sortable: false,
+                  value: ''
                 }
               ];
               var workspaceVal = "0";

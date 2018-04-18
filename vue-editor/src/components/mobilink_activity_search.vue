@@ -195,7 +195,7 @@
 
                     <td>
                         <div class="pt-2 pb-2">
-                            <a href="javascript:;" title="Xem chi tiết" v-on:click="activityDetail(props.item,props.index)">
+                            <a href="javascript:;" :title="props.item.subject" v-on:click="activityDetail(props.item,props.index)">
                                 <span>{{props.item.subject}}</span>
                             </a>
                         </div>
@@ -864,7 +864,9 @@
     #activitySearch #table_search table tbody td {
         border: 1px solid #ddd !important;
     }
-
+    #activitySearch #table_search table tbody td a:hover {
+        color: blue!important
+    }
     #activitySearch .mx-datepicker{
         width: 100%!important
     }
