@@ -60,19 +60,24 @@
         <div class="layout wrap" v-if="currentListPage">
 
           <div class="row-header flex-break" v-if="!keywordsSearchable">
-            <div class="flex" style="max-width:50%" v-show="!isSearch">
-              <v-breadcrumbs class="py-2" v-if="breadWorkspace">
-                <v-icon slot="divider" style="color: #ffffff!important">chevron_right</v-icon>
-                <v-breadcrumbs-item v-for="item in workspaceTree" :key="item.id" v-on:click.native="breadcrumbsSelected(item)">
-                  {{ item.name }}
-                </v-breadcrumbs-item>
-              </v-breadcrumbs>
-              <v-breadcrumbs class="py-2" v-else>
-                <v-icon slot="divider" style="color: #ffffff!important">chevron_right</v-icon>
-                <v-breadcrumbs-item v-for="item in docFileTemplateTree" :key="item.id" v-on:click.native="breadcrumbsSelectedDocTEMP(item)">
-                  {{ item.name }}
-                </v-breadcrumbs-item>
-              </v-breadcrumbs>
+            <div class="flex" style="min-width:50%;max-width:50%">
+              <div v-show="!isSearch">
+                <v-breadcrumbs class="py-2" v-if="breadWorkspace">
+                  <v-icon slot="divider" style="color: #ffffff!important">chevron_right</v-icon>
+                  <v-breadcrumbs-item v-for="item in workspaceTree" :key="item.id" v-on:click.native="breadcrumbsSelected(item)">
+                    {{ item.name }}
+                  </v-breadcrumbs-item>
+                </v-breadcrumbs>
+                <v-breadcrumbs class="py-2" v-else>
+                  <span v-show="viewFirst">Quản lý văn bản</span>
+                  <span v-show="txtPersonShare" class="txtPersonShare"></span>
+                  <v-icon slot="divider" v-show="!txtPersonShare" style="color: #ffffff!important">chevron_right</v-icon>
+                  <v-breadcrumbs-item v-show="!txtPersonShare" v-for="item in docFileTemplateTree" :key="item.id" v-on:click.native="breadcrumbsSelectedDocTEMP(item)">
+                    {{ item.name }}
+                  </v-breadcrumbs-item>
+                </v-breadcrumbs>
+              </div>
+              <div v-show="isSearch">Kết quả tìm kiếm</div>
             </div>
             <!-- Search -->
             <div class="flex w-100-xs" style="
@@ -91,7 +96,7 @@
             </div>
             <!-- Search advanced -->
             <v-menu left :close-on-content-click="false" :nudge-left="200" :nudge-bottom="2" v-model="menu">
-              <v-btn flat slot="activator">Nâng cao</v-btn>
+              <v-btn flat slot="activator">Tìm kiếm nâng cao</v-btn>
               <v-card>
                 <v-list>
                   <v-list-tile>
@@ -350,6 +355,8 @@
       groupid: themeDisplay.getScopeGroupId(),
       onScroll: 'onScroll',
       data: {
+        txtPersonShare: false,
+        viewFirst: true,
         isSearch: false,
         workspace_curId: 0,
         codeNocodeNotation_hidden: true,
@@ -686,6 +693,8 @@
               vm.khoDuLieuListpage = 1;
               vm.no_list_access = false;
               vm.breadWorkspace = true;
+              vm.viewFirst = false;
+              vm.txtPersonShare = false;
               vm.currentListPage = true;
               vm.detailModel = config.item;
               vm.detailModel['workspaceId'] = config.item.id;
@@ -793,6 +802,8 @@
               var vm = this;
               vm.no_list_access = false;
               vm.breadWorkspace = false;
+              vm.viewFirst = false;
+              vm.txtPersonShare = false;
               if (config.item.children != null || config.item.parent.name === 'root') {
               	vm.docFileTempID = 0;
                 vm.docFileTemplateTree = [
@@ -825,17 +836,23 @@
               var vm = this;
               vm.keywordsSearch = "";
               vm.breadWorkspace = false;
+              vm.viewFirst = false;
+              vm.txtPersonShare = true;
               vm.khoDuLieuListpage = 1;
               vm.no_list_access = false;
               vm.currentListPage = true;
               vm.detailModel = {};
               vm.detailModel['register'] = "";
               if (data === 'me') {
-                $('.row-header a.breadcrumbs__item')[0].innerHTML = "Tài liệu của tôi";
+                setTimeout(function(){
+                  $('.row-header .txtPersonShare').innerHTML = "Tài liệu của tôi";
+                },100)
               	vm.detailModel['userId'] = themeDisplay.getUserId();
               } else if (data === 'share') {
-                $('.row-header a.breadcrumbs__item')[0].innerHTML = "Tài liệu được chia sẻ";
-              	vm.detailModel['me'] = true;
+                setTimeout(function(){
+                  $('.row-header .txtPersonShare').innerHTML = "Tài liệu được chia sẻ";
+                },100)
+                vm.detailModel['me'] = true;
               	vm.detailModel['userId'] = 0;
               }
               vm._inikhoDuLieuList(vm.detailModel);
@@ -1054,7 +1071,7 @@
           'id': 'keywordsSearch',
           'name': 'keywordsSearch',
           'type': 'text',
-          'placeholder': 'Tìm kiếm theo từ khoá...',
+          'placeholder': 'Nhập từ khoá',
           'solo': true,
           'append_icon': 'search',
           'onKeyup': 'filterTableKeywords',
@@ -1645,7 +1662,7 @@
 		                    	],
 		                    	vm.docFileDetail,
 		                    	vm.class_pk,
-		                    	vm.docFileDetail['permission'],
+		                    	'owner,leader,hoster,manager'.indexOf( vm.docFileDetail['permission'] ||'none' )>=0?true:false,
 		                    	vm
 		                    );
 		                    vm.thuMucLuuTruWorkspacespk = vm.class_pk;
@@ -1987,10 +2004,24 @@
                     vm.thuMucLuuTruWorkspaces.push(vm.thuMucLuuTruWorkspacesItems[key]);
                   }
                 }
+                vm.docFileDetail['thuMucLuuTruWorkspaces'] = vm.thuMucLuuTruWorkspaces
+                vm.initEditableControl(
+                      [
+                        {
+                          name: 'thuMucLuuTruWorkspaces',
+                          value: 'thuMucLuuTruWorkspaces'
+                        }
+                      ],
+                      vm.docFileDetail,
+                      vm.class_pk,
+                      'owner,leader,hoster,manager'.indexOf( vm.docFileDetail['permission'] ||'none' )>=0?true:false,
+                      vm
+                    );
               })
               .catch(function (error) {
                 console.log(error)
               })
+
             },
             mySuccesssnackbarCall: function(value) {
               var vm = this
@@ -2433,6 +2464,16 @@
   }
   #khoTuLieuViewJX a.breadcrumbs__item{
     color: #ffffff!important
+  }
+  #khoTuLieuViewJX .danhSachPaymentTable__class table tr td{
+    overflow: hidden;
+    text-overflow: ellipsis; 
+    white-space: nowrap;
+    border: 1px solid #ddd !important;
+  }
+  #khoTuLieuViewJX .danhSachPaymentTable__class table thead tr th{
+    border: 1px solid #ddd !important;
+    color: #000!important
   }
   .max-width {
     width: 100% !important;
