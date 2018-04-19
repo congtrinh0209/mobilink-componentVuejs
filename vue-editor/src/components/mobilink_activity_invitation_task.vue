@@ -1,5 +1,5 @@
 <template>
-    <div id="activity_invitation_task" v-if="opening_state_prop == 0||opening_state_prop == 3 || opening_state_prop == 4 ">
+    <div id="activity_invitation_task">
         <v-dialog class="application theme--light progessLoading" v-model="dialog_loading" persistent max-width="50px">
             <v-card style="text-align: center;padding-top: 5px;">
                 <v-progress-circular v-bind:size="25" indeterminate color="primary"></v-progress-circular>
@@ -484,7 +484,8 @@
             end_point: null,
             working_unit_prop: null,
             permission_prop: null,
-            opening_state_prop: null
+            opening_state_prop: null,
+            // startend_prop:null
         },
 
         created () {
@@ -562,6 +563,20 @@
                 /** */
                 vm.getInvitationTask();
                 
+            },
+            /**Check permision */
+            managerPermision: function(src){
+                if(src=='manager'||src=='hoster'||src=='owner'||src=='leader'){
+                    return true
+                } else {return false}
+            },
+            /*check state truyền startend*/
+            stateTask: function(src){
+                if(src==0||src==1){
+                    return true
+                } else if(src==2||src==3||src==4) {
+                    return false
+                }
             },
             /* Load data invitation */
             getInvitationTask: function(){

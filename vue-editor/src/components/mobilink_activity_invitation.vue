@@ -1,6 +1,6 @@
 <template>
 
-    <div id="activity_invitation" v-if="opening_state_prop == 0||opening_state_prop==1 || opening_state_prop==4 || opening_state_prop==7 " >
+    <div id="activity_invitation" >
         
         <v-snackbar :timeout="3000" :top="true" :bottom="false" 
             :right="true" :left="false" :multi-line="true" 
@@ -30,9 +30,9 @@
 
                     <div slot="header" class="custome-panel-heading-with-icon">
                         <v-toolbar class="my-0">   
-                            <div class="ml-2" style="flex: none" v-if="opening_state_prop == 0||opening_state_prop == 1">Giấy mời: {{availableCount}}/ {{invitationCount}} sẵn sàng</div>
+                            <div class="ml-2" style="flex: none" v-if="opening_state_prop == 0||opening_state_prop == 3">Giấy mời: {{availableCount}}/ {{invitationCount}} sẵn sàng</div>
                             <div class="ml-2" style="flex: none" v-if="opening_state_prop == 4">Giấy mời: {{checkinCount}}/ {{invitationCount}} có mặt</div>
-                            <div class="ml-2" style="flex: none" v-if="opening_state_prop == 7 ">Giấy mời: {{checkinCount}}/ {{invitationCount}} có mặt</div>
+                            <div class="ml-2" style="flex: none" v-if="opening_state_prop == 9 ">Giấy mời: {{checkinCount}}/ {{invitationCount}} có mặt</div>
                             
                             <div style="flex: none;position:absolute;right:0;top:5px" class="ml-2">
                                 <div >
@@ -44,19 +44,19 @@
                                             <span>{{userLogin.userNote}}</span>
                                         </v-tooltip>
                                         
-                                        <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" class="mx-0" small color="success" 
+                                        <v-btn v-if="opening_state_prop == 0||opening_state_prop == 3" class="mx-0" small color="success" 
                                         v-on:click.stop="checkAvailable('ready',userLogin,null)" style="padding-left: 6px;padding-right: 6px"
                                         :class="activeClick?disableClick:''"
                                         >
                                             <v-icon style="color: white!important" v-if="userLogin.available == 1" >check</v-icon>
                                             <span style="color: white!important">Sẵn sàng</span>
                                         </v-btn>
-                                        <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" small class="text-white mx-1" 
+                                        <v-btn v-if="opening_state_prop == 0||opening_state_prop == 3" small class="text-white mx-1" 
                                         v-on:click.stop="checkAvailable('busy',userLogin,null)" :class="activeClick?disableClick:''" color="error">
                                             <v-icon style="color: white!important" v-if="userLogin.available == 2" >check</v-icon>
                                             <span style="color: white!important">Tôi bận</span>
                                         </v-btn>
-                                        <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 7" small class="text-white mx-1"
+                                        <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 9" small class="text-white mx-1"
                                          v-on:click.stop="checkin(userLogin)" :class="activeClick?disableClick:''" color="indigo">
                                             <v-icon style="color: white!important" v-if="userLogin.checkin" >check</v-icon>
                                             <span style="color: white!important">Tôi có mặt</span>
@@ -154,11 +154,11 @@
                                                                         </v-flex>
                                                                         <v-flex xs6 sm3>
                                                                             <div class="right">
-                                                                                <v-chip v-if="opening_state_prop == 0||opening_state_prop == 1" label outline color="primary" class="mr-2 mt-2">
+                                                                                <v-chip v-if="opening_state_prop == 0||opening_state_prop == 3" label outline color="primary" class="mr-2 mt-2">
                                                                                     {{item.role.statistic.available}}/{{item.role.statistic.invitation}}
                                                                                 </v-chip>
 
-                                                                                <v-chip v-if="opening_state_prop == 4 || opening_state_prop == 7" label outline color="primary" class="mr-2 mt-2">
+                                                                                <v-chip v-if="opening_state_prop == 4 || opening_state_prop == 9" label outline color="primary" class="mr-2 mt-2">
                                                                                     {{item.role.statistic.checkin}}/{{item.role.statistic.invitation}}
                                                                                 </v-chip>
 
@@ -241,7 +241,7 @@
                                                                                     <span >{{subItem.userNote}}</span>
                                                                                 </v-tooltip>
                                                                                 
-                                                                                <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" class="mx-0" small color="success"
+                                                                                <v-btn v-if="opening_state_prop == 0||opening_state_prop == 3" class="mx-0" small color="success"
                                                                                 :class="(permission_prop!='manager'&&permission_prop!='owner')||activeClick? pointerEvent : ''"
                                                                                 
                                                                                 v-on:click.stop="checkAvailable('ready',subItem,item)" style="padding-left: 6px;padding-right: 6px"
@@ -249,7 +249,7 @@
                                                                                     <v-icon style="color: white" v-if="subItem.available == 1" >check</v-icon>
                                                                                     Sẵn sàng
                                                                                 </v-btn>
-                                                                                <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" small class="text-white mx-0" 
+                                                                                <v-btn v-if="opening_state_prop == 0||opening_state_prop == 3" small class="text-white mx-0" 
                                                                                 :class="(permission_prop!='manager'&&permission_prop!='owner')||activeClick? pointerEvent : ''"
                                                                                 v-on:click.stop="checkAvailable('busy',subItem,item)" color="error"
                                                                                 >
@@ -257,9 +257,9 @@
                                                                                     Bận
                                                                                 </v-btn>
 
-                                                                                <!-- <span v-if="opening_state_prop == 0||opening_state_prop == 1" style="color:green" class="mr-2" v-html="bindAvailableText(subItem.available)"></span> -->
+                                                                                <!-- <span v-if="opening_state_prop == 0||opening_state_prop == 3" style="color:green" class="mr-2" v-html="bindAvailableText(subItem.available)"></span> -->
 
-                                                                                <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 7"
+                                                                                <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 9"
                                                                                 :class="(permission_prop!='manager'&&permission_prop!='owner')||activeClick? pointerEvent : ''"
                                                                                 v-on:click.stop="managerCheckin(subItem,item)" outline small class="text-white mx-1" color="indigo"
                                                                                 >
@@ -450,14 +450,14 @@
                                                                                     <span >{{item.userNote}}</span>
                                                                                 </v-tooltip>
                                                                                 
-                                                                                <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" class="mx-0" small color="success"
+                                                                                <v-btn v-if="opening_state_prop == 0||opening_state_prop == 3" class="mx-0" small color="success"
                                                                                 :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
                                                                                 v-on:click.stop="checkAvailable('ready',item,null)" style="padding-left: 6px;padding-right: 6px"
                                                                                 >
                                                                                     <v-icon style="color: white" v-if="item.available == 1" >check</v-icon>
                                                                                     Sẵn sàng
                                                                                 </v-btn>
-                                                                                <v-btn v-if="opening_state_prop == 0||opening_state_prop == 1" small class="text-white mx-0" 
+                                                                                <v-btn v-if="opening_state_prop == 0||opening_state_prop == 3" small class="text-white mx-0" 
                                                                                 :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
                                                                                 v-on:click.stop="checkAvailable('busy',item,null)" color="error"
                                                                                 >
@@ -465,10 +465,10 @@
                                                                                     Bận
                                                                                 </v-btn>
 
-                                                                                <!-- <span v-if="opening_state_prop == 0||opening_state_prop == 1" class="mr-2" style="color:green"
+                                                                                <!-- <span v-if="opening_state_prop == 0||opening_state_prop == 3" class="mr-2" style="color:green"
                                                                                 v-html="bindAvailableText(item.available)"></span> -->
 
-                                                                                <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 7" 
+                                                                                <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 9" 
                                                                                 :class="(permission_prop!='manager'&&permission_prop!='owner')||activeClick? pointerEvent : ''"
                                                                                 v-on:click.stop="managerCheckin(item,null)"  outline small class="text-white mx-1" color="indigo">
                                                                                     <v-icon color="indigo" v-if="item.checkin" >check</v-icon>
@@ -560,7 +560,8 @@
             end_point: null,
             working_unit_prop: null,
             permission_prop: null,
-            opening_state_prop: null
+            opening_state_prop: null,
+            // startend_prop:null
         },
 
         created () {
@@ -645,7 +646,20 @@
                 vm.getInvText()
 
             },
-            
+            /**Check permision */
+            managerPermision: function(src){
+                if(src=='manager'||src=='hoster'||src=='owner'||src=='leader'){
+                    return true
+                } else {return false}
+            },
+            /*check state truyền startend*/
+            stateEvent: function(src){
+                if(src==0||src==1){
+                    return true
+                } else if(src==3||src==4) {
+                    return false
+                }
+            },
             /* Load data invitation */
             getInvitation: function(){
                 /*console.log("getInvitation");*/

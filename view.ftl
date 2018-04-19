@@ -25,8 +25,8 @@
             Thư mục lưu trữ
           </div>
           
-          <v-card>
-            <v-card-text style="overflow: auto;white-space: nowrap;">
+          <v-card style="background-color: #EFEFEF!important;">
+            <v-card-text class="px-0 py-0">
               <div class="flex xs12 pl-3" jx-bind="workspace0Filter" class="workspace0Filter"></div>
 
               <div class="flex xs12 pl-3 hidden_fak_temp" jx-bind="docFileTemplateFilter"></div>
@@ -81,8 +81,7 @@
                     {{ item.name }}
                   </v-breadcrumbs-item>
                 </v-breadcrumbs>
-                <v-breadcrumbs class="py-2" v-else>
-                  <span v-show="viewFirst">Thư mục lưu trữ</span>
+                <v-breadcrumbs class="py-2" v-if="!breadWorkspace&&!viewFirst">
                   <span v-show="txtPersonShare" class="txtPersonShare"></span>
                   <v-icon slot="divider" v-show="!txtPersonShare" style="color: #ffffff!important">chevron_right</v-icon>
                   <v-breadcrumbs-item v-show="!txtPersonShare" v-for="item in docFileTemplateTree" :key="item.id" v-on:click.native="breadcrumbsSelectedDocTEMP(item)">
@@ -90,6 +89,7 @@
                   </v-breadcrumbs-item>
                 </v-breadcrumbs>
               </div>
+              <div v-show="viewFirst" class="pl-2">Thư mục lưu trữ</div>
               <div v-show="isSearch" class="pl-2">Kết quả tìm kiếm</div>
             </div>
             <!-- Search -->
@@ -98,7 +98,6 @@
 						  display: -webkit-flex;
 						  align-items: center"
 					  >
-					
               <v-btn flat icon v-on:click.native="toDetailDocFile(docFileTempID)" class="my-0 mx-0" 
               v-if="docFileTemplateTree.length > 0 && !breadWorkspace && docFileTempID > 0">
                 <v-icon>edit</v-icon>
@@ -224,7 +223,7 @@
 <div id="activity_expand_list_template" class="hidden">
   <template slot="items" slot-scope="props">
 
-    <td class="text-xs-left" style="padding-top: 7px; padding-left: 0px;">
+    <td class="text-xs-left px-2" style="padding-top: 2px">
     	<v-btn v-if="(props.item.permanent == true && props.item.permission === 'owner') || (props.item.permanent == '' && props.item.permission === 'owner')" icon class="mx-0 my-0">
           <v-icon>check_box</v-icon>
         </v-btn>
@@ -237,20 +236,18 @@
       
     </td>
 
-    <td class="text-xs-left" style="padding-top: 15px;">
+    <td class="text-xs-center px-2" style="padding-top: 10px;">
     	<a href="javascript:;" @click.stop.prevent="toDetailDocFile(props.item.docFileId)">
         {{ props.item.promulgationDate | date }}
       </a>
       
     </td>
-    <td class="text-xs-left" style="padding-top: 15px;">
+    <td class="text-xs-left px-2" style="padding-top: 10px;">
       <a href="javascript:;" @click.stop.prevent="toDetailDocFile(props.item.docFileId)">
         {{ props.item.name }}
       </a>
     </td>
-    <td class="text-xs-right" style="
-		    display: flex;
-		    display: -webkit-flex;
+    <td class="text-xs-center px-2" style="
 		    align-items: center;
 		    border: 0;
 		">
@@ -382,7 +379,7 @@
         tempData2: '',
       	no_list_access: true,
       	docFileTempID: 0,
-        breadWorkspace: true,
+        breadWorkspace: false,
         is_add_form: true,
         fav: true,
         menu: false,
@@ -1234,20 +1231,20 @@
               var vm = this;
               vm.khoDuLieuListheaders = [{
                   text: 'Số ký hiệu',
-                  align: 'left',
-                  sortable: true,
+                  align: 'center',
+                  sortable: false,
                   value: 'codeNotation'
                 },
                 {
                   text: 'Ngày ban hành',
-                  align: 'left',
-                  sortable: true,
+                  align: 'center',
+                  sortable: false,
                   value: 'promulgationDate'
                 },
                 {
                   text: 'Trích yếu',
-                  align: 'left',
-                  sortable: true,
+                  align: 'center',
+                  sortable: false,
                   value: 'name'
                 },
                 {
@@ -1343,6 +1340,7 @@
               var vm = this;
               vm.viewFirst = true;
               vm.isSearch = false;
+              vm.breadWorkspace = false;
               vm._initworkspace0Filter()
             },
             _inikhoDuLieuListTEMP: function() {
@@ -1963,7 +1961,7 @@
           'type': 'select',
           'label': 'Sổ theo dõi: ',
           'mode': 'editable',
-          'labelClass': 'text-bold xs12 sm4',
+          'labelClass': ' xs12 sm4',
           'controlClass': 'xs12 sm8',
           'updateapi': '/o/v2/mobilink/docfiles',
           "item_text": "subject",
@@ -2008,7 +2006,7 @@
           'chips': true,
           'deletable_chips': true,
           'multiple': true,
-          'labelClass': 'text-bold xs12 sm2',
+          'labelClass': ' xs12 sm2',
           'controlClass': 'xs12 sm10',
           'updateapi': '/o/v2/mobilink/docfiles',
           "item_text_adv": "workspaceNamePath",
@@ -2098,7 +2096,7 @@
           'type': 'select',
           'label': 'Loại sổ: ',
           'mode': 'editable',
-          'labelClass': 'text-bold xs12 sm4',
+          'labelClass': 'xs12 sm4',
           'controlClass': 'xs12 sm8',
           'updateapi': '/o/v2/mobilink/docfiles',
           "item_text": "text",
@@ -2139,7 +2137,7 @@
           'label': 'Ngày đến/phát hành: ',
           'placeholder': 'Nhập dữ liệu',
           'mode': 'editable',
-          'labelClass': 'text-bold xs12 sm4',
+          'labelClass': 'xs12 sm4',
           'controlClass': 'xs12 sm8',
           'updateapi': '/o/v2/mobilink/docfiles',
           'success_msg': 'Cập nhật trường text này thành công',
@@ -2159,7 +2157,7 @@
           'label': 'Ngày ban hành: ',
           'placeholder': 'Nhập dữ liệu',
           'mode': 'editable',
-          'labelClass': 'text-bold xs12 sm4',
+          'labelClass': 'xs12 sm4',
           'controlClass': 'xs12 sm8',
           'updateapi': '/o/v2/mobilink/docfiles',
           'success_msg': 'Cập nhật trường text này thành công',
@@ -2179,7 +2177,7 @@
           'label': 'Cơ quan ban hành: ',
           'no_data_text': 'Chưa có',
           'mode': 'editable',
-          'labelClass': 'text-bold xs12 sm4',
+          'labelClass': 'xs12 sm4',
           'controlClass': 'xs12 sm8',
           'updateapi': '/o/v2/mobilink/docfiles',
           "item_text": "itemName",
@@ -2218,7 +2216,7 @@
           'label': 'Người ký: ',
           'placeholder': 'cập nhật tên người ký ...',
           'mode': 'editable',
-          'labelClass': 'text-bold xs12 sm4',
+          'labelClass': 'xs12 sm4',
           'controlClass': 'xs12 sm8',
           'updateapi': '/o/v2/mobilink/docfiles',
           'success_msg': 'Cập nhật trường text này thành công',
@@ -2239,7 +2237,7 @@
           'no_data_text': 'Chưa có',
           'mode': 'editable',
           'chips': true,
-          'labelClass': 'text-bold xs12 sm4',
+          'labelClass': 'xs12 sm4',
           'controlClass': 'xs12 sm8',
           'updateapi': '/o/v2/mobilink/docfiles',
           "item_text_adv": "texttemp",
@@ -2294,7 +2292,7 @@
           'label': 'Ngôn ngữ: ',
           'placeholder': 'Nhập dữ liệu',
           'mode': 'editable',
-          'labelClass': 'text-bold xs12 sm4',
+          'labelClass': ' xs12 sm4',
           'controlClass': 'xs12 sm8',
           'updateapi': '/o/v2/mobilink/docfiles',
           'success_msg': 'Cập nhật trường text này thành công',
@@ -2314,7 +2312,7 @@
           'label': 'Số bản: ',
           'placeholder': 'nhập số bản',
           'mode': 'editable',
-          'labelClass': 'text-bold xs12 sm4',
+          'labelClass': ' xs12 sm4',
           'controlClass': 'xs12 sm8',
           'updateapi': '/o/v2/mobilink/docfiles',
           'success_msg': 'Cập nhật trường số bản thành công!',
@@ -2334,7 +2332,7 @@
           'label': 'Số trang: ',
           'placeholder': 'nhập số trang ...',
           'mode': 'editable',
-          'labelClass': 'text-bold xs12 sm4',
+          'labelClass': 'xs12 sm4',
           'controlClass': 'xs12 sm8',
           'updateapi': '/o/v2/mobilink/docfiles',
           'success_msg': 'Cập nhật trường số trang thành công!',
@@ -2353,7 +2351,7 @@
           'type': 'select',
           'label': 'Độ khẩn: ',
           'mode': 'editable',
-          'labelClass': 'text-bold xs12 sm4',
+          'labelClass': 'xs12 sm4',
           'controlClass': 'xs12 sm8',
           'updateapi': '/o/v2/mobilink/docfiles',
           "item_text": "text",
@@ -2361,7 +2359,7 @@
           "hide_selected": true,
           "loading": false,
           "items": [],
-          'labelClass': 'text-bold xs12 sm4',
+          'labelClass': ' xs12 sm4',
           'controlClass': 'xs12 sm8',
           'updateapi': '/o/v2/mobilink/docfiles',
           'success_msg': 'Cập nhật trường text này thành công',
@@ -2400,7 +2398,7 @@
           'type': 'select',
           'label': 'Độ mật: ',
           'mode': 'editable',
-          'labelClass': 'text-bold xs12 sm4',
+          'labelClass': 'xs12 sm4',
           'controlClass': 'xs12 sm8',
           'updateapi': '/o/v2/mobilink/docfiles',
           "item_text": "text",
@@ -2446,8 +2444,8 @@
           'label': 'Tóm tắt nội dung: ',
           'placeholder': 'nhập tóm tắt nội dung ...',
           'mode': 'editable',
-          'labelClass': 'text-bold xs12 sm2',
-          'controlClass': 'xs12 sm10',
+          'labelClass': 'xs12 sm2',
+          'controlClass': 'xs12 sm9',
           'updateapi': '/o/v2/mobilink/docfiles',
           'success_msg': 'Cập nhật trường text này thành công',
           'error_msg': 'Cập nhật trường text này thất bại',
@@ -2535,14 +2533,18 @@
 
   body .danhSachPaymentTable__class table.table th:nth-child(1) {
     width: 20%;
+    background-color: transparent!important;
   }
 
   body .danhSachPaymentTable__class table.table th:nth-child(2) {
-    width: 10%;
+    width: 12%;
   }
 
   body .danhSachPaymentTable__class table.table th:nth-child(3) {
-    width: 65%;
+    width: 59%;
+  }
+  body .danhSachPaymentTable__class table.table th:nth-child(4) {
+    width: 9%;
   }
 
   .btn__nopadding {
@@ -2569,13 +2571,40 @@
 	.codeNo__codeNotation .input-group{
 		padding-top: 0px;
 	}
+  .expMenu .expansion-panel{
+    border: 0px;
+  }
   .expMenu .expansion-panel__header{
+    font-family: 'Roboto'!important;
+    color:rgba(0,0,0,0.87)!important;
     border: 0px;
     background-color: #EFEFEF;
     padding: 0px
   }
+  .expMenu .expansion-panel__header .nav__btn__custom{
+    font-weight: 500;
+    font-size: 13px;
+  }
+  .expansion-panel__header .icon {
+      color: rgba(0,0,0,0.54)!important;
+  }
   .expMenu .expansion-panel__header:hover{
     background-color: #C6C6C6
   }
+  #danhSachPaymentTable__class table{
+    table-layout: fixed
+  }
+  .headerDetail{
+        background: #e1f5fe;
+    }
+    .controlClass .input-group__selections__comma{
+        font-size: 14px;
+    }
+    .controlClass .chip__content{
+        font-size:14px
+    }
+    body table.table td a:hover{
+        color: #1a5eba!important;
+    }
 </style>
 
