@@ -407,13 +407,13 @@
                     axios.get(vm.end_point + 'workingunits', config),
                     axios.get( vm.end_point + 'users', configGetEmployee),
                     axios.get( vm.end_point + 'locations', config),
-                    axios.get( vm.end_point + 'projects', config)
+                    // axios.get( vm.end_point + 'projects', config)
                 ])
-                .then(axios.spread(function(workingUnitRespones, userRespones, locationRespones,projectsRespone) {
+                .then(axios.spread(function(workingUnitRespones, userRespones, locationRespones) {
                     var serializable = workingUnitRespones.data;
                     var serializable1 = userRespones.data;
                     var serializable2 = locationRespones.data;
-                    var serializable3 = projectsRespone.data;
+                    // var serializable3 = projectsRespone.data;
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
                             vm.hostingIdItems.push({
@@ -439,15 +439,15 @@
                             
                         }
                     }
-                    if (serializable3.hasOwnProperty('data')) {
-                        for (var key in serializable3.data) {
-                            vm.projectItems.push({
-                                projectName: serializable3.data[key].projectName,
-                                projectId: serializable3.data[key].projectId
-                            })
+                    // if (serializable3.hasOwnProperty('data')) {
+                    //     for (var key in serializable3.data) {
+                    //         vm.projectItems.push({
+                    //             projectName: serializable3.data[key].projectName,
+                    //             projectId: serializable3.data[key].projectId
+                    //         })
                             
-                        }
-                    };
+                    //     }
+                    // };
                     if(!vm.keyS){
                         vm.bindAdvanceSearch();
                         vm.getTableList();
@@ -600,7 +600,7 @@
                     vm.status = (url.has("state")?url.get("state"):'')?Number(url.get("state")):'';
                     vm.hostingId = (url.has("hosting")?url.get("hosting"):'')?Number(url.get("hosting")):'';
                     vm.managerS = (url.has("manager")?url.get("manager"):'')?Number(url.get("manager")):'';
-                    vm.projectS = (url.has("project")?url.get("project"):'')?Number(url.get("project")):'';
+                    // vm.projectS = (url.has("project")?url.get("project"):'')?Number(url.get("project")):'';
                     vm.activityType = url.has("type")?url.get("type"):'';
                     vm.locationS = (url.has("location")?url.get("location"):'')?Number(url.get("location")):'';
                     vm.timeStart = url.has("fromdate")?new Date (url.get("fromdate").slice(0,4)+'-'+url.get("fromdate").slice(4,6)+'-'+ url.get("fromdate").slice(6,8)):'';
@@ -610,7 +610,7 @@
                     vm.status = vm.state?vm.state:'';
                     vm.hostingId = vm.hosting?vm.hosting:'';
                     vm.managerS = vm.manager?vm.manager:'';
-                    vm.projectS = vm.project?vm.project:'';
+                    // vm.projectS = vm.project?vm.project:'';
                     vm.activityType = vm.type?vm.type:'';
                     vm.locationS = vm.location?vm.location:'';
                     vm.timeStart = vm.fromdate?new Date (vm.fromdate.slice(0,4)+'-'+vm.fromdate.slice(4,6)+'-'+ vm.fromdate.slice(6,8)):'';
@@ -640,7 +640,7 @@
                     paramsTableActivity.state = vm.status?vm.status:'';
                     paramsTableActivity.hosting = vm.hostingId?vm.hostingId:'';
                     paramsTableActivity.manager = vm.managerS?vm.managerS:'';
-                    paramsTableActivity.project = vm.projectS?vm.projectS:'';
+                    // paramsTableActivity.project = vm.projectS?vm.projectS:'';
                     paramsTableActivity.type = vm.activityType?vm.activityType:'';
                     paramsTableActivity.location = vm.locationS?vm.locationS:'';
                     paramsTableActivity.fromdate = vm.parseDateFormat(vm.timeStart);
@@ -702,12 +702,12 @@
                         return item.userId == vm.managerS;
                     })[0].fullName
                 };
-                if(vm.projectS){
-                    var arr = vm.projectItems;
-                    var projectT = arr.filter(function(item) {
-                        return item.projectId == vm.projectS;
-                    })[0].projectName
-                };
+                // if(vm.projectS){
+                //     var arr = vm.projectItems;
+                //     var projectT = arr.filter(function(item) {
+                //         return item.projectId == vm.projectS;
+                //     })[0].projectName
+                // };
                 if(vm.activityType){
                     var arr = vm.activityTypeItems;
                     var activityTypeText = arr.filter(function(item) {
@@ -721,7 +721,7 @@
                     'Đơn vị tổ chức: ' : hostingT,
                     'Địa chỉ: ' : locationT,
                     'Người chủ trì/ phụ trách: ': managerT,
-                    'Dự án/chương trình: ' : projectT,
+                    // 'Dự án/chương trình: ' : projectT,
                     'Hoạt động: ' :activityTypeText
                     
                 };
@@ -756,7 +756,7 @@
                 vm.keyValue = vm.keySearch;
                 vm.timeStart='';
                 vm.timeEnd ='';
-                vm.projectS='';
+                // vm.projectS='';
                 vm.status = '';
                 vm.hostingId = '';
                 vm.managerS = '';
