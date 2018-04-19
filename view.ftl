@@ -18,18 +18,15 @@
           </v-list>
         </v-menu>
       </div>
-      <v-expansion-panel expand>
+      <v-expansion-panel expand class="my-0 expMenu" style="box-shadow: none!important">
         <v-expansion-panel-content value="true">
-          <div slot="header">
-              <div class="flex xs12 pl-3 nav__btn__custom">
-                <v-btn block flat class="mx-0 my-0 px-0">
-                  <v-icon>storage </v-icon>
-                  Thư mục lưu trữ
-                </v-btn>
-              </div>
+          <div slot="header" class="pl-3 py-2 nav__btn__custom" @click="viewThumuc">
+            <v-icon>storage </v-icon>
+            Thư mục lưu trữ
           </div>
+          
           <v-card>
-            <v-card-text>
+            <v-card-text style="overflow: auto;white-space: nowrap;">
               <div class="flex xs12 pl-3" jx-bind="workspace0Filter" class="workspace0Filter"></div>
 
               <div class="flex xs12 pl-3 hidden_fak_temp" jx-bind="docFileTemplateFilter"></div>
@@ -85,7 +82,7 @@
                   </v-breadcrumbs-item>
                 </v-breadcrumbs>
                 <v-breadcrumbs class="py-2" v-else>
-                  <span v-show="viewFirst">Quản lý văn bản</span>
+                  <span v-show="viewFirst">Thư mục lưu trữ</span>
                   <span v-show="txtPersonShare" class="txtPersonShare"></span>
                   <v-icon slot="divider" v-show="!txtPersonShare" style="color: #ffffff!important">chevron_right</v-icon>
                   <v-breadcrumbs-item v-show="!txtPersonShare" v-for="item in docFileTemplateTree" :key="item.id" v-on:click.native="breadcrumbsSelectedDocTEMP(item)">
@@ -148,7 +145,7 @@
 
             </div>
           </v-slide-y-transition>
-          <!-- Menu trái -->
+          <!-- Content Right -->
           <v-slide-y-transition>
             <div class="mb-2 folder__expand__view pt-2" v-if="khoDuLieuListFolderItems.length > 0 && !isSearch">
 
@@ -490,7 +487,7 @@
           'template_content': 'paymentViewJX_form_template',
           'onLoad': '_doRouter',
           'events': {
-			onScroll: function(e) {},
+			      onScroll: function(e) {},
             _doRouter: function() {
               this.detailModel['workspaceId'] = ${Request.workspaceIdW};
               this.toDetailDocFile(${Request.docFileId});
@@ -1212,7 +1209,7 @@
           'cssClass': 'danhSachPaymentTable__class',
           'item_key': 'id',
           'headers': 'headers',
-          'no_data_text': 'Không có tài liệu!',
+          'no_data_text': 'Không có tài liệu',
           'template': 'activity_expand_list_template',
           'pagging': '_khoDuLieuListTable',
           'events': {
@@ -1341,6 +1338,12 @@
                 })).catch(function(error) {
                   console.log(error);
                 });
+            },
+            viewThumuc: function(){
+              var vm = this;
+              vm.viewFirst = true;
+              vm.isSearch = false;
+              vm._initworkspace0Filter()
             },
             _inikhoDuLieuListTEMP: function() {
               var vm = this;
@@ -2566,5 +2569,13 @@
 	.codeNo__codeNotation .input-group{
 		padding-top: 0px;
 	}
+  .expMenu .expansion-panel__header{
+    border: 0px;
+    background-color: #EFEFEF;
+    padding: 0px
+  }
+  .expMenu .expansion-panel__header:hover{
+    background-color: #C6C6C6
+  }
 </style>
 

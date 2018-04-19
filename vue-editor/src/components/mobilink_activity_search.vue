@@ -259,7 +259,7 @@
             group_id: '',
             end_point: '',
             search:'',
-            searchUrl: null,
+            search_url: null,
             category:'',
             state:'',
             hosting:'',
@@ -273,7 +273,7 @@
             var vm = this;
             vm.$nextTick(function () {
                 console.log(vm._props);
-                var url = vm.searchUrl?(new URL(vm.searchUrl)).searchParams:null;
+                var url = vm.search_url?(new URL(vm.search_url)).searchParams:null;
                 if(url&&url.get("search")=='true'){
                     vm.search_advanced()
                 }
@@ -595,7 +595,7 @@
             /**bind props */
             bindAdvanceSearch: function(){
                 var vm =this;
-                var url = vm.searchUrl?(new URL(vm.searchUrl)).searchParams:null;
+                var url = vm.search_url?(new URL(vm.search_url)).searchParams:null;
                 if(url&&url.get("search")=='true'){
                     vm.status = (url.has("state")?url.get("state"):'')?Number(url.get("state")):'';
                     vm.hostingId = (url.has("hosting")?url.get("hosting"):'')?Number(url.get("hosting")):'';
@@ -725,7 +725,7 @@
                     'Hoạt động: ' :activityTypeText
                     
                 };
-                var url = vm.searchUrl?(new URL(vm.searchUrl)).searchParams:null;
+                var url = vm.search_url?(new URL(vm.search_url)).searchParams:null;
                 if(url&&url.get("search")=='true'&&url.has("keywords")){
                     vm.textResult = 'Từ khóa:'+url.get("keywords");
                 } else {vm.textResult = ''}
