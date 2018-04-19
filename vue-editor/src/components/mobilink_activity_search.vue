@@ -317,6 +317,10 @@
                 keyS: false,
                 keyValue:'',
                 textResult:'',
+                isOverdue: '',
+                startend:'',
+                categoryS:'',
+                follow:'',
 
                 tableListTotal: 0,
                 tableListItems:[],
@@ -605,7 +609,10 @@
                     vm.locationS = (url.has("location")?url.get("location"):'')?Number(url.get("location")):'';
                     vm.timeStart = url.has("fromdate")?new Date (url.get("fromdate").slice(0,4)+'-'+url.get("fromdate").slice(4,6)+'-'+ url.get("fromdate").slice(6,8)):'';
                     vm.timeEnd = url.has("todate")?new Date (url.get("todate").slice(0,4)+'-'+url.get("todate").slice(4,6)+'-'+ url.get("todate").slice(6,8)):'';
-                    
+                    vm.isOverdue = url.has("isOverdue")?url.get("isOverdue"):'';
+                    vm.startend = url.has("startend")?url.get("startend"):'';
+                    vm.categoryS = url.has("category")?url.get("category"):'';
+                    vm.follow = url.has("follow")?url.get("follow"):'';
                 } else {
                     vm.status = vm.state?vm.state:'';
                     vm.hostingId = vm.hosting?vm.hosting:'';
@@ -637,12 +644,16 @@
                     vm.textResult = '';
                     vm.textResult = "Từ khóa:"+vm.keyValue
                 } else {
-                    paramsTableActivity.state = vm.status?vm.status:'';
-                    paramsTableActivity.hosting = vm.hostingId?vm.hostingId:'';
-                    paramsTableActivity.manager = vm.managerS?vm.managerS:'';
+                    paramsTableActivity.state = vm.status?vm.status:null;
+                    paramsTableActivity.hosting = vm.hostingId?vm.hostingId:null;
+                    paramsTableActivity.leader = vm.managerS?vm.managerS:null;
                     // paramsTableActivity.project = vm.projectS?vm.projectS:'';
-                    paramsTableActivity.type = vm.activityType?vm.activityType:'';
-                    paramsTableActivity.location = vm.locationS?vm.locationS:'';
+                    paramsTableActivity.type = vm.activityType?vm.activityType:null;
+                    paramsTableActivity.isOverdue = vm.isOverdue?vm.isOverdue:null;
+                    paramsTableActivity.startend = vm.startend?vm.startend:null;
+                    paramsTableActivity.follow = vm.follow?vm.follow:null;
+                    paramsTableActivity.category = vm.categoryS?vm.categoryS:null;
+                    paramsTableActivity.location = vm.locationS?vm.locationS:null;
                     paramsTableActivity.fromdate = vm.parseDateFormat(vm.timeStart);
                     paramsTableActivity.todate = vm.parseDateFormat(vm.timeEnd);
                     
