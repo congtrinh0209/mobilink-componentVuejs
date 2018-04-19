@@ -601,9 +601,9 @@
                 var vm =this;
                 var url = vm.search_url?(new URL(vm.search_url)).searchParams:null;
                 if(url&&url.get("search")=='true'){
-                    vm.status = (url.has("state")?url.get("state"):'')?Number(url.get("state")):'';
+                    vm.status = url.has("state")?url.get("state"):'';
                     vm.hostingId = (url.has("hosting")?url.get("hosting"):'')?Number(url.get("hosting")):'';
-                    vm.managerS = (url.has("manager")?url.get("manager"):'')?Number(url.get("manager")):'';
+                    vm.managerS = (url.has("leader")?url.get("leader"):'')?Number(url.get("leader")):'';
                     // vm.projectS = (url.has("project")?url.get("project"):'')?Number(url.get("project")):'';
                     vm.activityType = url.has("type")?url.get("type"):'';
                     vm.locationS = (url.has("location")?url.get("location"):'')?Number(url.get("location")):'';
@@ -695,12 +695,12 @@
                     })[0].name
                 };
                 
-                if(vm.status){
-                    var arr = vm.statusItems;
-                    var stateT = arr.filter(function(item) {
-                        return item.statusCode == vm.status;
-                    })[0].statusName
-                };
+                // if(vm.status){
+                //     var arr = vm.statusItems;
+                //     var stateT = arr.filter(function(item) {
+                //         return item.statusCode == vm.status;
+                //     })[0].statusName
+                // };
                 if(vm.locationS){
                     var arr = vm.locationItems;
                     var locationT = arr.filter(function(item) {
@@ -728,7 +728,7 @@
                 var textShow = {
                     'Từ ngày: ': vm.startDate,
                     'Đến ngày: ': vm.endDate,
-                    'Trạng thái: ' : stateT,
+                    // 'Trạng thái: ' : stateT,
                     'Đơn vị tổ chức: ' : hostingT,
                     'Địa chỉ: ' : locationT,
                     'Người chủ trì/ phụ trách: ': managerT,
