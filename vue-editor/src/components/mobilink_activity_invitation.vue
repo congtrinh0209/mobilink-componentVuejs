@@ -1,6 +1,6 @@
 <template>
 
-    <div id="activity_invitation" v-if="startend_prop!=4">
+    <div id="activity_invitation">
         
         <v-snackbar :timeout="3000" :top="true" :bottom="false" 
             :right="true" :left="false" :multi-line="true" 
@@ -37,7 +37,7 @@
                                 <div >
                                     <span v-if="mineInv">
                                         <v-tooltip top :disabled="(userLogin.userNote?false:true)">
-                                            <v-btn icon slot="activator" class="text-white mx-0 my-0"  @click.stop="showAddNote(userLogin)">
+                                            <v-btn icon slot="activator" :class="stateEvent(startend_prop)==false?disableClick:''" class="text-white mx-0 my-0"  @click.stop="showAddNote(userLogin)">
                                                 <v-icon class="iconCmm" >comment</v-icon>
                                             </v-btn>
                                             <span>{{userLogin.userNote}}</span>
@@ -56,7 +56,7 @@
                                             <span style="color: white!important">Tôi bận</span>
                                         </v-btn>
                                         <v-btn v-if="stateEvent(startend_prop)==false" small class="text-white mx-1"
-                                         v-on:click.stop="checkin(userLogin)" :class="activeClick?disableClick:''" color="indigo">
+                                         v-on:click.stop="checkin(userLogin)" :class="disableClick" color="indigo">
                                             <v-icon style="color: white!important" v-if="userLogin.checkin" >check</v-icon>
                                             <span style="color: white!important">Tôi có mặt</span>
                                         </v-btn>
@@ -100,7 +100,7 @@
                                     <div class="color-subpanel">Đơn vị/ Nhóm trong cơ quan</div>
                                     
                                     <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add1" 
-                                    v-if="managerPermision(permission_prop)==true"
+                                    v-if="managerPermision(permission_prop)&&stateEvent(startend_prop)"
                                     grey darken-4>
                                         add_circle
                                     </v-icon>
@@ -182,7 +182,7 @@
                                                             <!-- end -->
 
                                                             <!-- Phần thêm cá nhân trong tổ chức/ đơn vị -->
-                                                            <div v-if="item.role.invitationType == 0 && item.leader" class="layout wrap mx-0 mb-2 pl-2 pr-1">
+                                                            <div v-if="item.role.invitationType == 0 && item.leader&&stateEvent(startend_prop)" class="layout wrap mx-0 mb-2 pl-2 pr-1">
                                                                 <toggle-button class="mr-1 mt-4"
                                                                 
                                                                 v-model="presenterAddUserUnit"
@@ -301,7 +301,7 @@
                                     <div class="color-subpanel">Cá nhân/ Tổ chức theo danh bạ</div>
 
                                     <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add2" 
-                                    v-if="managerPermision(permission_prop)==true" grey darken-4>
+                                    v-if="managerPermision(permission_prop)&&stateEvent(startend_prop)" grey darken-4>
                                         add_circle
                                     </v-icon>
                                 </div>

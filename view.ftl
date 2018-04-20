@@ -725,7 +725,7 @@
               vm.setWorkspaceTree(vm.detailModel);
               vm._inikhoDuLieuList(vm.detailModel);
             },
-			/** thuoc tinh cua modelDetail */
+			    /** thuoc tinh cua modelDetail */
             _mapModelDetail: function(model, active) {
               var vm = this;
               for (var key in this.detailModel) {
@@ -1215,8 +1215,19 @@
               vm.downloading = item.docFileId;
               var url = '/o/v2/mobilink/docfiles/' + item.docFileId + '/download';
               axios.get(url, config_blob).then(function(response) {
-                  var url = window.URL.createObjectURL(response.data);
-                  window.open(url);
+                  // var url = window.URL.createObjectURL(response.data);
+                  // window.open(url);
+                  var fileName = response.headers['content-disposition'];
+                  fileName = fileName.split('"')[1];
+                  var a = document.createElement("a");
+                  document.body.appendChild(a);
+                  a.style = "display: none";
+                  var url = window.URL.createObjectURL(response.data)
+                  a.href = url;
+                  a.download = fileName;
+                  a.click();
+                  window.URL.revokeObjectURL(url);
+                  //  
                   vm.downloading = -1;
                 })
                 .catch(function(error) {
@@ -1587,6 +1598,7 @@
               vm.workspaceTree = newTree;
             },
             previewAttachPDFTab: function(item) {
+              
               var vm = this;
               vm.no_list_access = false;
               if (item.workspaceId) {
@@ -1597,8 +1609,18 @@
               } else {
                 var url = vm.endPoint + "fileattachs/" + item.docFileId;
                 axios.get(url, config_blob).then(function(response) {
-                  var url = window.URL.createObjectURL(response.data);
-                  window.open(url);
+                  // var url = window.URL.createObjectURL(response.data);
+                  // window.open(url);
+                  var fileName = response.headers['content-disposition'];
+                  fileName = fileName.split('"')[1];
+                  var a = document.createElement("a");
+                  document.body.appendChild(a);
+                  a.style = "display: none";
+                  var url = window.URL.createObjectURL(response.data)
+                  a.href = url;
+                  a.download = fileName;
+                  a.click();
+                  window.URL.revokeObjectURL(url);
                 })
                 .catch(function(error) {
                   console.log(error);
@@ -2598,6 +2620,9 @@
     background-color: #C6C6C6
   }
   #danhSachPaymentTable__class table{
+    table-layout: fixed
+  }
+  table{
     table-layout: fixed
   }
   .headerDetail{

@@ -33,17 +33,19 @@
                                 <div>
                                     <span v-if="mineInv">
                                         <v-tooltip top :disabled="(userLogin.userNote?false:true)">
-                                            <v-btn icon slot="activator" class="text-white mx-0 my-0"  @click.stop="showAddNote(userLogin)">
+                                            <v-btn icon slot="activator" :class="stateTask(startend_prop)==false?disableClick:''" class="text-white mx-0 my-0"  @click.stop="showAddNote(userLogin)">
                                                 <v-icon class="iconCmm" >comment</v-icon>
                                             </v-btn>
                                             <span >{{userLogin.userNote}}</span>
                                         </v-tooltip>
                                         
-                                        <v-btn class="mx-0" small color="success" v-on:click.stop="checkAvailable('ready',userLogin,null)" style="padding-left: 6px;padding-right: 6px">
+                                        <v-btn class="mx-0" small color="success" v-on:click.stop="checkAvailable('ready',userLogin,null)"
+                                        :class="stateTask(startend_prop)==false?disableClick:''" style="padding-left: 6px;padding-right: 6px">
                                             <v-icon style="color: white!important" v-if="userLogin.available == 1"  >check</v-icon>
                                             <span style="color: white!important">Sẵn sàng</span>
                                         </v-btn>
-                                        <v-btn small class="text-white mx-1" v-on:click.stop="checkAvailable('busy',userLogin,null)" color="error">
+                                        <v-btn small class="text-white mx-1" v-on:click.stop="checkAvailable('busy',userLogin,null)"
+                                        :class="stateTask(startend_prop)==false?disableClick:''" color="error">
                                             <v-icon style="color: white!important" v-if="userLogin.available == 2" >check</v-icon>
                                             <span style="color: white!important">Tôi bận</span>
                                         </v-btn>
@@ -86,7 +88,7 @@
                                 <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0">
                                     <div class="color-subpanel">Đơn vị/ Nhóm trong cơ quan</div>
 
-                                    <v-icon class="btn-add mx-0 my-0" v-if="managerPermision(permission_prop)==true"
+                                    <v-icon class="btn-add mx-0 my-0" v-if="managerPermision(permission_prop)&&stateTask(startend_prop)"
                                         v-on:click.stop="show_Add1Task" grey darken-4>
                                         add_circle
                                     </v-icon>
@@ -162,7 +164,7 @@
                                                             <!-- end -->
 
                                                             <!-- Phần thêm cá nhân trong tổ chức/ đơn vị -->
-                                                            <div v-if="item.role.invitationType == 0 && item.user_leader" class="layout wrap mx-0 mb-2 pl-2 pr-1">
+                                                            <div v-if="item.role.invitationType == 0 && item.user_leader&&stateTask(startend_prop)" class="layout wrap mx-0 mb-2 pl-2 pr-1">
                                                                 <toggle-button class="mr-1 mt-4"
                                                                 
                                                                 v-model="presenterAddUserUnit"
@@ -272,7 +274,7 @@
                                     <div class="color-subpanel">Cá nhân/ Tổ chức theo danh bạ</div>
 
                                     <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add2Task" 
-                                    v-if="managerPermision(permission_prop)==true" grey darken-4>
+                                    v-if="managerPermision(permission_prop)&&stateTask(startend_prop)" grey darken-4>
                                         add_circle
                                     </v-icon>
                                 </div>
@@ -1319,7 +1321,9 @@
 	   -webkit-flex: 1; /* Safari 6.1+ */
 	   flex: 1;
 	}
-
+    #activity_invitation_task .disableClick{
+        pointer-events: none;
+    }
     #activity_invitation_task button{
         min-width: 0px;
         margin: 6px 0;
