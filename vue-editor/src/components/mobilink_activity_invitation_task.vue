@@ -86,7 +86,7 @@
                                 <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0">
                                     <div class="color-subpanel">Đơn vị/ Nhóm trong cơ quan</div>
 
-                                    <v-icon class="btn-add mx-0 my-0" v-if="permission_prop == 'manager'|| permission_prop == 'owner' || permission_prop == 'leader'|| permission_prop == 'hoster'"
+                                    <v-icon class="btn-add mx-0 my-0" v-if="managerPermision(permission_prop)==true"
                                         v-on:click.stop="show_Add1Task" grey darken-4>
                                         add_circle
                                     </v-icon>
@@ -141,7 +141,7 @@
                                                                                     {{item.role.statistic.available}}/{{item.role.statistic.invitation}}
                                                                                 </v-chip>
                                                                                 
-                                                                                <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager' || permission_prop == 'owner'|| permission_prop == 'leader'|| permission_prop == 'hoster'" 
+                                                                                <v-btn icon title="Xóa" class="mx-0" v-if="managerPermision(permission_prop)==true" 
                                                                                 @click.stop="updateInvitationTask('DELETE',item.role.resourceInvitationId,index,itemInvGroupTask)">
                                                                                     <v-icon color="red darken-3">clear</v-icon>
                                                                                 </v-btn> 
@@ -195,7 +195,7 @@
                                                                                 <toggle-button class="mr-1 mt-1" 
                                                                                 @change="updatePresenterUserGroupTask($event,subItem.resourceInvitationId,item)"
                                                                                 :value="bindPresenter(subItem.right)"
-                                                                                :disabled="(permission_prop=='manager'||permission_prop=='owner'|| permission_prop == 'leader'|| permission_prop == 'hoster'|| item.leader)?false:true"
+                                                                                :disabled="(managerPermision(permission_prop)==true|| item.leader)?false:true"
                                                                                 title_checked = "Thực hiện"
                                                                                 title_unchecked = "Phối hợp"
                                                                                 :labels="{checked: 'TH', unchecked: 'PH'}"
@@ -236,7 +236,7 @@
 
                                                                                 <!-- <span style="color:green" class="mr-2" v-html="bindAvailableText(subItem.available)"></span> -->
                                                                                 
-                                                                                <v-btn v-if="permission_prop=='manager' ||permission_prop=='owner' || item.leader" icon title="Xóa" class="mx-0"
+                                                                                <v-btn v-if="managerPermision(permission_prop)==true || item.leader" icon title="Xóa" class="mx-0"
                                                                                 @click.stop="updateInvitationTask('DELETE',subItem.resourceInvitationId,index,item.items)">
                                                                                     <v-icon color="red darken-3">clear</v-icon>
                                                                                 </v-btn>
@@ -268,7 +268,7 @@
                                     <div class="color-subpanel">Cá nhân/ Tổ chức theo danh bạ</div>
 
                                     <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add2Task" 
-                                    v-if="permission_prop == 'manager'|| permission_prop == 'owner'|| permission_prop == 'leader'|| permission_prop == 'hoster'" grey darken-4>
+                                    v-if="managerPermision(permission_prop)==true" grey darken-4>
                                         add_circle
                                     </v-icon>
                                 </div>
@@ -393,7 +393,7 @@
                                                                         <v-flex class="pt-2">
                                                                             <v-list-tile-title>
                                                                                 <toggle-button class="mr-1 mt-1"
-                                                                                :disabled="(permission_prop=='manager'||permission_prop=='owner'|| permission_prop == 'leader'|| permission_prop == 'hoster')?false:true"
+                                                                                :disabled="(managerPermision(permission_prop)==true)?false:true"
                                                                                 :value="bindPresenter(item.right)"
                                                                                 @change="updatePresenterUserGroupTask($event,item.resourceInvitationId,itemInvContactTask)"
                                                                                 title_checked = "Thực hiện"
@@ -436,7 +436,7 @@
 
                                                                                 <!-- <span class="mr-2" style="color:green" v-html="bindAvailableText(item.available)"></span> -->
 
-                                                                                <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager'|| permission_prop == 'owner'|| permission_prop == 'leader'|| permission_prop == 'hoster'"
+                                                                                <v-btn icon title="Xóa" class="mx-0" v-if="managerPermision(permission_prop)==true"
                                                                                 @click.stop="updateInvitationTask('DELETE',item.resourceInvitationId,index,itemInvContactTask)">
                                                                                     <v-icon color="red darken-3">clear</v-icon>
                                                                                 </v-btn> 
@@ -484,8 +484,8 @@
             end_point: null,
             working_unit_prop: null,
             permission_prop: null,
-            opening_state_prop: null,
-            // startend_prop:null
+            // opening_state_prop: null,
+            startend_prop:null
         },
 
         created () {
@@ -1016,7 +1016,7 @@
                     presenterChange = 1
                 }else {presenterChange = 0};
 
-                if(vm.permission_prop=='manager'||vm.permission_prop=='owner'|| items.leader){
+                if(vm.managerPermision(permission_prop)==true|| items.leader){
                     vm.submitUpdatePresenterTask(invId,presenterChange,items)
                 } else {
                     return false

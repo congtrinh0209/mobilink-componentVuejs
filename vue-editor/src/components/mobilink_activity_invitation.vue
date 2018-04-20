@@ -1,6 +1,6 @@
 <template>
 
-    <div id="activity_invitation" >
+    <div id="activity_invitation" v-if="startend_prop!=4">
         
         <v-snackbar :timeout="3000" :top="true" :bottom="false" 
             :right="true" :left="false" :multi-line="true" 
@@ -30,9 +30,8 @@
 
                     <div slot="header" class="custome-panel-heading-with-icon">
                         <v-toolbar class="my-0">   
-                            <div class="ml-2" style="flex: none" v-if="opening_state_prop == 0||opening_state_prop == 3">Giấy mời: {{availableCount}}/ {{invitationCount}} sẵn sàng</div>
-                            <div class="ml-2" style="flex: none" v-if="opening_state_prop == 4">Giấy mời: {{checkinCount}}/ {{invitationCount}} có mặt</div>
-                            <div class="ml-2" style="flex: none" v-if="opening_state_prop == 9 ">Giấy mời: {{checkinCount}}/ {{invitationCount}} có mặt</div>
+                            <div class="ml-2" style="flex: none" v-if="stateEvent(startend_prop)==true">Giấy mời: {{availableCount}}/ {{invitationCount}} sẵn sàng</div>
+                            <div class="ml-2" style="flex: none" v-if="stateEvent(startend_prop)==false">Giấy mời: {{checkinCount}}/ {{invitationCount}} có mặt</div>
                             
                             <div style="flex: none;position:absolute;right:0;top:5px" class="ml-2">
                                 <div >
@@ -44,19 +43,19 @@
                                             <span>{{userLogin.userNote}}</span>
                                         </v-tooltip>
                                         
-                                        <v-btn v-if="opening_state_prop == 0||opening_state_prop == 3" class="mx-0" small color="success" 
+                                        <v-btn v-if="stateEvent(startend_prop)==true" class="mx-0" small color="success" 
                                         v-on:click.stop="checkAvailable('ready',userLogin,null)" style="padding-left: 6px;padding-right: 6px"
                                         :class="activeClick?disableClick:''"
                                         >
                                             <v-icon style="color: white!important" v-if="userLogin.available == 1" >check</v-icon>
                                             <span style="color: white!important">Sẵn sàng</span>
                                         </v-btn>
-                                        <v-btn v-if="opening_state_prop == 0||opening_state_prop == 3" small class="text-white mx-1" 
+                                        <v-btn v-if="stateEvent(startend_prop)==true" small class="text-white mx-1" 
                                         v-on:click.stop="checkAvailable('busy',userLogin,null)" :class="activeClick?disableClick:''" color="error">
                                             <v-icon style="color: white!important" v-if="userLogin.available == 2" >check</v-icon>
                                             <span style="color: white!important">Tôi bận</span>
                                         </v-btn>
-                                        <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 9" small class="text-white mx-1"
+                                        <v-btn v-if="stateEvent(startend_prop)==false" small class="text-white mx-1"
                                          v-on:click.stop="checkin(userLogin)" :class="activeClick?disableClick:''" color="indigo">
                                             <v-icon style="color: white!important" v-if="userLogin.checkin" >check</v-icon>
                                             <span style="color: white!important">Tôi có mặt</span>
@@ -101,7 +100,7 @@
                                     <div class="color-subpanel">Đơn vị/ Nhóm trong cơ quan</div>
                                     
                                     <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add1" 
-                                    v-if="permission_prop == 'manager'|| permission_prop == 'owner' || permission_prop == 'leader'|| permission_prop == 'hoster'"
+                                    v-if="managerPermision(permission_prop)==true"
                                     grey darken-4>
                                         add_circle
                                     </v-icon>
@@ -154,15 +153,15 @@
                                                                         </v-flex>
                                                                         <v-flex xs6 sm3>
                                                                             <div class="right">
-                                                                                <v-chip v-if="opening_state_prop == 0||opening_state_prop == 3" label outline color="primary" class="mr-2 mt-2">
+                                                                                <v-chip v-if="stateEvent(startend_prop)==true" label outline color="primary" class="mr-2 mt-2">
                                                                                     {{item.role.statistic.available}}/{{item.role.statistic.invitation}}
                                                                                 </v-chip>
 
-                                                                                <v-chip v-if="opening_state_prop == 4 || opening_state_prop == 9" label outline color="primary" class="mr-2 mt-2">
+                                                                                <v-chip v-if="stateEvent(startend_prop)==false" label outline color="primary" class="mr-2 mt-2">
                                                                                     {{item.role.statistic.checkin}}/{{item.role.statistic.invitation}}
                                                                                 </v-chip>
 
-                                                                                <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager' || permission_prop == 'owner'|| permission_prop == 'leader'|| permission_prop == 'hoster'" 
+                                                                                <v-btn icon title="Xóa" class="mx-0" v-if="managerPermision(permission_prop)==true" 
                                                                                 @click.stop="updateInvitation('DELETE',item.role.resourceInvitationId,index,itemInvGroup)">
                                                                                     <v-icon color="red darken-3">clear</v-icon>
                                                                                 </v-btn> 
@@ -216,7 +215,7 @@
                                                                                 <toggle-button class="mr-1 mt-1" 
                                                                                 @change="updatePresenterUserGroup($event,subItem.resourceInvitationId,item)"
                                                                                 :value="bindPresenter(subItem.right)"
-                                                                                :disabled="(permission_prop=='manager'||permission_prop=='owner'|| permission_prop == 'leader'|| permission_prop == 'hoster'|| item.leader)?false:true"
+                                                                                :disabled="(managerPermision(permission_prop)==true|| item.leader)?false:true"
                                                                                 title_checked = "Thành viên"
                                                                                 title_unchecked = "Theo dõi"
                                                                                 :labels="{checked: 'TV', unchecked: 'TD'}"
@@ -241,7 +240,7 @@
                                                                                     <span >{{subItem.userNote}}</span>
                                                                                 </v-tooltip>
                                                                                 
-                                                                                <v-btn v-if="opening_state_prop == 0||opening_state_prop == 3" class="mx-0" small color="success"
+                                                                                <v-btn v-if="stateEvent(startend_prop)==true" class="mx-0" small color="success"
                                                                                 :class="(permission_prop!='manager'&&permission_prop!='owner')||activeClick? pointerEvent : ''"
                                                                                 
                                                                                 v-on:click.stop="checkAvailable('ready',subItem,item)" style="padding-left: 6px;padding-right: 6px"
@@ -249,7 +248,7 @@
                                                                                     <v-icon style="color: white" v-if="subItem.available == 1" >check</v-icon>
                                                                                     Sẵn sàng
                                                                                 </v-btn>
-                                                                                <v-btn v-if="opening_state_prop == 0||opening_state_prop == 3" small class="text-white mx-0" 
+                                                                                <v-btn v-if="stateEvent(startend_prop)==true" small class="text-white mx-0" 
                                                                                 :class="(permission_prop!='manager'&&permission_prop!='owner')||activeClick? pointerEvent : ''"
                                                                                 v-on:click.stop="checkAvailable('busy',subItem,item)" color="error"
                                                                                 >
@@ -257,9 +256,9 @@
                                                                                     Bận
                                                                                 </v-btn>
 
-                                                                                <!-- <span v-if="opening_state_prop == 0||opening_state_prop == 3" style="color:green" class="mr-2" v-html="bindAvailableText(subItem.available)"></span> -->
+                                                                                <!-- <span v-if="stateEvent(startend_prop)==true" style="color:green" class="mr-2" v-html="bindAvailableText(subItem.available)"></span> -->
 
-                                                                                <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 9"
+                                                                                <v-btn v-if="stateEvent(startend_prop)==false"
                                                                                 :class="(permission_prop!='manager'&&permission_prop!='owner')||activeClick? pointerEvent : ''"
                                                                                 v-on:click.stop="managerCheckin(subItem,item)" outline small class="text-white mx-1" color="indigo"
                                                                                 >
@@ -267,7 +266,7 @@
                                                                                     Có mặt
                                                                                 </v-btn>
 
-                                                                                <v-btn v-if="permission_prop=='manager' ||permission_prop=='owner' || item.leader" icon title="Xóa" class="mx-0"
+                                                                                <v-btn v-if="managerPermision(permission_prop)==true ||item.leader" icon title="Xóa" class="mx-0"
                                                                                 @click.stop="updateInvitation('DELETE',subItem.resourceInvitationId,index,item.items)">
                                                                                     <v-icon color="red darken-3">clear</v-icon>
                                                                                 </v-btn>
@@ -298,7 +297,7 @@
                                     <div class="color-subpanel">Cá nhân/ Tổ chức theo danh bạ</div>
 
                                     <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add2" 
-                                    v-if="permission_prop == 'manager'|| permission_prop == 'owner'|| permission_prop == 'leader'|| permission_prop == 'hoster'" grey darken-4>
+                                    v-if="managerPermision(permission_prop)==true" grey darken-4>
                                         add_circle
                                     </v-icon>
                                 </div>
@@ -423,7 +422,7 @@
                                                                         <v-flex>
                                                                             <v-list-tile-title class="pt-2">
                                                                                 <toggle-button class="mr-1 mt-1"
-                                                                                :disabled="(permission_prop=='manager'||permission_prop=='owner'|| permission_prop == 'leader'|| permission_prop == 'hoster')?false:true"
+                                                                                :disabled="(managerPermision(permission_prop)==true)?false:true"
                                                                                 :value="bindPresenter(item.right)"
                                                                                 @change="updatePresenterUserGroup($event,item.resourceInvitationId,itemInvContact)"
                                                                                 title_checked = "Thành viên"
@@ -450,14 +449,14 @@
                                                                                     <span >{{item.userNote}}</span>
                                                                                 </v-tooltip>
                                                                                 
-                                                                                <v-btn v-if="opening_state_prop == 0||opening_state_prop == 3" class="mx-0" small color="success"
+                                                                                <v-btn v-if="stateEvent(startend_prop)==true" class="mx-0" small color="success"
                                                                                 :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
                                                                                 v-on:click.stop="checkAvailable('ready',item,null)" style="padding-left: 6px;padding-right: 6px"
                                                                                 >
                                                                                     <v-icon style="color: white" v-if="item.available == 1" >check</v-icon>
                                                                                     Sẵn sàng
                                                                                 </v-btn>
-                                                                                <v-btn v-if="opening_state_prop == 0||opening_state_prop == 3" small class="text-white mx-0" 
+                                                                                <v-btn v-if="stateEvent(startend_prop)==true" small class="text-white mx-0" 
                                                                                 :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
                                                                                 v-on:click.stop="checkAvailable('busy',item,null)" color="error"
                                                                                 >
@@ -465,17 +464,17 @@
                                                                                     Bận
                                                                                 </v-btn>
 
-                                                                                <!-- <span v-if="opening_state_prop == 0||opening_state_prop == 3" class="mr-2" style="color:green"
+                                                                                <!-- <span v-if="stateEvent(startend_prop)==true" class="mr-2" style="color:green"
                                                                                 v-html="bindAvailableText(item.available)"></span> -->
 
-                                                                                <v-btn v-if="opening_state_prop == 4 || opening_state_prop == 9" 
+                                                                                <v-btn v-if="stateEvent(startend_prop)==false" 
                                                                                 :class="(permission_prop!='manager'&&permission_prop!='owner')||activeClick? pointerEvent : ''"
                                                                                 v-on:click.stop="managerCheckin(item,null)"  outline small class="text-white mx-1" color="indigo">
                                                                                     <v-icon color="indigo" v-if="item.checkin" >check</v-icon>
                                                                                     Có mặt
                                                                                 </v-btn>
 
-                                                                                <v-btn icon title="Xóa" class="mx-0" v-if="permission_prop == 'manager'|| permission_prop == 'owner'|| permission_prop == 'leader'|| permission_prop == 'hoster'"
+                                                                                <v-btn icon title="Xóa" class="mx-0" v-if="managerPermision(permission_prop)==true"
                                                                                 @click.stop="updateInvitation('DELETE',item.resourceInvitationId,index,itemInvContact)">
                                                                                     <v-icon color="red darken-3">clear</v-icon>
                                                                                 </v-btn> 
@@ -505,11 +504,11 @@
                                 <div slot="header" class="custome-panel-heading-with-icon pl-0 mr-2">
                                     <div class="color-subpanel">Thành phần tham dự</div>
                                     <v-icon class="btn-add mx-0 my-0" title="Sửa" v-on:click.stop="activeEdit = false" 
-                                    v-if="(permission_prop == 'manager'|| permission_prop == 'owner'|| permission_prop == 'leader'|| permission_prop == 'hoster')&& activeEdit==true" grey darken-4>
+                                    v-if="(managerPermision(permission_prop)==true)&& activeEdit==true" grey darken-4>
                                         create
                                     </v-icon>
                                     <v-icon class="btn-add mx-0 my-0" title="Hủy" v-on:click.stop="activeEdit = true" 
-                                    v-if="(permission_prop == 'manager'|| permission_prop == 'owner' || permission_prop == 'leader'|| permission_prop == 'hoster')&&activeEdit==false" grey darken-4>
+                                    v-if="(managerPermision(permission_prop)==true)&&activeEdit==false" grey darken-4>
                                         cancel
                                     </v-icon>
                                 </div>
@@ -560,8 +559,8 @@
             end_point: null,
             working_unit_prop: null,
             permission_prop: null,
-            opening_state_prop: null,
-            // startend_prop:null
+            // opening_state_prop: null,
+            startend_prop:null
         },
 
         created () {
@@ -647,16 +646,16 @@
 
             },
             /**Check permision */
-            managerPermision: function(src){
-                if(src=='manager'||src=='hoster'||src=='owner'||src=='leader'){
+            managerPermision: function(permision){
+                if(permision=='manager'||permision=='hoster'||permision=='owner'||permision=='leader'){
                     return true
                 } else {return false}
             },
             /*check state truyền startend*/
-            stateEvent: function(src){
-                if(src==0||src==1){
+            stateEvent: function(startend_prop){
+                if(startend_prop==0||startend_prop==1){
                     return true
-                } else if(src==3||src==4) {
+                } else if(startend_prop==3||startend_prop==4) {
                     return false
                 }
             },
@@ -1107,7 +1106,7 @@
                     presenterChange = 1
                 }else {presenterChange = 0};
 
-                if(vm.permission_prop=='manager'||vm.permission_prop=='owner'|| items.leader){
+                if(vm.managerPermision(permission_prop)==true|| items.leader){
                     vm.submitUpdatePresenter(invId,presenterChange,items)
                 } else {
                     return false
