@@ -146,12 +146,16 @@
                                                             <v-list-tile slot="item" class="px-0">
                                                                 <v-list-tile-content class="px-0">
                                                                     <v-flex xs12 class="layout wrap pl-2 pr-1" style="width: 100%!important">
-                                                                        <v-flex xs6 sm9 class="pt-2">
+                                                                        <v-flex xs6 sm8 class="pt-2">
                                                                             <v-list-tile-title class="item_group">
-                                                                                {{ item.role.fullName }}
+                                                                                <v-tooltip top>
+                                                                                    <span slot="activator">{{ item.role.fullName }}</span>
+                                                                                    <span>{{ item.role.fullName }}</span>
+                                                                                </v-tooltip>
+                                                                                <!-- {{ item.role.fullName }} -->
                                                                             </v-list-tile-title>
                                                                         </v-flex>
-                                                                        <v-flex xs6 sm3>
+                                                                        <v-flex xs6 sm4>
                                                                             <div class="right">
                                                                                 <v-chip v-if="stateEvent(startend_prop)==true" label outline color="primary" class="mr-2 mt-2">
                                                                                     {{item.role.statistic.available}}/{{item.role.statistic.invitation}}
@@ -225,7 +229,7 @@
                                                                                     <span class="pt-2" slot="activator">{{ subItem.fullName }}</span>
                                                                                     <span>Email:{{ subItem.email }} - Tel:{{ subItem.telNo }}</span>
                                                                                 </v-tooltip>
-                                                                                <!-- <span class="pt-2">{{ subItem.fullName }}</span> -->
+                                                                                
                                                                             </v-list-tile-title>
                                                                         </v-flex>
 
@@ -419,7 +423,7 @@
                                                                 <v-list-tile-title>
                                                                     <v-flex xs12 class="layout wrap">
 
-                                                                        <v-flex>
+                                                                        <v-flex xs6 sm5>
                                                                             <v-list-tile-title class="pt-2">
                                                                                 <toggle-button class="mr-1 mt-1"
                                                                                 :disabled="(managerPermision(permission_prop)==true)?false:true"
@@ -438,7 +442,7 @@
                                                                             </v-list-tile-title>
                                                                         </v-flex>
                                                                         
-                                                                        <v-flex>
+                                                                        <v-flex xs6 sm7>
                                                                             <div class="right">
                                                                                 <v-tooltip top :disabled="(item.userNote?false:true)">
                                                                                     <v-btn icon slot="activator" :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
@@ -715,7 +719,10 @@
                             for (var key in vm.invitationItems) {
                                 let item = vm.invitationItems[key];
                                 let itemGroups = vm.itemInvGroup[keys].role;
-                                if(item.roleId==itemGroups.roleId&&item.invitationType==3 || item.roleId==itemGroups.roleId&&item.invitationType==5 || item.roleId==itemGroups.roleId&&item.invitationType==4){
+                                if(item.roleId==itemGroups.roleId&&item.invitationType==3 || 
+                                    item.roleId==itemGroups.roleId&&item.invitationType==5 || 
+                                    item.roleId==itemGroups.roleId&&item.invitationType==4)
+                                {
                                     vm.itemInvGroup[keys].items.push(item)
                                 }
                             }

@@ -130,12 +130,16 @@
                                                             <v-list-tile slot="item" class="px-0">
                                                                 <v-list-tile-content class="px-0">
                                                                     <v-flex xs12 class="layout wrap pl-2 pr-1" style="width: 100%!important">
-                                                                        <v-flex xs6 sm9 class="pt-2">
+                                                                        <v-flex xs6 sm8 class="pt-2">
                                                                             <v-list-tile-title class="item_group">
-                                                                                {{ item.role.fullName }}
+                                                                                <v-tooltip top>
+                                                                                    <span slot="activator">{{ item.role.fullName }}</span>
+                                                                                    <span>{{ item.role.fullName }}</span>
+                                                                                </v-tooltip>
+                                                                                <!-- {{ item.role.fullName }} -->
                                                                             </v-list-tile-title>
                                                                         </v-flex>
-                                                                        <v-flex xs6 sm3>
+                                                                        <v-flex xs6 sm4>
                                                                             <div class="right">
                                                                                 <v-chip label outline color="primary" class="mr-2 mt-2">
                                                                                     {{item.role.statistic.available}}/{{item.role.statistic.invitation}}
@@ -390,7 +394,7 @@
                                                                 <v-list-tile-title>
                                                                     <v-flex xs12 class="layout wrap pl-2">
 
-                                                                        <v-flex class="pt-2">
+                                                                        <v-flex class="pt-1" xs6 sm5>
                                                                             <v-list-tile-title>
                                                                                 <toggle-button class="mr-1 mt-1"
                                                                                 :disabled="(managerPermision(permission_prop)==true)?false:true"
@@ -409,7 +413,7 @@
                                                                             </v-list-tile-title>
                                                                         </v-flex>
                                                                         
-                                                                        <v-flex>
+                                                                        <v-flex xs6 sm7>
                                                                             <div class="right">
                                                                                 <v-tooltip top :disabled="(item.userNote?false:true)">
                                                                                     <v-btn icon slot="activator" :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
@@ -465,7 +469,6 @@
             </v-expansion-panel>
 
             
-
         </div>
     </div>
 </template>
@@ -484,7 +487,6 @@
             end_point: null,
             working_unit_prop: null,
             permission_prop: null,
-            // opening_state_prop: null,
             startend_prop:null
         },
 
