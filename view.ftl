@@ -18,9 +18,9 @@
           </v-list>
         </v-menu>
       </div>
-      <v-expansion-panel expand class="my-0 expMenu" style="box-shadow: none!important">
+      <v-expansion-panel expand class="my-0 expMenu" style="box-shadow: none!important;border:0px;width: 100%;">
         <v-expansion-panel-content value="true">
-          <div slot="header" class="pl-3 py-2 nav__btn__custom" @click="viewThumuc">
+          <div slot="header" class="pl-3 py-2 nav__btn__custom" style="color: rgba(0,0,0,0.87)!important;font-family: 'Roboto',sans-serif!important;"  @click="viewThumuc">
             <v-icon>storage </v-icon>
             Thư mục lưu trữ
           </div>
@@ -1296,77 +1296,79 @@
               var url = vm.endPoint + 'workspaces';
               var url2 = vm.endPoint + 'docfiles';
 			        axios.all([
-                  axios.get(url, configKhoDuLieu),
-                  axios.get(url2, configDocFile)
-                ])
-                .then(axios.spread(function(urlRespones, urlFilesRespones) {
-                  // Both requests are now complete
-                  var serializable = urlRespones.data;
-                  var serializable2 = urlFilesRespones.data;
-                  if (serializable.hasOwnProperty('data') && !vm.isSearch) {
-                    vm.khoDuLieuListFolderItems = vm._mapListModelDetail(serializable.data);
-                    if (item != null && !item.hasOwnProperty('register')) {
-                      var treeArray = [];
-                      for (var key in serializable.data) {
-                        treeArray.push({
-                          "children": [],
-                          "name": serializable.data[key].name,
-                          "pid": 0,
-                          "ptype": serializable.data[key].treeIndex,
-                          "id": serializable.data[key].workspaceId,
-                          "pidNode": serializable.data[key].parentId,
-                          "folder_icon": "folder"
-                        });
-                      };
-                      item['children'] = treeArray;
-                    } else if (item != null && item.hasOwnProperty('register')) {
-                      vm.khoDuLieuListFolderItems = [];
+                axios.get(url, configKhoDuLieu),
+                axios.get(url2, configDocFile)
+              ])
+              .then(axios.spread(function(urlRespones, urlFilesRespones) {
+                // Both requests are now complete
+                var serializable = urlRespones.data;
+                var serializable2 = urlFilesRespones.data;
+                if (serializable.hasOwnProperty('data') && !vm.isSearch) {
+                  vm.khoDuLieuListFolderItems = vm._mapListModelDetail(serializable.data);
+                  if (item != null && !item.hasOwnProperty('register')) {
+                    var treeArray = [];
+                    for (var key in serializable.data) {
+                      treeArray.push({
+                        "children": [],
+                        "name": serializable.data[key].name,
+                        "pid": 0,
+                        "ptype": serializable.data[key].treeIndex,
+                        "id": serializable.data[key].workspaceId,
+                        "pidNode": serializable.data[key].parentId,
+                        "folder_icon": "folder"
+                      });
                     };
-                  } else {
+                    item['children'] = treeArray;
+                  } else if (item != null && item.hasOwnProperty('register')) {
                     vm.khoDuLieuListFolderItems = [];
                   };
-                  if (serializable2.hasOwnProperty('data')) {
-                    vm.khoDuLieuListItems = vm._mapListModelDetail(serializable2.data);
-                    vm.khoDuLieuListTotal = Math.ceil(serializable2.total / 15);
-                  } else {
-                    vm.khoDuLieuListItems = [];
-                    vm.khoDuLieuListTotal = 0;
-                  };
-                })).catch(function(error) {
-                  console.log(error);
-                });
+                } else {
+                  vm.khoDuLieuListFolderItems = [];
+                };
+                if (serializable2.hasOwnProperty('data')) {
+                  vm.khoDuLieuListItems = vm._mapListModelDetail(serializable2.data);
+                  vm.khoDuLieuListTotal = Math.ceil(serializable2.total / 15);
+                } else {
+                  vm.khoDuLieuListItems = [];
+                  vm.khoDuLieuListTotal = 0;
+                };
+              })).catch(function(error) {
+                console.log(error);
+              });
             },
             viewThumuc: function(){
               var vm = this;
               vm.viewFirst = true;
               vm.isSearch = false;
               vm.breadWorkspace = false;
-              vm._initworkspace0Filter()
+              vm.detailModel.workspaceId = 0;
+              vm._initworkspace0Filter();
+              
             },
             _inikhoDuLieuListTEMP: function() {
               var vm = this;
               vm.no_list_access = false;
               vm.khoDuLieuListheaders = [{
                   text: 'Số ký hiệu',
-                  align: 'left',
-                  sortable: true,
+                  align: 'center',
+                  sortable: false,
                   value: 'codeNotation'
                 },
                 {
                   text: 'Ngày ban hành',
-                  align: 'left',
-                  sortable: true,
+                  align: 'center',
+                  sortable: false,
                   value: 'promulgationDate'
                 },
                 {
                   text: 'Trích yếu',
-                  align: 'left',
-                  sortable: true,
+                  align: 'center',
+                  sortable: false,
                   value: 'name'
                 },
                 {
                   text: '',
-                  align: 'left',
+                  align: 'center',
                   sortable: false,
                   value: ''
                 }
@@ -1403,31 +1405,32 @@
               };
               var url = vm.endPoint + 'workspaces';
               var url2 = vm.endPoint + 'docfiles';
-			  axios.all([
-                  axios.get(url, configKhoDuLieu),
-                  axios.get(url2, configDocFile)
-                ])
-                .then(axios.spread(function(urlRespones, urlFilesRespones) {
-                  // Both requests are now complete
-                    var serializable = urlRespones.data;
-                    var serializable2 = urlFilesRespones.data;
-                      if (serializable.hasOwnProperty('data')) {
-                      	vm.khoDuLieuListFolderItems = vm._mapListModelDetail(serializable.data);
-	                  } else {
-	                    vm.khoDuLieuListFolderItems = [];
-	                  };
-	                  
-	                  if (serializable2.hasOwnProperty('data')) {
-	                    vm.khoDuLieuListItems = vm._mapListModelDetail(serializable2.data);
-	                    vm.khoDuLieuListTotal = Math.ceil(serializable2.total / 15);
-	                  } else {
-	                    vm.khoDuLieuListItems = [];
-	                    vm.khoDuLieuListTotal = 0;
-	                  };
-	                  console.log(vm.khoDuLieuListItems.length);
-                })).catch(function(error) {
-                  console.log(error);
-                });
+			        axios.all([
+                axios.get(url, configKhoDuLieu),
+                axios.get(url2, configDocFile)
+              ])
+              .then(axios.spread(function(urlRespones, urlFilesRespones) {
+                // Both requests are now complete
+                  var serializable = urlRespones.data;
+                  var serializable2 = urlFilesRespones.data;
+                    if (serializable.hasOwnProperty('data')) {
+                      vm.khoDuLieuListFolderItems = vm._mapListModelDetail(serializable.data);
+                  } else {
+                    vm.khoDuLieuListFolderItems = [];
+                  };
+                  
+                  if (serializable2.hasOwnProperty('data')) {
+                    vm.khoDuLieuListItems = vm._mapListModelDetail(serializable2.data);
+                    vm.khoDuLieuListTotal = Math.ceil(serializable2.total / 15);
+                  } else {
+                    vm.khoDuLieuListItems = [];
+                    vm.khoDuLieuListTotal = 0;
+                  };
+                  console.log(vm.khoDuLieuListItems.length);
+                  console.log(vm.khoDuLieuListFolderItems)
+              })).catch(function(error) {
+                console.log(error);
+              });
             },
             toWorkspaceEdit: function(item, index) {
               var vm = this;
@@ -1447,135 +1450,135 @@
               vm.workspaceSibling = item.seqOrder;
             },
             toWorkspaceDelete: function (item, index) {
-				var vm = this;
-				vm.$dialog.confirm('Bạn có muốn xóa ngăn thư mục '+ item.name +'?', {
-					html: true,
-					loader: true,
-					okText: 'Xác nhận',
-					cancelText: 'Quay lại',
-					animation: 'fade'
-				})
-				.then(function(dialog){
+              var vm = this;
+              vm.$dialog.confirm('Bạn có muốn xóa ngăn thư mục '+ item.name +'?', {
+                html: true,
+                loader: true,
+                okText: 'Xác nhận',
+                cancelText: 'Quay lại',
+                animation: 'fade'
+              })
+              .then(function(dialog){
 
-					var url = vm.endPoint + "workspaces/" + item.workspaceId;
-					axios.delete(url, config).then(function (response) {
-						vm.khoDuLieuListFolderItems.splice(index, 1);
-						vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thành công!";
-	                      vm.snackbarkhoTuLieuViewJX = true;
-	                      vm.loadingkhoTuLieuViewJX = false;
-					})
-					.catch(function (error) {
-						console.log(error);
-	                      vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thất bại!";
-	                      vm.snackbarerorkhoTuLieuViewJX = true;
-	                      vm.loadingkhoTuLieuViewJX = false;
-					});
-					
-					dialog.close();
-				})
-				.catch(function(e){
-					console.log(e);
-				})
-			},
-			toRemoveFile: function(item, index) {
+                var url = vm.endPoint + "workspaces/" + item.workspaceId;
+                axios.delete(url, config).then(function (response) {
+                  vm.khoDuLieuListFolderItems.splice(index, 1);
+                  vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thành công!";
+                  vm.snackbarkhoTuLieuViewJX = true;
+                  vm.loadingkhoTuLieuViewJX = false;
+                })
+                .catch(function (error) {
+                  console.log(error);
+                  vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thất bại!";
+                  vm.snackbarerorkhoTuLieuViewJX = true;
+                  vm.loadingkhoTuLieuViewJX = false;
+                });
+                
+                dialog.close();
+              })
+              .catch(function(e){
+                console.log(e);
+              })
+            },
+			      toRemoveFile: function(item, index) {
               var vm = this;
               vm.$dialog.confirm('Bạn có muốn xóa file?', {
-                  html: true,
-                  loader: true,
-                  okText: 'Xác nhận',
-                  cancelText: 'Quay lại',
-                  animation: 'fade'
-                })
-                .then(function(dialog) {
-                  var url = vm.endPoint + "fileattachs/" + item.docFileId;
-                  axios.delete(url, {
-                      headers: vm.headers
-                    }).then(function(response) {
-                      vm.khoDuLieuListItems.splice(index, 1);
-                      vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thành công!";
-                      vm.snackbarkhoTuLieuViewJX = true;
-                      vm.loadingkhoTuLieuViewJX = false;
-                    })
-                    .catch(function(error) {
-                      console.log(error);
-                      vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thất bại!";
-                      vm.snackbarerorkhoTuLieuViewJX = true;
-                      vm.loadingkhoTuLieuViewJX = false;
-                    });
-                  dialog.close();
-                })
-                .catch(function(e) {
-                  console.log(e);
-                })
+                html: true,
+                loader: true,
+                okText: 'Xác nhận',
+                cancelText: 'Quay lại',
+                animation: 'fade'
+              })
+              .then(function(dialog) {
+                var url = vm.endPoint + "fileattachs/" + item.docFileId;
+                axios.delete(url, {
+                    headers: vm.headers
+                  }).then(function(response) {
+                    vm.khoDuLieuListItems.splice(index, 1);
+                    vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thành công!";
+                    vm.snackbarkhoTuLieuViewJX = true;
+                    vm.loadingkhoTuLieuViewJX = false;
+                  })
+                  .catch(function(error) {
+                    console.log(error);
+                    vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thất bại!";
+                    vm.snackbarerorkhoTuLieuViewJX = true;
+                    vm.loadingkhoTuLieuViewJX = false;
+                  });
+                dialog.close();
+              })
+              .catch(function(e) {
+                console.log(e);
+              })
             },
             toRemoveFileLink: function(item, index) {
               var vm = this;
               vm.$dialog.confirm('Bạn có muốn xóa file được chia sẻ này?', {
-                  html: true,
-                  loader: true,
-                  okText: 'Xác nhận',
-                  cancelText: 'Quay lại',
-                  animation: 'fade'
-                })
-                .then(function(dialog) {
-                  var workspaceVal = "";
-              	  if (vm.detailModel.workspaceId > 0) {
-                    workspaceVal = vm.detailModel.workspaceId;
-                  }
-                  var url = vm.endPoint + "resourceworkspaces/" + vm.class_name_doc + "/" + item.docFileId + "/" + workspaceVal;
-                  axios.delete(url, {
-                      headers: vm.headers
-                    }).then(function(response) {
-                      vm.khoDuLieuListItems.splice(index, 1);
-                      vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thành công!";
-                      vm.snackbarkhoTuLieuViewJX = true;
-                      vm.loadingkhoTuLieuViewJX = false;
-                    })
-                    .catch(function(error) {
-                      console.log(error);
-                      vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thất bại!";
-                      vm.snackbarkhoTuLieuViewJX = true;
-                      vm.loadingkhoTuLieuViewJX = false;
-                    });
-                  dialog.close();
-                })
-                .catch(function(e) {
-                  console.log(e);
-                })
+                html: true,
+                loader: true,
+                okText: 'Xác nhận',
+                cancelText: 'Quay lại',
+                animation: 'fade'
+              })
+              .then(function(dialog) {
+                var workspaceVal = "";
+                if (vm.detailModel.workspaceId > 0) {
+                  workspaceVal = vm.detailModel.workspaceId;
+                }
+                var url = vm.endPoint + "resourceworkspaces/" + vm.class_name_doc + "/" + item.docFileId + "/" + workspaceVal;
+                axios.delete(url, {
+                    headers: vm.headers
+                  }).then(function(response) {
+                    vm.khoDuLieuListItems.splice(index, 1);
+                    vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thành công!";
+                    vm.snackbarkhoTuLieuViewJX = true;
+                    vm.loadingkhoTuLieuViewJX = false;
+                  })
+                  .catch(function(error) {
+                    console.log(error);
+                    vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thất bại!";
+                    vm.snackbarkhoTuLieuViewJX = true;
+                    vm.loadingkhoTuLieuViewJX = false;
+                  });
+                dialog.close();
+              })
+              .catch(function(e) {
+                console.log(e);
+              })
             },
             toRemoveDocFile: function(item) {
               var vm = this;
               vm.$dialog.confirm('Bạn có muốn xóa văn bản này?', {
-                  html: true,
-                  loader: true,
-                  okText: 'Xác nhận',
-                  cancelText: 'Quay lại',
-                  animation: 'fade'
-                })
-                .then(function(dialog) {
-                  var url = vm.endPoint + "docfiles/" + item.docFileId;
-                  axios.delete(url, {
-                      headers: vm.headers
-                    }).then(function(response) {
-                      vm._inikhoDuLieuList(null);
-                      vm.backToList();
-                      vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thành công!";
-                      vm.snackbarkhoTuLieuViewJX = true;
-                      vm.loadingkhoTuLieuViewJX = false;
-                    })
-                    .catch(function(error) {
-                      console.log(error);
-                      vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thất bại!";
-                      vm.snackbarerorkhoTuLieuViewJX = true;
-                      vm.loadingkhoTuLieuViewJX = false;
-                    });
-                  dialog.close();
-                })
-                .catch(function(e) {
-                  console.log(e);
-                })
+                html: true,
+                loader: true,
+                okText: 'Xác nhận',
+                cancelText: 'Quay lại',
+                animation: 'fade'
+              })
+              .then(function(dialog) {
+                var url = vm.endPoint + "docfiles/" + item.docFileId;
+                axios.delete(url, {
+                    headers: vm.headers
+                  }).then(function(response) {
+                    vm._inikhoDuLieuList(null);
+                    vm.backToList();
+                    vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thành công!";
+                    vm.snackbarkhoTuLieuViewJX = true;
+                    vm.loadingkhoTuLieuViewJX = false;
+                  })
+                  .catch(function(error) {
+                    console.log(error);
+                    vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thất bại!";
+                    vm.snackbarerorkhoTuLieuViewJX = true;
+                    vm.loadingkhoTuLieuViewJX = false;
+                  });
+                dialog.close();
+              })
+              .catch(function(e) {
+                console.log(e);
+              })
             },
-			setWorkspaceTree: function(item) {
+			      setWorkspaceTree: function(item) {
               var vm = this;
               var newTree = vm.workspaceTree.filter(function(workspace) {
                 return (item.treeIndex.indexOf(workspace.treeIndex) >= 0 && item.treeIndex !== workspace.treeIndex);
@@ -1587,19 +1590,19 @@
               var vm = this;
               vm.no_list_access = false;
               if (item.workspaceId) {
-              console.log(item);
+                console.log(item);
                 vm.setWorkspaceTree(item);
                 vm.detailModel = vm.workspaceTree.slice(-1)[0];
                 vm._inikhoDuLieuList(null);
               } else {
                 var url = vm.endPoint + "fileattachs/" + item.docFileId;
                 axios.get(url, config_blob).then(function(response) {
-                    var url = window.URL.createObjectURL(response.data);
-                    window.open(url);
-                  })
-                  .catch(function(error) {
-                    console.log(error);
-                  });
+                  var url = window.URL.createObjectURL(response.data);
+                  window.open(url);
+                })
+                .catch(function(error) {
+                  console.log(error);
+                });
               }
             },
             toDetailDocFile: function(id) {
@@ -1611,100 +1614,99 @@
                 window.history.pushState('', '', themeDisplay.getLayoutURL() + '/-/docfile/' + id);	
                 var url = vm.endPoint + "docfiles/" + id;
                 axios.get(url, config).then(function(response) {
-                    vm.docFileDetail = response.data;
-                    //vm.docFileDetail['permission']='write';
-                    setTimeout(
-		                function() {
-		                  	vm._initThuMucLuuTruWorkspaces(vm.class_name_doc, vm.class_pk);
-		                    if (vm.secutypeItems.length <= 0) {
-		                      vm._initSecutype();
-		                    }
-		                    if (vm.priorityItems.length <= 0) {
-		                      vm._initPriority();
-		                    }
-		                    if (vm.registerItems.length <= 0) {
-		                      vm._initRegister();
-		                    }
-		                    if (vm.issuerCodeItems.length <= 0) {
-		                      vm._initIssuerCode();
-		                    }
-		                    if (vm.documentCatItems.length <= 0) {
-		                      vm._initDocumentCat();
-		                    }
-		                    if (vm.templateNoItems.length <= 0) {
-		                      vm._initTemplateNo();
-		                    }
-		                    
-		                    vm.initEditableControl(
-		                    	[
-		                    		{
-		                    			name: 'content',
-		                    			value: 'content'
-		                    		},
-		                    		{
-		                    			name: 'priority',
-		                    			value: 'priority'
-		                    		},
-		                    		{
-		                    			name: 'secutype',
-		                    			value: 'secutype'
-		                    		},
-		                    		{
-		                    			name: 'documentCat',
-		                    			value: 'documentCat'
-		                    		},
-		                    		{
-		                    			name: 'language',
-		                    			value: 'language'
-		                    		},
-		                    		{
-		                    			name: 'promulgationAmount',
-		                    			value: 'promulgationAmount'
-		                    		},
-		                    		{
-		                    			name: 'pageAmount',
-		                    			value: 'pageAmount'
-		                    		},
-		                    		{
-		                    			name: 'signerInfo',
-		                    			value: 'signerInfo'
-		                    		},
-		                    		{
-		                    			name: 'promulgationDate',
-		                    			value: 'promulgationDate',
-		                    			type: 'date'
-		                    		},
-		                    		{
-		                    			name: 'registerDate',
-		                    			value: 'registerDate',
-		                    			type: 'date'
-		                    		},
-		                    		{
-		                    			name: 'register',
-		                    			value: 'register'
-		                    		},
-		                    		{
-		                    			name: 'issuerCode',
-		                    			value: 'issuerCode'
-		                    		},
-		                    		{
-		                    			name: 'templateNo',
-		                    			value: 'templateNo'
-		                    		}
-		                    	],
-		                    	vm.docFileDetail,
-		                    	vm.class_pk,
-		                    	'owner,leader,hoster,manager'.indexOf( vm.docFileDetail['permission'] ||'none' )>=0?true:false,
-		                    	vm
-		                    );
-		                    vm.thuMucLuuTruWorkspacespk = vm.class_pk;
-		                    vm.thuMucLuuTruWorkspacespermission = vm.docFileDetail['permission'];
-		                },
-		                500);
-                  })
-                  .catch(function(error) {
-                    console.log(error);
-                  });
+                  vm.docFileDetail = response.data;
+                  //vm.docFileDetail['permission']='write';
+                  setTimeout(
+                  function() {
+                    vm._initThuMucLuuTruWorkspaces(vm.class_name_doc, vm.class_pk);
+                    if (vm.secutypeItems.length <= 0) {
+                      vm._initSecutype();
+                    }
+                    if (vm.priorityItems.length <= 0) {
+                      vm._initPriority();
+                    }
+                    if (vm.registerItems.length <= 0) {
+                      vm._initRegister();
+                    }
+                    if (vm.issuerCodeItems.length <= 0) {
+                      vm._initIssuerCode();
+                    }
+                    if (vm.documentCatItems.length <= 0) {
+                      vm._initDocumentCat();
+                    }
+                    if (vm.templateNoItems.length <= 0) {
+                      vm._initTemplateNo();
+                    }
+                    
+                    vm.initEditableControl(
+                      [
+                        {
+                          name: 'content',
+                          value: 'content'
+                        },
+                        {
+                          name: 'priority',
+                          value: 'priority'
+                        },
+                        {
+                          name: 'secutype',
+                          value: 'secutype'
+                        },
+                        {
+                          name: 'documentCat',
+                          value: 'documentCat'
+                        },
+                        {
+                          name: 'language',
+                          value: 'language'
+                        },
+                        {
+                          name: 'promulgationAmount',
+                          value: 'promulgationAmount'
+                        },
+                        {
+                          name: 'pageAmount',
+                          value: 'pageAmount'
+                        },
+                        {
+                          name: 'signerInfo',
+                          value: 'signerInfo'
+                        },
+                        {
+                          name: 'promulgationDate',
+                          value: 'promulgationDate',
+                          type: 'date'
+                        },
+                        {
+                          name: 'registerDate',
+                          value: 'registerDate',
+                          type: 'date'
+                        },
+                        {
+                          name: 'register',
+                          value: 'register'
+                        },
+                        {
+                          name: 'issuerCode',
+                          value: 'issuerCode'
+                        },
+                        {
+                          name: 'templateNo',
+                          value: 'templateNo'
+                        }
+                      ],
+                      vm.docFileDetail,
+                      vm.class_pk,
+                      'owner,leader,hoster,manager'.indexOf( vm.docFileDetail['permission'] ||'none' )>=0?true:false,
+                      vm
+                    );
+                    vm.thuMucLuuTruWorkspacespk = vm.class_pk;
+                    vm.thuMucLuuTruWorkspacespermission = vm.docFileDetail['permission'];
+                  },500);
+                })
+                .catch(function(error) {
+                  console.log(error);
+                });
               }
             },
             backToList: function() {
@@ -2574,6 +2576,9 @@
   .expMenu .expansion-panel{
     border: 0px;
   }
+  .expMenu>li{
+    width: 100%!important
+  }
   .expMenu .expansion-panel__header{
     font-family: 'Roboto'!important;
     color:rgba(0,0,0,0.87)!important;
@@ -2584,6 +2589,7 @@
   .expMenu .expansion-panel__header .nav__btn__custom{
     font-weight: 500;
     font-size: 13px;
+    color:rgba(0,0,0,0.87)!important;
   }
   .expansion-panel__header .icon {
       color: rgba(0,0,0,0.54)!important;
