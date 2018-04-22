@@ -1,49 +1,51 @@
 <!DOCTYPE html>
 <html>
-
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width,initial-scale=1.0">
-        <title>Activity detail</title>
-        <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
-        
-        <script type="text/javascript" src="../js/axios.min.js"></script>
-        <script type="text/javascript" src="../js/vue.min.js"></script>
-        
-        
-        <script type="text/javascript" src="../js/vuejx.min.js"></script>
-        <script type="text/javascript" src="../js/vuejx_dev.js"></script>
-        <!-- <script src="http://hanoi.fds.vn:8004/o/mobilink_npm-theme/js/vuejx_dev.js?t=78787876567575"></script> -->
-        <script type="text/javascript" src="../js/moment-with-locales.min.js"></script>
-        <script type="text/javascript" src="../js/moment.min.js"></script>
-        <!-- <script type="text/javascript" src="../js/vue-jx-lib.js?t=12"></script> -->
-        <script type="text/javascript" src="../../../vue-editor/dist/vue-jx-lib.js?"></script>
-        <script type="text/javascript" src="../js/vue-tree-list.min.js?t=12"></script>
-        <script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.js"></script>
-        
-        <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
-        <link href="../css/vuetify017.css" rel="stylesheet">
-        <link href="http://hanoi.fds.vn:8004/o/mentions-web/css/mentions.css" rel="stylesheet" type="text/css">
-        <link href="http://hanoi.fds.vn:8004/o/frontend-css-web/main.css">
-        <link href="../css/th.css" rel="stylesheet">
-      
-        <link href="http://hanoi.fds.vn:8004/combo?browserId=other&amp;minifierType=css&amp;languageId=en_US&amp;b=7003&amp;t=1516283649602&amp;/o/product-navigation-simulation-theme-contributor/css/simulation_panel.css">
-        <script type="text/javascript" src="../js/vuetify017.js"></script>
-        
-        <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
-        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-        <script src="http://hanoi.fds.vn:8004/o/mobilink_npm-theme/js/jquery-comments.js?t=131322221"></script>
-      
-        <script type="text/javascript" src="../js/bootstrap-datetimepicker.js"></script>
-        <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css"/>
-        <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.css"/>
-
-        <script src="//unpkg.com/babel-polyfill@latest/dist/polyfill.min.js"></script>
-        <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.js"></script>
-    </head>
+  <head>
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1.0">
+      <title>Mobilink Docfile</title>
+      <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet" type="text/css">
+    <!-- vuejs -->
+    <script type="text/javascript" src="../js/add_support.js"></script>
+    <script type="text/javascript" src="../js/axios.min.js"></script>
+    <script type="text/javascript" src="../js/vue.min.js"></script>
+    <script type="text/javascript" src="../js/vuejx.min.js"></script>
+    <script type="text/javascript" src="../js/vuejx_dev.js"></script>
+    <script type="text/javascript" src="../js/moment-with-locales.min.js"></script>
+    <script type="text/javascript" src="../js/moment.min.js"></script>
+    <script type="text/javascript" src="../js/vue-tree-list.min.js"></script>
+    <script type="text/javascript" src="../../../vue-editor/dist/vue-jx-lib.js?"></script>
+    <script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.js"></script>
+    <!-- <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script> -->
+    <script type="text/javascript" src="../js/vuetify017.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/js/jquery-comments.js"></script>
+    <script type="text/javascript" src="../js/bootstrap-datetimepicker.js"></script>
+    <script type="text/javascript" src="../js/locales/bootstrap-datetimepicker.fr.js"></script>
+    
+    <!-- <link href="../css/vuetify017.css" rel="stylesheet"> -->
+    <link href="http://dhtn.longbien.gov.vn/o/mentions-web/css/mentions.css" rel="stylesheet" type="text/css">
+    <link href="http://dhtn.longbien.gov.vn/o/dynamic-data-mapping-form-renderer/css/main.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/aui.css" rel="stylesheet">
+    <link href="http://hanoi.fds.vn:8004/o/mobilink_npm-theme/css/main.css" rel="stylesheet">
+    
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/orgin.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/page/dist/page.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/page/dist/nav.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/component/dist/list_header.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/component/dist/input.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/component/dist/button.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/component/dist/select.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/component/dist/table.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/component/dist/tabmenu.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/component/dist/navigation_drawer.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/component/dist/mycomponent.css" rel="stylesheet">
+    <link href="http://dhtn.longbien.gov.vn/o/mobilink_npm-theme/css/jquery-comments.css" rel="stylesheet">
+  </head>
 <body>
 
-    <input type="hidden">
+<!-- TODO Template Xây dựng navigation -->
+<input type="hidden">
 <div id="menu_template" class="hidden">
   <v-slide-x-transition>
     <div class="layout row wrap" v-if="currentListPage">
@@ -62,16 +64,15 @@
           </v-list>
         </v-menu>
       </div>
-      <v-expansion-panel expand class="my-0 expMenu" style="box-shadow: none!important">
+      <v-expansion-panel expand class="my-0 expMenu" style="box-shadow: none!important;border:0px;width: 100%;">
         <v-expansion-panel-content value="true">
-          <div slot="header" class="pl-3 py-2 nav__btn__custom" @click="viewThumuc">
-              
-                  <v-icon>storage </v-icon>
-                  Thư mục lưu trữ
-                
+          <div slot="header" class="pl-3 py-2 nav__btn__custom" style="color: rgba(0,0,0,0.87)!important;font-family: 'Roboto',sans-serif!important;"  @click="viewThumuc">
+            <v-icon>storage </v-icon>
+            Thư mục lưu trữ
           </div>
-          <v-card>
-            <v-card-text style="overflow: auto;white-space: nowrap;">
+          
+          <v-card style="background-color: #EFEFEF!important;">
+            <v-card-text class="px-0 py-0">
               <div class="flex xs12 pl-3" jx-bind="workspace0Filter" class="workspace0Filter"></div>
 
               <div class="flex xs12 pl-3 hidden_fak_temp" jx-bind="docFileTemplateFilter"></div>
@@ -79,6 +80,7 @@
           </v-card>
         </v-expansion-panel-content>
       </v-expansion-panel>
+      
 
       <div class="flex xs12 pl-3 nav__btn__custom">
         <v-btn block flat class="mx-0 my-0 px-0" v-on:click.native="filterDocFileChangeBTN('me')">
@@ -89,9 +91,9 @@
       <div class="flex xs12 pl-3 nav__btn__custom">
         <v-btn block flat class="mx-0 my-0 px-0" v-on:click.native="filterDocFileChangeBTN('share')">
           <i aria-hidden="true" class="fa fa-share-alt" style="
-                    width: 27px;
-                    height: 15px;
-                "></i>
+					width: 27px;
+					height: 15px;
+				"></i>
         Tài liệu được chia sẻ
         </v-btn>
       </div>
@@ -105,94 +107,509 @@
   <!-- TODO: show detail -->
   <div class="jx-content-wrap layout wrap">
 
-    <div class=" xs6" :class="{'max-width': !currentListPage, 'no-width': currentListPage}">
+    <div class="flex xs6" :class="{'max-width': !currentListPage, 'no-width': currentListPage}">
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      <#include "detail.ftl">
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+      <!-- Chi tiết -->
+      <v-slide-x-transition>
+        <v-layout wrap  v-if="!currentListPage">
+          <v-flex xs12 sm8>
+          
+            <div class="panel">
+              <div class="panel-heading">
+                 <v-layout wrap>
+                  <v-btn flat icon v-on:click.native="backToList()">
+                    <v-icon>undo</v-icon>
+                   </v-btn>
+                  <v-flex xs8 v-if="docFileDetail.isTemplate == 1" >
+                    <v-layout wrap>
+                      <v-flex xs12 class="editable-wrap">
+                        <div class="layout wrap codeNo__codeNotation">
+                              <v-flex xs12 class="layout">
+                                <span v-if="templateNosubject_hidden" class="editable__content__value">
+                                  <v-icon>description</v-icon> {{docFileDetail.templateNo}}/{{docFileDetail.subject}}
+                                  <v-btn flat icon class="btn--editable btn--editable--done mx-0 my-0"
+                                v-if="templateNosubject_hidden && ( 'owner,leader,hoster,manager'.indexOf( docFileDetail.permission ||'none' )>=0?true:false )"
+                                @click.stop.prevent="templateNosubjectTempleDataEvent(docFileDetail)" 
+                                :loading="templateNosubject_hidden_loading" 
+                                :disabled="templateNosubject_hidden_loading"
+                              >
+                                <v-icon>create</v-icon>
+                              </v-btn>
+                                </span>
+                                  <v-text-field v-if="!templateNosubject_hidden && ( 'owner,leader,hoster,manager'.indexOf( docFileDetail.permission ||'none' )>=0?true:false )"
+                                    class="flex sm3 pt-2 format_italic_source"
+                                    placeholder="Số hiệu sổ:"
+                                    v-model="docFileDetail.templateNo"
+                                    append-icon="remove"
+                                  ></v-text-field>
+                                  <v-text-field v-if="!templateNosubject_hidden && ( 'owner,leader,hoster,manager'.indexOf( docFileDetail.permission ||'none' )>=0?true:false )"
+                                    class="flex pt-2"
+                                    placeholder="Tên sổ"
+                                    v-model="docFileDetail.subject"
+                                  ></v-text-field>
+                              </v-flex>
+                        </div>
+                        <div class="editable-tool mt-2">
+                          
+                          <v-btn flat icon class="btn--editable btn--editable--done mx-0 my-0"
+                            v-if="!templateNosubject_hidden && ('owner,leader,hoster,manager'.indexOf( docFileDetail.permission ||'none' )>=0?true:false )"
+                            @click.stop.prevent="templateNosubjectUpdateEvent" 
+                            :loading="templateNosubject_hidden_loading" 
+                            :disabled="templateNosubject_hidden_loading"
+                          >
+                            <v-icon>done</v-icon>
+                          </v-btn>
+                          
+                          <v-btn flat icon class="mx-0 my-0"
+                            v-if="!templateNosubject_hidden && ( 'owner,leader,hoster,manager'.indexOf( docFileDetail.permission ||'none' )>=0?true:false )"
+                            @click.stop.prevent="templateNosubjectRolbackEvent(docFileDetail)" 
+                            :loading="templateNosubject_hidden_loading" 
+                            :disabled="templateNosubject_hidden_loading"
+                          >
+                            <v-icon color="red darken-3">clear</v-icon>
+                          </v-btn>
+                        </div>
+                      </v-flex>
+                    </v-layout>
+                  </v-flex>
+                  <v-flex xs8 class="header__editable" v-else>
+                    <v-layout wrap>
+                      <v-flex xs5 class="editable-wrap">
+                        <div class="layout wrap codeNo__codeNotation">
+                              <v-flex xs12 class="layout">
+                                <span v-if="codeNocodeNotation_hidden" class="editable__content__value">
+                                  <span v-if="docFileDetail.register == 2 && docFileDetail.seqNum.length > 0">
+                                    # {{docFileDetail.seqNum}} - 
+                                  </span>
+                                  <span v-if="docFileDetail.codeNo.length < 1 && docFileDetail.codeNotation.length < 1">
+                                    <i class="text-gray">số ký hiệu</i>
+                                  </span>
+                                  <span v-else>
+                                    {{docFileDetail.codeNo}}/{{docFileDetail.codeNotation}}
+                                  </span>
+                                  
+                                  <v-btn flat icon class="btn--editable btn--editable--done mx-0 my-0"
+                                v-if="codeNocodeNotation_hidden && ( 'owner,leader,hoster,manager'.indexOf( docFileDetail.permission ||'none' )>=0?true:false )"
+                                @click.stop.prevent="codeNocodeNotationTempleDataEvent(docFileDetail)" 
+                                :loading="codeNocodeNotation_hidden_loading" 
+                                :disabled="codeNocodeNotation_hidden_loading"
+                              >
+                                <v-icon>create</v-icon>
+                              </v-btn>
+                                </span>
+                                  <v-text-field v-if="!codeNocodeNotation_hidden && docFileDetail.register == 2 && ( 'owner,leader,hoster,manager'.indexOf( docFileDetail.permission ||'none' )>=0?true:false )"
+                                    class="flex sm5 mt-2"
+                                    placeholder="Số đến"
+                                    v-model="docFileDetail.seqNum"
+                                    append-icon="remove"
+                                  ></v-text-field>
+                                  <v-text-field v-if="!codeNocodeNotation_hidden && ( 'owner,leader,hoster,manager'.indexOf( docFileDetail.permission ||'none' )>=0?true:false )"
+                                    class="flex sm5 format_italic_source mt-2"
+                                    placeholder="Số"
+                                    v-model="docFileDetail.codeNo"
+                                    append-icon="remove"
+                                  ></v-text-field>
+                                  <v-text-field v-if="!codeNocodeNotation_hidden && ( 'owner,leader,hoster,manager'.indexOf( docFileDetail.permission ||'none' )>=0?true:false )"
+                                    class="flex mt-2"
+                                    placeholder="Ký hiệu"
+                                    v-model="docFileDetail.codeNotation"
+                                  ></v-text-field>
+                              </v-flex>
+                        </div>
+                        <div class="editable-tool mt-2">
+                          
+                          <v-btn flat icon class="btn--editable btn--editable--done mx-0 my-0"
+                            v-if="!codeNocodeNotation_hidden && ( 'owner,leader,hoster,manager'.indexOf( docFileDetail.permission ||'none' )>=0?true:false )"
+                            @click.stop.prevent="codeNocodeNotationUpdateEvent(docFileDetail)" 
+                            :loading="codeNocodeNotation_hidden_loading" 
+                            :disabled="codeNocodeNotation_hidden_loading"
+                          >
+                            <v-icon>done</v-icon>
+                          </v-btn>
+                          
+                          <v-btn flat icon class="mx-0 my-0"
+                            v-if="!codeNocodeNotation_hidden && ( 'owner,leader,hoster,manager'.indexOf( docFileDetail.permission ||'none' )>=0?true:false )"
+                            @click.stop.prevent="codeNocodeNotationRolbackEvent(docFileDetail)" 
+                            :loading="codeNocodeNotation_hidden_loading" 
+                            :disabled="codeNocodeNotation_hidden_loading"
+                          >
+                            <v-icon color="red darken-3">clear</v-icon>
+                          </v-btn>
+                        </div>
+                      </v-flex>
+                      <v-flex xs12 class="editable-wrap">
+                        <div class="layout wrap codeNo__codeNotation">
+                              <v-flex xs12 class="layout">
+                                <span v-if="subject_hidden" class="editable__content__value pt-0">
+                                  {{docFileDetail.subject}}
+                                  <v-btn flat icon class="btn--editable btn--editable--done mx-0 my-0"
+                                v-if="subject_hidden && ('owner,leader,hoster,manager'.indexOf( docFileDetail.permission ||'none' )>=0?true:false)"
+                                @click.stop.prevent="subjectTempleDataEvent(docFileDetail)" 
+                                :loading="subject_hidden_loading" 
+                                :disabled="subject_hidden_loading"
+                              >
+                                <v-icon>create</v-icon>
+                              </v-btn>
+                                </span>
+                                  <v-text-field v-if="!subject_hidden && ('owner,leader,hoster,manager'.indexOf( docFileDetail.permission ||'none' )>=0?true:false )"
+                                    class="flex sm12"
+                                    placeholder="Số"
+                                    v-model="docFileDetail.subject"
+                                  ></v-text-field>
+                              </v-flex>
+                        </div>
+                        <div class="editable-tool">
+                          
+                          <v-btn flat icon class="btn--editable btn--editable--done mx-0 my-0"
+                            v-if="!subject_hidden && ( 'owner,leader,hoster,manager'.indexOf( docFileDetail.permission ||'none' )>=0?true:false )"
+                            @click.stop.prevent="subjectUpdateEvent" 
+                            :loading="subject_hidden_loading" 
+                            :disabled="subject_hidden_loading"
+                          >
+                            <v-icon>done</v-icon>
+                          </v-btn>
+                          
+                          <v-btn flat icon class="mx-0 my-0"
+                            v-if="!subject_hidden && ( 'owner,leader,hoster,manager'.indexOf( docFileDetail.permission ||'none' )>=0?true:false )"
+                            @click.stop.prevent="subjectRolbackEvent(docFileDetail)" 
+                            :loading="subject_hidden_loading" 
+                            :disabled="subject_hidden_loading"
+                          >
+                            <v-icon color="red darken-3">clear</v-icon>
+                          </v-btn>
+                        </div>
+                      </v-flex>
+                    </v-layout>
+                  </v-flex>
+                  <v-flex xs12 sm3 class="text-right">
+                     <v-layout wrap>
+                      <v-flex xs12>
+                        <i class="text-gray">
+                        Tạo bởi: {{docFileDetail.userName}}
+                        </i>
+                      </v-flex>
+                      <v-flex xs12>
+                        <i class="text-gray">
+                        {{docFileDetail.createDate | datetime}}
+                        </i>
+                      </v-flex>
+                    </v-layout>
+                   </v-flex>
+                </v-layout>
+              </div>
+              <div>
+                <v-slide-y-transition>
+                  <v-layout wrap class="pt-2">
+                    <v-flex xs12 sm6 jx-bind="register" class="px-3" v-if="docFileDetail.isTemplate === 1" :class="{'order-lg1': docFileDetail.isTemplate === 1}">
+                    
+                    </v-flex>
+                    <v-flex xs12 sm6 jx-bind="templateNo" class="px-3" v-if="docFileDetail.isTemplate === 0" :class="{'order-lg1': docFileDetail.isTemplate === 0}">
+                    
+                    </v-flex>
+                    <v-flex xs12 sm6 jx-bind="registerDate" class="px-3" v-if="docFileDetail.isTemplate === 0" :class="{'order-lg2': docFileDetail.isTemplate === 0}">
+                    
+                    </v-flex>
+                    <v-flex xs12 sm6 jx-bind="promulgationDate" class="px-3" v-if="docFileDetail.isTemplate === 0" :class="{'order-lg4': docFileDetail.isTemplate === 0}">
+                    
+                    </v-flex>
+                    
+                    <v-flex xs12 sm6 class="px-3 editable-wrap" v-if="docFileDetail.isTemplate === 1" :class="{'order-lg100': docFileDetail.isTemplate === 0, 'order-lg2': docFileDetail.isTemplate === 1}">
+                      <div class="layout wrap codeNo__codeNotation">
+                        <div class="labelClass flex text-bold xs12 sm4"> Số/Ký hiệu: </div>
+                            <v-flex xs6 sm4 class="layout format_italic_source">
+                              <span v-if="codeNocodeNotation_hidden" class="editable__content__value">
+                                {{docFileDetail.codeNo}}/{{docFileDetail.codeNotation}}
+                              </span>
+                              
+                              <v-text-field v-if="!codeNocodeNotation_hidden"
+                                class="flex sm8"
+                                placeholder="Số"
+                                v-model="docFileDetail.codeNo"
+                                append-icon="remove"
+                              ></v-text-field>
+                              <v-text-field v-if="!codeNocodeNotation_hidden"
+                                class="flex"
+                                placeholder="Ký hiệu"
+                                v-model="docFileDetail.codeNotation"
+                              ></v-text-field>
+                            </v-flex>
+                      </div>
+                      <div class="editable-tool mr-3">
+                        <v-btn flat icon class="btn--editable btn--editable--done mx-0 my-0"
+                          v-if="codeNocodeNotation_hidden && ('owner,leader,hoster,manager'.indexOf( docFileDetail.permission ||'none' )>=0?true:false)"
+                          @click.stop.prevent="codeNocodeNotationTempleDataEvent(docFileDetail)" 
+                          :loading="codeNocodeNotation_hidden_loading" 
+                          :disabled="codeNocodeNotation_hidden_loading"
+                        >
+                          <v-icon>create</v-icon>
+                        </v-btn>
+                        
+                        <v-btn flat icon class="btn--editable btn--editable--done mx-0 my-0"
+                          v-if="!codeNocodeNotation_hidden"
+                          @click.stop.prevent="codeNocodeNotationUpdateEvent" 
+                          :loading="codeNocodeNotation_hidden_loading" 
+                          :disabled="codeNocodeNotation_hidden_loading"
+                        >
+                          <v-icon>done</v-icon>
+                        </v-btn>
+                        
+                        <v-btn flat icon class="mx-0 my-0"
+                          v-if="!codeNocodeNotation_hidden"
+                          @click.stop.prevent="codeNocodeNotationRolbackEvent(docFileDetail)" 
+                          :loading="codeNocodeNotation_hidden_loading" 
+                          :disabled="codeNocodeNotation_hidden_loading"
+                        >
+                          <v-icon color="red darken-3">clear</v-icon>
+                        </v-btn>
+                      </div>
+                    </v-flex>
+                    <v-flex xs12 sm6 jx-bind="issuerCode" class="px-3" :class="{'order-lg3': docFileDetail.isTemplate === 0, 'order-lg4': docFileDetail.isTemplate === 1}">
+                    
+                    </v-flex>
+                    <v-flex xs12 sm6 jx-bind="documentCat" class="px-3 no__chips_views" :class="{'order-lg5': docFileDetail.isTemplate === 0, 'order-lg3': docFileDetail.isTemplate === 1}">
+                    
+                    </v-flex>
+                    <v-flex xs12 sm6 jx-bind="signerInfo" class="px-3" v-if="docFileDetail.isTemplate === 0" :class="{'order-lg6': docFileDetail.isTemplate === 0, 'order-lg100': docFileDetail.isTemplate === 1}" >
+                    
+                    </v-flex>
+                    
+                    <v-flex xs12 sm6 jx-bind="language" class="px-3" v-if="detailShowMore" :class="{'order-lg7': docFileDetail.isTemplate === 0, 'order-lg100': docFileDetail.isTemplate === 1}">
+                    
+                    </v-flex>
+                    <v-flex xs12 sm6 jx-bind="priority" class="px-3" v-if="detailShowMore" :class="{'order-lg8': docFileDetail.isTemplate === 0, 'order-lg100': docFileDetail.isTemplate === 1}">
+                    
+                    </v-flex>
+                    <v-flex xs12 sm6 jx-bind="promulgationAmount" class="px-3" v-if="detailShowMore" :class="{'order-lg9': docFileDetail.isTemplate === 0, 'order-lg100': docFileDetail.isTemplate === 1}">
+                    
+                    </v-flex>
+                    <v-flex xs12 sm6 jx-bind="secutype" class="px-3" v-if="detailShowMore" :class="{'order-lg10': docFileDetail.isTemplate === 0, 'order-lg100': docFileDetail.isTemplate === 1}">
+                    
+                    </v-flex>
+                    <v-flex xs12 sm6 jx-bind="pageAmount" class="px-3" v-if="detailShowMore" :class="{'order-lg11': docFileDetail.isTemplate === 0, 'order-lg100': docFileDetail.isTemplate === 1}">
+                    
+                    </v-flex>
+                    <v-flex xs12 sm6 jx-bind="" class="px-3" v-if="detailShowMore" :class="{'order-lg12': docFileDetail.isTemplate === 0, 'order-lg100': docFileDetail.isTemplate === 1}">
+                    
+                    </v-flex>
+                    <v-flex xs12 jx-bind="thuMucLuuTruWorkspaces" class="px-3" v-if="detailShowMore" :class="{'order-lg12': docFileDetail.isTemplate === 0, 'order-lg5': docFileDetail.isTemplate === 1}">
+                    
+                    </v-flex>
+                    <v-flex xs12 class="px-3 max-width146" v-if="docFileDetail.isTemplate === 1 || detailShowMore" :class="{'order-lg12': docFileDetail.isTemplate === 0, 'order-lg5': docFileDetail.isTemplate === 1}">
+                      <v-layout wrap>
+                        <v-flex xs12 sm4 class="labelClass text-bold" style="padding-top: 8px;">
+                          Thêm thẻ nhãn:
+                        </v-flex>
+                        <v-flex xs12 sm8>
+                          <jx-mobilink-label
+                            :class_name="class_name_doc"
+                            :class_pk="class_pk"
+                            :group_id="groupId"
+                            item_text="labelName"
+                            item_value="labelId"
+                            :label_api=endPoint+"resourcelabels"
+                            :permission="docFileDetail.permission"
+                          ></jx-mobilink-label>
+                        </v-flex>
+                      </v-layout>
+                    </v-flex>
+                    <v-flex xs12 jx-bind="content" class="px-3 max-width146" v-if="docFileDetail.isTemplate === 1 || detailShowMore" :class="{'order-lg12': docFileDetail.isTemplate === 0, 'order-lg6': docFileDetail.isTemplate === 1}">
+                    
+                    </v-flex>
+                    
+                  </v-layout>
+                </v-slide-y-transition>
+                
+                <v-layout wrap>
+                  <v-btn flat block v-on:click.native="detailShowMore = !detailShowMore" class="detail_show_more" v-if="docFileDetail.isTemplate === 0">
+                    <i v-if="!detailShowMore">Xem thêm</i>
+                    <i v-else>Thu gọn</i>
+                    <v-icon v-if="!detailShowMore">keyboard_arrow_down</v-icon>
+                    <v-icon v-else>keyboard_arrow_up</v-icon>
+                  </v-btn>
+                </v-layout>
+                <br/>
+                <uploader :options="options" class="uploader-example">
+                  <uploader-unsupport></uploader-unsupport>
+                  <uploader-list 
+                    id="1"
+                    developer-key='AIzaSyAouTfMdrvMHjAwvF9RVsvwsuN1WSzGjmM'
+                    client-id='790244148120-0grj2n5evkij0kqqthkbtgb18i0gup1j.apps.googleusercontent.com'
+                    view-id='DOCS'
+                    :class_name="class_name_doc"
+                    :class_pk="class_pk"
+                    :group_id="groupId"
+                        :file_attach_api=endPoint+"fileattachs"
+                        extensions_upload="true"
+                        :permission="docFileDetail.permission"
+                  ></uploader-list>
+                </uploader>
+                
+                <script type="text/javascript" src="http://apis.google.com/js/api.js?onload=onApiLoad"></script>
+              </div>
+            </div>
+            <div v-if="docFileDetail.isTemplate === 0" >
+              <jx-mobilink-online-form
+                    id="2"
+                    @preview-alpacajs-form="previewAlpacaJsFormFunc"
+                    @submit-alpacajs-form="submitFormOnlineData"
+                    :class_name="class_name_doc"
+                :class_pk="class_pk"
+                :group_id="groupId"
+                    :alpaca_api="endPoint+'docfiles/'+class_pk+'/inputform'"
+                    :jasper_api="endPoint+'docfiles/'+class_pk+'/reportform'"
+                    :formdata_api="endPoint+'docfiles/'+class_pk+'/formdata'"
+                    :sample_api="endPoint+'docfiles/'+class_pk+'/formdata'"
+                    :download_api="endPoint+'docfiles/'+class_pk+'/formdata'"
+                     config_view="1"
+                 :permission="docFileDetail.permission"
+                  ></jx-mobilink-online-form>
+              <jx-mobilink-comment
+                  id="1"
+                  @init-comment="initComment"
+                  :class_name="class_name_doc"
+                :class_pk="class_pk"
+                :group_id="groupId"
+                  :comments_api=endPoint+"comments"
+                  expanded="true"
+                  :user_id="current_user_id"
+                  :full_name="current_user_name"
+                  :contacts="contacts"
+                ></jx-mobilink-comment>
+              </div>
+              <div v-else>
+                <jx-mobilink-online-form
+                    id="1"
+                    @preview-alpacajs-form="previewAlpacaJsFormFunc"
+                    @submit-alpacajs-form="submitFormOnlineData"
+                    :class_name="class_name_doc"
+                :class_pk="class_pk"
+                :group_id="groupId"
+                    :alpaca_api="endPoint+'docfiles/'+class_pk+'/inputform'"
+                    :jasper_api="endPoint+'docfiles/'+class_pk+'/reportform'"
+                    :formdata_api="endPoint+'docfiles/'+class_pk+'/formdata'"
+                    :sample_api="endPoint+'docfiles/'+class_pk+'/formdata'"
+                    :download_api="endPoint+'docfiles/'+class_pk+'/formdata'"
+                     config_view="0"
+                 :permission="docFileDetail.permission"
+                  ></jx-mobilink-online-form>
+              </div>
+          </v-flex>
+          <v-flex xs12 sm4 class="pl-3" >
+            <div v-if="docFileDetail.isTemplate === 0">
+              <jx-mobilink-share 
+                :visibilities_api=endPoint+"visibilities"
+                :resourceworkspace_get_api=endPoint+"resourceworkspaces"
+                :resourceroles_get_api=endPoint+"resourceroles"
+                :resourceusers_get_api=endPoint+"resourceusers"
+                :changelogs_get_api=endPoint+"changelogs"
+                :class_name="class_name_doc"
+                :class_pk="class_pk"
+                :group_id="groupId"
+                :permission="docFileDetail.permission"
+                share_for="docfile"
+              ></jx-mobilink-share>
+              <br>
+              <jx-mobilink-status
+                :class_name="class_name_doc"
+                :class_pk="class_pk"
+                :group_id="groupId"
+                :items="statusItems"
+                item-text="text"
+                item-value="value"
+                :update_api=endPoint+"docfiles"
+                status-key="status"
+                date-key="dueDate"
+                :permission="docFileDetail.permission"
+              ></jx-mobilink-status>
+              <br>
+              <jx-mobilink-approval
+                :class_name="class_name_doc"
+              :class_pk="class_pk"
+              :group_id="groupId"
+                :approval_get_api=endPoint+"approvals"
+                :employee_get_api=endPoint+"employees"
+                :approval_user_id="current_user_id"
+                expanded="true"
+              :permission="docFileDetail.permission"
+              ></jx-mobilink-approval>
+              <br>
+              <jx-mobilink-voting
+                :class_name="class_name_doc"
+              :class_pk="class_pk"
+              :group_id="groupId"
+                expanded="true"
+                voting-title="Lấy ý kiến thống nhất"
+                :voting_api=endPoint+"votings"
+               :permission="docFileDetail.permission"
+               :user_id="current_user_id"
+              ></jx-mobilink-voting>
+            </div>
+            <div v-else>
+              <jx-mobilink-share 
+                :visibilities_api=endPoint+"visibilities"
+                :resourceworkspace_get_api=endPoint+"resourceworkspaces"
+                :resourceroles_get_api=endPoint+"resourceroles"
+                :resourceusers_get_api=endPoint+"resourceusers"
+                :changelogs_get_api=endPoint+"changelogs"
+                :class_name="class_name_doc"
+                :class_pk="class_pk"
+                :group_id="groupId"
+                :permission="docFileDetail.permission"
+                share_for="docfile"
+              ></jx-mobilink-share>
+            </div>
+            
+          </v-flex>
+        </v-layout>
+        </v-slide-x-transition>
+        
+        <script type="text/javascript" src="http://apis.google.com/js/api.js?onload=onApiLoad"></script>
+      <!--  -->
 
     </div>
 
-    <div class=" xs6" :class="{'no-width': !currentListPage, 'max-width': currentListPage}">
+    <div class="flex xs6" :class="{'no-width': !currentListPage, 'max-width': currentListPage}">
 
       <v-slide-x-transition>
         <div class="layout wrap" v-if="currentListPage">
 
           <div class="row-header flex-break" v-if="!keywordsSearchable">
-            <div class="flex" style="max-width:50%" v-show="!isSearch">
-              <v-breadcrumbs class="py-2" v-if="breadWorkspace">
-                <v-icon slot="divider" style="color: #ffffff!important">chevron_right</v-icon>
-                <v-breadcrumbs-item v-for="item in workspaceTree" :key="item.id" v-on:click.native="breadcrumbsSelected(item)">
-                  {{ item.name }}
-                </v-breadcrumbs-item>
-              </v-breadcrumbs>
-              <v-breadcrumbs class="py-2" v-else>
-                <v-icon slot="divider" style="color: #ffffff!important">chevron_right</v-icon>
-                <v-breadcrumbs-item v-for="item in docFileTemplateTree" :key="item.id" v-on:click.native="breadcrumbsSelectedDocTEMP(item)">
-                  {{ item.name }}
-                </v-breadcrumbs-item>
-              </v-breadcrumbs>
+            <div class="flex" style="min-width:50%;max-width:50%">
+              <div v-show="!isSearch">
+                <v-breadcrumbs class="py-2" v-if="breadWorkspace">
+                  <v-icon slot="divider" style="color: #ffffff!important">chevron_right</v-icon>
+                  <v-breadcrumbs-item v-for="item in workspaceTree" :key="item.id" v-on:click.native="breadcrumbsSelected(item)">
+                    {{ item.name }}
+                  </v-breadcrumbs-item>
+                </v-breadcrumbs>
+                <v-breadcrumbs class="py-2" v-if="!breadWorkspace&&!viewFirst">
+                  <span v-show="txtPersonShare" class="txtPersonShare"></span>
+                  <v-icon slot="divider" v-show="!txtPersonShare" style="color: #ffffff!important">chevron_right</v-icon>
+                  <v-breadcrumbs-item v-show="!txtPersonShare" v-for="item in docFileTemplateTree" :key="item.id" v-on:click.native="breadcrumbsSelectedDocTEMP(item)">
+                    {{ item.name }}
+                  </v-breadcrumbs-item>
+                </v-breadcrumbs>
+              </div>
+              <div v-show="viewFirst" class="pl-2">Thư mục lưu trữ</div>
+              <div v-show="isSearch" class="pl-2">Kết quả tìm kiếm</div>
             </div>
             <!-- Search -->
             <div class="flex w-100-xs" style="
-                          display: flex;
-                          display: -webkit-flex;
-                          align-items: center"
-                      >
-                    
+						  display: flex;
+						  display: -webkit-flex;
+						  align-items: center"
+					  >
               <v-btn flat icon v-on:click.native="toDetailDocFile(docFileTempID)" class="my-0 mx-0" 
               v-if="docFileTemplateTree.length > 0 && !breadWorkspace && docFileTempID > 0">
                 <v-icon>edit</v-icon>
               </v-btn>
-                  
+	              
               <div class="flex w-100-xs finder-keywords-search" jx-bind="keywordsSearch" style="display: flex;display: -webkit-flex;">
               </div>
             </div>
             <!-- Search advanced -->
             <v-menu left :close-on-content-click="false" :nudge-left="200" :nudge-bottom="2" v-model="menu">
-              <v-btn flat slot="activator">Nâng cao</v-btn>
+              <v-btn flat slot="activator">Tìm kiếm nâng cao</v-btn>
               <v-card>
                 <v-list>
                   <v-list-tile>
@@ -204,7 +621,7 @@
                 <v-divider class="my-0"></v-divider>
                 <v-layout wrap class="px-3">
                   <div class="flex xs12" jx-bind="documentCatFilter"></div>
-                        <div class="flex xs12" jx-bind="labelFilter"></div>
+      				    <div class="flex xs12" jx-bind="labelFilter"></div>
                 </v-layout>
                 <v-card-actions>
                   <v-spacer></v-spacer>
@@ -228,7 +645,7 @@
 
             </div>
           </v-slide-y-transition>
-          <!-- Menu trái -->
+          <!-- Content Right -->
           <v-slide-y-transition>
             <div class="mb-2 folder__expand__view pt-2" v-if="khoDuLieuListFolderItems.length > 0 && !isSearch">
 
@@ -257,10 +674,10 @@
                       </div>
 
                       <div class="card-col-field lfr-card-actions-column pr-3" v-if="item.editable">
-                        <v-menu transition="slide-x-transition" full-width>
-                            <v-btn flat icon class="mx-0 my-0" slot="activator">
-                              <v-icon>settings</v-icon>
-                            </v-btn>
+                      	<v-menu transition="slide-x-transition" full-width>
+                      		<v-btn flat icon class="mx-0 my-0" slot="activator">
+	                          <v-icon>settings</v-icon>
+	                        </v-btn>
                           <v-list>
                             <v-list-tile @click="toWorkspaceEdit(item, index)">
                               <v-list-tile-title>
@@ -286,11 +703,11 @@
             <div style="width: 100%;">
               <div v-if="khoDuLieuListFolderItems.length > 0" class="mb-2">
               </div>
-              <div v-if="!no_list_access && khoDuLieuListFolderItems.length > 0 && khoDuLieuListItems.length > 0">
-                Tài liệu: 
+              <div v-if="!no_list_access && khoDuLieuListFolderItems.length > 0 ">
+              	Tài liệu: 
                 <br>
               </div>
-              <div v-if="!no_list_access && khoDuLieuListItems.length > 0" class="layout wrap" jx-bind="khoDuLieuList">
+              <div v-if="!no_list_access" class="layout wrap" jx-bind="khoDuLieuList">
 
               </div>
             </div>
@@ -307,36 +724,34 @@
 <div id="activity_expand_list_template" class="hidden">
   <template slot="items" slot-scope="props">
 
-    <td class="text-xs-left" style="padding-top: 7px; padding-left: 0px;">
-        <v-btn v-if="(props.item.permanent == true && props.item.permission === 'owner') || (props.item.permanent == '' && props.item.permission === 'owner')" icon class="mx-0 my-0">
+    <td class="text-xs-left px-2" style="padding-top: 2px">
+    	<v-btn v-if="(props.item.permanent == true && props.item.permission === 'owner') || (props.item.permanent == '' && props.item.permission === 'owner')" icon class="mx-0 my-0">
           <v-icon>check_box</v-icon>
         </v-btn>
-        <v-btn v-else icon class="mx-0 my-0">
+    	<v-btn v-else icon class="mx-0 my-0">
           <i aria-hidden="true" class="fa fa-share-alt"></i>
         </v-btn>
-        <a href="javascript:;" @click.stop.prevent="toDetailDocFile(props.item.docFileId)">
+    	<a href="javascript:;" @click.stop.prevent="toDetailDocFile(props.item.docFileId)">
         {{ props.item.codeNo }} / {{ props.item.codeNotation }}
       </a>
       
     </td>
 
-    <td class="text-xs-left" style="padding-top: 15px;">
-        <a href="javascript:;" @click.stop.prevent="toDetailDocFile(props.item.docFileId)">
+    <td class="text-xs-center px-2" style="padding-top: 10px;">
+    	<a href="javascript:;" @click.stop.prevent="toDetailDocFile(props.item.docFileId)">
         {{ props.item.promulgationDate | date }}
       </a>
       
     </td>
-    <td class="text-xs-left" style="padding-top: 15px;">
+    <td class="text-xs-left px-2" style="padding-top: 10px;">
       <a href="javascript:;" @click.stop.prevent="toDetailDocFile(props.item.docFileId)">
         {{ props.item.name }}
       </a>
     </td>
-    <td class="text-xs-right" style="
-            display: flex;
-            display: -webkit-flex;
-            align-items: center;
-            border: 0;
-        ">
+    <td class="text-xs-center px-2" style="
+		    align-items: center;
+		    border: 0;
+		">
 
       <v-btn icon class="mx-0 my-0" :loading="downloading === props.item.docFileId" v-on:click.native="downloadDocFileReferent(props.item)"
         :disabled="downloading === props.item.docFileId">
@@ -361,7 +776,29 @@
     <div class="flex pr-3 w-100-xs" jx-bind="workspaceSibling"></div>
 
     <div class="flex xs12 mobilink-shared-root editable-wrap editable-wrap-before-select" jx-bind="parentWorkspace"></div>
+    <div class="flex xs12">
+      <v-alert outline color="error" icon="warning" :value="apistate1 === 2">
+        Lỗi cập nhật dữ liệu!
+      </v-alert>
+    </div>
+    <div class="flex xs12">
+      <jx-mobilink-share-select item-text="fullName" item-value="userId" :items="workspaceUserItems" label="Người được phép truy cập"
+        v-model="workspaceUser" ref="workspaceUser"></jx-mobilink-share-select>
+      <v-alert outline color="error" icon="warning" :value="apistate2 === 2">
+        Lỗi cập nhật phân quyền người có tài khoản!
+      </v-alert>
+    </div>
 
+    <div class="flex xs12">
+      <jx-mobilink-share-select item-text="roleName" item-value="roleId" :items="workspaceRoleItems" label="Chức vụ được phép truy cập"
+        v-model="workspaceRole" ref="workspaceRole"></jx-mobilink-share-select>
+      <v-alert outline color="error" icon="warning" v-if="apistate3 === 2">
+        Lỗi cập nhật phân quyền chức vụ!
+      </v-alert>
+      <v-alert outline color="success" icon="check_circle" :value="apistate3 === 1 && apistate2 === 1 && apistate1 === 1">
+        Yêu cầu của bạn được thực hiện thành công!
+      </v-alert>
+    </div>
 
   </div>
 </div>
@@ -370,18 +807,18 @@
   <div class="layout wrap flex xs12 text-center pt-4 mt-3">
 
     <div class="flex pr-3 w-100-xs" v-if="is_add_form">
-        <jx-mobilink-docfile-add
-            :class_name="class_name_doc"
-            :class_pk="class_pk"
-            :group_id="groupId"
-            is_template="false"
-            is_upload="true"
-            file_attach_api="/o/v2/mobilink/fileattachs"
-            ref="uploadcom1"
-            @call-back="successCallBack"
-            :workspace_cur="workspace_curId"
-            :current_user_id="current_user_id"
-        ></jx-mobilink-docfile-add>
+    	<jx-mobilink-docfile-add
+    		:class_name="class_name_doc"
+			:class_pk="class_pk"
+			:group_id="groupId"
+			is_template="false"
+			is_upload="true"
+			:file_attach_api=endPoint+"fileattachs"
+			ref="uploadcom1"
+			@call-back="successCallBack"
+			:workspace_cur="workspace_curId"
+			:current_user_id="current_user_id"
+    	></jx-mobilink-docfile-add>
     </div>
 
   </div>
@@ -391,18 +828,18 @@
   <div class="layout wrap flex xs12 text-center pt-4 mt-3">
 
     <div class="flex pr-3 w-100-xs" v-if="!is_add_form">
-        <jx-mobilink-docfile-add
-            :class_name="class_name_doc"
-            :class_pk="class_pk"
-            :group_id="groupId"
-            is_template="true"
-            is_upload="false"
-            file_attach_api="/o/v2/mobilink/fileattachs"
-            ref="uploadcom2"
-            @call-back="successCallBack"
-            :workspace_cur="workspace_curId"
-            :current_user_id="current_user_id"
-        ></jx-mobilink-docfile-add>
+    	<jx-mobilink-docfile-add
+    		:class_name="class_name_doc"
+			:class_pk="class_pk"
+			:group_id="groupId"
+			is_template="true"
+			is_upload="false"
+			:file_attach_api=endPoint+"fileattachs"
+			ref="uploadcom2"
+			@call-back="successCallBack"
+			:workspace_cur="workspace_curId"
+			:current_user_id="current_user_id"
+    	></jx-mobilink-docfile-add>
     </div>
 
   </div>
@@ -414,21 +851,23 @@
   document.addEventListener('DOMContentLoaded', function(event) {
     var config = {
       headers: {
-        'groupId': 2014
+        'groupId': themeDisplay.getScopeGroupId()
       }
     };
     var config_blob = {
       headers: {
-        'groupId': 2014
+        'groupId': themeDisplay.getScopeGroupId()
       },
       responseType: 'blob'
     };
     var khoTuLieuViewJX = new VueJX({
       el: 'khoTuLieuViewJX',
       pk: 1,
-      groupid: 2014,
+      groupid: themeDisplay.getScopeGroupId(),
       onScroll: 'onScroll',
       data: {
+        txtPersonShare: false,
+        viewFirst: true,
         isSearch: false,
         workspace_curId: 0,
         codeNocodeNotation_hidden: true,
@@ -439,9 +878,9 @@
         subject_hidden_loading: false,
         tempData1: '',
         tempData2: '',
-        no_list_access: true,
-        docFileTempID: 0,
-        breadWorkspace: true,
+      	no_list_access: true,
+      	docFileTempID: 0,
+        breadWorkspace: false,
         is_add_form: true,
         fav: true,
         menu: false,
@@ -455,14 +894,15 @@
         class_name: 'org.mobilink.sharing.model.Workspace',
         class_name_doc: 'org.mobilink.docmgt.model.DocFile',
         class_pk: 0,
-        current_user_id: 2015,
-        current_user_name: 2016,
-        groupId: 2014,
+        current_user_id: themeDisplay.getUserId(),
+        current_user_name: themeDisplay.getUserName(),
+        groupId: themeDisplay.getScopeGroupId(),
         options: {
-          target: '/o/v2/mobilink/fileattachs/upload',
+          // target: '/o/v2/mobilink/fileattachs/upload',
+          target: 'http://127.0.0.1:8081/api/fileattachs/upload',
           chunkSize: 100*1024*1024,
           headers: {
-            'groupId': 2014
+          	'groupId': themeDisplay.getScopeGroupId()
           }
         },
         workspaceRoleItems: [],
@@ -516,9 +956,9 @@
         docFileTemplateTree: [],
         valid: false,
         currentListPage: true,
-        endPoint: 'http://127.0.0.1:8081/api/',
+        endPoint: '/o/v2/mobilink/',
         headers: {
-          groupId: 2014
+          groupId: themeDisplay.getScopeGroupId()
         },
         khoDuLieuListFolderItems: [],
         statusItems: [{
@@ -546,10 +986,13 @@
           'template_content': 'paymentViewJX_form_template',
           'onLoad': '_doRouter',
           'events': {
-            onScroll: function(e) {},
+			      onScroll: function(e) {},
             _doRouter: function() {
               // this.detailModel['workspaceId'] = ${Request.workspaceIdW};
               // this.toDetailDocFile(${Request.docFileId});
+              this.detailModel['workspaceId'] = 1;
+              this.toDetailDocFile(1);
+              // 
               this.initContacts();
             },
             initComment: function(prevewConfig) {
@@ -582,49 +1025,49 @@
             
             },
             previewAlpacaJsFormFunc: function (prevewConfig) {
-                console.log(prevewConfig);
-                console.log(prevewConfig.formscript);
-                var alpacaJs = {};
-                if (prevewConfig.formscript.startsWith('{')) {
-                   alpacaJs = eval('(' + prevewConfig.formscript + ')');
-                };
-                $(prevewConfig.id).alpaca("destroy");
-                
-                setTimeout(
+            	console.log(prevewConfig);
+            	console.log(prevewConfig.formscript);
+	            var alpacaJs = {};
+	            if (prevewConfig.formscript.startsWith('{')) {
+	               alpacaJs = eval('(' + prevewConfig.formscript + ')');
+	            };
+	            $(prevewConfig.id).alpaca("destroy");
+	            
+	            setTimeout(
                 function() {
                   $(prevewConfig.id).alpaca(alpacaJs);
                 },
                 1000);
-              },
-              submitFormOnlineData: function (dataConfig) {
-                var control = $(dataConfig.id).alpaca("get");
-                this.alpacaSubmit(dataConfig, JSON.stringify(control.getValue()));
-              },
-              codeNocodeNotationTempleDataEvent: function(data) {
-                this.tempData1 = data.codeNo;
-                this.tempData2 = data.codeNotation;
-                this.tempData3 = data.seqNum;
-                this.codeNocodeNotation_hidden = !this.codeNocodeNotation_hidden;
-              },
-              codeNocodeNotationRolbackEvent: function(data) {
-                data.codeNo = this.tempData1;
-                data.codeNotation = this.tempData2;
-                data.seqNum = this.tempData3;
-                this.codeNocodeNotation_hidden = !this.codeNocodeNotation_hidden;
-              },
-              codeNocodeNotationUpdateEvent: function(item) {
-                var vm = this; 
-                var validator = document.querySelector(".editable-wrap .error--text"); 
-                var dataToAPI = new URLSearchParams();
-                dataToAPI.append("codeNo", vm.docFileDetail.codeNo);
-                dataToAPI.append("codeNotation", vm.docFileDetail.codeNotation);
-                if (item.register == 2) {
-                    dataToAPI.append("seqNum", vm.docFileDetail.seqNum);
-                }
-                if(validator == null) {
-                    var url = '/o/v2/mobilink/docfiles/' +vm.docFileDetail.docFileId ;
-                    axios.put(url, dataToAPI, config).then(function(response) {
-                        vm.snackbartextkhoTuLieuViewJX = "Cập nhật dữ liệu thành công!";
+	          },
+	          submitFormOnlineData: function (dataConfig) {
+	          	var control = $(dataConfig.id).alpaca("get");
+	          	this.alpacaSubmit(dataConfig, JSON.stringify(control.getValue()));
+	          },
+	          codeNocodeNotationTempleDataEvent: function(data) {
+	          	this.tempData1 = data.codeNo;
+	          	this.tempData2 = data.codeNotation;
+	          	this.tempData3 = data.seqNum;
+	          	this.codeNocodeNotation_hidden = !this.codeNocodeNotation_hidden;
+	          },
+	          codeNocodeNotationRolbackEvent: function(data) {
+	          	data.codeNo = this.tempData1;
+	          	data.codeNotation = this.tempData2;
+	          	data.seqNum = this.tempData3;
+	          	this.codeNocodeNotation_hidden = !this.codeNocodeNotation_hidden;
+	          },
+	          codeNocodeNotationUpdateEvent: function(item) {
+	          	var vm = this; 
+	          	var validator = document.querySelector(".editable-wrap .error--text"); 
+	          	var dataToAPI = new URLSearchParams();
+	          	dataToAPI.append("codeNo", vm.docFileDetail.codeNo);
+	          	dataToAPI.append("codeNotation", vm.docFileDetail.codeNotation);
+	          	if (item.register == 2) {
+	          		dataToAPI.append("seqNum", vm.docFileDetail.seqNum);
+	          	}
+	          	if(validator == null) {
+	          		var url = vm.endPoint+'docfiles/' +vm.docFileDetail.docFileId ;
+	          		axios.put(url, dataToAPI, config).then(function(response) {
+	          			vm.snackbartextkhoTuLieuViewJX = "Cập nhật dữ liệu thành công!";
                     vm.snackbarkhoTuLieuViewJX = true;
                     vm.codeNocodeNotation_hidden = !vm.codeNocodeNotation_hidden;
                   })
@@ -633,65 +1076,65 @@
                     vm.snackbartextkhoTuLieuViewJX = "Cập nhật dữ liệu thất bại!";
                     vm.snackbarerorkhoTuLieuViewJX = true;
                   });
-                }
-              },
-              templateNosubjectTempleDataEvent: function(data) {
-                this.tempData1 = data.templateNo;
-                this.tempData2 = data.subject;
-                this.templateNosubject_hidden = !this.templateNosubject_hidden;
-              },
-              templateNosubjectRolbackEvent: function(data) {
-                data.templateNo = this.tempData1;
-                data.subject = this.tempData2;
-                this.templateNosubject_hidden = !this.templateNosubject_hidden;
-              },
-              templateNosubjectUpdateEvent: function() {
-                var vm = this; 
-                var validator = document.querySelector(".editable-wrap .error--text"); 
-                var dataToAPI = new URLSearchParams();
-                dataToAPI.append("templateNo", vm.docFileDetail.templateNo);
-                dataToAPI.append("subject", vm.docFileDetail.subject);
-                if(validator == null) {
-                    var url = '/o/v2/mobilink/docfiles/' +vm.docFileDetail.docFileId ;
-                    axios.put(url, dataToAPI, config).then(function(response) {
-                        vm.snackbartextkhoTuLieuViewJX = "Cập nhật dữ liệu thành công!";
-                        vm.snackbarkhoTuLieuViewJX = true;
-                        vm.templateNosubject_hidden = !vm.templateNosubject_hidden;
-                      })
-                      .catch(function(error) {
-                        console.log(error);
-                        vm.snackbartextkhoTuLieuViewJX = "Cập nhật dữ liệu thất bại!";
-                        vm.snackbarerorkhoTuLieuViewJX = true;
-                      });
-                }
-              },
-              subjectTempleDataEvent: function(data) {
-                this.tempData2 = data.subject;
-                this.subject_hidden = !this.subject_hidden;
-              },
-              subjectRolbackEvent: function(data) {
-                data.subject = this.tempData2;
-                this.subject_hidden = !this.subject_hidden;
-              },
-              subjectUpdateEvent: function() {
-                var vm = this; 
-                var validator = document.querySelector(".editable-wrap .error--text"); 
-                var dataToAPI = new URLSearchParams();
-                dataToAPI.append("subject", vm.docFileDetail.subject);
-                if(validator == null) {
-                    var url = '/o/v2/mobilink/docfiles/' +vm.docFileDetail.docFileId ;
-                    axios.put(url, dataToAPI, config).then(function(response) {
-                        vm.snackbartextkhoTuLieuViewJX = "Cập nhật dữ liệu thành công!";
-                        vm.snackbarkhoTuLieuViewJX = true;
-                        vm.subject_hidden = !vm.subject_hidden;
-                      })
-                      .catch(function(error) {
-                        console.log(error);
-                        vm.snackbartextkhoTuLieuViewJX = "Cập nhật dữ liệu thất bại!";
-                        vm.snackbarerorkhoTuLieuViewJX = true;
-                      });
-                }
-              }
+	          	}
+	          },
+	          templateNosubjectTempleDataEvent: function(data) {
+	          	this.tempData1 = data.templateNo;
+	          	this.tempData2 = data.subject;
+	          	this.templateNosubject_hidden = !this.templateNosubject_hidden;
+	          },
+	          templateNosubjectRolbackEvent: function(data) {
+	          	data.templateNo = this.tempData1;
+	          	data.subject = this.tempData2;
+	          	this.templateNosubject_hidden = !this.templateNosubject_hidden;
+	          },
+	          templateNosubjectUpdateEvent: function() {
+	          	var vm = this; 
+	          	var validator = document.querySelector(".editable-wrap .error--text"); 
+	          	var dataToAPI = new URLSearchParams();
+	          	dataToAPI.append("templateNo", vm.docFileDetail.templateNo);
+	          	dataToAPI.append("subject", vm.docFileDetail.subject);
+	          	if(validator == null) {
+	          		var url = vm.endPoint+'docfiles/' +vm.docFileDetail.docFileId ;
+	          		axios.put(url, dataToAPI, config).then(function(response) {
+	          			vm.snackbartextkhoTuLieuViewJX = "Cập nhật dữ liệu thành công!";
+	                    vm.snackbarkhoTuLieuViewJX = true;
+	                    vm.templateNosubject_hidden = !vm.templateNosubject_hidden;
+	                  })
+	                  .catch(function(error) {
+	                    console.log(error);
+	                    vm.snackbartextkhoTuLieuViewJX = "Cập nhật dữ liệu thất bại!";
+	                    vm.snackbarerorkhoTuLieuViewJX = true;
+	                  });
+	          	}
+	          },
+	          subjectTempleDataEvent: function(data) {
+	          	this.tempData2 = data.subject;
+	          	this.subject_hidden = !this.subject_hidden;
+	          },
+	          subjectRolbackEvent: function(data) {
+	          	data.subject = this.tempData2;
+	          	this.subject_hidden = !this.subject_hidden;
+	          },
+	          subjectUpdateEvent: function() {
+	          	var vm = this; 
+	          	var validator = document.querySelector(".editable-wrap .error--text"); 
+	          	var dataToAPI = new URLSearchParams();
+	          	dataToAPI.append("subject", vm.docFileDetail.subject);
+	          	if(validator == null) {
+	          		var url = vm.endPoint+'docfiles/' +vm.docFileDetail.docFileId ;
+	          		axios.put(url, dataToAPI, config).then(function(response) {
+	          			vm.snackbartextkhoTuLieuViewJX = "Cập nhật dữ liệu thành công!";
+	                    vm.snackbarkhoTuLieuViewJX = true;
+	                    vm.subject_hidden = !vm.subject_hidden;
+	                  })
+	                  .catch(function(error) {
+	                    console.log(error);
+	                    vm.snackbartextkhoTuLieuViewJX = "Cập nhật dữ liệu thất bại!";
+	                    vm.snackbarerorkhoTuLieuViewJX = true;
+	                  });
+	          	}
+	          }
           }
         },
         'workspace0Filter': {
@@ -710,40 +1153,40 @@
               var vm = this;
                 vm.currentListPage = true;
                 if (id === 1) {
-                    vm.khoTuLieuViewJXTitle = "Thêm mới ngăn thư mục";
-                    vm.popUpEditWorkspace = !vm.popUpEditWorkspace;
-                    vm.workspaceId = 0;
-                    if (!vm._initPopup) {
-                      vm._initParentWorkspaceData();
-                      vm._initPopup = true;
-                    }
-                    var parentWorkspaceStr = 0;
-                    if (vm.workspaceTree.slice(-1)[0]) {
-                        parentWorkspaceStr = vm.workspaceTree.slice(-1)[0].workspaceId;
-                    }
-                    vm.parentWorkspace = parentWorkspaceStr;
-                    vm._initworkspaceRoleData();
-                    vm._initworkspaceUserData();
-                    vm.currentIndex = -1;
-                    vm.workspaceName = "";
-                    var workspaceSiblingStr = 0;
-                    if (vm.detailModel['seqOrder'] > 0 && vm.detailModel['seqOrder'] != 'default') {
-                        workspaceSiblingStr = vm.detailModel['seqOrder'];
-                    }
-                    vm.workspaceSibling = workspaceSiblingStr;
+                	vm.khoTuLieuViewJXTitle = "Thêm mới ngăn thư mục";
+                	vm.popUpEditWorkspace = !vm.popUpEditWorkspace;
+                	vm.workspaceId = 0;
+	                if (!vm._initPopup) {
+	                  vm._initParentWorkspaceData();
+	                  vm._initPopup = true;
+	                }
+	                var parentWorkspaceStr = 0;
+	                if (vm.workspaceTree.slice(-1)[0]) {
+	                	parentWorkspaceStr = vm.workspaceTree.slice(-1)[0].workspaceId;
+	                }
+	                vm.parentWorkspace = parentWorkspaceStr;
+	                vm._initworkspaceRoleData();
+	                vm._initworkspaceUserData();
+	                vm.currentIndex = -1;
+	                vm.workspaceName = "";
+	                var workspaceSiblingStr = 0;
+	                if (vm.detailModel['seqOrder'] > 0 && vm.detailModel['seqOrder'] != 'default') {
+	                	workspaceSiblingStr = vm.detailModel['seqOrder'];
+	                }
+	                vm.workspaceSibling = workspaceSiblingStr;
                 } else if (id === 2) {
-                    vm.khoTuLieuViewJXTitle = "Thêm mới tài liệu";
-                    var parentWorkspaceStr = 0;
-                    if (vm.workspaceTree.slice(-1)[0]) {
-                        parentWorkspaceStr = vm.workspaceTree.slice(-1)[0].workspaceId;
-                    }
-                    vm.is_add_form = true;
-                    vm.workspace_curId = parentWorkspaceStr;
-                    vm.popUpEditDocFile = !vm.popUpEditDocFile;
+                	vm.khoTuLieuViewJXTitle = "Thêm mới tài liệu";
+                	var parentWorkspaceStr = 0;
+	                if (vm.workspaceTree.slice(-1)[0]) {
+	                	parentWorkspaceStr = vm.workspaceTree.slice(-1)[0].workspaceId;
+	                }
+                	vm.is_add_form = true;
+                	vm.workspace_curId = parentWorkspaceStr;
+                	vm.popUpEditDocFile = !vm.popUpEditDocFile;
                 } else if (id === 3) {
-                    vm.khoTuLieuViewJXTitle = "Thêm mới sổ tài liệu";
-                    vm.is_add_form = false;
-                    vm.popUpEditDocFileTemp = !vm.popUpEditDocFileTemp;
+                	vm.khoTuLieuViewJXTitle = "Thêm mới sổ tài liệu";
+                	vm.is_add_form = false;
+                	vm.popUpEditDocFileTemp = !vm.popUpEditDocFileTemp;
                 }
             },
             /** click vao ten thu muc tren breadcrumb */
@@ -765,6 +1208,9 @@
               vm.khoDuLieuListpage = 1;
               vm.no_list_access = false;
               vm.breadWorkspace = true;
+              vm.viewFirst = false;
+              vm.isSearch = false;
+              vm.txtPersonShare = false;
               vm.currentListPage = true;
               vm.detailModel = config.item;
               vm.detailModel['workspaceId'] = config.item.id;
@@ -784,7 +1230,7 @@
               vm.setWorkspaceTree(vm.detailModel);
               vm._inikhoDuLieuList(vm.detailModel);
             },
-            /** thuoc tinh cua modelDetail */
+			    /** thuoc tinh cua modelDetail */
             _mapModelDetail: function(model, active) {
               var vm = this;
               for (var key in this.detailModel) {
@@ -828,7 +1274,7 @@
               };
               return result;
             },
-                  _initworkspace0Filter: function() {
+			      _initworkspace0Filter: function() {
               /** TODO: call api workspaces?level=0*/
               this.newdatatree = {};
               var vm = this;
@@ -858,7 +1304,7 @@
                 console.log(error);
               });
             }
-              }
+		      }
         },
         'docFileTemplateFilter': {
           'id': 'docFileTemplateFilter',
@@ -872,24 +1318,27 @@
               var vm = this;
               vm.no_list_access = false;
               vm.breadWorkspace = false;
+              vm.viewFirst = false;
+              vm.isSearch = false;
+              vm.txtPersonShare = false;
               if (config.item.children != null || config.item.parent.name === 'root') {
-                vm.docFileTempID = 0;
+              	vm.docFileTempID = 0;
                 vm.docFileTemplateTree = [
                   {
-                    id: config.item.id,
-                    name: config.item.name
+                  	id: config.item.id,
+                  	name: config.item.name
                   }
                 ];
               } else {
-                vm.docFileTempID = config.item.id;
-                vm.docFileTemplateTree = [
+              	vm.docFileTempID = config.item.id;
+              	vm.docFileTemplateTree = [
                   {
-                    id: config.item.parent.id,
-                    name: config.item.parent.name
+                  	id: config.item.parent.id,
+                  	name: config.item.parent.name
                   },
                   {
-                    id: config.item.id,
-                    name: config.item.name
+                  	id: config.item.id,
+                  	name: config.item.name
                   }
                 ];
               };
@@ -904,18 +1353,25 @@
               var vm = this;
               vm.keywordsSearch = "";
               vm.breadWorkspace = false;
+              vm.viewFirst = false;
+              vm.isSearch = false;
+              vm.txtPersonShare = true;
               vm.khoDuLieuListpage = 1;
               vm.no_list_access = false;
               vm.currentListPage = true;
               vm.detailModel = {};
               vm.detailModel['register'] = "";
               if (data === 'me') {
-                $('.row-header a.breadcrumbs__item')[0].innerHTML = "Tài liệu của tôi";
-                vm.detailModel['userId'] = 2015;
+                setTimeout(function(){
+                  $('.row-header .txtPersonShare')[0].innerHTML = "Tài liệu của tôi";
+                },100)
+              	vm.detailModel['userId'] = themeDisplay.getUserId();
               } else if (data === 'share') {
-                $('.row-header a.breadcrumbs__item')[0].innerHTML = "Tài liệu được chia sẻ";
+                setTimeout(function(){
+                  $('.row-header .txtPersonShare')[0].innerHTML = "Tài liệu được chia sẻ";
+                },100)
                 vm.detailModel['me'] = true;
-                vm.detailModel['userId'] = 0;
+              	vm.detailModel['userId'] = 0;
               }
               vm._inikhoDuLieuList(vm.detailModel);
             },
@@ -1107,8 +1563,8 @@
               axios.get(url, config).then(function(response) {
                   var serializable = response.data;
                   if (serializable.hasOwnProperty('data')) {
-                      vm.labelFilterItems = serializable.data;
-                  }
+					  vm.labelFilterItems = serializable.data;
+				  }
                 })
                 .catch(function(error) {
                   console.log(error);
@@ -1133,7 +1589,7 @@
           'id': 'keywordsSearch',
           'name': 'keywordsSearch',
           'type': 'text',
-          'placeholder': 'Tìm kiếm theo từ khoá...',
+          'placeholder': 'Nhập từ khoá',
           'solo': true,
           'append_icon': 'search',
           'onKeyup': 'filterTableKeywords',
@@ -1255,17 +1711,28 @@
           'cssClass': 'danhSachPaymentTable__class',
           'item_key': 'id',
           'headers': 'headers',
-          'no_data_text': 'Không có tài liệu!',
+          'no_data_text': 'Không có tài liệu',
           'template': 'activity_expand_list_template',
           'pagging': '_khoDuLieuListTable',
           'events': {
             downloadDocFileReferent: function(item) {
               var vm = this;
               vm.downloading = item.docFileId;
-              var url = '/o/v2/mobilink/docfiles/' + item.docFileId + '/download';
+              var url = vm.endPoint+'docfiles/' + item.docFileId + '/download';
               axios.get(url, config_blob).then(function(response) {
-                  var url = window.URL.createObjectURL(response.data);
-                  window.open(url);
+                  // var url = window.URL.createObjectURL(response.data);
+                  // window.open(url);
+                  var fileName = response.headers['content-disposition'];
+                  fileName = fileName.split('"')[1];
+                  var a = document.createElement("a");
+                  document.body.appendChild(a);
+                  a.style = "display: none";
+                  var url = window.URL.createObjectURL(response.data)
+                  a.href = url;
+                  a.download = fileName;
+                  a.click();
+                  window.URL.revokeObjectURL(url);
+                  //  
                   vm.downloading = -1;
                 })
                 .catch(function(error) {
@@ -1276,31 +1743,37 @@
             _khoDuLieuListTable: function() {
               this._inikhoDuLieuList(null);
             },
-                  _inikhoDuLieuList: function(item) {
+			      _inikhoDuLieuList: function(item) {
               var vm = this;
               vm.khoDuLieuListheaders = [{
                   text: 'Số ký hiệu',
-                  align: 'left',
-                  sortable: true,
+                  align: 'center',
+                  sortable: false,
                   value: 'codeNotation'
                 },
                 {
                   text: 'Ngày ban hành',
-                  align: 'left',
-                  sortable: true,
+                  align: 'center',
+                  sortable: false,
                   value: 'promulgationDate'
                 },
                 {
                   text: 'Trích yếu',
-                  align: 'left',
-                  sortable: true,
+                  align: 'center',
+                  sortable: false,
                   value: 'name'
+                },
+                {
+                  text: '',
+                  align: 'left',
+                  sortable: false,
+                  value: ''
                 }
               ];
               
               var workspaceVal = "";
               if (vm.detailModel.workspaceId > 0) {
-                workspaceVal = vm.detailModel.workspaceId;
+              	workspaceVal = vm.detailModel.workspaceId;
               }
               var paramsBuilder = {
                 keyword: vm.keywordsSearch,
@@ -1315,10 +1788,10 @@
               
               var permissionPar = "";
               if (vm.detailModel['me']) {
-                permissionPar = "follow";
+              	permissionPar = "follow";
               }
               if (vm.detailModel['userId'] > 0) {
-                permissionPar = "owner";
+              	permissionPar = "owner";
               }
               var paramsDocFileBuilder = {
                 keywords: vm.keywordsSearch,
@@ -1338,79 +1811,87 @@
               };
               var url = vm.endPoint + 'workspaces';
               var url2 = vm.endPoint + 'docfiles';
-                    axios.all([
-                  axios.get(url, configKhoDuLieu),
-                  axios.get(url2, configDocFile)
-                ])
-                .then(axios.spread(function(urlRespones, urlFilesRespones) {
-                  // Both requests are now complete
-                  var serializable = urlRespones.data;
-                  var serializable2 = urlFilesRespones.data;
-                  if (serializable.hasOwnProperty('data') && !vm.isSearch) {
-                    vm.khoDuLieuListFolderItems = vm._mapListModelDetail(serializable.data);
-                    if (item != null && !item.hasOwnProperty('register')) {
-                      var treeArray = [];
-                      for (var key in serializable.data) {
-                        treeArray.push({
-                          "children": [],
-                          "name": serializable.data[key].name,
-                          "pid": 0,
-                          "ptype": serializable.data[key].treeIndex,
-                          "id": serializable.data[key].workspaceId,
-                          "pidNode": serializable.data[key].parentId,
-                          "folder_icon": "folder"
-                        });
-                      };
-                      item['children'] = treeArray;
-                    } else if (item != null && item.hasOwnProperty('register')) {
-                      vm.khoDuLieuListFolderItems = [];
+			        axios.all([
+                axios.get(url, configKhoDuLieu),
+                axios.get(url2, configDocFile)
+              ])
+              .then(axios.spread(function(urlRespones, urlFilesRespones) {
+                // Both requests are now complete
+                var serializable = urlRespones.data;
+                var serializable2 = urlFilesRespones.data;
+                if (serializable.hasOwnProperty('data') && !vm.isSearch) {
+                  vm.khoDuLieuListFolderItems = vm._mapListModelDetail(serializable.data);
+                  if (item != null && !item.hasOwnProperty('register')) {
+                    var treeArray = [];
+                    for (var key in serializable.data) {
+                      treeArray.push({
+                        "children": [],
+                        "name": serializable.data[key].name,
+                        "pid": 0,
+                        "ptype": serializable.data[key].treeIndex,
+                        "id": serializable.data[key].workspaceId,
+                        "pidNode": serializable.data[key].parentId,
+                        "folder_icon": "folder"
+                      });
                     };
-                  } else {
+                    item['children'] = treeArray;
+                  } else if (item != null && item.hasOwnProperty('register')) {
                     vm.khoDuLieuListFolderItems = [];
                   };
-                  if (serializable2.hasOwnProperty('data')) {
-                    vm.khoDuLieuListItems = vm._mapListModelDetail(serializable2.data);
-                    vm.khoDuLieuListTotal = Math.ceil(serializable2.total / 15);
-                  } else {
-                    vm.khoDuLieuListItems = [];
-                    vm.khoDuLieuListTotal = 0;
-                  };
-                })).catch(function(error) {
-                  console.log(error);
-                });
+                } else {
+                  vm.khoDuLieuListFolderItems = [];
+                };
+                if (serializable2.hasOwnProperty('data')) {
+                  vm.khoDuLieuListItems = vm._mapListModelDetail(serializable2.data);
+                  vm.khoDuLieuListTotal = Math.ceil(serializable2.total / 15);
+                } else {
+                  vm.khoDuLieuListItems = [];
+                  vm.khoDuLieuListTotal = 0;
+                };
+              })).catch(function(error) {
+                console.log(error);
+              });
             },
             viewThumuc: function(){
               var vm = this;
-              console.log("runViewThuMuc");
               vm.viewFirst = true;
               vm.isSearch = false;
-              vm._initworkspace0Filter()
+              vm.breadWorkspace = false;
+              vm.detailModel.workspaceId = 0;
+              vm._initworkspace0Filter();
+              
             },
             _inikhoDuLieuListTEMP: function() {
               var vm = this;
               vm.no_list_access = false;
               vm.khoDuLieuListheaders = [{
                   text: 'Số ký hiệu',
-                  align: 'left',
-                  sortable: true,
+                  align: 'center',
+                  sortable: false,
                   value: 'codeNotation'
                 },
                 {
                   text: 'Ngày ban hành',
-                  align: 'left',
-                  sortable: true,
+                  align: 'center',
+                  sortable: false,
                   value: 'promulgationDate'
                 },
                 {
                   text: 'Trích yếu',
-                  align: 'left',
-                  sortable: true,
+                  align: 'center',
+                  sortable: false,
                   value: 'name'
+                },
+                {
+                  text: '',
+                  align: 'center',
+                  sortable: false,
+                  value: ''
                 }
               ];
               var workspaceVal = "0";
               if (vm.detailModel.workspaceId > 0) {
-                workspaceVal = vm.detailModel.workspaceId;
+              	workspaceVal = vm.detailModel.workspaceId;
               }
               var paramsBuilder = {
                 keyword: vm.keywordsSearch,
@@ -1440,31 +1921,32 @@
               };
               var url = vm.endPoint + 'workspaces';
               var url2 = vm.endPoint + 'docfiles';
-              axios.all([
-                  axios.get(url, configKhoDuLieu),
-                  axios.get(url2, configDocFile)
-                ])
-                .then(axios.spread(function(urlRespones, urlFilesRespones) {
-                  // Both requests are now complete
-                    var serializable = urlRespones.data;
-                    var serializable2 = urlFilesRespones.data;
-                      if (serializable.hasOwnProperty('data')) {
-                        vm.khoDuLieuListFolderItems = vm._mapListModelDetail(serializable.data);
-                      } else {
-                        vm.khoDuLieuListFolderItems = [];
-                      };
-                      
-                      if (serializable2.hasOwnProperty('data')) {
-                        vm.khoDuLieuListItems = vm._mapListModelDetail(serializable2.data);
-                        vm.khoDuLieuListTotal = Math.ceil(serializable2.total / 15);
-                      } else {
-                        vm.khoDuLieuListItems = [];
-                        vm.khoDuLieuListTotal = 0;
-                      };
-                      console.log(vm.khoDuLieuListItems.length);
-                })).catch(function(error) {
-                  console.log(error);
-                });
+			        axios.all([
+                axios.get(url, configKhoDuLieu),
+                axios.get(url2, configDocFile)
+              ])
+              .then(axios.spread(function(urlRespones, urlFilesRespones) {
+                // Both requests are now complete
+                  var serializable = urlRespones.data;
+                  var serializable2 = urlFilesRespones.data;
+                    if (serializable.hasOwnProperty('data')) {
+                      vm.khoDuLieuListFolderItems = vm._mapListModelDetail(serializable.data);
+                  } else {
+                    vm.khoDuLieuListFolderItems = [];
+                  };
+                  
+                  if (serializable2.hasOwnProperty('data')) {
+                    vm.khoDuLieuListItems = vm._mapListModelDetail(serializable2.data);
+                    vm.khoDuLieuListTotal = Math.ceil(serializable2.total / 15);
+                  } else {
+                    vm.khoDuLieuListItems = [];
+                    vm.khoDuLieuListTotal = 0;
+                  };
+                  console.log(vm.khoDuLieuListItems.length);
+                  console.log(vm.khoDuLieuListFolderItems)
+              })).catch(function(error) {
+                console.log(error);
+              });
             },
             toWorkspaceEdit: function(item, index) {
               var vm = this;
@@ -1484,135 +1966,135 @@
               vm.workspaceSibling = item.seqOrder;
             },
             toWorkspaceDelete: function (item, index) {
-                var vm = this;
-                vm.$dialog.confirm('Bạn có muốn xóa ngăn thư mục '+ item.name +'?', {
-                    html: true,
-                    loader: true,
-                    okText: 'Xác nhận',
-                    cancelText: 'Quay lại',
-                    animation: 'fade'
-                })
-                .then(function(dialog){
+              var vm = this;
+              vm.$dialog.confirm('Bạn có muốn xóa ngăn thư mục '+ item.name +'?', {
+                html: true,
+                loader: true,
+                okText: 'Xác nhận',
+                cancelText: 'Quay lại',
+                animation: 'fade'
+              })
+              .then(function(dialog){
 
-                    var url = vm.endPoint + "workspaces/" + item.workspaceId;
-                    axios.delete(url, config).then(function (response) {
-                        vm.khoDuLieuListFolderItems.splice(index, 1);
-                        vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thành công!";
-                          vm.snackbarkhoTuLieuViewJX = true;
-                          vm.loadingkhoTuLieuViewJX = false;
-                    })
-                    .catch(function (error) {
-                        console.log(error);
-                          vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thất bại!";
-                          vm.snackbarerorkhoTuLieuViewJX = true;
-                          vm.loadingkhoTuLieuViewJX = false;
-                    });
-                    
-                    dialog.close();
+                var url = vm.endPoint + "workspaces/" + item.workspaceId;
+                axios.delete(url, config).then(function (response) {
+                  vm.khoDuLieuListFolderItems.splice(index, 1);
+                  vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thành công!";
+                  vm.snackbarkhoTuLieuViewJX = true;
+                  vm.loadingkhoTuLieuViewJX = false;
                 })
-                .catch(function(e){
-                    console.log(e);
-                })
+                .catch(function (error) {
+                  console.log(error);
+                  vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thất bại!";
+                  vm.snackbarerorkhoTuLieuViewJX = true;
+                  vm.loadingkhoTuLieuViewJX = false;
+                });
+                
+                dialog.close();
+              })
+              .catch(function(e){
+                console.log(e);
+              })
             },
-            toRemoveFile: function(item, index) {
+			      toRemoveFile: function(item, index) {
               var vm = this;
               vm.$dialog.confirm('Bạn có muốn xóa file?', {
-                  html: true,
-                  loader: true,
-                  okText: 'Xác nhận',
-                  cancelText: 'Quay lại',
-                  animation: 'fade'
-                })
-                .then(function(dialog) {
-                  var url = vm.endPoint + "fileattachs/" + item.docFileId;
-                  axios.delete(url, {
-                      headers: vm.headers
-                    }).then(function(response) {
-                      vm.khoDuLieuListItems.splice(index, 1);
-                      vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thành công!";
-                      vm.snackbarkhoTuLieuViewJX = true;
-                      vm.loadingkhoTuLieuViewJX = false;
-                    })
-                    .catch(function(error) {
-                      console.log(error);
-                      vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thất bại!";
-                      vm.snackbarerorkhoTuLieuViewJX = true;
-                      vm.loadingkhoTuLieuViewJX = false;
-                    });
-                  dialog.close();
-                })
-                .catch(function(e) {
-                  console.log(e);
-                })
+                html: true,
+                loader: true,
+                okText: 'Xác nhận',
+                cancelText: 'Quay lại',
+                animation: 'fade'
+              })
+              .then(function(dialog) {
+                var url = vm.endPoint + "fileattachs/" + item.docFileId;
+                axios.delete(url, {
+                    headers: vm.headers
+                  }).then(function(response) {
+                    vm.khoDuLieuListItems.splice(index, 1);
+                    vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thành công!";
+                    vm.snackbarkhoTuLieuViewJX = true;
+                    vm.loadingkhoTuLieuViewJX = false;
+                  })
+                  .catch(function(error) {
+                    console.log(error);
+                    vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thất bại!";
+                    vm.snackbarerorkhoTuLieuViewJX = true;
+                    vm.loadingkhoTuLieuViewJX = false;
+                  });
+                dialog.close();
+              })
+              .catch(function(e) {
+                console.log(e);
+              })
             },
             toRemoveFileLink: function(item, index) {
               var vm = this;
               vm.$dialog.confirm('Bạn có muốn xóa file được chia sẻ này?', {
-                  html: true,
-                  loader: true,
-                  okText: 'Xác nhận',
-                  cancelText: 'Quay lại',
-                  animation: 'fade'
-                })
-                .then(function(dialog) {
-                  var workspaceVal = "";
-                  if (vm.detailModel.workspaceId > 0) {
-                    workspaceVal = vm.detailModel.workspaceId;
-                  }
-                  var url = vm.endPoint + "resourceworkspaces/" + vm.class_name_doc + "/" + item.docFileId + "/" + workspaceVal;
-                  axios.delete(url, {
-                      headers: vm.headers
-                    }).then(function(response) {
-                      vm.khoDuLieuListItems.splice(index, 1);
-                      vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thành công!";
-                      vm.snackbarkhoTuLieuViewJX = true;
-                      vm.loadingkhoTuLieuViewJX = false;
-                    })
-                    .catch(function(error) {
-                      console.log(error);
-                      vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thất bại!";
-                      vm.snackbarkhoTuLieuViewJX = true;
-                      vm.loadingkhoTuLieuViewJX = false;
-                    });
-                  dialog.close();
-                })
-                .catch(function(e) {
-                  console.log(e);
-                })
+                html: true,
+                loader: true,
+                okText: 'Xác nhận',
+                cancelText: 'Quay lại',
+                animation: 'fade'
+              })
+              .then(function(dialog) {
+                var workspaceVal = "";
+                if (vm.detailModel.workspaceId > 0) {
+                  workspaceVal = vm.detailModel.workspaceId;
+                }
+                var url = vm.endPoint + "resourceworkspaces/" + vm.class_name_doc + "/" + item.docFileId + "/" + workspaceVal;
+                axios.delete(url, {
+                    headers: vm.headers
+                  }).then(function(response) {
+                    vm.khoDuLieuListItems.splice(index, 1);
+                    vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thành công!";
+                    vm.snackbarkhoTuLieuViewJX = true;
+                    vm.loadingkhoTuLieuViewJX = false;
+                  })
+                  .catch(function(error) {
+                    console.log(error);
+                    vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thất bại!";
+                    vm.snackbarkhoTuLieuViewJX = true;
+                    vm.loadingkhoTuLieuViewJX = false;
+                  });
+                dialog.close();
+              })
+              .catch(function(e) {
+                console.log(e);
+              })
             },
             toRemoveDocFile: function(item) {
               var vm = this;
               vm.$dialog.confirm('Bạn có muốn xóa văn bản này?', {
-                  html: true,
-                  loader: true,
-                  okText: 'Xác nhận',
-                  cancelText: 'Quay lại',
-                  animation: 'fade'
-                })
-                .then(function(dialog) {
-                  var url = vm.endPoint + "docfiles/" + item.docFileId;
-                  axios.delete(url, {
-                      headers: vm.headers
-                    }).then(function(response) {
-                      vm._inikhoDuLieuList(null);
-                      vm.backToList();
-                      vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thành công!";
-                      vm.snackbarkhoTuLieuViewJX = true;
-                      vm.loadingkhoTuLieuViewJX = false;
-                    })
-                    .catch(function(error) {
-                      console.log(error);
-                      vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thất bại!";
-                      vm.snackbarerorkhoTuLieuViewJX = true;
-                      vm.loadingkhoTuLieuViewJX = false;
-                    });
-                  dialog.close();
-                })
-                .catch(function(e) {
-                  console.log(e);
-                })
+                html: true,
+                loader: true,
+                okText: 'Xác nhận',
+                cancelText: 'Quay lại',
+                animation: 'fade'
+              })
+              .then(function(dialog) {
+                var url = vm.endPoint + "docfiles/" + item.docFileId;
+                axios.delete(url, {
+                    headers: vm.headers
+                  }).then(function(response) {
+                    vm._inikhoDuLieuList(null);
+                    vm.backToList();
+                    vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thành công!";
+                    vm.snackbarkhoTuLieuViewJX = true;
+                    vm.loadingkhoTuLieuViewJX = false;
+                  })
+                  .catch(function(error) {
+                    console.log(error);
+                    vm.snackbartextkhoTuLieuViewJX = "Xoá dữ liệu thất bại!";
+                    vm.snackbarerorkhoTuLieuViewJX = true;
+                    vm.loadingkhoTuLieuViewJX = false;
+                  });
+                dialog.close();
+              })
+              .catch(function(e) {
+                console.log(e);
+              })
             },
-            setWorkspaceTree: function(item) {
+			      setWorkspaceTree: function(item) {
               var vm = this;
               var newTree = vm.workspaceTree.filter(function(workspace) {
                 return (item.treeIndex.indexOf(workspace.treeIndex) >= 0 && item.treeIndex !== workspace.treeIndex);
@@ -1621,127 +2103,137 @@
               vm.workspaceTree = newTree;
             },
             previewAttachPDFTab: function(item) {
+              
               var vm = this;
               vm.no_list_access = false;
               if (item.workspaceId) {
-              console.log(item);
+                console.log(item);
                 vm.setWorkspaceTree(item);
                 vm.detailModel = vm.workspaceTree.slice(-1)[0];
                 vm._inikhoDuLieuList(null);
               } else {
                 var url = vm.endPoint + "fileattachs/" + item.docFileId;
                 axios.get(url, config_blob).then(function(response) {
-                    var url = window.URL.createObjectURL(response.data);
-                    window.open(url);
-                  })
-                  .catch(function(error) {
-                    console.log(error);
-                  });
+                  // var url = window.URL.createObjectURL(response.data);
+                  // window.open(url);
+                  var fileName = response.headers['content-disposition'];
+                  fileName = fileName.split('"')[1];
+                  var a = document.createElement("a");
+                  document.body.appendChild(a);
+                  a.style = "display: none";
+                  var url = window.URL.createObjectURL(response.data)
+                  a.href = url;
+                  a.download = fileName;
+                  a.click();
+                  window.URL.revokeObjectURL(url);
+                })
+                .catch(function(error) {
+                  console.log(error);
+                });
               }
             },
             toDetailDocFile: function(id) {
               var vm = this;
               if (id > 0) {
-                vm.options.target = '/o/v2/mobilink/fileattachs/upload/'+vm.class_name_doc+'/'+id+'/'+vm.groupId;
+                vm.options.target = vm.endPoint+'fileattachs/upload/'+vm.class_name_doc+'/'+id+'/'+vm.groupId;
                 vm.class_pk = id;
                 vm.currentListPage = false;
-                window.history.pushState('', '', themeDisplay.getLayoutURL() + '/-/docfile/' + id); 
+                window.history.pushState('', '', themeDisplay.getLayoutURL() + '/-/docfile/' + id);	
                 var url = vm.endPoint + "docfiles/" + id;
                 axios.get(url, config).then(function(response) {
-                    vm.docFileDetail = response.data;
-                    //vm.docFileDetail['permission']='write';
-                    setTimeout(
-                        function() {
-                            vm._initThuMucLuuTruWorkspaces(vm.class_name_doc, vm.class_pk);
-                            if (vm.secutypeItems.length <= 0) {
-                              vm._initSecutype();
-                            }
-                            if (vm.priorityItems.length <= 0) {
-                              vm._initPriority();
-                            }
-                            if (vm.registerItems.length <= 0) {
-                              vm._initRegister();
-                            }
-                            if (vm.issuerCodeItems.length <= 0) {
-                              vm._initIssuerCode();
-                            }
-                            if (vm.documentCatItems.length <= 0) {
-                              vm._initDocumentCat();
-                            }
-                            if (vm.templateNoItems.length <= 0) {
-                              vm._initTemplateNo();
-                            }
-                            
-                            vm.initEditableControl(
-                                [
-                                    {
-                                        name: 'content',
-                                        value: 'content'
-                                    },
-                                    {
-                                        name: 'priority',
-                                        value: 'priority'
-                                    },
-                                    {
-                                        name: 'secutype',
-                                        value: 'secutype'
-                                    },
-                                    {
-                                        name: 'documentCat',
-                                        value: 'documentCat'
-                                    },
-                                    {
-                                        name: 'language',
-                                        value: 'language'
-                                    },
-                                    {
-                                        name: 'promulgationAmount',
-                                        value: 'promulgationAmount'
-                                    },
-                                    {
-                                        name: 'pageAmount',
-                                        value: 'pageAmount'
-                                    },
-                                    {
-                                        name: 'signerInfo',
-                                        value: 'signerInfo'
-                                    },
-                                    {
-                                        name: 'promulgationDate',
-                                        value: 'promulgationDate',
-                                        type: 'date'
-                                    },
-                                    {
-                                        name: 'registerDate',
-                                        value: 'registerDate',
-                                        type: 'date'
-                                    },
-                                    {
-                                        name: 'register',
-                                        value: 'register'
-                                    },
-                                    {
-                                        name: 'issuerCode',
-                                        value: 'issuerCode'
-                                    },
-                                    {
-                                        name: 'templateNo',
-                                        value: 'templateNo'
-                                    }
-                                ],
-                                vm.docFileDetail,
-                                vm.class_pk,
-                                'owner,leader,hoster,manager'.indexOf( vm.docFileDetail['permission'] ||'none' )>=0?true:false,
-                                vm
-                            );
-                            vm.thuMucLuuTruWorkspacespk = vm.class_pk;
-                            vm.thuMucLuuTruWorkspacespermission = vm.docFileDetail['permission'];
+                  vm.docFileDetail = response.data;
+                  //vm.docFileDetail['permission']='write';
+                  setTimeout(
+                  function() {
+                    vm._initThuMucLuuTruWorkspaces(vm.class_name_doc, vm.class_pk);
+                    if (vm.secutypeItems.length <= 0) {
+                      vm._initSecutype();
+                    }
+                    if (vm.priorityItems.length <= 0) {
+                      vm._initPriority();
+                    }
+                    if (vm.registerItems.length <= 0) {
+                      vm._initRegister();
+                    }
+                    if (vm.issuerCodeItems.length <= 0) {
+                      vm._initIssuerCode();
+                    }
+                    if (vm.documentCatItems.length <= 0) {
+                      vm._initDocumentCat();
+                    }
+                    if (vm.templateNoItems.length <= 0) {
+                      vm._initTemplateNo();
+                    }
+                    
+                    vm.initEditableControl(
+                      [
+                        {
+                          name: 'content',
+                          value: 'content'
                         },
-                        500);
-                  })
-                  .catch(function(error) {
-                    console.log(error);
-                  });
+                        {
+                          name: 'priority',
+                          value: 'priority'
+                        },
+                        {
+                          name: 'secutype',
+                          value: 'secutype'
+                        },
+                        {
+                          name: 'documentCat',
+                          value: 'documentCat'
+                        },
+                        {
+                          name: 'language',
+                          value: 'language'
+                        },
+                        {
+                          name: 'promulgationAmount',
+                          value: 'promulgationAmount'
+                        },
+                        {
+                          name: 'pageAmount',
+                          value: 'pageAmount'
+                        },
+                        {
+                          name: 'signerInfo',
+                          value: 'signerInfo'
+                        },
+                        {
+                          name: 'promulgationDate',
+                          value: 'promulgationDate',
+                          type: 'date'
+                        },
+                        {
+                          name: 'registerDate',
+                          value: 'registerDate',
+                          type: 'date'
+                        },
+                        {
+                          name: 'register',
+                          value: 'register'
+                        },
+                        {
+                          name: 'issuerCode',
+                          value: 'issuerCode'
+                        },
+                        {
+                          name: 'templateNo',
+                          value: 'templateNo'
+                        }
+                      ],
+                      vm.docFileDetail,
+                      vm.class_pk,
+                      'owner,leader,hoster,manager'.indexOf( vm.docFileDetail['permission'] ||'none' )>=0?true:false,
+                      vm
+                    );
+                    vm.thuMucLuuTruWorkspacespk = vm.class_pk;
+                    vm.thuMucLuuTruWorkspacespermission = vm.docFileDetail['permission'];
+                  },500);
+                })
+                .catch(function(error) {
+                  console.log(error);
+                });
               }
             },
             backToList: function() {
@@ -1763,9 +2255,9 @@
           "template": "popUpEditDocFileTemplate",
           "events": {
             successCallBack: function (id) {
-                this.popUpEditDocFile = false;
-                this.popUpEditDocFileTemp = false;
-                this.toDetailDocFile(id);
+            	this.popUpEditDocFile = false;
+            	this.popUpEditDocFileTemp = false;
+            	this.toDetailDocFile(id);
             },
             popUpEditDocFileClose: function() {
               this.popUpEditDocFile = false;
@@ -1788,7 +2280,7 @@
           "color": "primary",
           "template": "popUpEditDocFileTempTemplate",
           "events": {
-            popUpEditDocFileTempClose: function() {
+          	popUpEditDocFileTempClose: function() {
               this.popUpEditDocFileTemp = false;
             },
             popUpEditDocFileTempSave: function() {
@@ -1825,9 +2317,9 @@
               var parentWorkspaceId = 0;
               console.log(vm.parentWorkspace);
               if (vm.parentWorkspace instanceof Object) {
-                parentWorkspaceId = vm.parentWorkspace.workspaceId;
+              	parentWorkspaceId = vm.parentWorkspace.workspaceId;
               } else {
-                parentWorkspaceId = vm.parentWorkspace;
+              	parentWorkspaceId = vm.parentWorkspace;
               }
               var postData = new URLSearchParams();
               postData.append('name', vm.workspaceName);
@@ -1851,56 +2343,56 @@
                       3000);
                       //update shared
                       vm.detailModel.workspaceId = serializable.workspaceId;
-                      var paramsApiUser = new URLSearchParams();
-                      paramsApiUser.append('users', JSON.stringify(vm.workspaceUser));
-                      paramsApiUser.append('className', vm.class_name);
-                      paramsApiUser.append('classPK', vm.detailModel.workspaceId);
-                      axios.post('/o/v2/mobilink/resourceusers/update',
-                          paramsApiUser,
-                          config
-                        )
-                        .then(function(response) {
-                          vm.apistate2 = 1;
-                          setTimeout(
-                            function() {
-                              apistate2 = 0;
-                            },
-                            3000);
-                        })
-                        .catch(function(error) {
-                          console.log(error);
-                          vm.apistate2 = 2;
-                          setTimeout(
-                            function() {
-                              apistate2 = 0;
-                            },
-                            3000);
-                        });
-                      var paramsApiRole = new URLSearchParams();
-                      paramsApiRole.append('roles', JSON.stringify(vm.workspaceRole));
-                      paramsApiRole.append('className', vm.class_name);
-                      paramsApiRole.append('classPK', vm.detailModel.workspaceId);
-                      axios.post('/o/v2/mobilink/resourceroles/update',
-                          paramsApiRole,
-                          config
-                        )
-                        .then(function(response) {
-                          vm.apistate3 = 1;
-                          setTimeout(
-                            function() {
-                              vm.apistate3 = 0;
-                            },
-                            3000);
-                        })
-                        .catch(function(error) {
-                          console.log(error);
-                          vm.apistate3 = 2;
-                          setTimeout(
-                            function() {
-                              vm.apistate3 = 0;
-                            },
-                            3000);
-                        })
+		              var paramsApiUser = new URLSearchParams();
+		              paramsApiUser.append('users', JSON.stringify(vm.workspaceUser));
+		              paramsApiUser.append('className', vm.class_name);
+		              paramsApiUser.append('classPK', vm.detailModel.workspaceId);
+		              axios.post(vm.endPoint+'resourceusers/update',
+		                  paramsApiUser,
+		                  config
+		                )
+		                .then(function(response) {
+		                  vm.apistate2 = 1;
+		                  setTimeout(
+		                    function() {
+		                      apistate2 = 0;
+		                    },
+		                    3000);
+		                })
+		                .catch(function(error) {
+		                  console.log(error);
+		                  vm.apistate2 = 2;
+		                  setTimeout(
+		                    function() {
+		                      apistate2 = 0;
+		                    },
+		                    3000);
+		                });
+		              var paramsApiRole = new URLSearchParams();
+		              paramsApiRole.append('roles', JSON.stringify(vm.workspaceRole));
+		              paramsApiRole.append('className', vm.class_name);
+		              paramsApiRole.append('classPK', vm.detailModel.workspaceId);
+		              axios.post(vm.endPoint+'resourceroles/update',
+		                  paramsApiRole,
+		                  config
+		                )
+		                .then(function(response) {
+		                  vm.apistate3 = 1;
+		                  setTimeout(
+		                    function() {
+		                      vm.apistate3 = 0;
+		                    },
+		                    3000);
+		                })
+		                .catch(function(error) {
+		                  console.log(error);
+		                  vm.apistate3 = 2;
+		                  setTimeout(
+		                    function() {
+		                      vm.apistate3 = 0;
+		                    },
+		                    3000);
+		                })
                   })
                   .catch(function(error) {
                     console.log(error);
@@ -1927,11 +2419,11 @@
                     vm.popUpEditWorkspace = false;
                     vm._initworkspace0Filter();
                     //update shared
-                      var paramsApiUser = new URLSearchParams();
-                      paramsApiUser.append('users', JSON.stringify(vm.workspaceUser));
-                      paramsApiUser.append('className', vm.class_name);
-                      paramsApiUser.append('classPK', serializable.workspaceId);
-                      axios.post('/o/v2/mobilink/resourceusers/update',
+		              var paramsApiUser = new URLSearchParams();
+		              paramsApiUser.append('users', JSON.stringify(vm.workspaceUser));
+		              paramsApiUser.append('className', vm.class_name);
+		              paramsApiUser.append('classPK', serializable.workspaceId);
+		              axios.post(vm.endPoint+'resourceusers/update',
                     paramsApiUser,
                     config
                   )
@@ -1952,11 +2444,11 @@
                       },
                     3000);
                   });
-                      var paramsApiRole = new URLSearchParams();
-                      paramsApiRole.append('roles', JSON.stringify(vm.workspaceRole));
-                      paramsApiRole.append('className', vm.class_name);
-                      paramsApiRole.append('classPK', serializable.workspaceId);
-                      axios.post('/o/v2/mobilink/resourceroles/update',
+		              var paramsApiRole = new URLSearchParams();
+		              paramsApiRole.append('roles', JSON.stringify(vm.workspaceRole));
+		              paramsApiRole.append('className', vm.class_name);
+		              paramsApiRole.append('classPK', serializable.workspaceId);
+		              axios.post(vm.endPoint+'resourceroles/update',
                     paramsApiRole,
                     config
                   )
@@ -2000,13 +2492,13 @@
           'mode': 'editable',
           'labelClass': ' xs12 sm4',
           'controlClass': 'xs12 sm8',
-          'updateapi': '/o/v2/mobilink/docfiles',
+          'updateapi': endPoint+'docfiles',
           "item_text": "subject",
           "item_value": "templateNo",
           "hide_selected": true,
           "loading": false,
           "items": [],
-          'updateapi': '/o/v2/mobilink/docfiles',
+          'updateapi': endPoint+'docfiles',
           'success_msg': 'Cập nhật trường text này thành công',
           'error_msg': 'Cập nhật trường text này thất bại',
           'call_back_success': 'mySuccesssnackbarCall',
@@ -2014,7 +2506,7 @@
           'events': {
             _initTemplateNo: function() {
               var vm = this;
-              axios.get('/o/v2/mobilink/docfiles?template=1&sort=subject', config)
+              axios.get(vm.endPoint+'docfiles?template=1&sort=subject', config)
               .then(function (response) {
                 var serializable = response.data
                 if (serializable.hasOwnProperty('data')) {
@@ -2045,14 +2537,14 @@
           'multiple': true,
           'labelClass': ' xs12 sm2',
           'controlClass': 'xs12 sm10',
-          'updateapi': '/o/v2/mobilink/docfiles',
+          'updateapi': endPoint+'docfiles',
           "item_text_adv": "workspaceNamePath",
           "item_text": "workspaceNamePath",
           "item_value": "workspaceId",
           "hide_selected": true,
           "loading": false,
           "items": [],
-          'updateapi': '/o/v2/mobilink/resourceworkspaces/update',
+          'updateapi': endPoint+'resourceworkspaces/update',
           'success_msg': 'Cập nhật trường text này thành công',
           'error_msg': 'Cập nhật trường text này thất bại',
           'call_back_success': 'mySuccesssnackbarCall',
@@ -2062,7 +2554,7 @@
               var vm = this;
               vm.class_name = className;
               vm.class_pk = classPK;
-              axios.get('/o/v2/mobilink/resourceworkspaces/'+className+'/'+classPK+'?sort=workspaceName&full=true&permanent=true', config)
+              axios.get(vm.endPoint+'resourceworkspaces/'+className+'/'+classPK+'?sort=workspaceName&full=true&permanent=true', config)
               .then(function (response) {
                 var serializable = response.data
                 vm.thuMucLuuTruWorkspacesItems = serializable.data;
@@ -2107,7 +2599,7 @@
               paramsApi2.append('className', vm.class_name)
               paramsApi2.append('classPK', vm.class_pk)
               
-              axios.post('/o/v2/mobilink/resourceworkspaces/update',
+              axios.post(vm.endPoint+'resourceworkspaces/update',
                 paramsApi2,
                 config
               )
@@ -2135,13 +2627,13 @@
           'mode': 'editable',
           'labelClass': 'xs12 sm4',
           'controlClass': 'xs12 sm8',
-          'updateapi': '/o/v2/mobilink/docfiles',
+          'updateapi': endPoint+'docfiles',
           "item_text": "text",
           "item_value": "value",
           "hide_selected": true,
           "loading": false,
           "items": [],
-          'updateapi': '/o/v2/mobilink/docfiles',
+          'updateapi': endPoint+'docfiles',
           'success_msg': 'Cập nhật trường text này thành công',
           'error_msg': 'Cập nhật trường text này thất bại',
           'call_back_success': 'mySuccesssnackbarCall',
@@ -2174,9 +2666,9 @@
           'label': 'Ngày đến/phát hành: ',
           'placeholder': 'Nhập dữ liệu',
           'mode': 'editable',
-          'labelClass': ' xs12 sm4',
+          'labelClass': 'xs12 sm4',
           'controlClass': 'xs12 sm8',
-          'updateapi': '/o/v2/mobilink/docfiles',
+          'updateapi': endPoint+'docfiles',
           'success_msg': 'Cập nhật trường text này thành công',
           'error_msg': 'Cập nhật trường text này thất bại',
           'call_back_success': 'mySuccesssnackbarCall',
@@ -2196,7 +2688,7 @@
           'mode': 'editable',
           'labelClass': 'xs12 sm4',
           'controlClass': 'xs12 sm8',
-          'updateapi': '/o/v2/mobilink/docfiles',
+          'updateapi': endPoint+'docfiles',
           'success_msg': 'Cập nhật trường text này thành công',
           'error_msg': 'Cập nhật trường text này thất bại',
           'call_back_success': 'mySuccesssnackbarCall',
@@ -2214,15 +2706,15 @@
           'label': 'Cơ quan ban hành: ',
           'no_data_text': 'Chưa có',
           'mode': 'editable',
-          'labelClass': ' xs12 sm4',
+          'labelClass': 'xs12 sm4',
           'controlClass': 'xs12 sm8',
-          'updateapi': '/o/v2/mobilink/docfiles',
+          'updateapi': endPoint+'docfiles',
           "item_text": "itemName",
           "item_value": "itemCode",
           "hide_selected": true,
           "loading": false,
           "items": [],
-          'updateapi': '/o/v2/mobilink/docfiles',
+          'updateapi': endPoint+'docfiles',
           'success_msg': 'Cập nhật trường text này thành công',
           'error_msg': 'Cập nhật trường text này thất bại',
           'call_back_success': 'mySuccesssnackbarCall',
@@ -2253,9 +2745,9 @@
           'label': 'Người ký: ',
           'placeholder': 'cập nhật tên người ký ...',
           'mode': 'editable',
-          'labelClass': ' xs12 sm4',
+          'labelClass': 'xs12 sm4',
           'controlClass': 'xs12 sm8',
-          'updateapi': '/o/v2/mobilink/docfiles',
+          'updateapi': endPoint+'docfiles',
           'success_msg': 'Cập nhật trường text này thành công',
           'error_msg': 'Cập nhật trường text này thất bại',
           'call_back_success': 'mySuccesssnackbarCall',
@@ -2274,16 +2766,16 @@
           'no_data_text': 'Chưa có',
           'mode': 'editable',
           'chips': true,
-          'labelClass': ' xs12 sm4',
+          'labelClass': 'xs12 sm4',
           'controlClass': 'xs12 sm8',
-          'updateapi': '/o/v2/mobilink/docfiles',
+          'updateapi': endPoint+'docfiles',
           "item_text_adv": "texttemp",
           "item_text": "text",
           "item_value": "value",
           "hide_selected": true,
           "loading": false,
           "items": [],
-          'updateapi': '/o/v2/mobilink/docfiles',
+          'updateapi': endPoint+'docfiles',
           'success_msg': 'Cập nhật trường text này thành công',
           'error_msg': 'Cập nhật trường text này thất bại',
           'call_back_success': 'mySuccesssnackbarCall',
@@ -2331,7 +2823,7 @@
           'mode': 'editable',
           'labelClass': ' xs12 sm4',
           'controlClass': 'xs12 sm8',
-          'updateapi': '/o/v2/mobilink/docfiles',
+          'updateapi': endPoint+'docfiles',
           'success_msg': 'Cập nhật trường text này thành công',
           'error_msg': 'Cập nhật trường text này thất bại',
           'call_back_success': 'mySuccesssnackbarCall',
@@ -2349,9 +2841,9 @@
           'label': 'Số bản: ',
           'placeholder': 'nhập số bản',
           'mode': 'editable',
-          'labelClass': 'xs12 sm4',
+          'labelClass': ' xs12 sm4',
           'controlClass': 'xs12 sm8',
-          'updateapi': '/o/v2/mobilink/docfiles',
+          'updateapi': endPoint+'docfiles',
           'success_msg': 'Cập nhật trường số bản thành công!',
           'error_msg': 'Số bản bắt buộc nhập số!',
           'call_back_success': 'mySuccesssnackbarCall',
@@ -2371,7 +2863,7 @@
           'mode': 'editable',
           'labelClass': 'xs12 sm4',
           'controlClass': 'xs12 sm8',
-          'updateapi': '/o/v2/mobilink/docfiles',
+          'updateapi': endPoint+'docfiles',
           'success_msg': 'Cập nhật trường số trang thành công!',
           'error_msg': 'Số trang bắt buộc nhập số!',
           'call_back_success': 'mySuccesssnackbarCall',
@@ -2390,15 +2882,15 @@
           'mode': 'editable',
           'labelClass': 'xs12 sm4',
           'controlClass': 'xs12 sm8',
-          'updateapi': '/o/v2/mobilink/docfiles',
+          'updateapi': endPoint+'docfiles',
           "item_text": "text",
           "item_value": "value",
           "hide_selected": true,
           "loading": false,
           "items": [],
-          'labelClass': 'xs12 sm4',
+          'labelClass': ' xs12 sm4',
           'controlClass': 'xs12 sm8',
-          'updateapi': '/o/v2/mobilink/docfiles',
+          'updateapi': endPoint+'docfiles',
           'success_msg': 'Cập nhật trường text này thành công',
           'error_msg': 'Cập nhật trường text này thất bại',
           'call_back_success': 'mySuccesssnackbarCall',
@@ -2435,9 +2927,9 @@
           'type': 'select',
           'label': 'Độ mật: ',
           'mode': 'editable',
-          'labelClass': ' xs12 sm4',
+          'labelClass': 'xs12 sm4',
           'controlClass': 'xs12 sm8',
-          'updateapi': '/o/v2/mobilink/docfiles',
+          'updateapi': endPoint+'docfiles',
           "item_text": "text",
           "item_value": "value",
           "hide_selected": true,
@@ -2481,9 +2973,9 @@
           'label': 'Tóm tắt nội dung: ',
           'placeholder': 'nhập tóm tắt nội dung ...',
           'mode': 'editable',
-          'labelClass': ' xs12 sm2',
+          'labelClass': 'xs12 sm2',
           'controlClass': 'xs12 sm9',
-          'updateapi': '/o/v2/mobilink/docfiles',
+          'updateapi': endPoint+'docfiles',
           'success_msg': 'Cập nhật trường text này thành công',
           'error_msg': 'Cập nhật trường text này thất bại',
           'call_back_success': 'mySuccesssnackbarCall',
@@ -2534,6 +3026,16 @@
   #khoTuLieuViewJX a.breadcrumbs__item{
     color: #ffffff!important
   }
+  #khoTuLieuViewJX .danhSachPaymentTable__class table tr td{
+    overflow: hidden;
+    text-overflow: ellipsis; 
+    white-space: nowrap;
+    border: 1px solid #ddd !important;
+  }
+  #khoTuLieuViewJX .danhSachPaymentTable__class table thead tr th{
+    border: 1px solid #ddd !important;
+    color: #000!important
+  }
   .max-width {
     width: 100% !important;
     max-width: 100% !important;
@@ -2560,14 +3062,18 @@
 
   body .danhSachPaymentTable__class table.table th:nth-child(1) {
     width: 20%;
+    background-color: transparent!important;
   }
 
   body .danhSachPaymentTable__class table.table th:nth-child(2) {
-    width: 10%;
+    width: 12%;
   }
 
   body .danhSachPaymentTable__class table.table th:nth-child(3) {
-    width: 65%;
+    width: 59%;
+  }
+  body .danhSachPaymentTable__class table.table th:nth-child(4) {
+    width: 9%;
   }
 
   .btn__nopadding {
@@ -2587,35 +3093,58 @@
   
   .mobilink-shared-root.editable-wrap.editable-wrap-before-select .input-group--chips label{
     display: block;
+	}
+	.mobilink-shared-root.editable-wrap.editable-wrap-before-select .input-group {
+	  padding-top: 20px;
+	}
+	.codeNo__codeNotation .input-group{
+		padding-top: 0px;
+	}
+  .expMenu .expansion-panel{
+    border: 0px;
+  }
+  .expMenu>li{
+    width: 100%!important
+  }
+  .expMenu .expansion-panel__header{
+    font-family: 'Roboto'!important;
+    color:rgba(0,0,0,0.87)!important;
+    border: 0px;
+    background-color: #EFEFEF;
+    padding: 0px
+  }
+  .expMenu .expansion-panel__header .nav__btn__custom{
+    font-weight: 500;
+    font-size: 13px;
+    color:rgba(0,0,0,0.87)!important;
+  }
+  .expansion-panel__header .icon {
+      color: rgba(0,0,0,0.54)!important;
+  }
+  .expMenu .expansion-panel__header:hover{
+    background-color: #C6C6C6
+  }
+  #danhSachPaymentTable__class table{
+    table-layout: fixed
+  }
+  table{
+    table-layout: fixed
+  }
+  .headerDetail{
+        background: #e1f5fe;
     }
-    .mobilink-shared-root.editable-wrap.editable-wrap-before-select .input-group {
-      padding-top: 20px;
+    .controlClass .input-group__selections__comma{
+        font-size: 14px;
     }
-    .codeNo__codeNotation .input-group{
-        padding-top: 0px;
+    .controlClass .chip__content{
+        font-size:14px
     }
-    .headerDetail{
-            background: #e1f5fe;
-        }
-        .controlClass .input-group__selections__comma{
-            font-size: 14px;
-        }
-        .controlClass .chip__content{
-            font-size:14px
-        }
-        body table.table td a:hover{
-            font-weight: 600!important;
-        }
-        .expMenu .expansion-panel__header{
-          border: 0px;
-          background-color: #EFEFEF;
-          padding: 0px
-        }
-        .expMenu .expansion-panel__header:hover{
-          background-color: #C6C6C6
-        }
-
+    body table.table td a:hover{
+        color: #1a5eba!important;
+    }
 </style>
+
+
 
 </body>
 
