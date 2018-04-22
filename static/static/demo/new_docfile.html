@@ -10,7 +10,7 @@
     <script type="text/javascript" src="../js/axios.min.js"></script>
     <script type="text/javascript" src="../js/vue.min.js"></script>
     <script type="text/javascript" src="../js/vuejx.min.js"></script>
-    <script type="text/javascript" src="../js/vuejx_dev.js"></script>
+    <script type="text/javascript" src="http://dev.mobilink.vn/o/mobilink_npm-theme/js/vuejx_dev.js"></script>
     <script type="text/javascript" src="../js/moment-with-locales.min.js"></script>
     <script type="text/javascript" src="../js/moment.min.js"></script>
     <script type="text/javascript" src="http://hanoi.fds.vn:8004/o/mobilink_npm-theme/js/vue-tree-list.min.js"></script>
@@ -1851,6 +1851,7 @@
                   vm.khoDuLieuListFolderItems = [];
                 };
                 if (serializable2.hasOwnProperty('data')) {
+                  
                   vm.khoDuLieuListItems = vm._mapListModelDetail(serializable2.data);
                   vm.khoDuLieuListTotal = Math.ceil(serializable2.total / 15);
                 } else {
@@ -1951,7 +1952,7 @@
                     vm.khoDuLieuListItems = [];
                     vm.khoDuLieuListTotal = 0;
                   };
-                  console.log(vm.khoDuLieuListItems.length);
+                  console.log(vm.khoDuLieuListItems);
                   console.log(vm.khoDuLieuListFolderItems)
               })).catch(function(error) {
                 console.log(error);
