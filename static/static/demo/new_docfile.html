@@ -13,7 +13,7 @@
     <script type="text/javascript" src="../js/vuejx_dev.js"></script>
     <script type="text/javascript" src="../js/moment-with-locales.min.js"></script>
     <script type="text/javascript" src="../js/moment.min.js"></script>
-    <script type="text/javascript" src="../js/vue-tree-list.min.js"></script>
+    <script type="text/javascript" src="http://hanoi.fds.vn:8004/o/mobilink_npm-theme/js/vue-tree-list.min.js"></script>
     <script type="text/javascript" src="../../../vue-editor/dist/vue-jx-lib.js?"></script>
     <script src="https://cdn.jsdelivr.net/lodash/4.13.1/lodash.js"></script>
     <!-- <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script> -->
@@ -1000,7 +1000,7 @@
               // this.detailModel['workspaceId'] = ${Request.workspaceIdW};
               // this.toDetailDocFile(${Request.docFileId});
               this.detailModel['workspaceId'] = 1;
-              this.toDetailDocFile(1);
+              // this.toDetailDocFile(1);
               // 
               this.initContacts();
             },
@@ -3149,6 +3149,27 @@
     }
     body table.table td a:hover{
         color: #1a5eba!important;
+    }
+
+
+
+    /*  */
+    aside{
+      width: 215px!important;
+      margin-right: 15px
+    }
+    aside>.layout{
+      margin: 0px!important;
+    }
+    .application--wrap{
+      margin: 10px
+    }
+    .lfr-asset-folder{
+      padding-left: 15px;
+      padding-right: 15px;
+      width: 25%;
+      float: left;
+      min-width: 215px
     }
 </style>
 

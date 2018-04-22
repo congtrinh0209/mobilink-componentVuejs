@@ -354,7 +354,7 @@ export default {
     group_id: null,
     is_template: 'false',
     is_upload: 'false',
-    file_attach_api: '/o/v2/mobilink/fileattachs',
+    file_attach_api: 'http://127.0.0.1:8081/api/fileattachs',
     workspace_cur: 0,
     current_user_id: 0
   },
@@ -367,7 +367,7 @@ export default {
         }
       }
       vm.workspaceAdd = []
-      axios.get('/o/v2/mobilink/workspaces?editable=true', config)
+      axios.get('http://127.0.0.1:8081/api/workspaces?editable=true', config)
       .then(function (response) {
         var serializable = response.data
         if (serializable.hasOwnProperty('data')) {
@@ -397,7 +397,7 @@ export default {
       if (vm.is_template) {
       } else {
         
-        axios.get('/o/v2/mobilink/docfiles?register=0&template=1', config)
+        axios.get('http://127.0.0.1:8081/api/docfiles?register=0&template=1', config)
         .then(function (response) {
           var serializable = response.data
           if (serializable.hasOwnProperty('data')) {
@@ -409,7 +409,7 @@ export default {
         })
       }
 
-      axios.get('/o/v2/mobilink/dictcollections/DOCUMENT_TYPE/dictitems?sort=treeIndex', config)
+      axios.get('http://127.0.0.1:8081/api/dictcollections/DOCUMENT_TYPE/dictitems?sort=treeIndex', config)
       .then(function (response) {
         var serializable = response.data
         if (serializable.hasOwnProperty('data')) {
@@ -431,7 +431,7 @@ export default {
         console.log(error)
       })
 
-      axios.get('/o/v2/mobilink/dictcollections/GOVERMENT_AGENCY/dictitems' + '?level=0', config)
+      axios.get('http://127.0.0.1:8081/api/dictcollections/GOVERMENT_AGENCY/dictitems' + '?level=0', config)
       .then(function (response) {
         var serializable = response.data
         if (serializable.hasOwnProperty('data')) {
@@ -442,7 +442,7 @@ export default {
         console.log(error)
       })
       vm.workspaceAdd = []
-      axios.get('/o/v2/mobilink/workspaces?editable=true', config)
+      axios.get('http://127.0.0.1:8081/api/workspaces?editable=true', config)
       .then(function (response) {
         var serializable = response.data
         if (serializable.hasOwnProperty('data')) {
@@ -472,7 +472,7 @@ export default {
       seqNumDen: null,
       is_so_den: false,
       optionsForm: {
-        target: '/o/v2/mobilink/fileattachs/upload/'+this.class_name+'/0/'+this.group_id,
+        target: 'http://127.0.0.1:8081/api/fileattachs/upload/'+this.class_name+'/0/'+this.group_id,
         chunkSize: 100*1024*1024,
         headers: {
           'groupId': this.group_id
@@ -602,7 +602,7 @@ export default {
         console.log(vm.$refs['docfileformupload'].fileList != null && vm.$refs['docfileformupload'].fileList.length > 0)
 
         if (vm.$refs['docfileformupload'].fileList != null && vm.$refs['docfileformupload'].fileList.length > 0) {
-          axios.post('/o/v2/mobilink/docfiles',
+          axios.post('http://127.0.0.1:8081/api/docfiles',
             params,
             config
           )
@@ -614,7 +614,7 @@ export default {
             paramsApi2.append('workspaces', JSON.stringify(vm.workspaceAdd))
             paramsApi2.append('className', vm.class_name)
             paramsApi2.append('classPK', response.data.docFileId)
-            axios.post('/o/v2/mobilink/resourceworkspaces/update',
+            axios.post('http://127.0.0.1:8081/api/resourceworkspaces/update',
               paramsApi2,
               config
             )
@@ -634,7 +634,7 @@ export default {
             paramsApi2.append('workspaces', JSON.stringify(vm.workspaceAdd))
             paramsApi2.append('className', vm.class_name)
             paramsApi2.append('classPK', response.data.docFileId)
-            axios.post('/o/v2/mobilink/resourceworkspaces/update',
+            axios.post('http://127.0.0.1:8081/api/resourceworkspaces/update',
               paramsApi2,
               config
             )
@@ -717,7 +717,7 @@ export default {
         }
       }
       vm.templateNoItems = []
-      axios.get('/o/v2/mobilink/docfiles?template=1&register='+item+'&sort=subject', config)
+      axios.get('http://127.0.0.1:8081/api/docfiles?template=1&register='+item+'&sort=subject', config)
         .then(function (response) {
           var serializable = response.data
           if (serializable.hasOwnProperty('data')) {
