@@ -19,7 +19,7 @@
       </v-flex>
       <!-- Sổ theo dõi -->
       <v-flex xs12 sm2  v-if="is_template=='false'&&register_type==2">
-        <v-subheader class="px-0 input-group--required">Sổ theo dõi:</v-subheader>
+        <v-subheader class="px-0 input-group--required"><label>Sổ theo dõi: </label></v-subheader>
       </v-flex>
       <v-flex xs12 sm4 class="layout so__theo__doi" v-if="is_template=='false'&&register_type==2">
           <v-select
@@ -43,7 +43,7 @@
       </v-flex>
       <v-flex xs12 sm4 v-if="is_template=='false'&&register_type==2">
         <v-text-field
-          class="so__den flex sm3 pl-2"
+          class="so__den flex"
           placeholder="Số đến"
           v-model="seqNumDen"
           :rules="[v => v.length != 0 || 'Trường dữ liệu bắt buộc']"
@@ -76,11 +76,45 @@
           </v-date-picker>
         </v-menu>
       </v-flex>
+      <!-- Đơn vị soạn thảo -->
+      <v-flex xs12 sm2 v-if="is_template=='false'&&register_type==1">
+        <v-subheader class="px-0 input-group--required"><label>Đơn vị soạn thảo:</label></v-subheader>
+      </v-flex>
+      <v-flex xs12 sm4 v-if="is_template=='false'&&register_type==1">
+        <v-select
+          v-bind:items="documentCatItems"
+          v-model="documentCat"
+          item-text="text"
+          item-value="value"
+          autocomplete
+          return-object
+          hide-selected
+          :rules="[v => v.length != 0 || 'Trường dữ liệu bắt buộc']"
+          required
+        ></v-select>
+      </v-flex>
+      <!-- Đơn vị soạn thảo -->
+      <v-flex xs12 sm2 v-if="is_template=='false'&&register_type==1">
+        <v-subheader class="px-0 input-group--required"><label>Người soạn thảo:</label></v-subheader>
+      </v-flex>
+      <v-flex xs12 sm4 v-if="is_template=='false'&&register_type==1">
+        <v-select
+          v-bind:items="documentCatItems"
+          v-model="documentCat"
+          item-text="text"
+          item-value="value"
+          autocomplete
+          return-object
+          hide-selected
+          :rules="[v => v.length != 0 || 'Trường dữ liệu bắt buộc']"
+          required
+        ></v-select>
+      </v-flex>
       <!-- Tiêu đề -->
-      <v-flex xs12 sm2 v-if="is_template=='false'&&register_type==2">
+      <v-flex xs12 sm2 v-if="is_template=='false'&&(register_type==1||register_type==2)">
         <v-subheader class="px-0 input-group--required"><label>Tiêu đề: </label> </v-subheader>
       </v-flex>
-      <v-flex xs12 sm10 v-if="is_template=='false'&&register_type==2">
+      <v-flex xs12 sm10 v-if="is_template=='false'&&(register_type==1||register_type==2)">
         <v-text-field
           placeholder="Tiêu đề "
           v-model="subject"
@@ -88,8 +122,27 @@
           required
         ></v-text-field>
       </v-flex>
+      <!-- Sổ theo dõi -->
+      <v-flex xs12 sm2  v-if="is_template=='false'&&register_type==1">
+        <v-subheader class="px-0 input-group--required">Sổ theo dõi:</v-subheader>
+      </v-flex>
+      <v-flex xs12 sm4 class="layout so__theo__doi" v-if="is_template=='false'&&register_type==1">
+          <v-select
+            v-bind:items="templateNoItems"
+            v-model="templateNo"
+            item-text="subject"
+            item-value="templateNo"
+            autocomplete
+            hide-selected
+            return-object
+            @change="templateNoChange($event)"
+            :rules="[v => v.length != 0 || 'Trường dữ liệu bắt buộc']"
+            required
+          ></v-select>
+      </v-flex>
+      <v-flex xs12 sm6  v-if="is_template=='false'&&register_type==1">
+      </v-flex>
       <!--  -->
-
 
       <v-flex xs12 sm2 v-if="is_template=='false'&&register_type==0">
         <v-subheader class="px-0 input-group--required"><label>Thư mục lưu trữ: </label></v-subheader>
