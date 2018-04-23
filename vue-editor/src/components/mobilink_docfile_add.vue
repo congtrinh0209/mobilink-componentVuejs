@@ -17,6 +17,45 @@
           required
         ></v-text-field>
       </v-flex>
+      <!-- Số hiệu mẫu -->
+      <v-flex xs12 sm2 v-if="is_template=='true'">
+        <v-subheader class="px-0 input-group--required"><label>Số hiệu mẫu: </label> </v-subheader>
+      </v-flex>
+      <v-flex xs12 sm4 v-if="is_template=='true'">
+        <v-text-field
+          placeholder="Số hiệu"
+          v-model="seqNumDen"
+          :rules="[v => v.length != 0 || 'Trường dữ liệu bắt buộc']"
+          required
+        ></v-text-field>
+      </v-flex>
+      <!-- Tên biểu mẫu -->
+      <v-flex xs12 sm2 v-if="is_template=='true'">
+        <v-subheader class="px-0 input-group--required"><label>Tên biểu mẫu: </label> </v-subheader>
+      </v-flex>
+      <v-flex xs12 sm10 v-if="is_template=='true'">
+        <v-text-field
+          placeholder="Tên biểu mẫu "
+          v-model="subject"
+          :rules="subjectRules"
+          required
+        ></v-text-field>
+      </v-flex>
+      <!-- Loại văn bản với biểu mẫu -->
+      <v-flex xs12 sm2 v-if="is_template == 'true'">
+        <v-subheader class="px-0">Loại văn bản:</v-subheader>
+      </v-flex>
+      <v-flex xs12 sm4 v-if="is_template == 'true'">
+        <v-select
+          v-bind:items="documentCatItems"
+          v-model="documentCat"
+          item-text="text"
+          item-value="value"
+          autocomplete
+          return-object
+          hide-selected
+        ></v-select>
+      </v-flex>
       <!-- Sổ theo dõi -->
       <v-flex xs12 sm2  v-if="is_template=='false'&&register_type==2">
         <v-subheader class="px-0 input-group--required"><label>Sổ theo dõi: </label></v-subheader>
@@ -76,11 +115,14 @@
           </v-date-picker>
         </v-menu>
       </v-flex>
-      <!-- Đơn vị soạn thảo -->
-      <v-flex xs12 sm2 v-if="is_template=='false'&&register_type==1">
-        <v-subheader class="px-0 input-group--required"><label>Đơn vị soạn thảo:</label></v-subheader>
+      <!-- Đơn vị soạn thảo/ trình duyệt -->
+      <v-flex xs12 sm2 v-if="is_template=='false'&&(register_type==1||register_type==3)">
+        <v-subheader class="px-0 input-group--required">
+          <label v-if="register_type==1">Đơn vị soạn thảo:</label>
+          <label v-if="register_type==3">Đơn vị trình duyệt:</label>
+        </v-subheader>
       </v-flex>
-      <v-flex xs12 sm4 v-if="is_template=='false'&&register_type==1">
+      <v-flex xs12 sm4 v-if="is_template=='false'&&(register_type==1||register_type==3)">
         <v-select
           v-bind:items="documentCatItems"
           v-model="documentCat"
@@ -93,11 +135,14 @@
           required
         ></v-select>
       </v-flex>
-      <!-- Đơn vị soạn thảo -->
-      <v-flex xs12 sm2 v-if="is_template=='false'&&register_type==1">
-        <v-subheader class="px-0 input-group--required"><label>Người soạn thảo:</label></v-subheader>
+      <!-- Người soạn thảo/ trình duyệt -->
+      <v-flex xs12 sm2 v-if="is_template=='false'&&(register_type==1||register_type==3)">
+        <v-subheader class="px-0 input-group--required">
+          <label v-if="register_type==1">Người soạn thảo:</label>
+          <label v-if="register_type==3">Người trình duyệt:</label>
+        </v-subheader>
       </v-flex>
-      <v-flex xs12 sm4 v-if="is_template=='false'&&register_type==1">
+      <v-flex xs12 sm4 v-if="is_template=='false'&&(register_type==1||register_type==3)">
         <v-select
           v-bind:items="documentCatItems"
           v-model="documentCat"
@@ -179,10 +224,10 @@
         </v-select>
       </v-flex>
       <!--  -->
-      <v-flex xs12 sm2 v-if="is_template == 'false'">
+      <v-flex xs12 sm2 >
         <v-subheader class="px-0">Số/Ký hiệu:</v-subheader>
       </v-flex>
-      <v-flex xs6 sm4 class="layout format_italic_source" v-if="is_template == 'false'">
+      <v-flex xs6 sm4 class="layout format_italic_source" >
         <v-text-field
           class="flex sm3"
           placeholder="Số"
@@ -195,9 +240,10 @@
           v-model="codeNotation"
         ></v-text-field>
       </v-flex>
-
+      
       <v-flex xs12 sm2 v-if="is_template == 'false'">
-        <v-subheader class="px-0">Ngày ban hành:</v-subheader>
+        <v-subheader class="px-0" v-if="register_type!=3">Ngày ban hành:</v-subheader>
+        <v-subheader class="px-0" v-if="register_type==3">Ngày trình:</v-subheader>
       </v-flex>
       
       <v-flex xs12 sm4 v-if="is_template == 'false'">
@@ -223,10 +269,10 @@
         </v-menu>
       </v-flex>
       <!--  -->
-      <v-flex xs12 sm2 v-if="is_template == 'false'">
+      <v-flex xs12 sm2 v-if="is_template == 'false'&&register_type!=3">
         <v-subheader class="px-0">Loại văn bản:</v-subheader>
       </v-flex>
-      <v-flex xs12 sm4 v-if="is_template == 'false'">
+      <v-flex xs12 sm4 v-if="is_template == 'false'&&register_type!=3">
         <v-select
           v-bind:items="documentCatItems"
           v-model="documentCat"
@@ -238,10 +284,10 @@
         ></v-select>
       </v-flex>
       <!--  -->
-      <v-flex xs12 sm2 v-if="is_template == 'false'">
+      <v-flex xs12 sm2 v-if="is_template == 'false'&&register_type!=3">
         <v-subheader class="px-0">Cơ quan ban hành:</v-subheader>
       </v-flex>
-      <v-flex xs12 sm4 v-if="is_template == 'false'">
+      <v-flex xs12 sm4 v-if="is_template == 'false'&&register_type!=3">
         <v-select
           v-bind:items="issuerCodeItems"
           v-model="issuerCode"
@@ -252,10 +298,11 @@
         ></v-select>
       </v-flex>
       <!-- Tóm tắt nội dung -->
-      <v-flex xs12 sm2 v-if="is_template=='false'&&register_type==2">
-        <v-subheader class="px-0">Tóm tắt nội dung:</v-subheader>
+      <v-flex xs12 sm2 v-if="is_template=='true'||(register_type==1||register_type==2||register_type==3)">
+        <v-subheader class="px-0" v-if="is_template=='false'||(register_type==1||register_type==2||register_type==3)">Tóm tắt nội dung:</v-subheader>
+        <v-subheader class="px-0" v-if="is_template=='true'">Mô tả:</v-subheader>
       </v-flex>
-      <v-flex xs12 sm10 v-if="is_template=='false'&&register_type==2">
+      <v-flex xs12 sm10 v-if="is_template=='true'||(register_type==1||register_type==2||register_type==3)">
         <v-text-field
           placeholder="Nội dung"
           textarea
