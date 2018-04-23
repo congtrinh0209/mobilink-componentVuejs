@@ -26,7 +26,7 @@
             <v-expansion-panel expand class="header-group expansion-blue">
                <v-expansion-panel-content value="true">
                     <div slot="header" class="custome-panel-heading-with-icon">
-                        <v-toolbar class="my-0">
+                        <div class="my-0">
                             <div class="ml-1" style="flex: none">Thành phần: {{availableCount}}/ {{invitationCount}}  sẵn sàng</div>
                                                         
                             <div style="flex: none;position:absolute;right:0;top:5px" class="ml-2">
@@ -78,7 +78,7 @@
                                 </v-card>
                             </v-dialog>
 
-                        </v-toolbar>
+                        </div>
                     </div>
 
                     <v-card>
@@ -218,7 +218,7 @@
                                                                         <v-flex>
                                                                             <div class="right">
                                                                                 <v-tooltip top :disabled="(subItem.userNote?false:true)">
-                                                                                    <v-btn icon slot="activator" :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
+                                                                                    <v-btn icon slot="activator" :class="managerPermision(permission_prop)==false? pointerEvent : ''"
                                                                                     @click.stop="showAddNote(subItem)" class="text-white mx-0 my-0" >
                                                                                         <v-icon class="iconCmm" >comment</v-icon>
                                                                                     </v-btn>
@@ -226,14 +226,14 @@
                                                                                 </v-tooltip>
 
                                                                                 <v-btn class="mx-0 text-white" small color="success"
-                                                                                :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
+                                                                                :class="managerPermision(permission_prop)==false? pointerEvent : ''"
                                                                                 v-on:click.stop="checkAvailable('ready',subItem,item)" style="padding-left: 6px;padding-right: 6px"
                                                                                 >
                                                                                     <v-icon style="color: white" v-if="subItem.available == 1" >check</v-icon>
                                                                                     Sẵn sàng
                                                                                 </v-btn>
                                                                                 <v-btn small class="text-white mx-0" color="error"
-                                                                                :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
+                                                                                :class="managerPermision(permission_prop)==false? pointerEvent : ''"
                                                                                 v-on:click.stop="checkAvailable('busy',subItem,item)" 
                                                                                 >
                                                                                     <v-icon style="color: white" v-if="subItem.available == 2" >check</v-icon>
@@ -418,7 +418,7 @@
                                                                         <v-flex xs6 sm7>
                                                                             <div class="right">
                                                                                 <v-tooltip top :disabled="(item.userNote?false:true)">
-                                                                                    <v-btn icon slot="activator" :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
+                                                                                    <v-btn icon slot="activator" :class="managerPermision(permission_prop)==false? pointerEvent : ''"
                                                                                     @click.stop="showAddNote(item)" class="text-white mx-0 my-0" >
                                                                                         <v-icon class="iconCmm" >comment</v-icon>
                                                                                     </v-btn>
@@ -426,14 +426,14 @@
                                                                                 </v-tooltip>
                                                                                 
                                                                                 <v-btn class="mx-0" small color="success"
-                                                                                :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
+                                                                                :class="managerPermision(permission_prop)==false? pointerEvent : ''"
                                                                                 v-on:click.stop="checkAvailable('ready',item,null)" style="padding-left: 6px;padding-right: 6px"
                                                                                 >
                                                                                     <v-icon style="color: white" v-if="item.available == 1" >check</v-icon>
                                                                                     Sẵn sàng
                                                                                 </v-btn>
                                                                                 <v-btn small class="text-white mx-0" color="error"
-                                                                                :class="(permission_prop!='manager'&&permission_prop!='owner')? pointerEvent : ''"
+                                                                                :class="managerPermision(permission_prop)==false? pointerEvent : ''"
                                                                                 v-on:click.stop="checkAvailable('busy',item,null)" 
                                                                                 >
                                                                                     <v-icon style="color: white" v-if="item.available == 2" >check</v-icon>
@@ -1343,10 +1343,10 @@
     #activity_invitation_task .header-group .header__icon{
         z-index: 120;
     }
-    #activity_invitation_task .sub-panel .expansion-panel__header{    
+    /*#activity_invitation_task .sub-panel .expansion-panel__header{    
         background-color: #f6f6f6!important;
     }
-    /* #activity_invitation_task .color-subpanel{
+    #activity_invitation_task .color-subpanel{
         color: #2a2a2a!important
     }
     #activity_invitation_task .sub-panel .expansion-panel__header i{
@@ -1357,6 +1357,7 @@
         padding-right: 0px!important;
     }
     #activity_invitation_task .expansion-panel__header{
+        height: 50px!important;
         padding-left: 10px!important;
         padding-right: 10px!important;
     }

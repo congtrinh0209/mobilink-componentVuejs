@@ -17,8 +17,80 @@
           required
         ></v-text-field>
       </v-flex>
-      
+      <!-- Sổ theo dõi -->
+      <v-flex xs12 sm2  v-if="is_template=='false'&&register_type==2">
+        <v-subheader class="px-0 input-group--required">Sổ theo dõi:</v-subheader>
+      </v-flex>
+      <v-flex xs12 sm4 class="layout so__theo__doi" v-if="is_template=='false'&&register_type==2">
+          <v-select
+            v-bind:items="templateNoItems"
+            v-model="templateNo"
+            item-text="subject"
+            item-value="templateNo"
+            autocomplete
+            hide-selected
+            return-object
+            @change="templateNoChange($event)"
+            :rules="[v => v.length != 0 || 'Trường dữ liệu bắt buộc']"
+            required
+          ></v-select>
+      </v-flex>
+      <v-flex xs12 sm6  v-if="is_template=='false'&&register_type==2">
+      </v-flex>
+      <!-- Số đến -->
+      <v-flex xs12 sm2 v-if="is_template=='false'&&register_type==2">
+        <v-subheader class="px-0 input-group--required"><label>Số đến: </label> </v-subheader>
+      </v-flex>
+      <v-flex xs12 sm4 v-if="is_template=='false'&&register_type==2">
+        <v-text-field
+          class="so__den flex sm3 pl-2"
+          placeholder="Số đến"
+          v-model="seqNumDen"
+          :rules="[v => v.length != 0 || 'Trường dữ liệu bắt buộc']"
+          required
+        ></v-text-field>
+      </v-flex>
+      <!-- Ngày đến -->
+      <v-flex xs12 sm2 v-if="is_template=='false'&&register_type==2">
+        <v-subheader class="px-0 input-group--required" >Ngày đến:</v-subheader>
+      </v-flex>
+      <v-flex xs12 sm4 v-if="is_template=='false'&&register_type==2">
+        <v-menu
+          lazy
+          :close-on-content-click="true"
+          v-model="promulgationDateMenu"
+          transition="scale-transition"
+          offset-y
+          full-width
+          :nudge-top="40"
+          max-width="290px"
+          min-width="290px"
+        >
+          <v-text-field
+            slot="activator"
+            placeholder="ngày ...tháng ... năm ..."
+            v-model="promulgationDate"
+            @blur="promulgationDateMd = parseDate(promulgationDate)"
+          ></v-text-field>
+          <v-date-picker v-model="promulgationDateMd" @input="promulgationDate = formatDate($event)" autosave locale="vi">
+          </v-date-picker>
+        </v-menu>
+      </v-flex>
+      <!-- Tiêu đề -->
+      <v-flex xs12 sm2 v-if="is_template=='false'&&register_type==2">
+        <v-subheader class="px-0 input-group--required"><label>Tiêu đề: </label> </v-subheader>
+      </v-flex>
+      <v-flex xs12 sm10 v-if="is_template=='false'&&register_type==2">
+        <v-text-field
+          placeholder="Tiêu đề "
+          v-model="subject"
+          :rules="subjectRules"
+          required
+        ></v-text-field>
+      </v-flex>
       <!--  -->
+
+
       <v-flex xs12 sm2 v-if="is_template=='false'&&register_type==0">
         <v-subheader class="px-0 input-group--required"><label>Thư mục lưu trữ: </label></v-subheader>
       </v-flex>
@@ -126,6 +198,18 @@
           hide-selected
         ></v-select>
       </v-flex>
+      <!-- Tóm tắt nội dung -->
+      <v-flex xs12 sm2 v-if="is_template=='false'&&register_type==2">
+        <v-subheader class="px-0">Tóm tắt nội dung:</v-subheader>
+      </v-flex>
+      <v-flex xs12 sm10 v-if="is_template=='false'&&register_type==2">
+        <v-text-field
+          placeholder="Nội dung"
+          textarea
+          rows="2"
+          v-model="content"
+        ></v-text-field>
+      </v-flex>
       <!--  -->
       <uploader :options="optionsForm" ref="docfileformupload" class="uploader-example mt-3 mb-2 text-left flex" v-if="is_upload == 'true'">
         <uploader-unsupport></uploader-unsupport>
@@ -142,34 +226,7 @@
           permission="write"
         ></uploader-list>
       </uploader>
-      <!-- Sổ theo dõi -->
-      <v-flex xs12 sm2 class="hidden_fak_temp" v-if="is_template=='false'&&register_type==2">
-        <v-subheader class="pr-0">Sổ theo dõi:</v-subheader>
-      </v-flex>
-      <v-flex xs12 sm4 class="layout so__theo__doi hidden_fak_temp" v-if="is_template=='false'&&register_type==2">
-        <div class="flex xs12" style="
-            display: flex;
-            display: -webkit-flex;
-        ">
-          <v-select
-            v-bind:items="templateNoItems"
-            v-model="templateNo"
-            item-text="subject"
-            item-value="templateNo"
-            autocomplete
-            hide-selected
-            return-object
-            @change="templateNoChange($event)"
-          ></v-select>
-          <v-text-field
-          v-if="is_so_den"
-          class="so__den flex sm3 pl-2"
-          placeholder="Số đến"
-          v-model="seqNumDen"
-        ></v-text-field>
-        
-        </div>
-      </v-flex>
+      
       <!-- Form thêm mới văn bản đến -->
       <!--  -->
       <!-- Form thêm mới văn bản đi -->
@@ -353,9 +410,7 @@
           v-model="content"
         ></v-text-field>
       </v-flex> -->
-      
-    
-    
+
   </div>
 </v-form>
 </template>
@@ -841,7 +896,7 @@ export default {
 .mobilink__docfile__add.layout > .flex:nth-child(14){
       -webkit-box-ordinal-group: 3;
     -ms-flex-order: 2;
-    order: 2;
+    order: 14;
 }
 .mobilink__docfile__add.layout > .flex:nth-child(15){
       -webkit-box-ordinal-group: 16;
@@ -886,12 +941,12 @@ export default {
 .mobilink__docfile__add.layout > .flex:nth-child(23){
       -webkit-box-ordinal-group: 4;
     -ms-flex-order: 3;
-    order: 3;
+    order: 23;
 }
 .mobilink__docfile__add.layout > .flex:nth-child(24){
     -webkit-box-ordinal-group: 5;
     -ms-flex-order: 4;
-    order: 4;
+    order: 24;
 }
 .mobilink__docfile__add.layout > .flex:nth-child(25){
       -webkit-box-ordinal-group: 26;
@@ -906,6 +961,6 @@ export default {
 .mobilink__docfile__add.layout > .flex:nth-child(27){
       -webkit-box-ordinal-group: 5;
     -ms-flex-order: 4;
-    order: 4;
+    order: 27;
 }
 </style>
