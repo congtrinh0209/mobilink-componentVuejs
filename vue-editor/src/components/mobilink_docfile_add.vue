@@ -29,6 +29,8 @@
           required
         ></v-text-field>
       </v-flex>
+      <v-flex xs12 sm6  v-if="is_template=='true'">
+      </v-flex>
       <!-- Tên biểu mẫu -->
       <v-flex xs12 sm2 v-if="is_template=='true'">
         <v-subheader class="px-0 input-group--required"><label>Tên biểu mẫu: </label> </v-subheader>
@@ -327,14 +329,6 @@
         ></uploader-list>
       </uploader>
       
-      <!-- Form thêm mới văn bản đến -->
-      <!--  -->
-      <!-- Form thêm mới văn bản đi -->
-      <!--  -->
-      <!-- Form thêm mới tài liệu trình duyệt -->
-      <!--  -->
-      <!-- Form thêm mới biểu mẫu điện tử -->
-      <!--  -->
       <!-- <v-flex xs12 sm2 class="hidden_fak_temp" v-if="is_template == 'false'">
         <v-subheader class="px-0">Loại sổ:</v-subheader>
       </v-flex>
@@ -347,7 +341,6 @@
       </v-flex>
        -->
       
-
       <!-- <v-flex xs12 sm2 v-if="is_template == 'false'">
         <v-subheader class="pr-0">Ngày phát hành:</v-subheader>
       </v-flex>
