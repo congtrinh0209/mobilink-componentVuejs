@@ -1334,8 +1334,8 @@
     }
     #activity_invitation_task nav .toolbar__content {
         height: 50px!important;
-        background-color: #e1f5fe!important;
-        color: #0091ea!important
+        /* background-color: #e1f5fe!important; */
+        /* color: #0091ea!important */
     }
     #activity_invitation_task button .icon{
         font-size: 18px!important;
@@ -1346,12 +1346,12 @@
     #activity_invitation_task .sub-panel .expansion-panel__header{    
         background-color: #f6f6f6!important;
     }
-    #activity_invitation_task .color-subpanel{
+    /* #activity_invitation_task .color-subpanel{
         color: #2a2a2a!important
     }
     #activity_invitation_task .sub-panel .expansion-panel__header i{
         color: #939393!important
-    }
+    } */
     #activity_invitation_task .btn__content {
         padding-left: 0px!important;
         padding-right: 0px!important;

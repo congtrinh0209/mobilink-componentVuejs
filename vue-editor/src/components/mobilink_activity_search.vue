@@ -229,7 +229,7 @@
 
                     <td class="text-xs-center">
 
-                        <v-icon color="red darken-3" 
+                        <v-icon color="red darken-3" title="Xóa"
                         v-if="props.item.permission=='owner'||props.item.permission=='manager'||props.item.permission=='leader'||props.item.permission=='hoster'" icon 
                         @click="deleteActivity(props.item,props.index,tableListItems)">clear</v-icon>
                     </td>
@@ -840,8 +840,8 @@
 <style>
     
     #activitySearch .row-header {
-        background-color: #3486D7!important;
-        color: #ffffff!important;
+        /* background-color: #3486D7!important;
+        color: #ffffff!important; */
         overflow: hidden;
         display: -webkit-flex;
         display: flex;
@@ -868,8 +868,8 @@
         top: 0px!important
     }
     #activitySearch .row-header button{
-        background-color: #01579b;
-        color: white;
+        /* background-color: #01579b;
+        color: white; */
         text-transform: none;
     }
     
@@ -945,6 +945,7 @@
         }
         body #activitySearch table.table th:nth-child(8),body #activitySearch table.table td:nth-child(8){
             width: 3%!important;
+            padding-top: 10px!important;
         }
 
         body #activitySearch .datatable__actions__select,body #activitySearch .datatable__actions__pagination{

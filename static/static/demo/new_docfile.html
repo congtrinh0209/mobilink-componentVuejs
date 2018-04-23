@@ -809,15 +809,16 @@
     <div class="flex pr-3 w-100-xs" v-if="is_add_form">
     	<jx-mobilink-docfile-add
     		:class_name="class_name_doc"
-			:class_pk="class_pk"
-			:group_id="groupId"
-			is_template="false"
-			is_upload="true"
-			:file_attach_api=endPoint+"fileattachs"
-			ref="uploadcom1"
-			@call-back="successCallBack"
-			:workspace_cur="workspace_curId"
-			:current_user_id="current_user_id"
+        :class_pk="class_pk"
+        :group_id="groupId"
+        :register_type= 0
+        is_template="false"
+        is_upload="true"
+        :file_attach_api=endPoint+"fileattachs"
+        ref="uploadcom1"
+        @call-back="successCallBack"
+        :workspace_cur="workspace_curId"
+        :current_user_id="current_user_id"
     	></jx-mobilink-docfile-add>
     </div>
 
@@ -3140,17 +3141,17 @@
     table-layout: fixed
   }
   .headerDetail{
-        background: #e1f5fe;
-    }
-    .controlClass .input-group__selections__comma{
-        font-size: 14px;
-    }
-    .controlClass .chip__content{
-        font-size:14px
-    }
-    body table.table td a:hover{
-        color: #1a5eba!important;
-    }
+      background: #e1f5fe;
+  }
+  .controlClass .input-group__selections__comma{
+      font-size: 14px;
+  }
+  .controlClass .chip__content{
+      font-size:14px
+  }
+  body table.table td a:hover{
+      color: #1a5eba!important;
+  }
 
 
 

@@ -1492,8 +1492,8 @@
     }
     #activity_invitation nav .toolbar__content {
         height: 50px!important;
-        background-color: #e1f5fe!important;
-        color: #0091ea!important
+        /* background-color: #e1f5fe!important; */
+        /* color: #0091ea!important */
     }
     #activity_invitation .formAddInvText .input-group__input{
         border: 1px solid #939393;
@@ -1553,12 +1553,12 @@
     #activity_invitation .sub-panel .expansion-panel__header{    
         background-color: #f6f6f6!important;
     }
-    #activity_invitation .color-subpanel{
+    /* #activity_invitation .color-subpanel{
         color: #2a2a2a!important
     }
     #activity_invitation .sub-panel .expansion-panel__header i{
         color: #939393!important
-    }
+    } */
     #activity_invitation .chip {
         max-height: 30px!important
     }
