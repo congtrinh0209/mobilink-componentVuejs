@@ -720,8 +720,9 @@
                         var serializable = response.data
                         if (serializable.hasOwnProperty('data')) {
                             for (var key in serializable.data) {
+                                serializable.data[key].fullNameSelect = serializable.data[key].fullName+'-'+serializable.data[key].email;
                                 vm.managerItems.push({
-                                    fullName: serializable.data[key].fullName,
+                                    fullName: serializable.data[key].fullNameSelect,
                                     employeeId: serializable.data[key].mappingUser?serializable.data[key].mappingUser.userId:''
                                 })
                                 
