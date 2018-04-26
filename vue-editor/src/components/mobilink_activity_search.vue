@@ -182,11 +182,8 @@
         :headers="headersTable"
         :items="tableListItems"
         :pagination.sync="pagination"
-        prev-icon="mdi-menu-left"
-        next-icon="mdi-menu-right"
-        sort-icon="mdi-menu-down"
-        :rows-per-page-text="rppt"
-        :rows-per-page-items="rppi"
+        :total-items="totalItems"
+        
         >
             <template slot="items" slot-scope="props">
                 <tr v-bind:class="{'active': props.index%2==1}">
@@ -245,15 +242,13 @@
                 </tr>
             </template>
 
-            <template slot="pageText" slot-scope="props">
-                {{ props.pageStart }} - {{ props.pageStop }} của {{ props.itemsLength }} bản ghi
-            </template>
-
             <v-alert slot="no-results" :value="true" color="error" icon="warning">
                 Không có kết quả phù hợp!
             </v-alert>
         </v-data-table>
-
+        <!-- <div class="text-xs-center pt-2">
+            <v-pagination v-model="pagination.page" :length="pages"></v-pagination>
+        </div> -->
     </v-slide-x-transition>
 
 </div>
