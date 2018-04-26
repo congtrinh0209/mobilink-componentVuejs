@@ -20,7 +20,7 @@
                         v-on:keyup.enter="search_by_keyOwn"
                         v-model="keySearch"
                     ></v-text-field>
-                    <v-btn v-on:click.native="advancedSearch" class="px-0" style="height: 30px">
+                    <v-btn v-on:click.native="advancedSearch" class="px-0 primary" style="height: 30px">
                         Tìm kiếm nâng cao
                     </v-btn>
  
@@ -96,7 +96,16 @@
                         autocomplete
                         
                         hide-selected
-                    ></v-select>
+                    >
+                        <template slot="item" slot-scope="data">
+                          <template>
+                            <v-list-tile-content>
+                              <v-list-tile-title v-html="data.item.fullName"></v-list-tile-title>
+                              <v-list-tile-sub-title v-html="data.item.email"></v-list-tile-sub-title>
+                            </v-list-tile-content>
+                          </template>
+                        </template>
+                    </v-select>
                 </v-flex>
                 <!--  -->
                 <v-flex xs12 sm2 class="pl-3">

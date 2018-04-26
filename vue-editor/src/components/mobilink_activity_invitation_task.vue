@@ -164,7 +164,8 @@
                                                             <!-- end -->
 
                                                             <!-- Phần thêm cá nhân trong tổ chức/ đơn vị -->
-                                                            <div v-if="item.role.invitationType == 0 && item.user_leader&&stateTask(startend_prop)" class="layout wrap mx-0 mb-2 pl-2 pr-1">
+                                                            <div v-if="item.role.invitationType == 0 && item.user_leader&&stateTask(startend_prop)"
+                                                             class="layout wrap mx-0 mb-2 pl-2 pr-1">
                                                                 <toggle-button class="mr-1 mt-4"
                                                                 
                                                                 v-model="presenterAddUserUnit"
@@ -177,13 +178,22 @@
                                                                     <v-select class="selectBoder pt-3"
                                                                     placeholder="Cá nhân trong đơn vị/nhóm"
                                                                     :items="employeeItemsTask"
-                                                                    item-text="fullNameSelect"
+                                                                    item-text="fullName"
                                                                     item-value="userId"
                                                                     v-model="employeeTask"
                                                                     return-object
                                                                     autocomplete
                                                                     :clearable="true"
-                                                                    ></v-select>
+                                                                    >
+                                                                        <template slot="item" slot-scope="data">
+                                                                            <template>
+                                                                                <v-list-tile-content>
+                                                                                    <v-list-tile-title v-html="data.item.fullName"></v-list-tile-title>
+                                                                                    <v-list-tile-sub-title v-html="data.item.email"></v-list-tile-sub-title>
+                                                                                </v-list-tile-content>
+                                                                            </template>
+                                                                        </template>
+                                                                    </v-select>
                                                                 </v-flex>
                                                                 <v-btn @click.stop="postInvitationTask('UserUnit',item.role.roleId)" small outline color="primary" class="mx-0 ml-1 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
                                                                     Giao
@@ -258,6 +268,7 @@
 
                                                         </v-list-group>
                                                     </v-list>
+                                                    <p v-if="itemInvGroupTask.length == 0" class="mt-3 ml-2">Chưa giao nhiệm vụ</p>
                                                 </v-card>
                                             </v-flex>
                                         </v-layout>
@@ -291,12 +302,21 @@
                                                     hide-selected
                                                     tags
                                                     v-model="contact"
-                                                    item-text="fullNameSelect"
+                                                    item-text="fullName"
                                                     item-value="contactId"
                                                     return-object
                                                     autocomplete
                                                     clearable
-                                                    ></v-select>
+                                                    >
+                                                        <template slot="item" slot-scope="data">
+                                                            <template>
+                                                                <v-list-tile-content>
+                                                                    <v-list-tile-title v-html="data.item.fullName"></v-list-tile-title>
+                                                                    <v-list-tile-sub-title v-html="data.item.email"></v-list-tile-sub-title>
+                                                                </v-list-tile-content>
+                                                            </template>
+                                                        </template>
+                                                    </v-select>
                                                     
                                                 </v-flex>
                                                 <toggle-button class="mx-1 mt-4"
@@ -456,9 +476,9 @@
                                                                 
                                                             </v-list-tile-content>  
                                                         </v-list-tile>
-                                                        
                                                     </v-list>
                                                     <!-- end -->
+                                                    <p v-if="itemInvContactTask.length == 0" class="mt-3 ml-2">Chưa giao nhiệm vụ</p>
                                                 </v-card>
                                             </v-flex>
                                         </v-layout>
@@ -576,9 +596,9 @@
             },
             /*check state truyền startend*/
             stateTask: function(src){
-                if(src==0||src==1){
+                if(src==0){
                     return true
-                } else if(src==2||src==3||src==4) {
+                } else if(src==1||src==2||src==3||src==4) {
                     return false
                 }
             },
@@ -747,7 +767,7 @@
                     var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            serializable.data[key].fullNameSelect = serializable.data[key].fullName+'-'+serializable.data[key].email;
+                            
                             if(vm.invitationTaskItems.length!=0){
                                 var itemInv = true;
                                 for(var keys in vm.invitationTaskItems){
@@ -792,7 +812,7 @@
                     if (serializable.hasOwnProperty('data')) {
                         
                         for (var key in serializable.data) {
-                            serializable.data[key].fullNameSelect = serializable.data[key].fullName+'-'+serializable.data[key].email;
+                            
                             if(vm.invitationTaskItems.length!=0){
                                 var itemInv = true;
                                 for(var keys in vm.invitationTaskItems){

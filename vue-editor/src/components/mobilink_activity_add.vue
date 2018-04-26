@@ -98,7 +98,16 @@
                         autocomplete
                         return-object
                         hide-selected
-                    ></v-select>
+                    >
+                        <template slot="item" slot-scope="data">
+                          <template>
+                            <v-list-tile-content>
+                              <v-list-tile-title v-html="data.item.fullName"></v-list-tile-title>
+                              <v-list-tile-sub-title v-html="data.item.email"></v-list-tile-sub-title>
+                            </v-list-tile-content>
+                          </template>
+                        </template>
+                    </v-select>
                 </v-flex>
                 
                 <!--  -->
@@ -208,7 +217,16 @@
                         autocomplete
                         return-object
                         hide-selected
-                    ></v-select>
+                    >
+                        <template slot="item" slot-scope="data">
+                          <template>
+                            <v-list-tile-content>
+                              <v-list-tile-title v-html="data.item.fullName"></v-list-tile-title>
+                              <v-list-tile-sub-title v-html="data.item.email"></v-list-tile-sub-title>
+                            </v-list-tile-content>
+                          </template>
+                        </template>
+                    </v-select>
                 </v-flex>
                 <!--  -->
                 <v-flex xs12 sm2>
@@ -338,7 +356,16 @@
                         autocomplete
                         return-object
                         hide-selected
-                    ></v-select>
+                    >
+                        <template slot="item" slot-scope="data">
+                          <template>
+                            <v-list-tile-content>
+                              <v-list-tile-title v-html="data.item.fullName"></v-list-tile-title>
+                              <v-list-tile-sub-title v-html="data.item.email"></v-list-tile-sub-title>
+                            </v-list-tile-content>
+                          </template>
+                        </template>
+                    </v-select>
                 </v-flex>
                 <!--  -->
                 <v-flex xs12 sm2>
@@ -723,7 +750,8 @@
                                 serializable.data[key].fullNameSelect = serializable.data[key].fullName+'-'+serializable.data[key].email;
                                 vm.managerItems.push({
                                     fullName: serializable.data[key].fullNameSelect,
-                                    employeeId: serializable.data[key].mappingUser?serializable.data[key].mappingUser.userId:''
+                                    employeeId: serializable.data[key].mappingUser?serializable.data[key].mappingUser.userId:'',
+                                    email: serializable.data[key].email
                                 })
                                 
                             }

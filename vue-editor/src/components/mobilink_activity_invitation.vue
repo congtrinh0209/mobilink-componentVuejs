@@ -30,32 +30,32 @@
 
                     <div slot="header" class="custome-panel-heading-with-icon">
                         <div class="my-0">   
-                            <div class="ml-2" style="flex: none" v-if="stateEvent(startend_prop)==true">Giấy mời: {{availableCount}}/ {{invitationCount}} sẵn sàng</div>
-                            <div class="ml-2" style="flex: none" v-if="stateEvent(startend_prop)==false">Giấy mời: {{checkinCount}}/ {{invitationCount}} có mặt</div>
+                            <div class="ml-2" style="flex: none" v-if="stateCheckin(startend_prop)==true">Giấy mời: {{availableCount}}/ {{invitationCount}} sẵn sàng</div>
+                            <div class="ml-2" style="flex: none" v-if="stateCheckin(startend_prop)==false">Giấy mời: {{checkinCount}}/ {{invitationCount}} có mặt</div>
                             
                             <div style="flex: none;position:absolute;right:0;top:5px" class="ml-2">
                                 <div >
                                     <span v-if="mineInv">
                                         <v-tooltip top :disabled="(userLogin.userNote?false:true)">
-                                            <v-btn icon slot="activator" :class="stateEvent(startend_prop)==false?disableClick:''" class="text-white mx-0 my-0"  @click.stop="showAddNote(userLogin)">
+                                            <v-btn icon slot="activator" :class="stateCheckin(startend_prop)==false?disableClick:''" class="text-white mx-0 my-0"  @click.stop="showAddNote(userLogin)">
                                                 <v-icon class="iconCmm" >comment</v-icon>
                                             </v-btn>
                                             <span>{{userLogin.userNote}}</span>
                                         </v-tooltip>
                                         
-                                        <v-btn v-if="stateEvent(startend_prop)==true" class="mx-0" small color="success" 
+                                        <v-btn v-if="stateCheckin(startend_prop)==true" class="mx-0" small color="success" 
                                         v-on:click.stop="checkAvailable('ready',userLogin,null)" style="padding-left: 6px;padding-right: 6px"
                                         :class="activeClick?disableClick:''"
                                         >
                                             <v-icon style="color: white!important" v-if="userLogin.available == 1" >check</v-icon>
                                             <span style="color: white!important">Sẵn sàng</span>
                                         </v-btn>
-                                        <v-btn v-if="stateEvent(startend_prop)==true" small class="text-white mx-1" 
+                                        <v-btn v-if="stateCheckin(startend_prop)==true" small class="text-white mx-1" 
                                         v-on:click.stop="checkAvailable('busy',userLogin,null)" :class="activeClick?disableClick:''" color="error">
                                             <v-icon style="color: white!important" v-if="userLogin.available == 2" >check</v-icon>
                                             <span style="color: white!important">Tôi bận</span>
                                         </v-btn>
-                                        <v-btn v-if="stateEvent(startend_prop)==false" small class="text-white mx-1"
+                                        <v-btn v-if="stateCheckin(startend_prop)==false" small class="text-white mx-1"
                                          v-on:click.stop="checkin(userLogin)" :class="disableClick" color="indigo">
                                             <v-icon style="color: white!important" v-if="userLogin.checkin" >check</v-icon>
                                             <span style="color: white!important">Tôi có mặt</span>
@@ -195,13 +195,22 @@
                                                                     <v-select class="selectBoder pt-3"
                                                                     placeholder="Cá nhân trong đơn vị/nhóm"
                                                                     :items="employeeItems"
-                                                                    item-text="fullNameSelect"
+                                                                    item-text="fullName"
                                                                     item-value="userId"
                                                                     v-model="employee"
                                                                     return-object
                                                                     autocomplete
                                                                     :clearable="true"
-                                                                    ></v-select>
+                                                                    >
+                                                                        <template slot="item" slot-scope="data">
+                                                                            <template>
+                                                                                <v-list-tile-content>
+                                                                                    <v-list-tile-title v-html="data.item.fullName"></v-list-tile-title>
+                                                                                    <v-list-tile-sub-title v-html="data.item.email"></v-list-tile-sub-title>
+                                                                                </v-list-tile-content>
+                                                                            </template>
+                                                                        </template>
+                                                                    </v-select>
                                                                 </v-flex>
                                                                 <v-btn @click.stop="postInvitation('UserUnit',item.role.roleId)" small outline color="primary" class="mx-0 ml-1 mb-0 invBtn" style="width: 45px!important; min-width: 0px!important">
                                                                     Mời
@@ -244,7 +253,7 @@
                                                                                     <span >{{subItem.userNote}}</span>
                                                                                 </v-tooltip>
                                                                                 
-                                                                                <v-btn v-if="stateEvent(startend_prop)==true" class="mx-0" small color="success"
+                                                                                <v-btn v-if="stateCheckin(startend_prop)==true" class="mx-0" small color="success"
                                                                                 :class="managerPermision(permission_prop)==false||activeClick? pointerEvent : ''"
                                                                                 
                                                                                 v-on:click.stop="checkAvailable('ready',subItem,item)" style="padding-left: 6px;padding-right: 6px"
@@ -252,7 +261,7 @@
                                                                                     <v-icon style="color: white" v-if="subItem.available == 1" >check</v-icon>
                                                                                     Sẵn sàng
                                                                                 </v-btn>
-                                                                                <v-btn v-if="stateEvent(startend_prop)==true" small class="text-white mx-0" 
+                                                                                <v-btn v-if="stateCheckin(startend_prop)==true" small class="text-white mx-0" 
                                                                                 :class="managerPermision(permission_prop)==false||activeClick? pointerEvent : ''"
                                                                                 v-on:click.stop="checkAvailable('busy',subItem,item)" color="error"
                                                                                 >
@@ -262,7 +271,7 @@
 
                                                                                 <!-- <span v-if="stateEvent(startend_prop)==true" style="color:green" class="mr-2" v-html="bindAvailableText(subItem.available)"></span> -->
 
-                                                                                <v-btn v-if="stateEvent(startend_prop)==false"
+                                                                                <v-btn v-if="stateCheckin(startend_prop)==false"
                                                                                 :class="managerPermision(permission_prop)==false||activeClick? pointerEvent : ''"
                                                                                 v-on:click.stop="managerCheckin(subItem,item)" outline small class="text-white mx-1" color="indigo"
                                                                                 >
@@ -286,6 +295,7 @@
 
                                                         </v-list-group>
                                                     </v-list>
+                                                    <p v-if="itemInvGroup.length == 0" class="mt-3 ml-2">Không có giấy mời</p>
                                                 </v-card>
                                             </v-flex>
                                         </v-layout>
@@ -306,8 +316,8 @@
                                     </v-icon>
                                 </div>
                                 
-                                <v-card class="pl-2 pr-1">
-                                    <v-card-text class="px-0 py-0">
+                                <v-card>
+                                    <v-card-text class="px-0 py-0 pl-2 pr-1">
                                         <v-layout row wrap class="mx-0">
                                             <v-flex class="layout wrap" v-if="showAdd2">
                                                 <v-flex xs12 sm8>
@@ -318,12 +328,21 @@
                                                     hide-selected
                                                     tags
                                                     v-model="contact"
-                                                    item-text="fullNameSelect"
+                                                    item-text="fullName"
                                                     item-value="contactId"
                                                     return-object
                                                     autocomplete
                                                     clearable
-                                                    ></v-select>
+                                                    >
+                                                        <template slot="item" slot-scope="data">
+                                                            <template>
+                                                                <v-list-tile-content>
+                                                                <v-list-tile-title v-html="data.item.fullName"></v-list-tile-title>
+                                                                <v-list-tile-sub-title v-html="data.item.email"></v-list-tile-sub-title>
+                                                                </v-list-tile-content>
+                                                            </template>
+                                                        </template>
+                                                    </v-select>
                                                 </v-flex>
 
                                                 <toggle-button class="mx-1 mt-4"
@@ -453,14 +472,14 @@
                                                                                     <span >{{item.userNote}}</span>
                                                                                 </v-tooltip>
                                                                                 
-                                                                                <v-btn v-if="stateEvent(startend_prop)==true" class="mx-0" small color="success"
+                                                                                <v-btn v-if="stateCheckin(startend_prop)==true" class="mx-0" small color="success"
                                                                                 :class="managerPermision(permission_prop)==false? pointerEvent : ''"
                                                                                 v-on:click.stop="checkAvailable('ready',item,null)" style="padding-left: 6px;padding-right: 6px"
                                                                                 >
                                                                                     <v-icon style="color: white" v-if="item.available == 1" >check</v-icon>
                                                                                     Sẵn sàng
                                                                                 </v-btn>
-                                                                                <v-btn v-if="stateEvent(startend_prop)==true" small class="text-white mx-0" 
+                                                                                <v-btn v-if="stateCheckin(startend_prop)==true" small class="text-white mx-0" 
                                                                                 :class="managerPermision(permission_prop)==false? pointerEvent : ''"
                                                                                 v-on:click.stop="checkAvailable('busy',item,null)" color="error"
                                                                                 >
@@ -471,7 +490,7 @@
                                                                                 <!-- <span v-if="stateEvent(startend_prop)==true" class="mr-2" style="color:green"
                                                                                 v-html="bindAvailableText(item.available)"></span> -->
 
-                                                                                <v-btn v-if="stateEvent(startend_prop)==false" 
+                                                                                <v-btn v-if="stateCheckin(startend_prop)==false" 
                                                                                 :class="managerPermision(permission_prop)==false||activeClick? pointerEvent : ''"
                                                                                 v-on:click.stop="managerCheckin(item,null)"  outline small class="text-white mx-1" color="indigo">
                                                                                     <v-icon color="indigo" v-if="item.checkin" >check</v-icon>
@@ -489,11 +508,12 @@
                                                                     </v-flex>
                                                                 </v-list-tile-title>
 
-                                                            </v-list-tile-content>  
+                                                            </v-list-tile-content>
                                                         </v-list-tile>
                                                         
                                                     </v-list>
                                                     <!-- end -->
+                                                    <p v-if="itemInvContact.length == 0" class="mt-3 ml-2">Không có giấy mời</p>
                                                 </v-card>
                                             </v-flex>
                                         </v-layout>
@@ -517,7 +537,7 @@
                                     </v-icon>
                                 </div>
                                 <v-card >
-                                    <v-card-text class="px-0 py-0">
+                                    <v-card-text class="px-0 py-0 ">
                                         <v-form xs12 sm12 v-model="validAddInv" ref="formInvText" class="formAddInvText px-2 py-2" lazy-validation style="position: relative">
                                             <v-text-field class="py-0"
                                             placeholder="Nhập thành phần tham dự"
@@ -605,6 +625,7 @@
                 itemsNote:[],
                 dialog_add_contact: false,
                 showAdd1: false,
+                expand_contact:true,
                 showAdd2: false,
                 disUserMail: false,
                 /**/ 
@@ -660,6 +681,13 @@
                 if(startend_prop==0||startend_prop==1){
                     return true
                 } else if(startend_prop==3||startend_prop==4) {
+                    return false
+                }
+            },
+            stateCheckin: function(startend_prop){
+                if(startend_prop==0){
+                    return true
+                } else if(startend_prop==1||startend_prop==3||startend_prop==4) {
                     return false
                 }
             },
@@ -833,7 +861,6 @@
                     var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            serializable.data[key].fullNameSelect = serializable.data[key].fullName+'-'+serializable.data[key].email;
                             
                             if(vm.invitationItems.length!=0){
                                 var itemInv = true;
@@ -878,7 +905,7 @@
                     var serializable = response.data
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            serializable.data[key].fullNameSelect = serializable.data[key].fullName+'-'+serializable.data[key].email;
+                            
                             if(vm.invitationItems.length!=0){
                                 var itemInv = true;
                                 for(var keys in vm.invitationItems){
@@ -1377,7 +1404,7 @@
             },
             show_Add2: function(){
                 var vm =this;
-                vm.showAdd2 =!vm.showAdd2
+                vm.showAdd2 =!vm.showAdd2;
             },
 
             submitAddContact: function(){
