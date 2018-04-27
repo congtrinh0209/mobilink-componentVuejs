@@ -1,6 +1,7 @@
 var vi_VN = {
   'email': 'Email',
   'telNo': 'Số điện thoại liên lạc',
+  'startDate': 'Ngày bắt đầu',
   'employeeNo': 'Mã nhân viên',
   'processNo': 'Số hiệu quy trình',
   'codeNo': 'Số văn bản',
@@ -22,7 +23,8 @@ var vi_VN = {
 };
 var en_US = {
   'email': 'Email',
-  'telNo': 'Telephone',
+  'telNo': 'Telephone number',
+  'startDate': 'Start date',
   'employeeNo': 'Employee number',
   'processNo': 'Process number',
   'codeNo': 'Document number',
@@ -44,8 +46,8 @@ var en_US = {
 };
 
 // Get message notification
-// var lang_locale = themeDisplay.getLanguageId();
-var lang_locale = 'vi_VN';
+var lang_locale = themeDisplay.getLanguageId();
+// var lang_locale = 'vi_VN';
 
 var notify = function(res){
   var mess = res.message?res.message:'';

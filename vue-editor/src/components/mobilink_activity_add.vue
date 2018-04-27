@@ -1176,7 +1176,7 @@
                     paramsAddTask.append('subject', vm.taskname?vm.taskname:"")
                     paramsAddTask.append('hostingId', vm.hostingId?vm.hostingId.workingUnitId:"")
                     paramsAddTask.append('hosting', vm.hostingId?vm.hostingId.name:'')
-                    paramsAddTask.append('leaderId', vm.manager?vm.manager.employeeId:"")
+                    paramsAddTask.append('managerId', vm.manager?vm.manager.employeeId:"")
 
                     paramsAddTask.append('startDate', startDateTask)
                     paramsAddTask.append('endDate', endDateTask)
