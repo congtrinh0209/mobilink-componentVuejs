@@ -88,9 +88,15 @@
                                 <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0">
                                     <div class="color-subpanel">Đơn vị/ Nhóm trong cơ quan</div>
 
-                                    <v-icon class="btn-add mx-0 my-0" v-if="managerPermision(permission_prop)&&stateTask(startend_prop)"
+                                    <v-icon class="btn-add mx-0 my-0" 
+                                        v-if="managerPermision(permission_prop)&&stateTask(startend_prop)&&showAdd1==false"
                                         v-on:click.stop="show_Add1Task" grey darken-4>
                                         add_circle
+                                    </v-icon>
+                                    <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add1Task" 
+                                    v-if="managerPermision(permission_prop)&&stateTask(startend_prop)&&showAdd1==true"
+                                    grey darken-4>
+                                        do_not_disturb_on
                                     </v-icon>
                                 </div>
                                 
@@ -285,8 +291,13 @@
                                     <div class="color-subpanel">Cá nhân/ Tổ chức theo danh bạ</div>
 
                                     <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add2Task" 
-                                    v-if="managerPermision(permission_prop)&&stateTask(startend_prop)" grey darken-4>
+                                    v-if="managerPermision(permission_prop)&&stateTask(startend_prop)&&showAdd2==false" grey darken-4>
                                         add_circle
+                                    </v-icon>
+                                    <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add2Task" 
+                                    v-if="managerPermision(permission_prop)&&stateTask(startend_prop)&&showAdd2==true"
+                                    grey darken-4>
+                                        do_not_disturb_on
                                     </v-icon>
                                 </div>
                                 
@@ -1146,13 +1157,18 @@
                             item.role.statistic.available+=1;
                             vm.availableCount+=1
                         } else if(typeCheck == 'busy' && subItem.available!=2){
+                            if(subItem.available==1){
+                                item.role.statistic.available-=1
+                                vm.availableCount-=1
+                            }
                             subItem.available = 2;
-                            item.role.statistic.available-=1
-                            vm.availableCount-=1
-                        } else if((typeCheck == 'ready' && subItem.available==1)||(typeCheck == 'busy' && subItem.available==2)){
+
+                        } else if((typeCheck == 'ready' && subItem.available==1)){
                             subItem.available = 0;
                             item.role.statistic.available-=1
                             vm.availableCount-=1
+                        } else if(typeCheck == 'busy' && subItem.available==2){
+                            subItem.available = 0;
                         };
                     }
 
