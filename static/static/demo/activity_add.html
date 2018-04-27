@@ -22,7 +22,7 @@
   <link href="https://unpkg.com/vuetify/dist/vuetify.min.css" rel="stylesheet">
   <link href="../css/main.css" rel="stylesheet">
   <script src="https://unpkg.com/vuetify/dist/vuetify.js"></script>
-  <script type="text/javascript" src="../js/mobilink_lang.js"></script>
+  <script type="text/javascript" src="../js/mobilink_lang.min.js"></script>
   
 
 </head>
@@ -66,8 +66,8 @@
           runApi: function(){
             var vm = this;
             vm.$refs.activityAddRef.initGetData();
-            var res = {"code":409,"message":"{\"email\":\"duplicate\"}","description":"conflict data!","type":"duplicate"};
-            console.log(notify('vi',res))
+            var res = {"code":409,"message":"{\"email\":\"12\"}","description":"conflict data!","type":"maxlength"};
+            console.log(notify(res))
           },
           getData: function(){
             var vm = this;
@@ -85,7 +85,7 @@
           
         }
       })
-      compile_language('vi');
+      compile_language();
     });
 
   </script>
