@@ -16,6 +16,7 @@ var vi_VN = {
   'groupCode': 'Mã code nhóm',
   'jobCode': 'Mã chức vụ',
   'issuerCode': 'Mã cơ quan ban hành',
+  'govAgencyCode': 'Mã phòng ban',
 
   'duplicate': 'đã tồn tại',
   'required': 'là bắt buộc'
@@ -39,6 +40,7 @@ var en_US = {
   'groupCode': 'Group code',
   'jobCode': 'Jobpos code',
   'issuerCode': 'Issuer code',
+  'govAgencyCode': 'Government agency code',
 
   'duplicate': 'is duplicate',
   'required': 'is required'
@@ -53,10 +55,10 @@ var notify = function(res){
   var mess = res.message?res.message:'';
   var type_err = res.type?res.type:'';
   var type_errText;
-  if(type_err == 'maxlength'){
+  if(type_err == 'maxlength'&&mess.search(":")>0){
     type_errText = mess?mess.match(':\"(.*)\"}')[1]:'';
   }
-  var target  = mess?mess.match('\"(.*)\":')[1]:'';
+  var target  = (mess&&mess.search(":")>0)?mess.match('\"(.*)\":')[1]:'';
 
   class multil_lang {
     constructor(lang) {

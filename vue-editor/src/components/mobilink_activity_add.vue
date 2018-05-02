@@ -747,9 +747,9 @@
                         var serializable = response.data
                         if (serializable.hasOwnProperty('data')) {
                             for (var key in serializable.data) {
-                                serializable.data[key].fullNameSelect = serializable.data[key].fullName+'-'+serializable.data[key].email;
+                                // serializable.data[key].fullNameSelect = serializable.data[key].fullName+'-'+serializable.data[key].email;
                                 vm.managerItems.push({
-                                    fullName: serializable.data[key].fullNameSelect,
+                                    fullName: serializable.data[key].fullName,
                                     employeeId: serializable.data[key].mappingUser?serializable.data[key].mappingUser.userId:'',
                                     email: serializable.data[key].email
                                 })
@@ -1044,11 +1044,16 @@
                 vm.timeEndMin = new Date();
                 var timeEnd = new Date();
                 if(vm.type_activity == 'events'){
+                    vm.timeStart = vm.roundDate(30,new Date());
                     timeEnd.setHours(timeEnd.getHours() + 2);
+                    vm.timeEnd = vm.roundDate(30,timeEnd);
                 } else if(vm.type_activity == 'tasks' || vm.type_activity == 'tickets'|| vm.type_activity == 'plans'){
-                    timeEnd.setHours(timeEnd.getHours() + 24);
+                    timeEnd.setHours(0);
+                    timeEnd.setMinutes(0);
+                    vm.timeStart = timeEnd;
+                    vm.timeEnd = timeEnd;
                 };
-                vm.timeEnd = vm.roundDate(30,timeEnd);
+                
                 
                 /* */
             },
