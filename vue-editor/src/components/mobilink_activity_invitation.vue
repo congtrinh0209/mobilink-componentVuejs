@@ -788,7 +788,7 @@
                     vm.getEmployees();
                 })
                 .catch(function (error) {
-                    console.log(error)
+                    console.log(error.response)
                 })
                 /** */
             },
@@ -968,7 +968,8 @@
                         vm.show_alert('success','Cập nhật thành công')                       
                     })
                     .catch(function (error) {
-                        vm.show_alert('error','Cập nhật thất bại',error) 
+                        vm.show_alert('error','Cập nhật thất bại',error.response.data);
+                        console.log(error.response)
                     })
                 } else if(type == "DELETE") {
                     axios.delete(urlUpdate, configPutInvitation)
@@ -981,7 +982,8 @@
                         
                     })
                     .catch(function (error) {
-                        vm.show_alert('error','Xóa giấy mời thất bại',error) 
+                        vm.show_alert('error','Xóa giấy mời thất bại',error.response.data);
+                        console.log(error.response)
                     });
                 }
             },
@@ -1098,7 +1100,8 @@
                         
                     })
                     .catch(function (error) {
-                        vm.show_alert('error','Thêm giấy mời thất bại',error)  
+                        vm.show_alert('error','Thêm giấy mời thất bại',error.response.data);
+                        console.log(error.response)  
                     })
                 }
                 
@@ -1142,7 +1145,7 @@
                     presenterChange = 1
                 }else {presenterChange = 0};
 
-                if(vm.managerPermision(permission_prop)==true|| items.leader){
+                if(vm.managerPermision(vm.permission_prop)==true|| items.leader){
                     vm.submitUpdatePresenter(invId,presenterChange,items)
                 } else {
                     return false
@@ -1168,7 +1171,8 @@
                     vm.show_alert('success','Cập nhật thành công')
                 })
                 .catch(function (error) {
-                    vm.show_alert('error','Cập nhật thất bại',error)  
+                    vm.show_alert('error','Cập nhật thất bại',error.response.data);
+                    console.log(error.response)  
                 })
             },
             /* Load thành phần tham dự */
@@ -1213,7 +1217,8 @@
                         vm.getInvText()
                     })
                     .catch(function (error) {
-                        vm.show_alert('error','Cập nhật thất bại',error)
+                        vm.show_alert('error','Cập nhật thất bại',error.response.data);
+                        console.log(error.response)
                     })
                 }
 
@@ -1319,7 +1324,8 @@
                     
                 })
                 .catch(function (error) {
-                    vm.show_alert('error','Cập nhật thất bại',error)
+                    vm.show_alert('error','Cập nhật thất bại',error.response.data);
+                    console.log(error.response)
                 });
 
             },
@@ -1354,7 +1360,8 @@
                     setTimeout(function(){
                         vm.getInvitation();
                         vm.dialog_loading = false;
-                        vm.show_alert('error','Cập nhật thất bại',error)
+                        vm.show_alert('error','Cập nhật thất bại',error.response.data);
+                        console.log(error.response)
                     },1000) ;
                 })
             },
@@ -1389,7 +1396,8 @@
                     }
                 })
                 .catch(function (error) {
-                    vm.show_alert('error','Cập nhật thất bại',error)
+                    vm.show_alert('error','Cập nhật thất bại',error.response.data);
+                    console.log(error.response)
                 })
             },
             show_Add1: function(){
@@ -1447,8 +1455,8 @@
                         
                     })
                     .catch(function (error) {
-                        vm.show_alert('error','Thêm mới liên lạc thất bại',error)
-                        console.log(error);
+                        vm.show_alert('error','Thêm mới liên lạc thất bại',error.response.data)
+                        console.log(error.response);
                         
                     })
                 }
@@ -1490,7 +1498,8 @@
                     
                 })
                 .catch(function (error) {
-                    vm.show_alert('error','Thêm giấy mời thất bại',error)
+                    vm.show_alert('error','Thêm giấy mời thất bại',error.response.data);
+                    console.log(error.response)
                 });
                 /*console.log("run add contact invitation")*/
             },

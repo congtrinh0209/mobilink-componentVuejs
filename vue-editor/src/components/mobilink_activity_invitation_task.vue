@@ -876,7 +876,8 @@
                        
                     })
                     .catch(function (error) {
-                        vm.show_alert('error','Cập nhật thất bại')
+                        vm.show_alert('error','Cập nhật thất bại',error.response.data);
+                        
                     })
                 } else if(type == "DELETE") {
                     axios.delete(urlUpdate, configPutInvitation)
@@ -888,8 +889,8 @@
                         },1000) ;
                     })
                     .catch(function (error) {
+                        vm.show_alert('error','Xóa thất bại',error.response.data);
                         
-                        vm.show_alert('error','Xóa thất bại')
                     });
                 }
             },
@@ -1004,7 +1005,7 @@
                         
                     })
                     .catch(function (error) {
-                        vm.show_alert('error','Giao nhiệm vụ thất bại')
+                        vm.show_alert('error','Giao nhiệm vụ thất bại',error.response.data);
                     })
                 }
                 
@@ -1051,7 +1052,7 @@
                     presenterChange = 1
                 }else {presenterChange = 0};
 
-                if(vm.managerPermision(permission_prop)==true|| items.leader){
+                if(vm.managerPermision(vm.permission_prop)==true|| items.leader){
                     vm.submitUpdatePresenterTask(invId,presenterChange,items)
                 } else {
                     return false
@@ -1077,7 +1078,7 @@
                     vm.show_alert('success','Cập nhật thành công')
                 })
                 .catch(function (error) {
-                    vm.show_alert('error','Cập nhật thất bại')
+                    vm.show_alert('error','Cập nhật thất bại',error.response.data);
                 })
             },
             /** */
@@ -1174,7 +1175,7 @@
 
                 })
                 .catch(function (error) {
-                    vm.show_alert('error','Cập nhật thất bại');
+                    vm.show_alert('error','Cập nhật thất bại',error.response.data);
 
                 })
                 
@@ -1209,7 +1210,7 @@
                     setTimeout(function(){
                         vm.getInvitationTask();
                         vm.dialog_loading = false;
-                        vm.show_alert('success','Cập nhật thất bại');
+                        vm.show_alert('error','Cập nhật thất bại',error.response.data);
                     },1000) ;
                 })
             },
@@ -1239,7 +1240,7 @@
                     vm.show_alert('success','Cập nhật thành công')
                 })
                 .catch(function (error) {
-                    vm.show_alert('error','Cập nhật thất bại')
+                    vm.show_alert('error','Cập nhật thất bại',error.response.data);
                 })
             },
             show_Add1Task: function(){
@@ -1250,13 +1251,17 @@
                 var vm =this;
                 vm.showAdd2 =!vm.showAdd2
             },
-            show_alert: function(type,text){
+
+            show_alert: function(type,text,res){
                 var vm = this;
                 if(type=='success'){
                     vm.alertMess = text;
                     vm.snackbarSucc = true  
                 } else {
-                    vm.alertMess = text;
+                    var mess = notify(res);
+                    if(mess){
+                        vm.alertMess = mess;
+                    } else {vm.alertMess = text}
                     vm.snackbarErr = true 
                 }
             },
@@ -1336,7 +1341,8 @@
     
                 })
                 .catch(function (error) {
-                    vm.show_alert('error','Giao nhiệm vụ thất bại')
+                    vm.show_alert('error','Giao nhiệm vụ thất bại',error.response.data);
+                    
                 });
                 /*console.log("run add contact invitation")*/
             }

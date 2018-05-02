@@ -170,7 +170,7 @@
                     @confirm = "changeDate" 
                     v-bind:not-before="timeStartMin" 
                     :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" 
-                    lang="vi" type="datetime" format="dd/MM/yyyy HH:mm" 
+                    lang="vi" type="date" format="dd/MM/yyyy" 
                     confirm="true"
                     :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
                     required
@@ -183,7 +183,7 @@
                 <v-flex xs12 sm4>
                     <date-picker class="mt-3" v-model="timeEnd" placeholder="Thời hạn hoàn thành" 
                     v-bind:not-before="timeEndMin" :time-picker-options ="{start: '00:00',step: '00:10',end: '23:00'}" lang="vi" 
-                    type="datetime" format="dd/MM/yyyy HH:mm" confirm="true"></date-picker>
+                    type="date" format="dd/MM/yyyy" confirm="true"></date-picker>
                 </v-flex>
                 <!--  -->
                 <v-flex xs12 sm2>
