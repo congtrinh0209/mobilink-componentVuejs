@@ -2,28 +2,6 @@
 
     <div id="activity_eventsource">
         
-        <v-snackbar :timeout="3000" :top="true" :bottom="false" 
-            :right="true" :left="false" :multi-line="true" 
-            :vertical="false" v-model="snackbarSucc" class="snackbar-success" > 
-            <v-icon flat color="white">check_circle</v-icon> 
-                {{alertMess}}
-            <v-btn flat fab mini color="white" @click.native="snackbarSucc = false">Tắt</v-btn> 
-        </v-snackbar>
-        <v-snackbar :timeout="3000" :top="true" :bottom="false" 
-            :right="true" :left="false" :multi-line="true" 
-            :vertical="false" v-model="snackbarErr" class="snackbar-error" > 
-            <v-icon flat color="white">check_circle</v-icon> 
-                {{alertMess}}
-            <v-btn flat fab mini color="white" @click.native="snackbarErr = false">Tắt</v-btn> 
-        </v-snackbar>
-        
-        <v-dialog class="application theme--light progessLoading" v-model="dialog_loading" persistent max-width="50px">
-            <v-card style="text-align: center;padding-top: 5px;">
-                <v-progress-circular v-bind:size="25" indeterminate color="primary"></v-progress-circular>
-            </v-card>
-                
-        </v-dialog>
-
         <div style="position: relative; overflow: hidden;">
 
             <v-expansion-panel expand class="sub-panel">
@@ -48,41 +26,122 @@
                         <v-card-text class="px-0 py-0 pl-2 pr-1">
                             <v-layout row wrap class="mx-0">
                                 <!-- Phần dialog -->
-                                <v-dialog v-model="dialog_add_eventlink" scrollable persistent max-width="700px">
+                                <v-dialog v-model="dialog_add_eventlink" scrollable persistent min-width="700px" max-width="700px">
                                     <v-card>
-                                        <v-card-title style="background-color: rgb(214, 233, 247)">
+                                        <v-card-title class="py-0" style="background-color: rgb(214, 233, 247)">
                                             <span>Cập nhật cuộc họp nguồn</span>
                                             <v-spacer></v-spacer>
                                             
                                             <div class="menu" style="display: inline-block;">
                                                 <div class="menu__activator">
-                                                    <v-btn icon slot="activator">
+                                                    <v-btn class="px-0" icon slot="activator" @click.native="dialog_add_eventlink= false">
                                                         <v-icon>clear</v-icon>
                                                     </v-btn>
                                                 </div>
                                             </div>
                                         </v-card-title>
 
-                                        <v-card-text>
-                                            <v-flex xs12 sm1>
-                                                <v-subheader class="px-0">Ngày bắt đầu: </v-subheader>
-                                            </v-flex>
-                                            <v-flex xs12 sm2 class="mr-3">
-                                                <date-picker @change="changeDate" class="mt-2" v-model="timeStart" 
-                                                v-bind:not-after="timeStartMax" lang="vi" type="date" format="dd/MM/yyyy"></date-picker>
-                                            </v-flex>
+                                        <v-card-text class="dialog_eventlink">
+                                            <v-layout wrap >
+                                                <div style="width:14%">
+                                                    <v-subheader class="px-0">Ngày bắt đầu: </v-subheader>
+                                                </div>
+                                                <div class="mr-2" style="width:22%">
+                                                    <date-picker @change="changeDate" class="mt-2" v-model="timeStart" placeholder="Từ ngày"
+                                                    v-bind:not-after="timeStartMax" lang="vi" type="date" format="dd/MM/yyyy"></date-picker>
+                                                </div>
 
-                                            <v-flex xs12 sm2>
-                                                <date-picker @change="changeDate" class="mt-2" v-model="timeEnd" 
-                                                v-bind:not-before="timeEndMin" lang="vi" type="date" format="dd/MM/yyyy"></date-picker>
-                                            </v-flex>
+                                                <div class="mr-2" style="width:22%">
+                                                    <date-picker @change="changeDate" class="mt-2" v-model="timeEnd" placeholder="Đến ngày"
+                                                    v-bind:not-before="timeEndMin" lang="vi" type="date" format="dd/MM/yyyy"></date-picker>
+                                                </div>
+                                                <div class="ml-1" style="width:8%">
+                                                    <v-subheader class="px-0">Chủ trì: </v-subheader>
+                                                </div>
+                                                <div class="mt-2" style="width:30%">
+                                                    <v-select class="selectBoder py-0"
+                                                        v-bind:items="managerItems"
+                                                        v-model="manager"
+                                                        return-object
+                                                        clearable
+                                                        item-text="fullName"
+                                                        item-value="employeeId"
+                                                        autocomplete
+                                                        placeholder="Chọn lãnh đạo chủ trì"
+                                                        hide-selected
+                                                        @change="getFilterLeader"
+                                                    >
+                                                        <template slot="item" slot-scope="data">
+                                                            <template>
+                                                                <v-list-tile-content>
+                                                                    <v-list-tile-title v-html="data.item.fullName"></v-list-tile-title>
+                                                                    <v-list-tile-sub-title v-html="data.item.email"></v-list-tile-sub-title>
+                                                                </v-list-tile-content>
+                                                            </template>
+                                                        </template>
+                                                    </v-select>
+                                                </div>
+                                                <v-flex xs12 sm10 class="mt-2">
+                                                    <v-text-field class="pt-0" id="searchInput"
+                                                        placeholder="Tên cuộc họp"
+                                                        single-line
+                                                        hide-details
+                                                        v-model="keySearch"
+                                                    ></v-text-field>
+                                                </v-flex>
+                                                <v-flex xs12 sm2>
+                                                    <v-btn v-on:click.native="advancedSearch" class="px-0 primary" style="height: 30px">
+                                                        Tìm kiếm
+                                                    </v-btn>
+                                                </v-flex>
+                                                <!--  -->
+                                                <v-flex xs12 sm12 class="mt-3">
+                                                    <v-list class="py-0">
+                                                        <v-list-tile v-for="(item,index) in itemActivityEvent" v-bind:key="item.activityId" class="px-0">
+                                                            <v-list-tile-content>
+                                                                <v-list-tile-title>
+                                                                    <v-flex xs12 class="layout wrap">
+
+                                                                        <v-flex xs2 sm2 style="text-align: center">
+                                                                            
+                                                                            <v-btn small outline color="blue-grey" @click.stop="selectEventLink(item, index)" class="px-0 primary" style="height: 30px">
+                                                                                Chọn
+                                                                            </v-btn>
+                                                                        </v-flex>
+
+                                                                        <v-flex xs6 sm5 class="pr-2 mt-2 overFlow">
+                                                                            <a href="javascript:;" :title="item.subject">
+                                                                                {{item.subject}}
+                                                                            </a>
+                                                                        </v-flex>
+                                                                        
+                                                                        <v-flex xs3 sm3 class="pl-2 mt-2 overFlow" :title="item.leaderName">
+                                                                            <span>Chủ trì: {{item.leaderName}}</span>
+                                                                        </v-flex>
+                                                                        
+                                                                        <v-flex xs3 sm2 style="text-align: center" class="mt-2">
+                                                                            <span>{{ parseDateView(new Date(item.startDate))}}</span>
+                                                                        </v-flex>
+
+                                                                    </v-flex>
+                                                                </v-list-tile-title>
+
+                                                            </v-list-tile-content>
+
+                                                            <!-- <v-list-tile-action style="flex-direction: row;min-width: 0px!important"
+                                                            title="Xem kết luận cuộc họp" @click="getListActivitySource(item.eventItem.activityId,index)"
+                                                            >
+                                                                <v-btn icon>
+                                                                    <v-icon>keyboard_arrow_down</v-icon>
+                                                                </v-btn>
+                                                            </v-list-tile-action> -->
+                                                        </v-list-tile>
+                                                    </v-list>
+                                                </v-flex>
+
+                                            </v-layout>
                                         </v-card-text>
 
-                                        <v-card-actions>
-                                            <v-spacer></v-spacer>
-                                            <v-btn class="mr-3" color="primary"  @click.native="dialog_add_eventlink= false">Hủy</v-btn>
-                                            <v-btn color="primary" @click.native="submitAddContact" >Thêm vào liên lạc</v-btn>
-                                        </v-card-actions>
                                     </v-card>
                                 </v-dialog>
                                 <!-- end -->
@@ -100,7 +159,7 @@
 
                                                                 <v-flex xs6 sm6 class="pr-2 subEl">
                                                                     
-                                                                    <a href="javascript:;" :title="item.eventItem.subject" v-on:click="activityDetail(item.eventItem,index)">
+                                                                    <a href="javascript:;" :title="item.eventItem.subject" v-on:click.stop="activityDetail(item.eventItem,index)">
                                                                         {{item.eventItem.subject}}
                                                                     </a>
                                                                 </v-flex>
@@ -116,7 +175,7 @@
                                                                 <v-flex xs3 sm1 style="text-align: center">
                                                                     <v-icon color="red darken-3" title="Xóa" class="delete_icon"
                                                                     v-if="managerPermision(permission_prop)" icon 
-                                                                    @click="deleteActivity(item,index,itemEventLink)">clear</v-icon>
+                                                                    @click.stop="deleteActivity(item.eventItem,index,itemEventLink)">clear</v-icon>
                                                                 </v-flex>
                                                             </v-flex>
                                                         </v-list-tile-title>
@@ -144,22 +203,22 @@
                                                         <template slot="items" scope="props">
                                                             
                                                             <tr v-bind:class="{'active': props.index%2==1}">
-                                                                <td class="text-xs-center py-2" style="width: 5%">{{props.index + 1}}</td>
-                                                                <td class="py-2" style="width: 30%" :title="props.item.subject">
+                                                                <td class="text-xs-center py-3" style="width: 5%">{{props.index + 1}}</td>
+                                                                <td class="py-3" style="width: 35%" :title="props.item.subject">
                                                                     <a href="javascript:;" v-on:click.stop="activityDetail(props.item,props.index)">
                                                                         <span>{{ props.item.subject }}</span>
                                                                     </a>
                                                                     
                                                                 </td>
-                                                                <td class="py-2" style="width: 20%" :title="props.item.hosting ">{{ props.item.hosting }}</td>
-                                                                <td class="text-xs-center py-2" style="width: 12%">{{parseDateView(new Date(props.item.endDate))}}</td>
-                                                                <td class="text-xs-center" style="width: 13%">
-                                                                    <v-chip style="display: inline-block;text-align: center;width:90%" label outline :color="getColor(props.item.state)">
+                                                                <td class="py-3" style="width: 28%" :title="props.item.hosting ">{{ props.item.hosting }}</td>
+                                                                <td class="text-xs-center py-3" style="width: 15%">{{parseDateView(new Date(props.item.endDate))}}</td>
+                                                                <td class="text-xs-center" style="width: 17%">
+                                                                    <v-chip style="display: inline-block;text-align: center;width:80%" label outline :color="getColor(props.item.state)">
                                                                         <span>{{props.item.stateName}}</span>
                                                                     </v-chip>
                                                                     
                                                                 </td>
-                                                                <td class="py-2" style="width: 20%" :title="props.item.resultNote">{{ props.item.resultNote }}</td>
+                                                                
                                                             </tr>
                                                             
                                                         </template>
@@ -206,7 +265,16 @@
         },
         data () {
             return {
+                itemActivityEvent: [],
                 itemEventLink: [],
+                managerItems: [],
+                manager:'',
+                keySearch:'',
+                timeStart: '',
+                timeEnd: '',
+                timeStartMax:'',
+                timeEndMin:'',
+                paramsGet: {},
                 dialog_add_eventlink: false
             }
         },
@@ -220,6 +288,21 @@
             show_add_link: function(){
                 var vm = this;
                 vm.dialog_add_eventlink = true;
+                var date = new Date();
+                vm.timeStart = new Date(date.getFullYear(), date.getMonth(), 1);
+                vm.timeEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+                vm.paramsGet = {
+                    sort:'startDate_Number',
+                    type: 'EVENT',
+                    fromdate: vm.timeStart?vm.parseDateFormat(vm.timeStart):null,
+                    todate: vm.timeEnd?vm.parseDateFormat(vm.timeEnd):null
+                };
+                vm.getActivity(vm.paramsGet);
+                vm.getUsers();
+            },
+            selectEventLink: function(item,index){
+                var vm = this;
+                vm.itemActivityEvent.splice(index, 1);
             },
             /**Load activity detail */
             activityDetail: function(item, index){
@@ -245,6 +328,80 @@
                 }
                 return date
             },
+            parseDateFormat : function(fullDate){
+                var date;
+                if(fullDate){
+                    date = fullDate.getFullYear()+(fullDate.getMonth()+1).toString().padStart(2, '0')+fullDate.getDate().toString().padStart(2, '0');
+                } else {
+                    date = ""
+                }
+                return date
+            },
+            /* Load data activity */
+            getActivity: function(param){
+                /*console.log("run get getActivity");*/
+                var vm = this;
+                vm.activityListItems=[];
+                var configGetActivity = {
+                    params: param,
+                    headers: {
+                        groupId: vm.group_id
+                    }
+                };
+                var url = vm.end_point + 'activities';
+                axios.get(url, configGetActivity).then(function (response) {
+                    var serializable = response.data;
+                    if (serializable.hasOwnProperty('data')) {
+                        for (var key in serializable.data) {
+                            vm.itemActivityEvent.push(serializable.data[key])
+
+                        };
+                        
+                    }else {
+                        
+                    }
+                    console.log(vm)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    
+                });
+            },
+            // 
+            changeDate: function(){
+                var vm = this;
+                vm.keySearch = '';
+                setTimeout(function(){
+                    vm.timeEndMin = vm.timeStart?new Date(vm.timeStart):'';
+                    vm.timeStartMax = vm.timeEnd?new Date(vm.timeEnd):'';
+                    vm.paramsGet = {
+                        sort:'startDate_Number',
+                        type: 'EVENT',
+                        fromdate: vm.timeStart?vm.parseDateFormat(vm.timeStart):null,
+                        todate: vm.timeEnd?vm.parseDateFormat(vm.timeEnd):null,
+                        leader: vm.manager?vm.manager.employeeId:null
+                    };
+                    vm.getActivity(vm.paramsGet);
+                    // vm.callGetActivity()
+                },200)
+                
+            },
+            /**Lọc theo leader */
+            getFilterLeader: function(){
+                var vm = this;
+                vm.keySearch = '';
+                setTimeout(function(){
+                    vm.paramsGet = {
+                        sort:'startDate_Number',
+                        type: 'EVENT',
+                        fromdate: vm.timeStart?vm.parseDateFormat(vm.timeStart):null,
+                        todate: vm.timeEnd?vm.parseDateFormat(vm.timeEnd):null,
+                        leader: vm.manager?vm.manager.employeeId:null
+                    };
+                    vm.getActivity(vm.paramsGet);
+                },200)
+            },
+            // 
             getActivityLink: function(){
                 /*console.log("run get getActivity");*/
                 var vm = this;
@@ -311,6 +468,36 @@
                 }
                 
             },
+            /**get users */
+            getUsers: function(){
+                var vm = this;
+                var paramsEmployees = {
+                    'class': 'employee',
+                };
+                const configEmployees = {
+                    params: paramsEmployees,
+                    headers: {
+                        'groupId': vm.group_id
+                    }
+                };
+                axios.get( vm.end_point + 'users', configEmployees)
+                    .then(function (response) {
+                        var serializable = response.data;
+                        if (serializable.hasOwnProperty('data')) {
+                            for (var key in serializable.data) {
+                                vm.managerItems.push({
+                                    fullName: serializable.data[key].fullName,
+                                    employeeId: serializable.data[key].userId,
+                                    email: serializable.data[key].email
+                                })
+                                
+                            }
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+            },
             /** */
             getColor: function(item){
                 var color;
@@ -361,7 +548,7 @@
 </script>
 
 <style>
-    .subEl {
+    .subEl, .overFlow {
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
@@ -379,13 +566,55 @@
         overflow: hidden;
         text-overflow: ellipsis; 
         white-space: nowrap;
-        padding: 8px 5px!important;
+        padding-left: 5px!important;
+        padding-right: 5px!important;
     }
     #activity_eventsource table{
         table-layout: fixed
     }
-    #activity_eventsource .mx-datepicker{
+    #activity_eventsource table .chip__content{
+        padding: 0px!important
+    }
+    #activity_eventsource .dialog_eventlink .mx-datepicker{
         width: 100%!important
+    }
+    #activity_eventsource table a:hover{
+        color: #1a5eba!important;
+    }
+    .dialog_eventlink{
+        min-height: 300px
+    }
+    .dialog_eventlink .input-group--text-field .input-group__input{
+        padding-left: 3px
+    }
+    .dialog_eventlink .input-group .input-group__input{
+        border: 1px solid #ddd;
+        margin-top: 0px!important;
+        border-radius: 2px!important;
+    }
+    .dialog_eventlink .input-group .input-group__details{
+        display: none
+    }
+    .dialog_eventlink .mx-datepicker{
+        width: 100%!important;
+        min-width: 0px!important;
+    }
+    .dialog_eventlink .input-group--select .input-group__input{
+        border: 1px solid #ddd;
+        border-radius: 2px!important;
+    }
+    .dialog_eventlink .input-group--select .input-group__details{
+        display: none
+    }
+    .dialog_eventlink ul li {
+        border-bottom: 1px dashed #ddd;
+    }
+    .dialog_eventlink ul li .list__tile{
+        padding-left: 0px;
+        padding-right: 0px
+    }
+    .dialog_eventlink .list__tile__title, .dialog_eventlink .list__tile{
+        height: 100%;
     }
 </style>
 

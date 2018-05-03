@@ -43,8 +43,11 @@
                     item-value="employeeId"
                     autocomplete
                     placeholder="Lọc theo lãnh đạo"
+                    hide-selected
                     @change="getFilterLeader"
-                ></v-select>
+                >
+
+                </v-select>
             </v-flex>
 
             <v-flex xs12 sm4 class="pt-3" style="display:none">
@@ -248,8 +251,9 @@
             getManager: function(){
                 /*console.log("run get mamager");*/
                 var vm = this;
+                /* Load data employees */
                 var paramsEmployees = {
-                    active: true
+                    'class': 'employee',
                 };
                 const configEmployees = {
                     params: paramsEmployees,
@@ -257,14 +261,13 @@
                         'groupId': vm.group_id
                     }
                 };
-                axios.get( vm.end_point + 'employees', configEmployees)
+                // 
+                axios.get( vm.end_point + 'users', configEmployees)
                 .then(function (response) {
-                    var serializable = response.data
+                    var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            vm.managerItems.push(
-                                serializable.data[key]
-                            )
+                            vm.managerItems.push(serializable.data[key])
                             
                         }
                     };
@@ -458,7 +461,7 @@
                                 break;
                             }
                         } else if(vm.radioGroup == "leader"){
-                            if(target[key].mappingUser.userId == vm.activityListItems[index].leaderId){
+                            if(target[key].userId == vm.activityListItems[index].leaderId){
                                 vm.mainItems.push(
                                     {
                                         'leader': target[key],
@@ -485,7 +488,7 @@
                                 vm.mainItems[key].activitySourceItems.push([])
                             }
                         } else if(vm.radioGroup == "leader"&&vm.mainItems.length!=0){
-                            if(vm.activityListItems[index].leaderId == vm.mainItems[key].leader.mappingUser.userId){
+                            if(vm.activityListItems[index].leaderId == vm.mainItems[key].leader.userId){
                                 vm.mainItems[key].activityItems.push(vm.activityListItems[index]);
                                 vm.mainItems[key].activitySourceItems.push([])
                             }
