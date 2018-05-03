@@ -24,6 +24,7 @@ import JxMobilinkDocFileAdd from './components/mobilink_docfile_add.vue'
 import JxMobilinkActivityAdd from './components/mobilink_activity_add.vue'
 import JxMobilinkActivitySearch from './components/mobilink_activity_search.vue'
 import JxMobilinkActivityInvitation from './components/mobilink_activity_invitation.vue'
+import JxMobilinkActivityEventSource from './components/mobilink_activity_eventsource.vue'
 import JxMobilinkActivityInvitationTask from './components/mobilink_activity_invitation_task.vue'
 import JxMobilinkActivityContact from './components/mobilink_activity_add_contact.vue'
 import JxMobilinkActivityManager from './components/mobilink_activity_manager.vue'
@@ -95,6 +96,7 @@ function install (Vue) {
   Vue.component(JxMobilinkActivitySearch.name, JxMobilinkActivitySearch)
   Vue.component(JxMobilinkActivityInvitation.name, JxMobilinkActivityInvitation)
   Vue.component(JxMobilinkActivityInvitationTask.name, JxMobilinkActivityInvitationTask)
+  Vue.component(JxMobilinkActivityEventSource.name, JxMobilinkActivityEventSource)
   Vue.component(JxMobilinkActivityManager.name, JxMobilinkActivityManager)
   Vue.component(JxMobilinkActivityContact.name, JxMobilinkActivityContact)
   Vue.component(JxMobilinkLabels.name, JxMobilinkLabels)

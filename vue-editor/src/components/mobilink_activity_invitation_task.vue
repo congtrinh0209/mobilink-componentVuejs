@@ -591,8 +591,8 @@
         methods: {
             initInvitationTask: function(){
                 var vm = this;
-                // vm.userId = 108;
-                vm.userId = themeDisplay.getUserId();
+                vm.userId = 108;
+                // vm.userId = themeDisplay.getUserId();
                 console.log(vm._props);
                 console.log('userId:'+ vm.userId)
                 /** */
@@ -872,11 +872,13 @@
                 if(type == "PUT"){
                     axios.put(urlUpdate, postData, configPutInvitation)
                     .then(function (response) {
-                        vm.show_alert('success','Cập nhật thành công')
+                        // vm.show_alert('success','Cập nhật thành công')
+                        showMessageToastr('success', 'Cập nhật thành công')
                        
                     })
                     .catch(function (error) {
-                        vm.show_alert('error','Cập nhật thất bại',error.response.data);
+                        // vm.show_alert('error','Cập nhật thất bại',error.response.data);
+                        showMessageByAPICode(error.response.status, error.response.data);
                         
                     })
                 } else if(type == "DELETE") {
@@ -885,11 +887,13 @@
                         // items.splice(index,1);
                         setTimeout(function(){
                             vm.initInvitationTask();
-                            vm.show_alert('success','Xóa thành công')
+                            // vm.show_alert('success','Xóa thành công')
+                            showMessageToastr('success', 'Xóa thành công')
                         },1000) ;
                     })
                     .catch(function (error) {
-                        vm.show_alert('error','Xóa thất bại',error.response.data);
+                        // vm.show_alert('error','Xóa thất bại',error.response.data);
+                        showMessageByAPICode(error.response.status, error.response.data);
                         
                     });
                 }
@@ -973,7 +977,8 @@
                         setTimeout(function(){
                             vm.initInvitationTask();
                             vm.dialog_loading = false;
-                            vm.show_alert('success','Giao nhiệm vụ thành công');
+                            // vm.show_alert('success','Giao nhiệm vụ thành công');
+                            showMessageToastr('success', 'Giao nhiệm vụ thành công')
                         },2000) ;
                         vm.valid = false;
                         if(type == 'GROUP'){
@@ -1005,7 +1010,8 @@
                         
                     })
                     .catch(function (error) {
-                        vm.show_alert('error','Giao nhiệm vụ thất bại',error.response.data);
+                        // vm.show_alert('error','Giao nhiệm vụ thất bại',error.response.data);
+                        showMessageByAPICode(error.response.status, error.response.data);
                     })
                 }
                 
@@ -1075,10 +1081,12 @@
                 };
                 axios.put(urlUpdate, dataUpdateInvitation, configPutInvitation)
                 .then(function (response) {
-                    vm.show_alert('success','Cập nhật thành công')
+                    // vm.show_alert('success','Cập nhật thành công')
+                    showMessageToastr('success', 'Cập nhật thành công')
                 })
                 .catch(function (error) {
-                    vm.show_alert('error','Cập nhật thất bại',error.response.data);
+                    // vm.show_alert('error','Cập nhật thất bại',error.response.data);
+                    showMessageByAPICode(error.response.status, error.response.data);
                 })
             },
             /** */
@@ -1148,11 +1156,13 @@
                     if(item == null){
                         setTimeout(function(){
                             vm.getInvitationTask();
-                            vm.show_alert('success','Cập nhật thành công');
+                            // vm.show_alert('success','Cập nhật thành công');
+                            showMessageToastr('success', 'Cập nhật thành công')
                         },1000) ;
 
                     } else{
-                        vm.show_alert('success','Cập nhật thành công');
+                        // vm.show_alert('success','Cập nhật thành công');
+                        showMessageToastr('success', 'Cập nhật thành công')
                         if(typeCheck == 'ready' && subItem.available!=1){
                             subItem.available = 1;
                             item.role.statistic.available+=1;
@@ -1175,7 +1185,8 @@
 
                 })
                 .catch(function (error) {
-                    vm.show_alert('error','Cập nhật thất bại',error.response.data);
+                    // vm.show_alert('error','Cập nhật thất bại',error.response.data);
+                    showMessageByAPICode(error.response.status, error.response.data);
 
                 })
                 
@@ -1202,7 +1213,8 @@
                     setTimeout(function(){
                         vm.getInvitationTask();
                         vm.dialog_loading = false;
-                        vm.show_alert('success','Cập nhật thành công');
+                        // vm.show_alert('success','Cập nhật thành công');
+                        showMessageToastr('success', 'Cập nhật thành công')
                     },1000) ;
                 })
                 .catch(function (error) {
@@ -1210,7 +1222,8 @@
                     setTimeout(function(){
                         vm.getInvitationTask();
                         vm.dialog_loading = false;
-                        vm.show_alert('error','Cập nhật thất bại',error.response.data);
+                        // vm.show_alert('error','Cập nhật thất bại',error.response.data);
+                        showMessageByAPICode(error.response.status, error.response.data);
                     },1000) ;
                 })
             },
@@ -1237,10 +1250,12 @@
                     if(typeCheckManager == true){
                         vm.checkinCount+=1;
                     } else {vm.checkinCount-=1;}
-                    vm.show_alert('success','Cập nhật thành công')
+                    // vm.show_alert('success','Cập nhật thành công')
+                    showMessageToastr('success', 'Cập nhật thành công')
                 })
                 .catch(function (error) {
-                    vm.show_alert('error','Cập nhật thất bại',error.response.data);
+                    // vm.show_alert('error','Cập nhật thất bại',error.response.data);
+                    showMessageByAPICode(error.response.status, error.response.data);
                 })
             },
             show_Add1Task: function(){
@@ -1335,13 +1350,15 @@
                     setTimeout(function(){
                         vm.initInvitationTask();
                         vm.dialog_loading = false;
-                        vm.show_alert('success','Giao nhiệm vụ thành công');
+                        // vm.show_alert('success','Giao nhiệm vụ thành công');
+                        showMessageToastr('success', 'Giao nhiệm vụ thành công')
                     },2000) ;
                     
     
                 })
                 .catch(function (error) {
-                    vm.show_alert('error','Giao nhiệm vụ thất bại',error.response.data);
+                    // vm.show_alert('error','Giao nhiệm vụ thất bại',error.response.data);
+                    showMessageByAPICode(error.response.status, error.response.data);
                     
                 });
                 /*console.log("run add contact invitation")*/
