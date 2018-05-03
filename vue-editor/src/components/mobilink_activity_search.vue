@@ -175,15 +175,18 @@
     </v-slide-y-transition>
 
     <v-slide-x-transition>
-        <div>
+
         <v-data-table
         id = "table_search"
         no-data-text="Không có dữ liệu"
         :headers="headersTable"
         :items="tableListItems"
-        class="elevation-1"
-        hide-actions
-        :pagination="pagination"
+        :pagination.sync="pagination"
+        prev-icon="mdi-menu-left"
+        next-icon="mdi-menu-right"
+        sort-icon="mdi-menu-down"
+        :rows-per-page-text="rppt"
+        :rows-per-page-items="rppi"
         >
             <template slot="items" slot-scope="props">
                 <tr v-bind:class="{'active': props.index%2==1}">
@@ -242,14 +245,15 @@
                 </tr>
             </template>
 
+            <template slot="pageText" slot-scope="props">
+                {{ props.pageStart }} - {{ props.pageStop }} của {{ props.itemsLength }} bản ghi
+            </template>
+
             <v-alert slot="no-results" :value="true" color="error" icon="warning">
-                Không có kết quả phù hợp
+                Không có kết quả phù hợp!
             </v-alert>
         </v-data-table>
-        <div class="text-xs-right pt-2">
-            <v-pagination v-model="pagination.page" :length="pagination.pages"></v-pagination>
-        </div>
-        </div>
+
     </v-slide-x-transition>
 
 </div>
@@ -284,14 +288,7 @@
                 }
             })
         },
-        watch: {
-            pagination: {
-                handler () {
-                    this.getTableList()
-                },
-                deep: true
-            }
-        },
+        
         data () {
             return {
                 timeStart: '',
@@ -314,6 +311,7 @@
                 contact:'',
                 managerItems:[],
                 managerS:'',
+                managerUrlS:'',
                 activityTypeItems:[
                     {itemName: 'Cuộc họp, hội nghị', itemCode: 'EVENT'},
                     {itemName: 'Giao nhiệm vụ', itemCode: 'TASK'},
@@ -338,12 +336,10 @@
                 tableListItems:[],
                 headersTable: [],
                 pagination: {
-                    totalItems: 0,
-                    rowsPerPage: 13,
-                    pages: 3,
-                    page: 1
-                }
-
+                    rowsPerPage: 10
+                },
+                rppt: "Hiển thị",
+                rppi: [10,20,30,{"text":"All","value":-1}]
             }
         },
         methods: {
@@ -618,6 +614,7 @@
                     vm.status = url.has("state")?url.get("state"):'';
                     vm.hostingId = (url.has("hosting")?url.get("hosting"):'')?Number(url.get("hosting")):'';
                     vm.managerS = (url.has("leader")?url.get("leader"):'')?Number(url.get("leader")):'';
+                    vm.managerUrlS = (url.has("manager")?url.get("manager"):'')?Number(url.get("manager")):'';
                     // vm.projectS = (url.has("project")?url.get("project"):'')?Number(url.get("project")):'';
                     vm.activityType = url.has("type")?url.get("type"):'';
                     vm.locationS = (url.has("location")?url.get("location"):'')?Number(url.get("location")):'';
@@ -651,9 +648,7 @@
                 var endPoint = vm.end_point;
                 var paramsTableActivity = {
                     sort:'startDate_Number',
-                    order:true,
-                    // start: vm.pagination.page * 10 - 10,
-                    // end: vm.pagination.page * 10,
+                    order:true
                 };
                 if(vm.keyS){
                     paramsTableActivity.keywords= vm.keyValue;
@@ -663,6 +658,7 @@
                     paramsTableActivity.state = vm.status?vm.status:null;
                     paramsTableActivity.hosting = vm.hostingId?vm.hostingId:null;
                     paramsTableActivity.leader = vm.managerS?vm.managerS:null;
+                    paramsTableActivity.manager = vm.managerUrlS?vm.managerUrlS:null;
                     // paramsTableActivity.project = vm.projectS?vm.projectS:'';
                     paramsTableActivity.type = vm.activityType?vm.activityType:null;
                     paramsTableActivity.isOverdue = vm.isOverdue?vm.isOverdue:null;
@@ -690,8 +686,6 @@
                     if (serializable.hasOwnProperty('data') && Array.isArray(serializable.data)) {
                         vm.tableListItems = serializable.data;
                         vm.tableListTotal = serializable.total;
-                        vm.pagination.totalItems = serializable.total;
-                        // vm.pagination.pages = Math.ceil(vm.pagination.totalItems/vm.pagination.rowsPerPage);
                     }  else {
                         vm.tableListItems = [];
                         vm.tableListTotal = 0;
@@ -731,6 +725,12 @@
                         return item.userId == vm.managerS;
                     })[0].fullName
                 };
+                if(vm.managerUrlS){
+                    var arr = vm.managerItems;
+                    var managerUrlT = arr.filter(function(item) {
+                        return item.userId == vm.managerUrlS;
+                    })[0].fullName
+                };
                 // if(vm.projectS){
                 //     var arr = vm.projectItems;
                 //     var projectT = arr.filter(function(item) {
@@ -749,7 +749,8 @@
                     // 'Trạng thái: ' : stateT,
                     'Đơn vị tổ chức: ' : hostingT,
                     'Địa chỉ: ' : locationT,
-                    'Người chủ trì/ phụ trách: ': managerT,
+                    'Người chủ trì: ': managerT,
+                    'Người phụ trách: ': managerUrlT,
                     // 'Dự án/chương trình: ' : projectT,
                     'Hoạt động: ' :activityTypeText
                     
@@ -879,9 +880,9 @@
     #activitySearch .row-header .input-group .input-group__details{
         display: none
     }
-    /* #activitySearch table tfoot{
+    #activitySearch table tfoot{
         display: none
-    } */
+    }
     #activitySearch .row-header .input-group label{
         top: 0px!important
     }
@@ -965,10 +966,10 @@
             width: 3%!important;
             padding-top: 10px!important;
         }
-        /* 
+
         body #activitySearch .datatable__actions__select,body #activitySearch .datatable__actions__pagination{
             display: none;
-        } */
+        }
         body #activitySearch table.table td div{
             margin-top: 4px;
         }

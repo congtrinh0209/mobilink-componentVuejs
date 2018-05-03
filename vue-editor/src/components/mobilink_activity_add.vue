@@ -734,7 +734,7 @@
                     })
                     /* Load data employees */
                     var paramsEmployees = {
-                        active: true
+                        'class': 'employee',
                     };
                     const configEmployees = {
                         params: paramsEmployees,
@@ -742,15 +742,15 @@
                             'groupId': vm.group_id
                         }
                     };
-                    axios.get( endPoint + 'employees', configEmployees)
+                    // 
+                    axios.get( vm.end_point + 'users', configEmployees)
                     .then(function (response) {
-                        var serializable = response.data
+                        var serializable = response.data;
                         if (serializable.hasOwnProperty('data')) {
                             for (var key in serializable.data) {
-                                // serializable.data[key].fullNameSelect = serializable.data[key].fullName+'-'+serializable.data[key].email;
                                 vm.managerItems.push({
                                     fullName: serializable.data[key].fullName,
-                                    employeeId: serializable.data[key].mappingUser?serializable.data[key].mappingUser.userId:'',
+                                    employeeId: serializable.data[key].userId,
                                     email: serializable.data[key].email
                                 })
                                 
@@ -760,6 +760,25 @@
                     .catch(function (error) {
                         console.log(error)
                     })
+                    // 
+                    // axios.get( endPoint + 'employees', configEmployees)
+                    // .then(function (response) {
+                    //     var serializable = response.data
+                    //     if (serializable.hasOwnProperty('data')) {
+                    //         for (var key in serializable.data) {
+                    //             // serializable.data[key].fullNameSelect = serializable.data[key].fullName+'-'+serializable.data[key].email;
+                    //             vm.managerItems.push({
+                    //                 fullName: serializable.data[key].fullName,
+                    //                 employeeId: serializable.data[key].mappingUser?serializable.data[key].mappingUser.userId:'',
+                    //                 email: serializable.data[key].email
+                    //             })
+                                
+                    //         }
+                    //     }
+                    // })
+                    // .catch(function (error) {
+                    //     console.log(error)
+                    // })
                     
                 /* Get API for EVENTS */
                     if (vm.type_activity == 'events') {

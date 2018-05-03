@@ -26,13 +26,12 @@
 
         <div style="position: relative; overflow: hidden;">
 
-            <!-- Phần cá nhân theo danh bạ -->
             <v-expansion-panel expand class="sub-panel">
                 <v-expansion-panel-content value="true">
                     <div slot="header" class="custome-panel-heading-with-icon pl-0 mr-2">
-                        <div class="">Cuộc họp nguồn/ liên quan</div>
+                        <div class="">Cuộc họp liên quan</div>
 
-                        <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_add_source" 
+                        <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_add_link" 
                         v-if="managerPermision(permission_prop)" grey darken-4>
                             add_circle
                         </v-icon>
@@ -48,8 +47,8 @@
                     <v-card>
                         <v-card-text class="px-0 py-0 pl-2 pr-1">
                             <v-layout row wrap class="mx-0">
-                                <!-- Phần dialog thêm mới liên lạc postInvitation('UserContact')-->
-                                <v-dialog v-model="dialog_add_eventsource" scrollable persistent max-width="700px">
+                                <!-- Phần dialog -->
+                                <v-dialog v-model="dialog_add_eventlink" scrollable persistent max-width="700px">
                                     <v-card>
                                         <v-card-title style="background-color: rgb(214, 233, 247)">
                                             <span>Cập nhật cuộc họp nguồn</span>
@@ -81,7 +80,7 @@
 
                                         <v-card-actions>
                                             <v-spacer></v-spacer>
-                                            <v-btn class="mr-3" color="primary"  @click.native="dialog_add_eventsource= false">Hủy</v-btn>
+                                            <v-btn class="mr-3" color="primary"  @click.native="dialog_add_eventlink= false">Hủy</v-btn>
                                             <v-btn color="primary" @click.native="submitAddContact" >Thêm vào liên lạc</v-btn>
                                         </v-card-actions>
                                     </v-card>
@@ -90,42 +89,86 @@
 
                                 <v-flex xs12 sm12>
                                     <v-card>
-                                        <!-- Phần danh sách cá nhân theo danh bạ -->
+                                        
                                         <v-list class="py-0">
-                                            <v-list-tile v-for="(item, index) in itemEventSource" v-bind:key="item.activityId">
+                                            <v-list-group class="listGroup py-0" v-for="(item,index) in itemEventLink" 
+                                             v-bind:key="item.eventItem.activityId">                                            
+                                                <v-list-tile slot="item" class="px-0">
+                                                    <v-list-tile-content>
+                                                        <v-list-tile-title>
+                                                            <v-flex xs12 class="layout wrap">
+
+                                                                <v-flex xs6 sm6 class="pr-2 subEl">
+                                                                    
+                                                                    <a href="javascript:;" :title="item.eventItem.subject" v-on:click="activityDetail(item.eventItem,index)">
+                                                                        {{item.eventItem.subject}}
+                                                                    </a>
+                                                                </v-flex>
+                                                                
+                                                                <v-flex xs3 sm3 class="pl-2">
+                                                                    <span>Chủ trì: {{item.eventItem.leaderName}}</span>
+                                                                </v-flex>
+                                                                
+                                                                <v-flex xs3 sm2 style="text-align: center">
+                                                                    <span>{{ parseDateView(new Date(item.eventItem.startDate))}}</span>
+                                                                </v-flex>
+
+                                                                <v-flex xs3 sm1 style="text-align: center">
+                                                                    <v-icon color="red darken-3" title="Xóa" class="delete_icon"
+                                                                    v-if="managerPermision(permission_prop)" icon 
+                                                                    @click="deleteActivity(item,index,itemEventLink)">clear</v-icon>
+                                                                </v-flex>
+                                                            </v-flex>
+                                                        </v-list-tile-title>
+
+                                                    </v-list-tile-content>
+
+                                                    <v-list-tile-action style="flex-direction: row;min-width: 0px!important"
+                                                    title="Xem kết luận cuộc họp" @click="getListActivitySource(item.eventItem.activityId,index)"
+                                                    >
+                                                        <v-btn icon>
+                                                            <v-icon>keyboard_arrow_down</v-icon>
+                                                        </v-btn>
+                                                    </v-list-tile-action>
+                                                </v-list-tile>
+
+                                                <!-- end -->
                                                 <v-list-tile-content>
-                                                    <v-list-tile-title>
-                                                        <v-flex xs12 class="layout wrap">
-
-                                                            <v-flex xs6 sm6 class="pr-2 subEl">
-                                                                <v-icon class="mr-2">fa-gg</v-icon>
-                                                                <a href="javascript:;" :title="item.subject" v-on:click="activityDetail(item,index)">
-                                                                    {{item.subject}}
-                                                                </a>
-                                                            </v-flex>
+                                                    <v-data-table id="subTableActivity"
+                                                    hide-headers
+                                                    no-data-text="Không có kết luận"
+                                                    :items="item.activitySourceItems"
+                                                    item-key="activityId"
+                                                    hide-actions
+                                                    >
+                                                        <template slot="items" scope="props">
                                                             
-                                                            <v-flex xs3 sm3 class="pl-2">
-                                                                <span>Chủ trì: {{item.leaderName}}</span>
-                                                            </v-flex>
+                                                            <tr v-bind:class="{'active': props.index%2==1}">
+                                                                <td class="text-xs-center py-2" style="width: 5%">{{props.index + 1}}</td>
+                                                                <td class="py-2" style="width: 30%" :title="props.item.subject">
+                                                                    <a href="javascript:;" v-on:click.stop="activityDetail(props.item,props.index)">
+                                                                        <span>{{ props.item.subject }}</span>
+                                                                    </a>
+                                                                    
+                                                                </td>
+                                                                <td class="py-2" style="width: 20%" :title="props.item.hosting ">{{ props.item.hosting }}</td>
+                                                                <td class="text-xs-center py-2" style="width: 12%">{{parseDateView(new Date(props.item.endDate))}}</td>
+                                                                <td class="text-xs-center" style="width: 13%">
+                                                                    <v-chip style="display: inline-block;text-align: center;width:90%" label outline :color="getColor(props.item.state)">
+                                                                        <span>{{props.item.stateName}}</span>
+                                                                    </v-chip>
+                                                                    
+                                                                </td>
+                                                                <td class="py-2" style="width: 20%" :title="props.item.resultNote">{{ props.item.resultNote }}</td>
+                                                            </tr>
                                                             
-                                                            <v-flex xs3 sm2 style="text-align: center">
-                                                                <span>{{ parseDateView(new Date(item.startDate))}}</span>
-                                                            </v-flex>
-
-                                                            <v-flex xs3 sm1 style="text-align: center">
-                                                                <v-icon color="red darken-3" title="Xóa" class="delete_icon"
-                                                                v-if="managerPermision(permission_prop)" icon 
-                                                                @click="deleteActivity(item,index,itemEventSource)">clear</v-icon>
-                                                            </v-flex>
-                                                        </v-flex>
-                                                    </v-list-tile-title>
-
+                                                        </template>
+                                                    </v-data-table>
+                                                    
                                                 </v-list-tile-content>
-                                            </v-list-tile>
-                                            
+                                            </v-list-group>
                                         </v-list>
-                                        <!-- end -->
-                                        <p v-if="itemEventSource.length == 0" class="mt-3 ml-2">Không có giấy mời</p>
+                                        
                                     </v-card>
                                 </v-flex>
                             </v-layout>
@@ -158,28 +201,25 @@
         created () {
             var vm = this
             vm.$nextTick(function () {
-                vm.initEventSource()
+                vm.initEventLink()
             })
         },
         data () {
             return {
-                itemEventSource: [
-                    {"activityId":1301,"resultNote":"Kết luận thanh tra Ban quản lý dự án","leaderId":101,"leaderName":"Trịnh Công Trình","userId":20156,"userName":"Admin Super","createDate":"2018-02-28T13:42:28.000Z","modifiedDate":"2018-02-28T13:42:28.000Z","activityType":"EVENT","activityCat":"","categoryName":"","projectId":0,"projectName":"","subject":"Nghiệm thu nội bộ TVGS","hostingId":1,"hosting":"","locationId":101,"location":"Tòa nhà Vapa, Tôn Thất Thuyết, Dịch Vọng Hậu, Hà Nội, Việt Nam","geolocation":"","startDate":1523430000000,"endDate":1523430000000,"state":2,"onCalendar":false,"isTemplate":false,"templateNo":"","managerId":1,"managerName":"Trịnh Công Trình","okrArchive":0,"overdue":0,"permission":"","visited":false,"participators":[{"workingUnitId":1,"name":"Mobilink"},{"workingUnitId":101,"name":"TEST"}],"contact":{"contactId":101,"fullname":"Thanh NV","companyName":"FDS","telNo":"0978266524","email":"thanhnv@fds.vn","userMappingId":0}},
-                    {"activityId":1601,"resultNote":"Kết luận thanh tra Ban quản lý dự án","leaderId":102,"leaderName":"Vũ  Đình Dũng","userId":20158,"userName":"Admin Super","createDate":"2018-02-28T18:11:02.000Z","modifiedDate":"2018-02-28T18:11:02.000Z","activityType":"EVENT","activityCat":"EVENT1","categoryName":"Sự kiện 1","projectId":0,"projectName":"","subject":"Báo cáo tuần 11 năm 2018","hostingId":3,"hosting":"Mobilink","locationId":101,"location":"Tòa nhà Vapa, Tôn Thất Thuyết, Dịch Vọng Hậu, Hà Nội, Việt Nam","geolocation":"","startDate":1523430000000,"endDate":1523430000000,"state":3,"onCalendar":true,"isTemplate":false,"templateNo":201,"managerId":1,"managerName":"Nguyễn Văn Thành","okrArchive":0,"overdue":0,"permission":"","visited":false,"participators":[{"workingUnitId":1,"name":"Mobilink"},{"workingUnitId":101,"name":"TEST"}],"contact":{"contactId":101,"fullname":"Thanh NV","companyName":"FDS","telNo":"0978266524","email":"thanhnv@fds.vn","userMappingId":0}}
-                    
-                ],
-                dialog_add_eventsource: false
+                itemEventLink: [],
+                dialog_add_eventlink: false
             }
         },
         
         methods: {
-            initEventSource: function(){
+            initEventLink: function(){
                 var vm = this;
                 console.log(vm._props);
+                vm.getActivityLink()
             },
-            show_add_source: function(){
-                var vm =this;
-                vm.dialog_add_eventsource = true;
+            show_add_link: function(){
+                var vm = this;
+                vm.dialog_add_eventlink = true;
             },
             /**Load activity detail */
             activityDetail: function(item, index){
@@ -205,6 +245,116 @@
                 }
                 return date
             },
+            getActivityLink: function(){
+                /*console.log("run get getActivity");*/
+                var vm = this;
+
+                var paramsGetActivityLink = {
+                    sort:'startDate_Number'
+                    
+                };
+                vm.paramsGet = paramsGetActivityLink;
+                var configGetActivityLink = {
+                    params: vm.paramsGet,
+                    headers: {
+                        groupId: vm.group_id
+                    }
+                };
+                var url = vm.end_point + 'activities/' + vm.class_pk + '/links';
+                axios.get(url, configGetActivityLink).then(function (response) {
+                    var serializable = response.data;
+                    if (serializable.hasOwnProperty('data')) {
+                        for (var key in serializable.data) {
+                            vm.itemEventLink.push({
+                                eventItem: serializable.data[key],
+                                activitySourceItems:[]
+                            })
+
+                        };
+                                                
+                    }
+                    console.log(vm)
+                })
+                .catch(function (error) {
+                    console.log(error);
+                    
+                });
+            },
+            /** get list source group*/
+            getListActivitySource: function(class_pk,index){
+                var vm =this;
+                var paramsGetSource = {
+                    
+                };
+                const configGetSource = {
+                    params: paramsGetSource,
+                    headers: {
+                        'groupId': vm.group_id
+                    }
+                };
+                if(vm.itemEventLink[index].activitySourceItems.length==0){
+                    axios.get( vm.end_point + 'activities/source/'+vm.class_name+'/'+ class_pk, configGetSource)
+                    .then(function (response) {
+                        var serializable = response.data
+                        if (serializable.hasOwnProperty('data')) {
+                            for (var key in serializable.data) {
+                                vm.itemEventLink[index].activitySourceItems.push(
+                                    serializable.data[key]
+                                )
+                            
+                            }
+                        }
+                    })
+                    .catch(function (error) {
+                        console.log(error)
+                    })
+                }
+                
+            },
+            /** */
+            getColor: function(item){
+                var color;
+                switch (item) {
+                    case 1:
+                        color = "red";
+                        break;
+                    case 2:
+                        color = "red";
+                        break;
+                    case 3:
+                        color = "red";
+                        break;
+                    case 4:
+                        color = "blue";
+                        break;
+                    case 5:
+                        color = "blue";
+                        break;
+                    case 6:
+                        color = "teal";
+                        break;
+                    case 7:
+                        color = "amber";
+                        break;
+                    case 8:
+                        color = "grey";
+                        break;
+                    case 9:
+                        color = "pink";
+                        break;
+                    case 10:
+                        color = "cyan";
+                        break;
+                    case 11:
+                        color = "purple";
+                        break;
+                    case 12:
+                        color = "indigo";
+                        break;
+                        
+                }
+                return color
+            },
         }
 
     }
@@ -224,6 +374,18 @@
     }
     #activity_eventsource .delete_icon:hover{
         cursor: pointer;
+    }
+    #activity_eventsource table tr td{
+        overflow: hidden;
+        text-overflow: ellipsis; 
+        white-space: nowrap;
+        padding: 8px 5px!important;
+    }
+    #activity_eventsource table{
+        table-layout: fixed
+    }
+    #activity_eventsource .mx-datepicker{
+        width: 100%!important
     }
 </style>
 
