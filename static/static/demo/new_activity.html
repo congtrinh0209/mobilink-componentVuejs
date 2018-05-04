@@ -24,11 +24,16 @@
         <link href="http://hanoi.fds.vn:8004/o/mentions-web/css/mentions.css" rel="stylesheet" type="text/css">
         <link href="http://hanoi.fds.vn:8004/o/frontend-css-web/main.css">
         <link href="../css/th.css" rel="stylesheet">
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" rel="stylesheet">
       
         <link href="http://hanoi.fds.vn:8004/combo?browserId=other&amp;minifierType=css&amp;languageId=en_US&amp;b=7003&amp;t=1516283649602&amp;/o/product-navigation-simulation-theme-contributor/css/simulation_panel.css">
         <script type="text/javascript" src="../js/vuetify017.js"></script>
         
         <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+        <script type="text/javascript" src="http://hanoi.fds.vn:8004/o/mobilinkvue-theme/js/toastr.min.js"></script>
+        <!-- <script src="http://hanoi.fds.vn:8004/o/mobilinkvue-theme/js/doc-js/mobilink.util.js"></script> -->
+        <script type="text/javascript" src="../js/mobilink_lang.min.js"></script>
+        <script type="text/javascript" src="../js/mobilink.util.js"></script>
         <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
         <script src="http://hanoi.fds.vn:8004/o/mobilink_npm-theme/js/jquery-comments.js?t=131322221"></script>
       
@@ -320,17 +325,16 @@
                                 </v-flex>
                             </v-layout>
 
-                            <div v-if="detailModelSelected.isTemplate != true" >
+                            <div v-if="detailModelSelected.activityType=='EVENT'&& detailModelSelected.isTemplate!=true" >
 
-                                <jx-mobilink-activity-eventsource @delete_activity="remove_activity" @view_detail="detail__all" style="width: 100%;"
-                                
+                                <jx-mobilink-activity-eventlink @delete_activity="remove_activity" @view_detail="detail__all" style="width: 100%;"
                                 :group_id = "groupId"
                                 :class_pk = "class_pk"
                                 class_name ="org.mobilink.activitymgt.model.Activity"
                                 end_point= "http://127.0.0.1:8081/api/"
                                 :permission_prop= "detailModelSelected.permission"
                                 :startend_prop = "detailModelSelected.state"
-                                ></jx-mobilink-activity-eventsource>
+                                ></jx-mobilink-activity-eventlink>
                             </div>
 
                             <div v-if="detailModelSelected.isTemplate != true" >
