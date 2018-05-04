@@ -252,7 +252,14 @@
             permission_prop: null,
             startend_prop:null
         },
-
+        // watch: {
+        //     class_pk(){
+        //         var vm = this;
+        //         console.log(vm);
+        //         vm.initEventLink()
+        //     }
+            
+        // },
         created () {
             var vm = this
             vm.$nextTick(function () {
