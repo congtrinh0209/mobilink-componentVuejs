@@ -90,7 +90,7 @@
                                                     ></v-text-field>
                                                 </v-flex>
                                                 <v-flex xs12 sm2>
-                                                    <v-btn v-on:click.native="advancedSearch" class="px-0 primary" style="height: 30px">
+                                                    <v-btn v-on:click.native="keywordSearch" class="px-0 primary" style="height: 30px">
                                                         Tìm kiếm
                                                     </v-btn>
                                                 </v-flex>
@@ -103,16 +103,15 @@
                                                                     <v-flex xs12 class="layout wrap">
 
                                                                         <v-flex xs2 sm2 style="text-align: center">
-                                                                            
                                                                             <v-btn small outline color="blue-grey" @click.stop="selectEventLink(item, index)" class="px-0 primary" style="height: 30px">
                                                                                 Chọn
                                                                             </v-btn>
                                                                         </v-flex>
 
                                                                         <v-flex xs6 sm5 class="pr-2 mt-2 overFlow">
-                                                                            <a href="javascript:;" :title="item.subject">
+                                                                            <span :title="item.subject">
                                                                                 {{item.subject}}
-                                                                            </a>
+                                                                            </span>
                                                                         </v-flex>
                                                                         
                                                                         <v-flex xs3 sm3 class="pl-2 mt-2 overFlow" :title="item.leaderName">
@@ -128,13 +127,6 @@
 
                                                             </v-list-tile-content>
 
-                                                            <!-- <v-list-tile-action style="flex-direction: row;min-width: 0px!important"
-                                                            title="Xem kết luận cuộc họp" @click="getListActivitySource(item.eventItem.activityId,index)"
-                                                            >
-                                                                <v-btn icon>
-                                                                    <v-icon>keyboard_arrow_down</v-icon>
-                                                                </v-btn>
-                                                            </v-list-tile-action> -->
                                                         </v-list-tile>
                                                     </v-list>
                                                 </v-flex>
@@ -148,7 +140,6 @@
 
                                 <v-flex xs12 sm12>
                                     <v-card>
-                                        
                                         <v-list class="py-0">
                                             <v-list-group class="listGroup py-0" v-for="(item,index) in itemEventLink" 
                                              v-bind:key="item.eventItem.activityId">                                            
@@ -227,7 +218,7 @@
                                                 </v-list-tile-content>
                                             </v-list-group>
                                         </v-list>
-                                        
+                                        <p v-if="itemEventLink.length == 0" class="mt-3 ml-2">Không có cuộc họp liên quan</p>
                                     </v-card>
                                 </v-flex>
                             </v-layout>
@@ -252,7 +243,6 @@
             class_name: null,
             group_id: null,
             end_point: null,
-            working_unit_prop: null,
             permission_prop: null,
             startend_prop:null
         },
@@ -302,7 +292,26 @@
             },
             selectEventLink: function(item,index){
                 var vm = this;
-                vm.itemActivityEvent.splice(index, 1);
+                var paramsAddEventLink = new URLSearchParams();
+                paramsAddEventLink.append('targetId', item.activityId);
+
+                var configAddActivityLink = {
+                    headers: {
+                        groupId: vm.group_id
+                    }
+                };
+                var url = vm.end_point + 'activities/' + vm.class_pk + '/links';
+                axios.post(url, paramsAddEventLink, configAddActivityLink)
+                .then(function (response) {
+                    vm.itemActivityEvent.splice(index, 1);
+                    showMessageToastr('success', 'Cập nhật thành công');
+                    vm.getActivityLink()
+                })
+                .catch(function (error) {
+                    showMessageByAPICode(error.response.status, error.response.data);
+                    console.log(error.response)               
+                });
+                
             },
             /**Load activity detail */
             activityDetail: function(item, index){
@@ -312,36 +321,12 @@
             deleteActivity: function (item, index, items) {
                 this.$emit('delete_activity', item, index, items);
             },
-            /**Check permision */
-            managerPermision: function(permision){
-                if(permision=='manager'||permision=='hoster'||permision=='owner'||permision=='leader'){
-                    return true
-                } else {return false}
-            },
-            /**parse date */
-            parseDateView : function(fullDate){
-                var date;
-                if(fullDate){
-                    date = fullDate.getDate().toString().padStart(2, '0')+'/'+(fullDate.getMonth()+1).toString().padStart(2, '0')+'/'+fullDate.getFullYear();
-                } else {
-                    date = ""
-                }
-                return date
-            },
-            parseDateFormat : function(fullDate){
-                var date;
-                if(fullDate){
-                    date = fullDate.getFullYear()+(fullDate.getMonth()+1).toString().padStart(2, '0')+fullDate.getDate().toString().padStart(2, '0');
-                } else {
-                    date = ""
-                }
-                return date
-            },
+            
             /* Load data activity */
             getActivity: function(param){
                 /*console.log("run get getActivity");*/
                 var vm = this;
-                vm.activityListItems=[];
+                vm.itemActivityEvent=[];
                 var configGetActivity = {
                     params: param,
                     headers: {
@@ -353,11 +338,29 @@
                     var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            vm.itemActivityEvent.push(serializable.data[key])
+                            if (vm.itemEventLink.length!=0){
+                                var itemInv = true;
+                                for (var keys in vm.itemEventLink){
+                                    if (serializable.data[key].activityId == vm.itemEventLink[keys].eventItem.activityId||
+                                        serializable.data[key].activityId == vm.class_pk
+                                    ){
+                                        itemInv = false;
+                                        break;
+                                    }
+                                }
+                                if (itemInv){
+                                    vm.itemActivityEvent.push(serializable.data[key]);
+                                }
+                            } else {
+                                if (serializable.data[key].activityId != vm.class_pk){
+                                    vm.itemActivityEvent.push(serializable.data[key])
+                                }
+                            }
+                            
 
                         };
                         
-                    }else {
+                    } else {
                         
                     }
                     console.log(vm)
@@ -382,7 +385,6 @@
                         leader: vm.manager?vm.manager.employeeId:null
                     };
                     vm.getActivity(vm.paramsGet);
-                    // vm.callGetActivity()
                 },200)
                 
             },
@@ -400,6 +402,19 @@
                     };
                     vm.getActivity(vm.paramsGet);
                 },200)
+            },
+            // 
+            keywordSearch: function(){
+                var vm = this;
+                vm.timeStart = '';
+                vm.timeEnd = '';
+                vm.manager = '';
+                vm.paramsGet = {
+                    sort:'startDate_Number',
+                    type: 'EVENT',
+                    keywords: vm.keySearch
+                };
+                vm.getActivity(vm.paramsGet);
             },
             // 
             getActivityLink: function(){
@@ -497,6 +512,31 @@
                     .catch(function (error) {
                         console.log(error)
                     })
+            },
+            /**Check permision */
+            managerPermision: function(permision){
+                if(permision=='manager'||permision=='hoster'||permision=='owner'||permision=='leader'){
+                    return true
+                } else {return false}
+            },
+            /**parse date */
+            parseDateView : function(fullDate){
+                var date;
+                if(fullDate){
+                    date = fullDate.getDate().toString().padStart(2, '0')+'/'+(fullDate.getMonth()+1).toString().padStart(2, '0')+'/'+fullDate.getFullYear();
+                } else {
+                    date = ""
+                }
+                return date
+            },
+            parseDateFormat : function(fullDate){
+                var date;
+                if(fullDate){
+                    date = fullDate.getFullYear()+(fullDate.getMonth()+1).toString().padStart(2, '0')+fullDate.getDate().toString().padStart(2, '0');
+                } else {
+                    date = ""
+                }
+                return date
             },
             /** */
             getColor: function(item){

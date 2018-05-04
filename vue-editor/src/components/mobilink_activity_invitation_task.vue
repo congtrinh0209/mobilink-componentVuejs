@@ -607,9 +607,9 @@
             },
             /*check state truyền startend*/
             stateTask: function(src){
-                if(src==0){
+                if(src==0 || src==1){
                     return true
-                } else if(src==1||src==2||src==3||src==4) {
+                } else if(src==2||src==3||src==4) {
                     return false
                 }
             },
