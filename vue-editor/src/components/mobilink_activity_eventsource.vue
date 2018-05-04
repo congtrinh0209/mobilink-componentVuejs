@@ -29,7 +29,7 @@
                                 <v-dialog v-model="dialog_add_eventlink" scrollable persistent min-width="700px" max-width="700px">
                                     <v-card>
                                         <v-card-title class="py-0" style="background-color: rgb(214, 233, 247)">
-                                            <span>Cập nhật cuộc họp nguồn</span>
+                                            <span>Cập nhật cuộc họp liên quan</span>
                                             <v-spacer></v-spacer>
                                             
                                             <div class="menu" style="display: inline-block;">
@@ -102,24 +102,24 @@
                                                                 <v-list-tile-title>
                                                                     <v-flex xs12 class="layout wrap">
 
-                                                                        <v-flex xs2 sm2 style="text-align: center">
-                                                                            <v-btn small outline color="blue-grey" @click.stop="selectEventLink(item, index)" class="px-0 primary" style="height: 30px">
+                                                                        <v-flex xs2 sm1 style="text-align: center">
+                                                                            <v-btn small outline color="blue-grey" class="px-0 mx-0 primary" style="height: 30px;min-width:0px"
+                                                                             @click.stop="selectEventLink(item, index)"
+                                                                            >
                                                                                 Chọn
                                                                             </v-btn>
                                                                         </v-flex>
 
-                                                                        <v-flex xs6 sm5 class="pr-2 mt-2 overFlow">
-                                                                            <span :title="item.subject">
-                                                                                {{item.subject}}
-                                                                            </span>
+                                                                        <v-flex xs6 sm5 class="pl-3 mt-2 overFlow">
+                                                                            <span :title="item.subject"> {{item.subject}} </span>
                                                                         </v-flex>
                                                                         
-                                                                        <v-flex xs3 sm3 class="pl-2 mt-2 overFlow" :title="item.leaderName">
-                                                                            <span>Chủ trì: {{item.leaderName}}</span>
+                                                                        <v-flex xs3 sm4 class="pl-2 mt-2 overFlow">
+                                                                            <span :title="item.leaderName">Chủ trì: {{item.leaderName}}</span>
                                                                         </v-flex>
                                                                         
                                                                         <v-flex xs3 sm2 style="text-align: center" class="mt-2">
-                                                                            <span>{{ parseDateView(new Date(item.startDate))}}</span>
+                                                                            <span title="Ngày bắt đầu">{{ parseDateView(new Date(item.startDate))}}</span>
                                                                         </v-flex>
 
                                                                     </v-flex>
@@ -129,6 +129,7 @@
 
                                                         </v-list-tile>
                                                     </v-list>
+                                                    <p v-if="itemActivityEvent.length == 0" class="mt-3 ml-2">Không có cuộc họp</p>
                                                 </v-flex>
 
                                             </v-layout>
@@ -238,7 +239,6 @@
     export default {
         name: COMPONENT_NAME,
         props: {
-            id: null,
             class_pk: null,
             class_name: null,
             group_id: null,
@@ -357,7 +357,6 @@
                                 }
                             }
                             
-
                         };
                         
                     } else {
@@ -610,7 +609,8 @@
         padding-right: 5px!important;
     }
     #activity_eventsource table{
-        table-layout: fixed
+        table-layout: fixed;
+        margin-bottom: 0px
     }
     #activity_eventsource table .chip__content{
         padding: 0px!important
