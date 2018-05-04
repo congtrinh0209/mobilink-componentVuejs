@@ -4,7 +4,7 @@
         
         <div style="position: relative; overflow: hidden;">
 
-            <v-expansion-panel expand class="sub-panel">
+            <v-expansion-panel expand class="sub-panel expansion-blue">
                 <v-expansion-panel-content value="true">
                     <div slot="header" class="custome-panel-heading-with-icon pl-0 mr-2">
                         <div class="">Cuộc họp liên quan</div>
@@ -23,7 +23,7 @@
                     </div>
                     
                     <v-card>
-                        <v-card-text class="px-0 py-0 pl-2 pr-1">
+                        <v-card-text class="px-0 py-0">
                             <v-layout row wrap class="mx-0">
                                 <!-- Phần dialog -->
                                 <v-dialog v-model="dialog_add_eventlink" scrollable persistent min-width="700px" max-width="700px">
@@ -129,6 +129,7 @@
 
                                                         </v-list-tile>
                                                     </v-list>
+                                                    
                                                     <i v-if="itemActivityEvent.length == 0" class="mt-5">Không có cuộc họp nào được tìm thấy</i>
                                                 </v-flex>
 
@@ -167,7 +168,7 @@
                                                                 <v-flex xs3 sm1 style="text-align: center">
                                                                     <v-icon color="red darken-3" title="Xóa" class="delete_icon"
                                                                     v-if="managerPermision(permission_prop)" icon 
-                                                                    @click.stop="deleteActivity(item.eventItem,index,itemEventLink)">clear</v-icon>
+                                                                    @click.stop="deleteEventLink(item.eventItem,index)">clear</v-icon>
                                                                 </v-flex>
                                                             </v-flex>
                                                         </v-list-tile-title>
@@ -187,7 +188,7 @@
                                                 <v-list-tile-content>
                                                     <v-data-table id="subTableActivity"
                                                     hide-headers
-                                                    no-data-text="Không có kết luận"
+                                                    v-if="item.activitySourceItems.length != 0"
                                                     :items="item.activitySourceItems"
                                                     item-key="activityId"
                                                     hide-actions
@@ -215,11 +216,16 @@
                                                             
                                                         </template>
                                                     </v-data-table>
-                                                    
+                                                    <p class="my-2 mx-3" v-if="item.activitySourceItems.length == 0" >
+                                                        <i>Không có kết luận cuộc họp</i>
+                                                    </p>
                                                 </v-list-tile-content>
                                             </v-list-group>
                                         </v-list>
-                                        <i v-if="itemEventLink.length == 0" class="my-3">Không có cuộc họp liên quan</i>
+                                        <p class="my-3" v-if="itemEventLink.length == 0" >
+                                            <i>Không có cuộc họp liên quan</i>
+                                        </p>
+                                        
                                     </v-card>
                                 </v-flex>
                             </v-layout>
@@ -317,9 +323,28 @@
             activityDetail: function(item, index){
                 this.$emit('view_detail', item, index);
             },
-            /**delete activity */
-            deleteActivity: function (item, index, items) {
-                this.$emit('delete_activity', item, index, items);
+            /**delete event links */
+            deleteEventLink: function(item, index){
+                var vm = this; 
+                var paramUpdateLinks = {
+                    
+                };
+                const configUpdateLinks = {
+                    params: paramUpdateLinks,
+                    headers: {
+                        'groupId': vm.group_id
+                    }
+                };
+                var urlUpdate = vm.end_point + "activities/"+ vm.class_pk +"/links/"+ item.activityId;
+                axios.delete(urlUpdate, configUpdateLinks)
+                .then(function (response) {
+                    vm.itemEventLink.splice(index, 1);
+                    showMessageToastr('success', 'Xóa cuộc họp liên quan thành công');
+                })
+                .catch(function (error) {
+                    showMessageByAPICode(error.response.status, error.response.data);
+                    console.log(error.response.status);
+                });
             },
             
             /* Load data activity */
@@ -620,6 +645,9 @@
     }
     #activity_eventsource table a:hover{
         color: #1a5eba!important;
+    }
+    #activity_eventsource .list--group__header--active{
+        background-color: #f6f6f642!important
     }
     .dialog_eventlink{
         min-height: 300px
