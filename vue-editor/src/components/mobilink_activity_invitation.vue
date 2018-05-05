@@ -24,7 +24,7 @@
                 
         </v-dialog>
 
-        <div style="position: relative; overflow: hidden;">
+        <div >
            <v-expansion-panel expand class="header-group expansion-blue">
                 <v-expansion-panel-content value="true">
 

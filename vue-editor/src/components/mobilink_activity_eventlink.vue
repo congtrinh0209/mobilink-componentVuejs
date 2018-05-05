@@ -96,6 +96,7 @@
                                                 </v-flex>
                                                 <!--  -->
                                                 <v-flex xs12 sm12 class="listActivity mt-3" style="text-align: center">
+                                                    <div>
                                                     <v-list class="py-0">
                                                         <v-list-tile v-for="(item,index) in itemActivityEvent" v-bind:key="item.activityId" class="px-0">
                                                             <v-list-tile-content>
@@ -129,8 +130,9 @@
 
                                                         </v-list-tile>
                                                     </v-list>
-                                                    <div class="right pt-2" v-if="itemActivityEvent.length != 0">
-                                                        <v-pagination v-model="pagination.page" :length="pagination.pages"></v-pagination>
+                                                    <div class="text-xs-right pt-2" v-if="itemActivityEvent.length != 0">
+                                                        <v-pagination class="right" v-model="pagination.page" :length="pagination.pages"></v-pagination>
+                                                    </div>
                                                     </div>
                                                     <i v-if="itemActivityEvent.length == 0" class="mt-5">Không có cuộc họp nào được tìm thấy</i>
                                                 </v-flex>
@@ -382,7 +384,24 @@
                     var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-
+                            // if (vm.itemEventLink.length!=0){
+                            //     var itemInv = true;
+                            //     for (var keys in vm.itemEventLink){
+                            //         if (serializable.data[key].activityId == vm.itemEventLink[keys].eventItem.activityId||
+                            //             serializable.data[key].activityId == vm.class_pk
+                            //         ){
+                            //             itemInv = false;
+                            //             break;
+                            //         }
+                            //     }
+                            //     if (itemInv){
+                            //         vm.itemActivityEvent.push(serializable.data[key]);
+                            //     }
+                            // } else {
+                            //     if (serializable.data[key].activityId != vm.class_pk){
+                            //         vm.itemActivityEvent.push(serializable.data[key])
+                            //     }
+                            // }
                             vm.itemActivityEvent.push(serializable.data[key])
                             
                         };
@@ -668,9 +687,9 @@
     .dialog_eventlink .input-group--select .input-group__details{
         display: none
     }
-    .dialog_eventlink .pagination__more {
+    /* .dialog_eventlink .pagination__more {
         display: none!important
-    }
+    } */
     .dialog_eventlink ul li {
         border-bottom: 1px dashed #ddd;
     }
@@ -681,13 +700,22 @@
     .dialog_eventlink .list__tile__title, .dialog_eventlink .list__tile{
         height: 100%;
     }
-    @media only screen and (min-width: 320px) and (max-width: 1025px) {
+    .dialog_eventlink .pagination li{
+        border-bottom: 0;
+    }
+    @media only screen and (min-width: 320px) and (max-width: 1024px) {
         .dialog_eventlink .listActivity .list__tile__title {
             position: static!important
         }
         .dialog_eventlink .listActivity .list__tile__title button{
             position: static!important
         }
+        #activity_eventsource table tr td, .subEl, .overFlow {
+            overflow: visible!important;
+            text-overflow: clip!important; 
+            white-space: normal!important;
+        }
+
     }
 </style>
 

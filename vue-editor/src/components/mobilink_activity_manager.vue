@@ -2,26 +2,26 @@
 
     <div id="activity_manager">
         <v-layout wrap class="navTable px-3 py-2">
-            <v-flex xs12 sm1>
+            <v-flex xs12 sm2 lg1>
                 <v-subheader class="px-0">Từ ngày: </v-subheader>
             </v-flex>
-            <v-flex xs12 sm2 class="mr-3">
+            <v-flex xs12 sm3 lg2 class="mr-3">
                 <date-picker @change="changeDate" class="mt-2" v-model="timeStart" 
                 v-bind:not-after="timeStartMax" lang="vi" type="date" format="dd/MM/yyyy"></date-picker>
             </v-flex>
 
-            <v-flex xs12 sm1>
+            <v-flex xs12 sm2 lg1>
                 <v-subheader class="px-0">Đến ngày: </v-subheader>
             </v-flex>
-            <v-flex xs12 sm2>
+            <v-flex xs12 sm3 lg2>
                 <date-picker @change="changeDate" class="mt-2" v-model="timeEnd" 
                 v-bind:not-before="timeEndMin" lang="vi" type="date" format="dd/MM/yyyy"></date-picker>
             </v-flex>
             
-            <v-flex xs2 sm1 class="ml-3">
+            <v-flex xs2 sm2 lg1>
                 <v-subheader class="px-0">Nhóm theo: </v-subheader>
             </v-flex>
-            <v-flex xs10 sm4 class="pt-2 pl-2">
+            <v-flex xs10 sm6 lg4 class="pt-2 pl-2">
                 <v-radio-group v-model="radioGroup" @change="changeGroup" row class="py-0 groupRadido">
                     <v-radio class="my-0" label="Lãnh đạo" color="secondary"
                         value="leader">
@@ -187,10 +187,10 @@
         data () {
             return {
                 class_name: 'org.mobilink.activitymgt.model.Activity',
-                group_id: 20147,
-                // group_id: themeDisplay.getScopeGroupId(),
-                end_point: 'http://127.0.0.1:8081/api/',
-                // end_point: '/o/v2/mobilink/',
+                // group_id: 20147,
+                group_id: themeDisplay.getScopeGroupId(),
+                // end_point: 'http://127.0.0.1:8081/api/',
+                end_point: '/o/v2/mobilink/',
                 mainItems: [],
                 userId: '',
                 activityListItems:[],
@@ -687,7 +687,14 @@
     #activity_manager .mx-datepicker{
         width: 100%!important
     }
-
+    @media only screen and (min-width: 320px) and (max-width: 1024px) {
+        #activity_manager .header-menu{
+            height: 50px;
+        }
+        #activity_manager .header-menu div{
+            white-space: normal!important;
+        }
+    }
 
 </style>
 

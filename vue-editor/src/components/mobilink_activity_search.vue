@@ -245,7 +245,7 @@
                 Không có kết quả phù hợp!
             </v-alert>
         </v-data-table>
-        <div class="text-xs-right pt-2">
+        <div class="pt-2">
             <v-pagination v-model="pagination.page" :length="pagination.pages"></v-pagination>
         </div>
         </div>
@@ -984,7 +984,7 @@
     body #activitySearch table.table td div{
         margin-top: 4px;
     }
-    @media only screen and (min-width: 320px) and (max-width: 1025px) {
+    @media only screen and (min-width: 320px) and (max-width: 1024px) {
         #activitySearch #table_search tr td{
             overflow: visible!important;
             text-overflow: clip!important; 
