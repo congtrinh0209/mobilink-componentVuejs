@@ -183,7 +183,7 @@
         :items="tableListItems"
         class="elevation-1"
         hide-actions
-        :pagination="pagination"
+        
         >
             <template slot="items" slot-scope="props">
                 <tr v-bind:class="{'active': props.index%2==1}">
@@ -340,8 +340,8 @@
                 headersTable: [],
                 pagination: {
                     totalItems: 0,
-                    rowsPerPage: 13,
-                    pages: 3,
+                    rowsPerPage: 10,
+                    pages: 0,
                     page: 1
                 }
 
@@ -654,8 +654,8 @@
                 var paramsTableActivity = {
                     sort:'startDate_Number',
                     order:true,
-                    // start: vm.pagination.page * 10 - 10,
-                    // end: vm.pagination.page * 10,
+                    start: vm.pagination.page * 10 - 10,
+                    end: vm.pagination.page * 10,
                 };
                 if(vm.keyS){
                     paramsTableActivity.keywords= vm.keyValue;
@@ -693,7 +693,7 @@
                         vm.tableListItems = serializable.data;
                         vm.tableListTotal = serializable.total;
                         vm.pagination.totalItems = serializable.total;
-                        // vm.pagination.pages = Math.ceil(vm.pagination.totalItems/vm.pagination.rowsPerPage);
+                        vm.pagination.pages = Math.ceil(vm.pagination.totalItems/vm.pagination.rowsPerPage);
                     }  else {
                         vm.tableListItems = [];
                         vm.tableListTotal = 0;

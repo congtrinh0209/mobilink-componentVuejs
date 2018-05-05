@@ -187,10 +187,10 @@
         data () {
             return {
                 class_name: 'org.mobilink.activitymgt.model.Activity',
-                // group_id: 20147,
-                group_id: themeDisplay.getScopeGroupId(),
-                // end_point: 'http://127.0.0.1:8081/api/',
-                end_point: '/o/v2/mobilink/',
+                group_id: 20147,
+                // group_id: themeDisplay.getScopeGroupId(),
+                end_point: 'http://127.0.0.1:8081/api/',
+                // end_point: '/o/v2/mobilink/',
                 mainItems: [],
                 userId: '',
                 activityListItems:[],

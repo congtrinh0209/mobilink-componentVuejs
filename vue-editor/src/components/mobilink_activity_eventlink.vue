@@ -2,10 +2,10 @@
 
     <div id="activity_eventsource">
         
-        <div style="position: relative; overflow: hidden;">
+        <div>
 
             <v-expansion-panel expand class="sub-panel expansion-blue">
-                <v-expansion-panel-content value="true">
+                <v-expansion-panel-content value="true" class="event_link_list">
                     <div slot="header" class="custome-panel-heading-with-icon pl-0 mr-2">
                         <div class="">Cuộc họp liên quan</div>
 
@@ -95,7 +95,7 @@
                                                     </v-btn>
                                                 </v-flex>
                                                 <!--  -->
-                                                <v-flex xs12 sm12 class="mt-3" style="text-align: center">
+                                                <v-flex xs12 sm12 class="listActivity mt-3" style="text-align: center">
                                                     <v-list class="py-0">
                                                         <v-list-tile v-for="(item,index) in itemActivityEvent" v-bind:key="item.activityId" class="px-0">
                                                             <v-list-tile-content>
@@ -129,7 +129,9 @@
 
                                                         </v-list-tile>
                                                     </v-list>
-                                                    
+                                                    <div class="right pt-2" v-if="itemActivityEvent.length != 0">
+                                                        <v-pagination v-model="pagination.page" :length="pagination.pages"></v-pagination>
+                                                    </div>
                                                     <i v-if="itemActivityEvent.length == 0" class="mt-5">Không có cuộc họp nào được tìm thấy</i>
                                                 </v-flex>
 
@@ -152,12 +154,12 @@
 
                                                                 <v-flex xs6 sm6 class="pr-2 subEl">
                                                                     
-                                                                    <a href="javascript:;" :title="item.eventItem.subject" v-on:click.stop="activityDetail(item.eventItem,index)">
+                                                                    <a v-bind:href="item.eventItem.activityId" :title="item.eventItem.subject" >
                                                                         {{item.eventItem.subject}}
                                                                     </a>
                                                                 </v-flex>
                                                                 
-                                                                <v-flex xs3 sm3 class="pl-2">
+                                                                <v-flex xs3 sm3 class="pl-2 subEl">
                                                                     <span :title="item.eventItem.leaderName">Chủ trì: {{item.eventItem.leaderName}}</span>
                                                                 </v-flex>
                                                                 
@@ -198,7 +200,7 @@
                                                             <tr v-bind:class="{'active': props.index%2==1}">
                                                                 <td class="text-xs-center py-3" style="width: 5%">{{props.index + 1}}</td>
                                                                 <td class="py-3" style="width: 35%" :title="props.item.subject">
-                                                                    <a href="javascript:;" v-on:click.stop="activityDetail(props.item,props.index)">
+                                                                    <a v-bind:href="props.item.activityId" >
                                                                         <span>{{ props.item.subject }}</span>
                                                                     </a>
                                                                     
@@ -252,14 +254,13 @@
             permission_prop: null,
             startend_prop:null
         },
-        // watch: {
-        //     class_pk(){
-        //         var vm = this;
-        //         console.log(vm);
-        //         vm.initEventLink()
-        //     }
-            
-        // },
+        watch: {
+            "pagination.page": {
+                handler () {
+                    this.getActivity()
+                }
+            }
+        },
         created () {
             var vm = this
             vm.$nextTick(function () {
@@ -278,6 +279,12 @@
                 timeStartMax:'',
                 timeEndMin:'',
                 paramsGet: {},
+                paramsGetActivity:{},
+                pagination: {
+                    rowsPerPage: 10,
+                    pages: 0,
+                    page: 1
+                },
                 dialog_add_eventlink: false
             }
         },
@@ -294,13 +301,8 @@
                 var date = new Date();
                 vm.timeStart = new Date(date.getFullYear(), date.getMonth(), 1);
                 vm.timeEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-                vm.paramsGet = {
-                    sort:'startDate_Number',
-                    type: 'EVENT',
-                    fromdate: vm.timeStart?vm.parseDateFormat(vm.timeStart):null,
-                    todate: vm.timeEnd?vm.parseDateFormat(vm.timeEnd):null
-                };
-                vm.getActivity(vm.paramsGet);
+
+                vm.getActivity();
                 vm.getUsers();
             },
             selectEventLink: function(item,index){
@@ -355,12 +357,22 @@
             },
             
             /* Load data activity */
-            getActivity: function(param){
+            getActivity: function(){
                 /*console.log("run get getActivity");*/
                 var vm = this;
+                vm.paramsGetActivity = {
+                    sort:'startDate_Number',
+                    type: 'EVENT',
+                    start: vm.pagination.page * vm.pagination.rowsPerPage - vm.pagination.rowsPerPage,
+                    end: vm.pagination.page * vm.pagination.rowsPerPage,
+                    fromdate: vm.timeStart?vm.parseDateFormat(vm.timeStart):null,
+                    todate: vm.timeEnd?vm.parseDateFormat(vm.timeEnd):null,
+                    leader: vm.manager?vm.manager.employeeId:null,
+                    keywords: vm.keySearch?vm.keySearch:null
+                };
                 vm.itemActivityEvent=[];
                 var configGetActivity = {
-                    params: param,
+                    params: vm.paramsGetActivity,
                     headers: {
                         groupId: vm.group_id
                     }
@@ -370,26 +382,11 @@
                     var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            if (vm.itemEventLink.length!=0){
-                                var itemInv = true;
-                                for (var keys in vm.itemEventLink){
-                                    if (serializable.data[key].activityId == vm.itemEventLink[keys].eventItem.activityId||
-                                        serializable.data[key].activityId == vm.class_pk
-                                    ){
-                                        itemInv = false;
-                                        break;
-                                    }
-                                }
-                                if (itemInv){
-                                    vm.itemActivityEvent.push(serializable.data[key]);
-                                }
-                            } else {
-                                if (serializable.data[key].activityId != vm.class_pk){
-                                    vm.itemActivityEvent.push(serializable.data[key])
-                                }
-                            }
+
+                            vm.itemActivityEvent.push(serializable.data[key])
                             
                         };
+                        vm.pagination.pages = Math.ceil(serializable.total/vm.pagination.rowsPerPage);
                         
                     } else {
                         
@@ -405,17 +402,12 @@
             changeDate: function(){
                 var vm = this;
                 vm.keySearch = '';
+                vm.pagination.page = 1;
                 setTimeout(function(){
                     vm.timeEndMin = vm.timeStart?new Date(vm.timeStart):'';
                     vm.timeStartMax = vm.timeEnd?new Date(vm.timeEnd):'';
-                    vm.paramsGet = {
-                        sort:'startDate_Number',
-                        type: 'EVENT',
-                        fromdate: vm.timeStart?vm.parseDateFormat(vm.timeStart):null,
-                        todate: vm.timeEnd?vm.parseDateFormat(vm.timeEnd):null,
-                        leader: vm.manager?vm.manager.employeeId:null
-                    };
-                    vm.getActivity(vm.paramsGet);
+                    
+                    vm.getActivity();
                 },200)
                 
             },
@@ -423,29 +415,20 @@
             getFilterLeader: function(){
                 var vm = this;
                 vm.keySearch = '';
+                vm.pagination.page = 1;
                 setTimeout(function(){
-                    vm.paramsGet = {
-                        sort:'startDate_Number',
-                        type: 'EVENT',
-                        fromdate: vm.timeStart?vm.parseDateFormat(vm.timeStart):null,
-                        todate: vm.timeEnd?vm.parseDateFormat(vm.timeEnd):null,
-                        leader: vm.manager?vm.manager.employeeId:null
-                    };
-                    vm.getActivity(vm.paramsGet);
+                    vm.getActivity();
                 },200)
             },
             // 
             keywordSearch: function(){
                 var vm = this;
+                vm.pagination.page = 1;
                 vm.timeStart = '';
                 vm.timeEnd = '';
                 vm.manager = '';
-                vm.paramsGet = {
-                    sort:'startDate_Number',
-                    type: 'EVENT',
-                    keywords: vm.keySearch
-                };
-                vm.getActivity(vm.paramsGet);
+
+                vm.getActivity();
             },
             // 
             getActivityLink: function(){
@@ -633,7 +616,11 @@
     #activity_eventsource .delete_icon:hover{
         cursor: pointer;
     }
+    #activity_eventsource .event_link_list {
+        width: 100%!important
+    }
     #activity_eventsource table tr td{
+        border: 1px solid #ddd !important;
         overflow: hidden;
         text-overflow: ellipsis; 
         white-space: nowrap;
@@ -681,6 +668,9 @@
     .dialog_eventlink .input-group--select .input-group__details{
         display: none
     }
+    .dialog_eventlink .pagination__more {
+        display: none!important
+    }
     .dialog_eventlink ul li {
         border-bottom: 1px dashed #ddd;
     }
@@ -690,6 +680,14 @@
     }
     .dialog_eventlink .list__tile__title, .dialog_eventlink .list__tile{
         height: 100%;
+    }
+    @media only screen and (min-width: 320px) and (max-width: 1025px) {
+        .dialog_eventlink .listActivity .list__tile__title {
+            position: static!important
+        }
+        .dialog_eventlink .listActivity .list__tile__title button{
+            position: static!important
+        }
     }
 </style>
 

@@ -50,6 +50,14 @@
   <div id="activitySearchTest" style="width: calc(100% - 300px)">
     <v-app>
         <jx-mobilink-activity-search v-bind="todo" ref="activitySearchRef"></jx-mobilink-activity-search>
+        <jx-mobilink-activity-eventlink style="width: 100%;"
+          group_id = "1233"
+          class_pk = "1301"
+          class_name ="org.mobilink.activitymgt.model.Activity"
+          end_point= "http://127.0.0.1:8081/api/"
+          permission_prop= "leader"
+          
+          ></jx-mobilink-activity-eventlink>
         <v-button @click= "runSearch">Run serach</v-button>
         <v-button @click= "runSearchOwn">Run serachOwn</v-button>
         <v-button @click= "runSearchAdvaced">Run searchAdvaced</v-button>

@@ -6,7 +6,7 @@
                 
                 <div class="row-header flex-break pl-2">
                     <v-flex style="max-width:50%" class="py-1">
-                        <div :title="textResult" style="overflow: hidden;max-width:90%;
+                        <div :title="textResult" class="textResult" style="overflow: hidden;max-width:90%;
                         text-overflow: ellipsis;
                         white-space: nowrap;">{{textResult}} </div>
                         <span>Có {{tableListTotal}} kết quả</span>
@@ -175,18 +175,14 @@
     </v-slide-y-transition>
 
     <v-slide-x-transition>
-
+        <div>
         <v-data-table
         id = "table_search"
         no-data-text="Không có dữ liệu"
         :headers="headersTable"
         :items="tableListItems"
-        :pagination.sync="pagination"
-        prev-icon="mdi-menu-left"
-        next-icon="mdi-menu-right"
-        sort-icon="mdi-menu-down"
-        :rows-per-page-text="rppt"
-        :rows-per-page-items="rppi"
+        class="elevation-1"
+        hide-actions
         >
             <template slot="items" slot-scope="props">
                 <tr v-bind:class="{'active': props.index%2==1}">
@@ -245,15 +241,14 @@
                 </tr>
             </template>
 
-            <template slot="pageText" slot-scope="props">
-                {{ props.pageStart }} - {{ props.pageStop }} của {{ props.itemsLength }} bản ghi
-            </template>
-
             <v-alert slot="no-results" :value="true" color="error" icon="warning">
                 Không có kết quả phù hợp!
             </v-alert>
         </v-data-table>
-
+        <div class="text-xs-right pt-2">
+            <v-pagination v-model="pagination.page" :length="pagination.pages"></v-pagination>
+        </div>
+        </div>
     </v-slide-x-transition>
 
 </div>
@@ -288,7 +283,13 @@
                 }
             })
         },
-        
+        watch: {
+            "pagination.page": {
+                handler () {
+                    this.getTableList()
+                }
+            }
+        },
         data () {
             return {
                 timeStart: '',
@@ -336,10 +337,11 @@
                 tableListItems:[],
                 headersTable: [],
                 pagination: {
-                    rowsPerPage: 10
-                },
-                rppt: "Hiển thị",
-                rppi: [10,20,30,{"text":"All","value":-1}]
+                    totalItems: 0,
+                    rowsPerPage: 10,
+                    pages: 0,
+                    page: 1
+                }
             }
         },
         methods: {
@@ -648,7 +650,9 @@
                 var endPoint = vm.end_point;
                 var paramsTableActivity = {
                     sort:'startDate_Number',
-                    order:true
+                    order:true,
+                    start: vm.pagination.page * 10 - 10,
+                    end: vm.pagination.page * 10,
                 };
                 if(vm.keyS){
                     paramsTableActivity.keywords= vm.keyValue;
@@ -686,6 +690,8 @@
                     if (serializable.hasOwnProperty('data') && Array.isArray(serializable.data)) {
                         vm.tableListItems = serializable.data;
                         vm.tableListTotal = serializable.total;
+                        vm.pagination.totalItems = serializable.total;
+                        vm.pagination.pages = Math.ceil(vm.pagination.totalItems/vm.pagination.rowsPerPage);
                     }  else {
                         vm.tableListItems = [];
                         vm.tableListTotal = 0;
@@ -770,8 +776,8 @@
             },
             /** search by key */
             search_by_key: function(){
-                
                 var vm = this;
+                vm.pagination.page = 1;
                 vm.keyS = true;
                 vm.keyValue = vm.search;
                 vm.init();
@@ -780,8 +786,8 @@
             },
             /** search by keyOwn */
             search_by_keyOwn: function(){
-                
                 var vm = this;
+                vm.pagination.page = 1;
                 vm.keyS = true;
                 vm.keyValue = vm.keySearch;
                 vm.timeStart='';
@@ -798,6 +804,7 @@
             /** search advanced */
             search_advanced: function(){
                 var vm = this;
+                vm.pagination.page = 1;
                 vm.keyS = false;
                 vm.init();
                 vm.getDataFormS();
@@ -805,6 +812,7 @@
             /** search advancedOwn */
             search_advancedOwn: function(){
                 var vm = this;
+                vm.pagination.page = 1;
                 vm.keyS = false;
                 vm.getTableList();
                 vm.viewAdvancedSearch = false;
@@ -899,6 +907,9 @@
         border: 1px solid #ddd !important;
         color: #000!important
     }
+    #activitySearch #table_search table {
+         table-layout: fixed
+    }
     #activitySearch #table_search table tbody td {
         border: 1px solid #ddd !important;
     }
@@ -912,7 +923,7 @@
 
     /* CSS Hoàn bổ sung */
     body #activitySearch table.table td{
-            padding: 0 5px!important;
+        padding: 0 5px!important;
     }
     #activitySearch table.table td i{
         cursor: pointer;
@@ -928,51 +939,71 @@
         height: 30px;
     }
     body #activitySearch table.table td:nth-child(1) div,body #activitySearch table.table td:nth-child(2) div,body #activitySearch table.table td:nth-child(3) div,body #activitySearch table.table td:nth-child(4) div,body #activitySearch table.table td:nth-child(5) div,body #activitySearch table.table td:nth-child(6) div,body #activitySearch table.table td:nth-child(7) div{
-            overflow: hidden;
-            text-overflow: ellipsis; 
-            white-space: nowrap; 
-            width: 90%!important;
-            position: absolute;
+        overflow: hidden;
+        text-overflow: ellipsis; 
+        white-space: nowrap; 
+        width: 90%!important;
+        
+    }
+    body #activitySearch table.table th:nth-child(1),body #activitySearch table.table td:nth-child(1) {
+        width: 5%!important;
+        
+    }
+    body #activitySearch table.table th:nth-child(2),body #activitySearch table.table td:nth-child(2) {
+        width: 15%!important;
+        
+    }
+    body #activitySearch table.table th:nth-child(3),body #activitySearch table.table td:nth-child(3) {
+        width: 20%!important;
+        
+    }
+    body #activitySearch table.table th:nth-child(4),body #activitySearch table.table td:nth-child(4) {
+        width: 15%!important;
+        
+    }
+    body #activitySearch table.table th:nth-child(5),body #activitySearch table.table td:nth-child(5) {
+        width: 15%!important;
+        
+    }
+    body #activitySearch table.table th:nth-child(6),body #activitySearch table.table td:nth-child(6) {
+        width: 13%!important;
+        
+    }
+    body #activitySearch table.table th:nth-child(7),body #activitySearch table.table td:nth-child(7) {
+        width: 14%!important;
+        
+    }
+    body #activitySearch table.table th:nth-child(8),body #activitySearch table.table td:nth-child(8){
+        width: 3%!important;
+        padding-top: 10px!important;
+    }
+
+    body #activitySearch .datatable__actions__select,body #activitySearch .datatable__actions__pagination{
+        display: none;
+    }
+    body #activitySearch table.table td div{
+        margin-top: 4px;
+    }
+    @media only screen and (min-width: 320px) and (max-width: 1025px) {
+        #activitySearch #table_search tr td{
+            overflow: visible!important;
+            text-overflow: clip!important; 
+            white-space: normal!important;
         }
-        body #activitySearch table.table th:nth-child(1),body #activitySearch table.table td:nth-child(1) {
-            width: 3%!important;
-            position: relative;
+        #activitySearch #table_search tr td div{
+            overflow: visible!important;
+            text-overflow: clip!important; 
+            white-space: normal!important;
         }
-        body #activitySearch table.table th:nth-child(2),body #activitySearch table.table td:nth-child(2) {
-            width: 10%!important;
-            position: relative;
+        #activitySearch #table_search table {
+            table-layout: auto
         }
-        body #activitySearch table.table th:nth-child(3),body #activitySearch table.table td:nth-child(3) {
-            width: 25%!important;
-            position: relative;
-        }
-        body #activitySearch table.table th:nth-child(4),body #activitySearch table.table td:nth-child(4) {
-            width: 19%!important;
-            position: relative;
-        }
-        body #activitySearch table.table th:nth-child(5),body #activitySearch table.table td:nth-child(5) {
-            width: 15%!important;
-            position: relative;
-        }
-        body #activitySearch table.table th:nth-child(6),body #activitySearch table.table td:nth-child(6) {
-            width: 15%!important;
-            position: relative;
-        }
-        body #activitySearch table.table th:nth-child(7),body #activitySearch table.table td:nth-child(7) {
-            width: 10%!important;
-            position: relative;
-        }
-        body #activitySearch table.table th:nth-child(8),body #activitySearch table.table td:nth-child(8){
-            width: 3%!important;
-            padding-top: 10px!important;
+        #activitySearch .textResult {
+            display: none!important;
         }
 
-        body #activitySearch .datatable__actions__select,body #activitySearch .datatable__actions__pagination{
-            display: none;
-        }
-        body #activitySearch table.table td div{
-            margin-top: 4px;
-        }
+    }
+    
 
 </style>
 
