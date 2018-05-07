@@ -22,14 +22,14 @@
             <v-btn flat fab mini color="white" @click.native="snackbarErr = false">Tắt</v-btn> 
         </v-snackbar>
 
-        <div style="position: relative; overflow: hidden;">
+        <div >
             <v-expansion-panel expand class="header-group expansion-blue">
                <v-expansion-panel-content value="true">
                     <div slot="header" class="custome-panel-heading-with-icon">
                         <div class="my-0">
                             <div class="ml-1" style="flex: none">Thành phần: {{availableCount}}/ {{invitationCount}}  sẵn sàng</div>
                                                         
-                            <div style="flex: none;position:absolute;right:0;top:5px" class="ml-2">
+                            <div style="flex: none;" class="info-user ml-2">
                                 <div>
                                     <span v-if="mineInv">
                                         <v-tooltip top :disabled="(userLogin.userNote?false:true)">
@@ -52,10 +52,11 @@
                                         
                                     </span>
 
-                                    <v-icon title="Tải lại" @click.stop="initInvitationTask" class="mx-0 px-0" >refresh</v-icon>
+                                    
                                 </div>
                                 
                             </div>
+                            <v-icon title="Tải lại" @click.stop="initInvitationTask" class="btn-refresh mx-0 px-0" >refresh</v-icon>
                             <!--  -->
                             <v-dialog v-model="dialog_add_note" persistent max-width="500px">
                                 <v-card>
@@ -419,7 +420,7 @@
                                             </v-flex>
                                             
                                             <v-flex xs12 sm12>
-                                                <v-card>
+                                                <v-card class="list-contact">
                                                     <!-- Phần danh sách cá nhân theo danh bạ -->
                                                     <v-list class="py-0">
                                                         <v-list-tile v-for="(item,index) in itemInvContactTask" v-bind:key="item.resourceInvitationId">
@@ -427,7 +428,7 @@
                                                                 <v-list-tile-title>
                                                                     <v-flex xs12 class="layout wrap pl-2">
 
-                                                                        <v-flex class="pt-1" xs6 sm5>
+                                                                        <v-flex class="pt-1" xs12 lg5>
                                                                             <v-list-tile-title>
                                                                                 <toggle-button class="mr-1 mt-1"
                                                                                 :disabled="(managerPermision(permission_prop)==true)?false:true"
@@ -446,7 +447,7 @@
                                                                             </v-list-tile-title>
                                                                         </v-flex>
                                                                         
-                                                                        <v-flex xs6 sm7>
+                                                                        <v-flex xs12 lg7>
                                                                             <div class="right">
                                                                                 <v-tooltip top :disabled="(item.userNote?false:true)">
                                                                                     <v-btn icon slot="activator" :class="managerPermision(permission_prop)==false? pointerEvent : ''"
@@ -591,8 +592,8 @@
         methods: {
             initInvitationTask: function(){
                 var vm = this;
-                vm.userId = 108;
-                // vm.userId = themeDisplay.getUserId();
+                // vm.userId = 108;
+                vm.userId = themeDisplay.getUserId();
                 console.log(vm._props);
                 console.log('userId:'+ vm.userId)
                 /** */
@@ -1391,11 +1392,6 @@
     #activity_invitation_task nav{
         box-shadow: none!important
     }
-    #activity_invitation_task nav .toolbar__content {
-        height: 50px!important;
-        /* background-color: #e1f5fe!important; */
-        /* color: #0091ea!important */
-    }
     #activity_invitation_task button .icon{
         font-size: 18px!important;
     }
@@ -1416,7 +1412,7 @@
         padding-right: 0px!important;
     }
     #activity_invitation_task .expansion-panel__header{
-        height: 50px!important;
+        min-height: 50px!important;
         padding-left: 10px!important;
         padding-right: 10px!important;
     }
@@ -1431,6 +1427,12 @@
 
     #activity_invitation_task .wrap_invitation ul .list--group{
         padding: 0!important;
+    }
+    #activity_invitation_task .wrap_invitation ul .list--group .list__tile{
+        border-bottom: 1px dashed #ddd;
+    } 
+    #activity_invitation_task .list-contact{
+        border-bottom: 1px dashed #ddd;
     }
     #activity_invitation_task .list__tile{
         padding: 0!important;
@@ -1476,6 +1478,18 @@
     }
     .pointerEvent{
         pointer-events: none!important
+    }
+    #activity_invitation_task .info-user {
+        position:absolute;right:0;top:5px;margin-right:20px;
+    }
+    #activity_invitation_task .btn-refresh {
+        position:absolute;right:0;top:15px
+    }
+    @media only screen and (min-width: 320px) and (max-width: 1024px) {
+        #activity_invitation_task .info-user {
+            position: static;
+            margin: 0px!important;
+        }
     }
     
 </style>

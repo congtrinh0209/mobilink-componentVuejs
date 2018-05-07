@@ -33,7 +33,7 @@
                             <div class="ml-2" style="flex: none" v-if="stateCheckin(startend_prop)==true">Giấy mời: {{availableCount}}/ {{invitationCount}} sẵn sàng</div>
                             <div class="ml-2" style="flex: none" v-if="stateCheckin(startend_prop)==false">Giấy mời: {{checkinCount}}/ {{invitationCount}} có mặt</div>
                             
-                            <div style="flex: none;position:absolute;right:0;top:5px" class="ml-2">
+                            <div style="flex: none;" class="info-user ml-2">
                                 <div >
                                     <span v-if="mineInv">
                                         <v-tooltip top :disabled="(userLogin.userNote?false:true)">
@@ -50,11 +50,13 @@
                                             <v-icon style="color: white!important" v-if="userLogin.available == 1" >check</v-icon>
                                             <span style="color: white!important">Sẵn sàng</span>
                                         </v-btn>
+
                                         <v-btn v-if="stateCheckin(startend_prop)==true" small class="text-white mx-1" 
                                         v-on:click.stop="checkAvailable('busy',userLogin,null)" :class="activeClick?disableClick:''" color="error">
                                             <v-icon style="color: white!important" v-if="userLogin.available == 2" >check</v-icon>
                                             <span style="color: white!important">Tôi bận</span>
                                         </v-btn>
+
                                         <v-btn v-if="stateCheckin(startend_prop)==false" small class="text-white mx-1"
                                          v-on:click.stop="checkin(userLogin)" :class="disableClick" color="indigo">
                                             <v-icon style="color: white!important" v-if="userLogin.checkin" >check</v-icon>
@@ -63,11 +65,10 @@
                                         
                                     </span>
 
-                                    <v-icon title="Tải lại" @click.stop="initInvitation" class="mx-0 px-0">refresh</v-icon>
-
                                 </div>
                                 
                             </div>
+                            <v-icon title="Tải lại" @click.stop="initInvitation" class="mx-0 px-0 btn-refresh">refresh</v-icon>
                             <!--  -->
                             <v-dialog v-model="dialog_add_note" persistent max-width="500px">
                                 <v-card>
@@ -94,7 +95,7 @@
 
                     <v-card>
                         <!-- Phần đơn vị/ Nhóm trong cơ quan-->
-                        <v-expansion-panel  expand class="sub-panel">
+                        <v-expansion-panel  expand>
                             <v-expansion-panel-content value="true">
                                 <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0">
                                     <div class="color-subpanel">Đơn vị/ Nhóm trong cơ quan</div>
@@ -144,7 +145,7 @@
                                             
                                             <v-flex xs12 sm12 class="wrap_invitation">
                                                 <v-card>
-                                                    <v-list class="py-0">
+                                                    <v-list class="sub-panel py-0">
                                                         <v-list-group class="py-0" v-for="(item, index) in itemInvGroup" :value="item.active" v-bind:key="item.role.resourceInvitationId">
                                                             <!-- Phần danh sách tổ chức/ đơn vị -->
                                                             <v-list-tile slot="item" class="px-0">
@@ -309,7 +310,7 @@
                         </v-expansion-panel>
                         
                         <!-- Phần cá nhân theo danh bạ -->
-                        <v-expansion-panel expand class="sub-panel">
+                        <v-expansion-panel expand class="sub-panel-contact">
                             <v-expansion-panel-content value="true">
                                 <div slot="header" class="custome-panel-heading-with-icon pl-0 mr-2">
                                     <div class="color-subpanel">Cá nhân/ Tổ chức theo danh bạ</div>
@@ -443,7 +444,7 @@
                                             </v-flex>
                                             
                                             <v-flex xs12 sm12>
-                                                <v-card>
+                                                <v-card class="list-contact">
                                                     <!-- Phần danh sách cá nhân theo danh bạ -->
                                                     <v-list class="py-0">
                                                         <v-list-tile v-for="(item,index) in itemInvContact" v-bind:key="item.resourceInvitationId">
@@ -451,7 +452,7 @@
                                                                 <v-list-tile-title>
                                                                     <v-flex xs12 class="layout wrap">
 
-                                                                        <v-flex xs6 sm5>
+                                                                        <v-flex xs12 lg5>
                                                                             <v-list-tile-title class="pt-2">
                                                                                 <toggle-button class="mr-1 mt-1"
                                                                                 :disabled="(managerPermision(permission_prop)==true)?false:true"
@@ -470,7 +471,7 @@
                                                                             </v-list-tile-title>
                                                                         </v-flex>
                                                                         
-                                                                        <v-flex xs6 sm7>
+                                                                        <v-flex xs12 lg7>
                                                                             <div class="right">
                                                                                 <v-tooltip top :disabled="(item.userNote?false:true)">
                                                                                     <v-btn icon slot="activator" :class="managerPermision(permission_prop)==false? pointerEvent : ''"
@@ -1587,7 +1588,7 @@
     }
 
     #activity_invitation .expansion-panel__header{
-        height: 50px!important;
+        min-height: 50px!important;
         padding-left: 10px!important;
         padding-right: 10px!important;
     }
@@ -1620,6 +1621,12 @@
     #activity_invitation .sub-panel .expansion-panel__header i{
         color: #939393!important
     } */
+    #activity_invitation .wrap_invitation ul .list--group .list__tile{
+        border-bottom: 1px dashed #ddd;
+    } 
+    #activity_invitation .list-contact{
+        border-bottom: 1px dashed #ddd;
+    }
     #activity_invitation .chip {
         max-height: 30px!important
     }
@@ -1659,8 +1666,17 @@
         max-width: 100%!important;
         max-height: 100%!important
     }
-    @media only screen and (min-width: 320px) and (max-width: 1025px) {
-
+    #activity_invitation .info-user {
+        position:absolute;right:0;top:5px;margin-right:20px;
+    }
+    #activity_invitation .btn-refresh {
+        position:absolute;right:0;top:15px
+    }
+    @media only screen and (min-width: 320px) and (max-width: 1024px) {
+        #activity_invitation .info-user {
+            position: static;
+            margin: 0px!important;
+        }
     }
 </style>
 

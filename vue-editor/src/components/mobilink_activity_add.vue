@@ -271,7 +271,7 @@
                 <v-flex xs12 sm2>
                     <v-subheader class="px-0">Nội dung</v-subheader>
                 </v-flex>
-                <v-flex xs12 sm10>
+                <v-flex xs12 sm10 class="mb-4">
                     <v-text-field
                         placeholder="Nội dung "
                         v-model="content"
