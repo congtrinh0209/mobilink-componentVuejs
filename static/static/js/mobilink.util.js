@@ -666,7 +666,7 @@ function showMessageByAPICode (code,response) {
 	} else if(code == 405) {
 		message = "Yêu cầu không được phép xử lý!!!";
 		status = "error";
-	} else if(code == 409) {
+	} else if(code == 409 || code == 412) {
 		mess = response?notify(response):'';
 		message = "Yêu cầu của bạn xử lý thất bại, " + mess;
 		status = "error";
