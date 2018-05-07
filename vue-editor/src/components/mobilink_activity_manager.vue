@@ -18,7 +18,7 @@
                 v-bind:not-before="timeEndMin" lang="vi" type="date" format="dd/MM/yyyy"></date-picker>
             </v-flex>
             
-            <v-flex xs2 sm2 lg1>
+            <v-flex xs2 sm2 lg1 class="breakRow">
                 <v-subheader class="px-0">Nhóm theo: </v-subheader>
             </v-flex>
             <v-flex xs10 sm6 lg4 class="pt-2 pl-2">
@@ -687,12 +687,18 @@
     #activity_manager .mx-datepicker{
         width: 100%!important
     }
+    #activity_manager .breakRow{
+        margin-left: 15px;
+    }
     @media only screen and (min-width: 320px) and (max-width: 1024px) {
         #activity_manager .header-menu{
             height: 50px;
         }
         #activity_manager .header-menu div{
             white-space: normal!important;
+        }
+        #activity_manager .breakRow{
+            margin-left: 0px;
         }
     }
 

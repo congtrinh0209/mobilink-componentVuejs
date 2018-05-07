@@ -1,5 +1,5 @@
 <template>
-<div id="activitySearch">
+<div id="activitySearch" style="margin-top: 6px;">
     <v-slide-x-transition>
         <div>
             <v-layout wrap>
@@ -245,7 +245,7 @@
                 Không có kết quả phù hợp!
             </v-alert>
         </v-data-table>
-        <div class="pt-2">
+        <div class="pt-2 text-xs-right">
             <v-pagination v-model="pagination.page" :length="pagination.pages"></v-pagination>
         </div>
         </div>

@@ -382,31 +382,34 @@
                 var url = vm.end_point + 'activities';
                 axios.get(url, configGetActivity).then(function (response) {
                     var serializable = response.data;
+                    var duplicateCount = 0;
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
-                            // if (vm.itemEventLink.length!=0){
-                            //     var itemInv = true;
-                            //     for (var keys in vm.itemEventLink){
-                            //         if (serializable.data[key].activityId == vm.itemEventLink[keys].eventItem.activityId||
-                            //             serializable.data[key].activityId == vm.class_pk
-                            //         ){
-                            //             itemInv = false;
-                            //             break;
-                            //         }
-                            //     }
-                            //     if (itemInv){
-                            //         vm.itemActivityEvent.push(serializable.data[key]);
-                            //     }
-                            // } else {
-                            //     if (serializable.data[key].activityId != vm.class_pk){
-                            //         vm.itemActivityEvent.push(serializable.data[key])
-                            //     }
-                            // }
-                            vm.itemActivityEvent.push(serializable.data[key])
+                            if (vm.itemEventLink.length!=0){
+                                var itemInv = true;
+                                for (var keys in vm.itemEventLink){
+                                    if (serializable.data[key].activityId == vm.itemEventLink[keys].eventItem.activityId||
+                                        serializable.data[key].activityId == vm.class_pk
+                                    ){
+                                        itemInv = false;
+                                        duplicateCount+=1;
+                                        break;
+                                    }
+                                }
+                                if (itemInv){
+                                    vm.itemActivityEvent.push(serializable.data[key]);
+                                }
+                            } else {
+                                if (serializable.data[key].activityId != vm.class_pk){
+                                    vm.itemActivityEvent.push(serializable.data[key])
+                                } else {
+                                    duplicateCount+=1;
+                                }
+                            }
                             
                         };
-                        vm.pagination.pages = Math.ceil(serializable.total/vm.pagination.rowsPerPage);
-                        
+                        vm.pagination.pages = Math.ceil((serializable.total-duplicateCount)/vm.pagination.rowsPerPage);
+                        console.log(serializable.total-duplicateCount)
                     } else {
                         
                     }
