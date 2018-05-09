@@ -346,8 +346,8 @@
                                                         <template slot="item" slot-scope="data">
                                                             <template>
                                                                 <v-list-tile-content>
-                                                                <v-list-tile-title v-html="data.item.fullName"></v-list-tile-title>
-                                                                <v-list-tile-sub-title v-html="data.item.email"></v-list-tile-sub-title>
+                                                                    <v-list-tile-title v-html="data.item.fullName"></v-list-tile-title>
+                                                                    <v-list-tile-sub-title v-html="data.item.email"></v-list-tile-sub-title>
                                                                 </v-list-tile-content>
                                                             </template>
                                                         </template>

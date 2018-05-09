@@ -253,7 +253,7 @@
                 var vm = this;
                 /* Load data employees */
                 var paramsEmployees = {
-                    'class': 'employee',
+                    'active': true,
                 };
                 const configEmployees = {
                     params: paramsEmployees,
@@ -262,7 +262,7 @@
                     }
                 };
                 // 
-                axios.get( vm.end_point + 'users', configEmployees)
+                axios.get( vm.end_point + 'employees', configEmployees)
                 .then(function (response) {
                     var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
@@ -461,7 +461,7 @@
                                 break;
                             }
                         } else if(vm.radioGroup == "leader"){
-                            if(target[key].userId == vm.activityListItems[index].leaderId){
+                            if(target[key].mappingUser.userId == vm.activityListItems[index].leaderId){
                                 vm.mainItems.push(
                                     {
                                         'leader': target[key],
@@ -488,7 +488,7 @@
                                 vm.mainItems[key].activitySourceItems.push([])
                             }
                         } else if(vm.radioGroup == "leader"&&vm.mainItems.length!=0){
-                            if(vm.activityListItems[index].leaderId == vm.mainItems[key].leader.userId){
+                            if(vm.activityListItems[index].leaderId == vm.mainItems[key].leader.mappingUser.userId){
                                 vm.mainItems[key].activityItems.push(vm.activityListItems[index]);
                                 vm.mainItems[key].activitySourceItems.push([])
                             }
@@ -695,6 +695,11 @@
             height: 50px;
         }
         #activity_manager .header-menu div{
+            white-space: normal!important;
+        }
+        #activity_manager .groupHeader p{
+            overflow: visible!important;
+            text-overflow: clip!important; 
             white-space: normal!important;
         }
         #activity_manager .breakRow{

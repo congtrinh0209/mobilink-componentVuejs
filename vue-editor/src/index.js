@@ -28,6 +28,7 @@ import JxMobilinkActivityEventLink from './components/mobilink_activity_eventlin
 import JxMobilinkActivityInvitationTask from './components/mobilink_activity_invitation_task.vue'
 import JxMobilinkActivityContact from './components/mobilink_activity_add_contact.vue'
 import JxMobilinkActivityManager from './components/mobilink_activity_manager.vue'
+import JxMobilinkChipSelect from './components/multiple_chip_in_select.vue'
 import ToggleButton from './components/mobilink_toggle_button.vue'
 import JxMobilinkLabels from './components/mobilink_labels.vue'
 import JxMobilinkWorkspaceDownload from './components/mobilink_workspace_download.vue'
@@ -98,6 +99,7 @@ function install (Vue) {
   Vue.component(JxMobilinkActivityInvitationTask.name, JxMobilinkActivityInvitationTask)
   Vue.component(JxMobilinkActivityEventLink.name, JxMobilinkActivityEventLink)
   Vue.component(JxMobilinkActivityManager.name, JxMobilinkActivityManager)
+  Vue.component(JxMobilinkChipSelect.name, JxMobilinkChipSelect)
   Vue.component(JxMobilinkActivityContact.name, JxMobilinkActivityContact)
   Vue.component(JxMobilinkLabels.name, JxMobilinkLabels)
   Vue.component(JxMobilinkWorkspaceDownload.name, JxMobilinkWorkspaceDownload)
