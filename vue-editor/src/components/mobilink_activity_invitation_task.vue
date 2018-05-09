@@ -104,7 +104,7 @@
                                 <v-card class="">
                                     <v-card-text class="px-0 py-0">
                                         <v-layout row wrap class="mx-0">
-                                            <v-flex class="mb-3 layout wrap pl-2" v-if="showAdd1">
+                                            <v-flex class="layout wrap elInv pl-1 mb-3" v-if="showAdd1">
                                                 <v-flex xs12 sm8>
                                                     <v-select class="selectBoder pt-3"
                                                     placeholder="Chọn đơn vị/nhóm"
@@ -139,7 +139,7 @@
                                                             <v-list-tile slot="item" class="px-0">
                                                                 <v-list-tile-content class="px-0">
                                                                     <v-flex xs12 class="layout wrap pl-2 pr-1" style="width: 100%!important">
-                                                                        <v-flex xs6 sm8 class="pt-2">
+                                                                        <v-flex xs6 sm7 lg8 class="pt-2">
                                                                             <v-list-tile-title class="item_group">
                                                                                 <v-tooltip top>
                                                                                     <span slot="activator">{{ item.role.fullName }}</span>
@@ -148,7 +148,7 @@
                                                                                 <!-- {{ item.role.fullName }} -->
                                                                             </v-list-tile-title>
                                                                         </v-flex>
-                                                                        <v-flex xs6 sm4>
+                                                                        <v-flex xs6 sm5 lg4>
                                                                             <div class="right">
                                                                                 <v-chip label outline color="primary" class="mr-2 mt-2">
                                                                                     {{item.role.statistic.available}}/{{item.role.statistic.invitation}}
@@ -172,7 +172,7 @@
 
                                                             <!-- Phần thêm cá nhân trong tổ chức/ đơn vị -->
                                                             <div v-if="item.role.invitationType == 0 && item.user_leader&&stateTask(startend_prop)"
-                                                             class="layout wrap mx-0 mb-2 pl-2 pr-1">
+                                                             class="layout wrap elInv mx-0 mb-2 pl-1">
                                                                 <toggle-button class="mr-1 mt-4"
                                                                 
                                                                 v-model="presenterAddUserUnit"
@@ -213,7 +213,7 @@
                                                                 <v-list-tile-content class="mt-2">
                                                                     <v-flex xs12 class="layout wrap pl-2 pr-1" style="width: 100%!important">
                                                                         
-                                                                        <v-flex class="pt-2">
+                                                                        <v-flex class="pt-2" xs12 lg5>
                                                                             <v-list-tile-title>
                                                                                 <toggle-button class="mr-1 mt-1" 
                                                                                 @change="updatePresenterUserGroupTask($event,subItem.resourceInvitationId,item)"
@@ -232,7 +232,7 @@
                                                                             </v-list-tile-title>
                                                                         </v-flex>
 
-                                                                        <v-flex>
+                                                                        <v-flex xs12 lg7>
                                                                             <div class="right">
                                                                                 <v-tooltip top :disabled="(subItem.userNote?false:true)">
                                                                                     <v-btn icon slot="activator" :class="managerPermision(permission_prop)==false? pointerEvent : ''"
@@ -286,7 +286,7 @@
                         
 
                         <!-- Phần cá nhân theo danh bạ -->
-                        <v-expansion-panel expand class="sub-panel">
+                        <v-expansion-panel expand class="sub-panel-contact">
                             <v-expansion-panel-content value="true">
                                 <div slot="header" class="custome-panel-heading-with-icon pl-0 mr-2">
                                     <div class="color-subpanel">Cá nhân/ Tổ chức theo danh bạ</div>
@@ -305,7 +305,7 @@
                                 <v-card class="">
                                     <v-card-text class="px-0 py-0">
                                         <v-layout row wrap class="mx-0">
-                                            <v-flex class="layout wrap pl-2" v-if="showAdd2">
+                                            <v-flex class="layout wrap elInv pl-1 " v-if="showAdd2">
                                                 <v-flex xs12 sm8>
                                                     <v-select class="selectBoder pt-3" id="selectContact"
                                                     placeholder="Cá nhân/ tổ chức theo danh bạ"
@@ -1428,18 +1428,41 @@
     #activity_invitation_task .wrap_invitation ul .list--group{
         padding: 0!important;
     }
+    #activity_invitation_task .wrap_invitation ul{
+        position: static!important;
+        height: auto!important;
+    }
+    #activity_invitation_task .wrap_invitation li{
+        position: static!important;
+        height: auto!important;
+    }
+    #activity_invitation_task .list__tile{
+        padding: 0!important;
+        height: auto!important;
+    }
+    #activity_invitation_task .list__tile__title{
+        height: auto!important;
+    }
+    #activity_invitation_task .list__tile__content{
+        overflow: visible!important;
+        height: auto!important;
+    }
     #activity_invitation_task .wrap_invitation ul .list--group .list__tile{
         border-bottom: 1px dashed #ddd;
     } 
-    #activity_invitation_task .list-contact{
+    #activity_invitation_task .list-contact li{
         border-bottom: 1px dashed #ddd;
     }
     #activity_invitation_task .list__tile{
         padding: 0!important;
     }
-    #activity_invitation_task .list__tile__title{
 
-        height: 100%!important;
+    #activity_invitation_task .sub-panel-contact .card,#activity_invitation_task .sub-panel-contact .list__tile,
+    #activity_invitation_task .sub-panel-contact .list__tile__title,#activity_invitation_task .wrap_invitation .card{
+        position: static!important;
+    }
+    #activity_invitation_task .sub-panel .list__tile,#activity_invitation_task .sub-panel .list__tile__title{
+        position: static!important;
     }
     #activity_invitation_task .list__tile__content{
         overflow: visible!important;
@@ -1489,6 +1512,17 @@
         #activity_invitation_task .info-user {
             position: static;
             margin: 0px!important;
+        }
+        #activity_invitation_task .elInv{
+            padding-left: 0px!important;
+        }
+        #activity_invitation_task .list__tile__title .tooltip {
+            white-space: normal!important;
+        }
+        #activity_invitation_task .list__tile__title {
+            overflow: visible!important;
+            text-overflow: clip!important; 
+            white-space: normal!important;
         }
     }
     

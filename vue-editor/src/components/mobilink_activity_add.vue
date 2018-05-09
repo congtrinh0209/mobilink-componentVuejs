@@ -63,6 +63,7 @@
                         return-object
                         hide-selected
                         clearable
+                        
                     >
 
                     </v-select>
@@ -112,7 +113,7 @@
                 
                 <!--  -->
                 <v-flex xs12 sm2>
-                    <v-subheader class="px-0" >Lĩnh vực </v-subheader>
+                    <v-subheader class="px-0" >Lĩnh vực *</v-subheader>
                 </v-flex>
                 <v-flex xs12 sm10>
                     <v-select
@@ -125,6 +126,8 @@
                         return-object
                         hide-selected
                         clearable
+                        :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
+                        required
                     ></v-select>
                 </v-flex>
 
@@ -1170,10 +1173,12 @@
                     )
                     .then(function (response) {
                         vm.dataForm = response.data;
+                        showMessageToastr('success', 'Thêm mới cuộc họp thành công');
                         vm.$emit('call-back-add', vm.dataForm);
                     })
                     .catch(function (error) {
-                        console.log(error)
+                        showMessageByAPICode(error.response.status, error.response.data);
+                        console.log(error.response)  
                     })
                 }
                 
@@ -1212,10 +1217,12 @@
                     )
                     .then(function (response) {
                         vm.dataForm = response.data;
+                        showMessageToastr('success', 'Thêm mới nhiệm vụ thành công');
                         vm.$emit('call-back-add', vm.dataForm);
                     })
                     .catch(function (error) {
-                        console.log(error)
+                        showMessageByAPICode(error.response.status, error.response.data);
+                        console.log(error.response) 
                     })
                 }
                 
@@ -1254,10 +1261,12 @@
                     )
                     .then(function (response) {
                         vm.dataForm = response.data;
+                        showMessageToastr('success', 'Thêm mới kế hoạch thành công');
                         vm.$emit('call-back-add', vm.dataForm);
                     })
                     .catch(function (error) {
-                        console.log(error)
+                        showMessageByAPICode(error.response.status, error.response.data);
+                        console.log(error.response) 
                     })
                 }
                 
@@ -1288,10 +1297,12 @@
                     )
                     .then(function (response) {
                         vm.dataForm = response.data;
+                        showMessageToastr('success', 'Thêm mới yêu cầu thành công');
                         vm.$emit('call-back-add', vm.dataForm);
                     })
                     .catch(function (error) {
-                        console.log(error)
+                        showMessageByAPICode(error.response.status, error.response.data);
+                        console.log(error.response) 
                     })
                 }
                 
@@ -1327,10 +1338,12 @@
                     )
                     .then(function (response) {
                         vm.dataForm = response.data;
+                        showMessageToastr('success', 'Thêm mới đề xuất, kiến nghị thành công');
                         vm.$emit('call-back-add', vm.dataForm);
                     })
                     .catch(function (error) {
-                        console.log(error)
+                        showMessageByAPICode(error.response.status, error.response.data);
+                        console.log(error.response) 
                     })
                 }
                 

@@ -700,8 +700,15 @@
         padding-left: 0px;
         padding-right: 0px
     }
-    .dialog_eventlink .list__tile__title, .dialog_eventlink .list__tile{
-        height: 100%;
+    .dialog_eventlink .list__tile__title, .dialog_eventlink .list__tile,.dialog_eventlink .list__tile__content{
+        height: auto!important;
+        position: static!important;
+    }
+    .dialog_eventlink .listActivity .list__tile__title .btn__content{
+        height: auto!important
+    }
+    .dialog_eventlink .listActivity .list__tile__title .btn__content:before{
+        height: auto!important
     }
     .dialog_eventlink .pagination li{
         border-bottom: 0;
@@ -717,6 +724,9 @@
             overflow: visible!important;
             text-overflow: clip!important; 
             white-space: normal!important;
+        }
+        #activity_eventsource .list__tile .list__tile__content .list__tile__title{
+            height: auto!important;
         }
 
     }

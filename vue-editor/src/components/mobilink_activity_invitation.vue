@@ -114,8 +114,8 @@
                                 
                                 <v-card class="">
                                     <v-card-text class="px-0 py-0">
-                                        <v-layout row wrap class="mx-0">
-                                            <v-flex class="mb-3 pl-2 layout wrap" v-if="showAdd1">
+                                        <v-layout wrap class="mx-0">
+                                            <v-flex class="mb-3 pl-1 layout wrap elInv" v-if="showAdd1">
                                                 <v-flex xs12 sm8>
                                                     <v-select class="selectBoder pt-3"
                                                     placeholder="Chọn đơn vị/nhóm"
@@ -150,8 +150,8 @@
                                                             <!-- Phần danh sách tổ chức/ đơn vị -->
                                                             <v-list-tile slot="item" class="px-0">
                                                                 <v-list-tile-content class="px-0">
-                                                                    <v-flex xs12 class="layout wrap pl-2 pr-1" style="width: 100%!important">
-                                                                        <v-flex xs6 sm8 class="pt-2">
+                                                                    <v-flex xs12 class="layout wrap pl-2 pr-1" style="overflow: visible;width: 100%!important;border-bottom: 1px solid #ddd;">
+                                                                        <v-flex xs6 sm7 lg8 class="pt-2">
                                                                             <v-list-tile-title class="item_group">
                                                                                 <v-tooltip top>
                                                                                     <span slot="activator">{{ item.role.fullName }}</span>
@@ -160,7 +160,7 @@
                                                                                 <!-- {{ item.role.fullName }} -->
                                                                             </v-list-tile-title>
                                                                         </v-flex>
-                                                                        <v-flex xs6 sm4>
+                                                                        <v-flex xs6 sm5 lg4>
                                                                             <div class="right">
                                                                                 <v-chip v-if="stateEvent(startend_prop)==true" label outline color="primary" class="mr-2 mt-2">
                                                                                     {{item.role.statistic.available}}/{{item.role.statistic.invitation}}
@@ -178,16 +178,15 @@
                                                                         </v-flex>
                                                                         
                                                                     </v-flex>
-                                                                    <v-divider xs12 class="my-0"></v-divider>
+                                                                    
                                                                     
                                                                 </v-list-tile-content>
                                                                 
                                                             </v-list-tile>
-                                                            
                                                             <!-- end -->
 
                                                             <!-- Phần thêm cá nhân trong tổ chức/ đơn vị -->
-                                                            <div v-if="item.role.invitationType == 0 && item.leader&&stateEvent(startend_prop)" class="layout wrap mx-0 mb-2 pl-2 pr-1">
+                                                            <div v-if="item.role.invitationType == 0 && item.leader&&stateEvent(startend_prop)" class="layout wrap elInv mx-0 mb-2 pl-1">
                                                                 <toggle-button class="mr-1 mt-4"
                                                                 
                                                                 v-model="presenterAddUserUnit"
@@ -226,9 +225,9 @@
                                                             <!-- Phần danh sách cá nhân trong tổ chức/ đơn vị -->
                                                             <v-list-tile v-for="(subItem, index) in item.items" v-bind:key="subItem.resourceInvitationId">
                                                                 <v-list-tile-content class="mt-2">
-                                                                    <v-flex xs12 class="layout wrap pl-2 pr-1" style="width: 100%!important">
+                                                                    <v-flex xs12 class="layout wrap pl-2 pr-1" style="overflow: visible;width: 100%!important">
                                                                         
-                                                                        <v-flex>
+                                                                        <v-flex xs12 lg5>
                                                                             <v-list-tile-title class="pt-2">
                                                                                 <toggle-button class="mr-1 mt-1" 
                                                                                 @change="updatePresenterUserGroup($event,subItem.resourceInvitationId,item)"
@@ -247,7 +246,7 @@
                                                                             </v-list-tile-title>
                                                                         </v-flex>
 
-                                                                        <v-flex class="">
+                                                                        <v-flex xs12 lg7>
                                                                             <div class="right">
                                                                                 <v-tooltip top :disabled="(subItem.userNote?false:true)">
                                                                                     <v-btn icon slot="activator" :class="managerPermision(permission_prop)==false? pointerEvent : ''"
@@ -327,9 +326,9 @@
                                 </div>
                                 
                                 <v-card>
-                                    <v-card-text class="px-0 py-0 pl-2 pr-1">
-                                        <v-layout row wrap class="mx-0">
-                                            <v-flex class="layout wrap" v-if="showAdd2">
+                                    <v-card-text class="px-0 py-0 ">
+                                        <v-layout wrap class="mx-0">
+                                            <v-flex class="layout wrap elInv pl-1" v-if="showAdd2">
                                                 <v-flex xs12 sm8>
                                                     <v-select class="selectBoder pt-3" id="selectContact"
                                                     placeholder="Cá nhân/ tổ chức theo danh bạ"
@@ -444,7 +443,7 @@
                                             </v-flex>
                                             
                                             <v-flex xs12 sm12>
-                                                <v-card class="list-contact">
+                                                <v-card class="list-contact pl-2 pr-1">
                                                     <!-- Phần danh sách cá nhân theo danh bạ -->
                                                     <v-list class="py-0">
                                                         <v-list-tile v-for="(item,index) in itemInvContact" v-bind:key="item.resourceInvitationId">
@@ -1599,14 +1598,23 @@
     #activity_invitation .wrap_invitation ul .list--group{
         padding: 0!important;
     }
+    #activity_invitation .wrap_invitation ul{
+        position: static!important;
+    }
+    #activity_invitation .wrap_invitation li{
+        position: static!important;
+        height: auto!important;
+    }
     #activity_invitation .list__tile{
         padding: 0!important;
+        height: auto!important;
     }
     #activity_invitation .list__tile__title{
-        height: 100%!important;
+        height: auto!important;
     }
     #activity_invitation .list__tile__content{
         overflow: visible!important;
+        height: auto!important;
     }
     #activity_invitation .item_group:hover{
         color: blue;
@@ -1624,7 +1632,7 @@
     #activity_invitation .wrap_invitation ul .list--group .list__tile{
         border-bottom: 1px dashed #ddd;
     } 
-    #activity_invitation .list-contact{
+    #activity_invitation .list-contact li{
         border-bottom: 1px dashed #ddd;
     }
     #activity_invitation .chip {
@@ -1672,10 +1680,28 @@
     #activity_invitation .btn-refresh {
         position:absolute;right:0;top:15px
     }
+    #activity_invitation .sub-panel-contact .card,#activity_invitation .sub-panel-contact .list__tile,
+    #activity_invitation .sub-panel-contact .list__tile__title,#activity_invitation .wrap_invitation .card{
+        position: static!important;
+    }
+    #activity_invitation .sub-panel .list__tile,#activity_invitation .sub-panel .list__tile__title{
+        position: static!important;
+    }
     @media only screen and (min-width: 320px) and (max-width: 1024px) {
         #activity_invitation .info-user {
             position: static;
             margin: 0px!important;
+        }
+        #activity_invitation .elInv{
+            padding-left: 0px!important;
+        }
+        #activity_invitation .list__tile__title .tooltip {
+            white-space: normal!important;
+        }
+        #activity_invitation .list__tile__title {
+            overflow: visible!important;
+            text-overflow: clip!important; 
+            white-space: normal!important;
         }
     }
 </style>
