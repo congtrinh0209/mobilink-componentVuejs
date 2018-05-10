@@ -76,26 +76,26 @@
         methods: {
             keyupDelete: function(event){
                 var vm = this;
-                console.log(event);
-                console.log(vm);
+                // console.log(event);
+                // console.log(vm);
                 if(vm.resourceTag.length<vm.currentResourceTag.length){
                     var tagFilter = {};
-                    for (var key in resourceTag) {
+                    for (var key in vm.currentResourceTag) {
                         
                         var itemTag = true;
-                        for(var keys in vm.currentResourceTag){
-                            if(vm.currentResourceTag[keys].resourceTagId == vm.resourceTag[key].resourceTagId){
+                        for(var keys in vm.resourceTag){
+                            if(vm.currentResourceTag[key].resourceTagId == vm.resourceTag[keys].resourceTagId){
                                 itemTag = false;
                                 break;
                             }
                         }
                         if(itemTag){
-                            tagFilter = vm.currentResourceTag[keys]
+                            tagFilter = vm.currentResourceTag[key]
                         }
  
                     }
-                    console.log(tagFilter)
-                    // vm.deleteRessourceTag(tagId)
+                    // console.log(tagFilter);
+                    vm.deleteRessourceTag(tagFilter.resourceTagId)
                 }
 
             },
@@ -185,10 +185,10 @@
             searchTag: function(event){
                 var vm = this;
                 setTimeout(function(){
-                    console.log(event.length+'--'+vm.currentSeclected)
+                    // console.log(event.length+'--'+vm.currentSeclected)
                     if(event.length>vm.currentSeclected){
-                        console.log("Event Input Select");
-                        console.log(event);
+                        // console.log("Event Input Select");
+                        // console.log(event);
                         var tagAdd = event[event.length-1];
                         if(typeof tagAdd == 'object'){
                             tagAdd = tagAdd.tag
