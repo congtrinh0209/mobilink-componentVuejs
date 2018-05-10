@@ -900,6 +900,7 @@
             getUserContact: function(){
                 /*console.log("getUserContact");*/
                 var vm = this;
+                vm.contactItems=[];
                 var paramsGetUserContact = {
                     'full' : 'guest',
                     'resource': 'invitation',

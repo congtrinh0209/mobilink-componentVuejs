@@ -809,6 +809,7 @@
             /**get contact */
             getUserContact: function(){
                 var vm = this;
+                vm.contactItemsTask=[];
                 var paramsGetUserContact = {
                     'full' : 'guest',
                     'resource': 'invitation',
