@@ -810,41 +810,27 @@
             getUserContact: function(){
                 var vm = this;
                 var paramsGetUserContact = {
-                    
+                    'full' : 'guest',
+                    'resource': 'invitation',
+                    'sort': 'fullName'
                 };
-                const configGetWorkingUnit = {
+                const configGetUserContact = {
                     params: paramsGetUserContact,
                     headers: {
                         'groupId': vm.group_id
                     }
                 };
-                axios.get( vm.end_point + 'contacts', configGetWorkingUnit)
+                axios.get( vm.end_point + 'resourceusers/'+ vm.class_name +'/'+vm.class_pk, configGetUserContact)
                 .then(function (response) {
                     var serializable = response.data
                     if (serializable.hasOwnProperty('data')) {
                         
                         for (var key in serializable.data) {
-                            
-                            if(vm.invitationTaskItems.length!=0){
-                                var itemInv = true;
-                                for(var keys in vm.invitationTaskItems){
-                                    if(
-                                        (serializable.data[key].userMappingId!=0 &&serializable.data[key].userMappingId == vm.invitationTaskItems[keys].toUserId)||
-                                        (serializable.data[key].userMappingId==0 &&serializable.data[key].email == vm.invitationTaskItems[keys].email)
-                                        ){
-                                        itemInv = false;
-                                        break;
-                                    }
-                                }
-                                if(itemInv){
-                                    vm.contactItemsTask.push(serializable.data[key])
-                                }
-                            } else {
-                                vm.contactItemsTask.push(
-                                    serializable.data[key]
-                                )
-                            }
-                            
+
+                            vm.contactItemsTask.push(
+                                serializable.data[key]
+                            )
+
                         }
                     }
                 })
@@ -954,11 +940,8 @@
                     dataPostInvitation.append('fullName', vm.contact[0].fullName);
                     dataPostInvitation.append('telNo', vm.contact[0].telNo);
                     dataPostInvitation.append('right', presenterPostUser);
-                    if(vm.contact[0].userMappingId!=0){
-                        dataPostInvitation.append('toUserId', vm.contact[0].userMappingId);
-                    } else {
-                        dataPostInvitation.append('email', vm.contact[0].email);
-                    }
+                    dataPostInvitation.append('email', vm.contact[0].email);
+
                 }
                 
                 var urlUpdate = vm.end_point + "resourceinvitations";

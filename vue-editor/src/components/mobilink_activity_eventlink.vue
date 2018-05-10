@@ -6,7 +6,7 @@
 
             <v-expansion-panel expand class="sub-panel expansion-blue">
                 <v-expansion-panel-content value="true" class="event_link_list">
-                    <div slot="header" class="custome-panel-heading-with-icon pl-0 mr-2">
+                    <div slot="header" class="custome-panel-heading-with-icon pl-0">
                         <div class="">Cuộc họp liên quan</div>
 
                         <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_add_link" 
