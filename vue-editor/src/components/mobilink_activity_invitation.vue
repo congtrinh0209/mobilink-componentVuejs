@@ -101,12 +101,12 @@
                                     <div class="color-subpanel">Đơn vị/ Nhóm trong cơ quan</div>
                                     
                                     <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add1" 
-                                    v-if="managerPermision(permission_prop)&&stateEvent(startend_prop)&&showAdd1==false"
+                                    v-if="managerPermision(permission_prop)&&showAdd1==false"
                                     grey darken-4>
                                         add_circle
                                     </v-icon>
                                     <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add1" 
-                                    v-if="managerPermision(permission_prop)&&stateEvent(startend_prop)&&showAdd1==true"
+                                    v-if="managerPermision(permission_prop)&&showAdd1==true"
                                     grey darken-4>
                                         do_not_disturb_on
                                     </v-icon>
@@ -186,7 +186,7 @@
                                                             <!-- end -->
 
                                                             <!-- Phần thêm cá nhân trong tổ chức/ đơn vị -->
-                                                            <div v-if="item.role.invitationType == 0 && item.leader&&stateEvent(startend_prop)" class="layout wrap elInv mx-0 mb-2 pl-1">
+                                                            <div v-if="item.role.invitationType == 0 && item.leader" class="layout wrap elInv mx-0 mb-2 pl-1">
                                                                 <toggle-button class="mr-1 mt-4"
                                                                 
                                                                 v-model="presenterAddUserUnit"
@@ -315,11 +315,11 @@
                                     <div class="color-subpanel">Cá nhân/ Tổ chức theo danh bạ</div>
 
                                     <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add2" 
-                                    v-if="managerPermision(permission_prop)&&stateEvent(startend_prop)&&showAdd2==false" grey darken-4>
+                                    v-if="managerPermision(permission_prop)&&showAdd2==false" grey darken-4>
                                         add_circle
                                     </v-icon>
                                     <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add2" 
-                                    v-if="managerPermision(permission_prop)&&stateEvent(startend_prop)&&showAdd2==true"
+                                    v-if="managerPermision(permission_prop)&&showAdd2==true"
                                     grey darken-4>
                                         do_not_disturb_on
                                     </v-icon>
@@ -1228,7 +1228,8 @@
                 setTimeout(function(){
                     if(event.length!=0){
                         vm.contact = [event[event.length -1]];
-                    }else {vm.contact= []}            
+                    }else {vm.contact= []};
+                    return false              
                 },200)
             },
             addUserContact:function(){

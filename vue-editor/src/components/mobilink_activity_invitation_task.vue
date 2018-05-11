@@ -90,12 +90,12 @@
                                     <div class="color-subpanel">Đơn vị/ Nhóm trong cơ quan</div>
 
                                     <v-icon class="btn-add mx-0 my-0" 
-                                        v-if="managerPermision(permission_prop)&&stateTask(startend_prop)&&showAdd1==false"
+                                        v-if="managerPermision(permission_prop)&&showAdd1==false"
                                         v-on:click.stop="show_Add1Task" grey darken-4>
                                         add_circle
                                     </v-icon>
                                     <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add1Task" 
-                                    v-if="managerPermision(permission_prop)&&stateTask(startend_prop)&&showAdd1==true"
+                                    v-if="managerPermision(permission_prop)&&showAdd1==true"
                                     grey darken-4>
                                         do_not_disturb_on
                                     </v-icon>
@@ -171,7 +171,7 @@
                                                             <!-- end -->
 
                                                             <!-- Phần thêm cá nhân trong tổ chức/ đơn vị -->
-                                                            <div v-if="item.role.invitationType == 0 && item.user_leader&&stateTask(startend_prop)"
+                                                            <div v-if="item.role.invitationType == 0 && item.user_leader"
                                                              class="layout wrap elInv mx-0 mb-2 pl-1">
                                                                 <toggle-button class="mr-1 mt-4"
                                                                 
@@ -292,11 +292,11 @@
                                     <div class="color-subpanel">Cá nhân/ Tổ chức theo danh bạ</div>
 
                                     <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add2Task" 
-                                    v-if="managerPermision(permission_prop)&&stateTask(startend_prop)&&showAdd2==false" grey darken-4>
+                                    v-if="managerPermision(permission_prop)&&showAdd2==false" grey darken-4>
                                         add_circle
                                     </v-icon>
                                     <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add2Task" 
-                                    v-if="managerPermision(permission_prop)&&stateTask(startend_prop)&&showAdd2==true"
+                                    v-if="managerPermision(permission_prop)&&showAdd2==true"
                                     grey darken-4>
                                         do_not_disturb_on
                                     </v-icon>

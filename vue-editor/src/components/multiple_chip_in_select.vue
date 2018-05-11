@@ -1,12 +1,13 @@
 <template>
 
     <div :id="'chip-in-select'+id" class="chip-in-select">
-        <v-flex xs12 sm2>
+        <!-- <v-flex xs12 sm2>
             <v-subheader class="px-0">Thẻ nhãn:</v-subheader>
-        </v-flex>
+        </v-flex> -->
         <v-flex xs12 sm12>
 
             <v-select
+                placeholder="Thêm thẻ nhãn"
                 v-bind:items="resourceTagItems"
                 v-model="resourceTag"
                 chips
@@ -115,6 +116,7 @@
                         'groupId': vm.group_id
                     }
                 };
+                vm.resourceTagItems = [];
                 axios.get( vm.end_point + 'resourcetags', configGetTags)
                 .then(function (response) {
                     var serializable = response.data;
@@ -160,6 +162,7 @@
                         'groupId': vm.group_id
                     }
                 };
+                vm.resourceTag = [];
                 axios.get( vm.end_point + 'resourcetags/'+vm.class_name+'/'+vm.class_pk, configGetTagClassPk)
                 .then(function (response) {
                     var serializable = response.data;
@@ -196,7 +199,7 @@
                         console.log("-->tag = "+tagAdd);
                         vm.addRessourceTag(tagAdd)
                     }
-                    
+                    return false
                 },200)
                 
             },
@@ -227,6 +230,7 @@
                 })
                 .catch(function (error) {
                     showMessageByAPICode(error.response.status, error.response.data);
+                    vm.getResourseTagClassPk();
                     console.log(error.response)
                 });
 
@@ -258,8 +262,8 @@
             deleteTag: function(data){
                 var vm = this;
                 setTimeout(function(){
-                    console.log('Event Input Chip');
-                    console.log(data);
+                    // console.log('Event Input Chip');
+                    // console.log(data);
                     data.parent.selectItem(data.item);
                     var resourceTagId = data.item.resourceTagId;
                     vm.deleteRessourceTag(resourceTagId)
@@ -280,8 +284,9 @@
 <style>
     .chip-in-select .input-group__input{
         padding: 5px;
-        border: 2px solid #ddd;
-        border-radius: 5px;
+        min-height: 55px;
+        border: 1px solid #ddd;
+        border-radius: 3px;
     }
     .chip-in-select .input-group__details{
         display: none

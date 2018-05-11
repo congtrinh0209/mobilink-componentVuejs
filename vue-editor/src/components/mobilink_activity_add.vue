@@ -64,6 +64,7 @@
                         hide-selected
                         clearable
                         @input="eventInput($event)"
+
                         tags
                     >
 
@@ -234,7 +235,7 @@
                 </v-flex>
                 <!--  -->
                 <v-flex xs12 sm2>
-                    <v-subheader class="px-0">Lĩnh vực </v-subheader>
+                    <v-subheader class="px-0">Lĩnh vực *</v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4>
                     <v-select
@@ -247,6 +248,8 @@
                         return-object
                         hide-selected
                         clearable
+                        :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
+                        required
                     ></v-select>
                 </v-flex>
                 <!--  -->
@@ -373,7 +376,7 @@
                 </v-flex>
                 <!--  -->
                 <v-flex xs12 sm2>
-                    <v-subheader class="px-0">Lĩnh vực </v-subheader>
+                    <v-subheader class="px-0">Lĩnh vực *</v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4>
                     <v-select
@@ -386,6 +389,8 @@
                         return-object
                         hide-selected
                         clearable
+                        :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
+                        required
                     ></v-select>
                 </v-flex>
                 <!--  -->
@@ -1058,11 +1063,11 @@
                 var vm = this;
                 console.log(event);
                 vm.location = [];
-                /*console.log("run input");*/
+                console.log("run input");
                 setTimeout(function(){
                     if(event.length!=0){
                         vm.location = [event[event.length -1]];
-                    }else {vm.location= []}            
+                    }else {vm.location= []};            
                 },200)
             },
             /**Post địa điểm mới */
