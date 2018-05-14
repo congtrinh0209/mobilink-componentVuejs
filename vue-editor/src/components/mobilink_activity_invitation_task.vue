@@ -1368,6 +1368,9 @@
     #activity_invitation_task .disableClick{
         pointer-events: none;
     }
+    #activity_invitation_task .sub-panel .list--group__container .list--group{    
+        display: block!important;
+    }
     #activity_invitation_task button{
         min-width: 0px;
         margin: 6px 0;

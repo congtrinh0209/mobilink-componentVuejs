@@ -1602,15 +1602,10 @@
         color: blue;
         cursor: pointer;
     }
-    /* #activity_invitation .sub-panel .expansion-panel__header{    
-        background-color: #f6f6f6!important;
-    } */
-    /* #activity_invitation .color-subpanel{
-        color: #2a2a2a!important
+     #activity_invitation .sub-panel .list--group__container .list--group{    
+        display: block!important;
     }
-    #activity_invitation .sub-panel .expansion-panel__header i{
-        color: #939393!important
-    } */
+
     #activity_invitation .wrap_invitation ul .list--group .list__tile{
         border-bottom: 1px dashed #ddd;
     } 

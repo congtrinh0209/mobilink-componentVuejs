@@ -61,6 +61,8 @@
         created () {
             var vm = this
             vm.$nextTick(function () {
+                console.log("props resourceTag-->");
+                console.log(vm._props);
                 vm.initResourceTags()
             })
         },
@@ -249,11 +251,14 @@
                 var urlUpdate = vm.end_point + "resourcetags/"+tagId;
                 axios.delete(urlUpdate, configDeleteResourceTag)
                 .then(function (response) {
-
-                    showMessageToastr('success', 'Xóa thẻ nhãn thành công')
-                    vm.getResourseTagClassPk()
+                    setTimeout(function(){
+                        showMessageToastr('success', 'Xóa thẻ nhãn thành công');
+                        vm.getResourseTagClassPk()
+                    },1000)
+                    
                 })
                 .catch(function (error) {
+                    vm.getResourseTagClassPk();
                     showMessageByAPICode(error.response.status, error.response.data);
                     console.log(error.response)
                 });
@@ -293,6 +298,9 @@
     }
     .chip-in-select .input-group--select{
         padding-top: 5px!important
+    }
+    .chip-in-select .input-group{
+        max-width: 100%!important;
     }
     @media only screen and (min-width: 320px) and (max-width: 1024px) {
         

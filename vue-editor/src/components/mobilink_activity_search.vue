@@ -331,6 +331,7 @@
                 isOverdue: '',
                 startend:'',
                 categoryS:'',
+                tagS:'',
                 follow:'',
 
                 tableListTotal: 0,
@@ -625,6 +626,7 @@
                     vm.isOverdue = url.has("isOverdue")?url.get("isOverdue"):'';
                     vm.startend = url.has("startend")?url.get("startend"):'';
                     vm.categoryS = url.has("category")?url.get("category"):'';
+                    vm.tagS = url.has("tag")?url.get("tag"):'';
                     vm.follow = url.has("follow")?url.get("follow"):'';
                 } else {
                     vm.status = vm.state?vm.state:'';
@@ -669,6 +671,7 @@
                     paramsTableActivity.startend = vm.startend?vm.startend:null;
                     paramsTableActivity.follow = vm.follow?vm.follow:null;
                     paramsTableActivity.category = vm.categoryS?vm.categoryS:null;
+                    paramsTableActivity.tag = vm.tagS?vm.tagS:null;
                     paramsTableActivity.location = vm.locationS?vm.locationS:null;
                     paramsTableActivity.fromdate = vm.parseDateFormat(vm.timeStart);
                     paramsTableActivity.todate = vm.parseDateFormat(vm.timeEnd);
