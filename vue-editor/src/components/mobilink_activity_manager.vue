@@ -162,7 +162,7 @@
                 </v-expansion-panel-content>
                 <v-divider xs12 class="my-0"></v-divider>
             </v-expansion-panel>
-            <p class="my-3" v-if="activityListItems.length == 0" style="text-align: center">
+            <p class="py-3" v-if="activityListItems.length == 0" style="text-align: center; background-color: #fff;">
                 <i>Không có cuộc họp nào được tìm thấy</i>
             </p>
         </div>

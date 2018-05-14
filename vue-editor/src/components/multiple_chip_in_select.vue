@@ -12,7 +12,7 @@
                 v-model="resourceTag"
                 chips
                 tags
-                item-text="tag"
+                item-text="tagCount"
                 item-value="resourceTagId"
                 return-object
                 hide-selected
@@ -135,6 +135,7 @@
                                 if(itemTag){
                                     vm.resourceTagItems.push({
                                         tag: serializable.data[key].tag,
+                                        tagCount: serializable.data[key].tag + ' (' + serializable.data[key].count + ')',
                                         resourceTagId: serializable.data[key].resourceTagId,
                                     })
                                 }
