@@ -63,9 +63,6 @@
                         return-object
                         hide-selected
                         clearable
-                        @input="eventInput($event)"
-
-                        tags
                     >
 
                     </v-select>
@@ -606,7 +603,7 @@
                 locationItems:[],
                 location:'',
                 geolocation:'',
-                locationName:'',
+
                 contactItems:[],
                 contact:'',
                 taskTypeItems:[],
@@ -1059,63 +1056,7 @@
                     }    
                 })
             },
-            eventInput: function(event){
-                var vm = this;
-                console.log(event);
-                vm.location = [];
-                console.log("run input");
-                setTimeout(function(){
-                    if(event.length!=0){
-                        vm.location = [event[event.length -1]];
-                    }else {vm.location= []};            
-                },200)
-            },
-            /**Post địa điểm mới */
-            addLocation:function(){
-                var vm = this;
-                // console.log(vm);
-                var locationList = vm.locationItems;
-                var checkLocation = true;
-                for(var key in locationList){
-                    if(typeof(vm.location[0]) == 'object'){
-                        if(vm.location[0].locationId == locationList[key].locationId){
-                            checkLocation = false;
-                        }
-                    } 
-                 
-                };
-                if(checkLocation){
-                    vm.locationName = vm.location[0];
-                    var dataPostLocation  =new URLSearchParams();
-                    dataPostLocation.append('location', vm.locationName);
-                    dataPostLocation.append('geolocation', '');
-                    var paramsPostLocation = {
-                        
-                    };
-                    const configPostLocation = {
-                        params: paramsPostLocation,
-                        headers: {
-                            'groupId': vm.group_id
-                        }
-                    };
-                    var urlUpdate = vm.end_point + "locations";
-                    axios.post(urlUpdate, dataPostLocation, configPostLocation)
-                    .then(function (response) {
-                        var serializable = response.data;
-                        vm.location[0] = serializable;
-                        vm.submitAddEvents()
-                        
-                    })
-                    .catch(function (error) {
-                        showMessageByAPICode(error.response.status, error.response.data);
-                        console.log(error.response)
-                    });
-
-                } else {
-                    vm.submitAddEvents()
-                };
-                
-            },
+            
             formatDate (date) {
                 if (!date) {
                     return null
@@ -1225,9 +1166,10 @@
 
                     paramsAddEvent.append('startDate', startDateEvent)
                     paramsAddEvent.append('endDate', endDateEvent)
-                    paramsAddEvent.append('locationId', vm.location?vm.location[0].locationId:'')
-                    paramsAddEvent.append('location', vm.location?vm.location[0].location:'')
-                    paramsAddEvent.append('geolocation', vm.location?vm.location[0].geolocation:'')
+                    paramsAddEvent.append('locationId', vm.location?vm.location.locationId:'')
+                    paramsAddEvent.append('location', vm.location?vm.location.location:'')
+                    paramsAddEvent.append('geolocation', vm.location?vm.location.geolocation:'')
+
                     paramsAddEvent.append('description', vm.content?vm.content:'')
                     
                     
@@ -1417,8 +1359,7 @@
                 var vm = this;
                 console.log(vm);
                 if (vm.type_activity == 'events') {
-                    vm.addLocation();
-                    // vm.submitAddEvents()
+                    vm.submitAddEvents()
                 } else if (vm.type_activity == 'tasks') {
                     vm.submitAddTasks()
                 } else if (vm.type_activity == 'plans') {
