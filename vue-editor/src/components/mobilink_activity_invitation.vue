@@ -902,9 +902,7 @@
                 var vm = this;
                 vm.contactItems=[];
                 var paramsGetUserContact = {
-                    'full' : 'guest',
-                    'resource': 'invitation',
-                    'sort': 'fullName'
+
                 };
                 const configGetUserContact = {
                     params: paramsGetUserContact,
@@ -912,15 +910,33 @@
                         'groupId': vm.group_id
                     }
                 };
-                axios.get( vm.end_point + 'resourceusers/'+ vm.class_name +'/'+vm.class_pk, configGetUserContact)
+                axios.get( vm.end_point + 'contacts', configGetUserContact)
                 .then(function (response) {
                     var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
                         for (var key in serializable.data) {
+                            if(vm.invitationItems.length!=0){
+                                var itemInv = true;
+                                for(var keys in vm.invitationItems){
+                                    
+                                    if(
+                                        (serializable.data[key].userMappingId!=0&&serializable.data[key].userMappingId==vm.invitationItems[keys].toUserId) ||
+                                        (serializable.data[key].userMappingId==0&&serializable.data[key].email==vm.invitationItems[keys].email)
+                                    ){
+                                        itemInv = false;
+                                        break;
+                                    }
+                                }
+                                if(itemInv){
+                                    vm.contactItems.push(serializable.data[key])
+                                }
+                            }
+                            else {
+                                vm.contactItems.push(
+                                    serializable.data[key]
+                                )
+                            }  
 
-                            vm.contactItems.push(
-                                serializable.data[key]
-                            )   
                         }
                     }
                 })
@@ -1030,7 +1046,11 @@
                     dataPostInvitation.append('fullName', vm.contact[0].fullName);
                     dataPostInvitation.append('telNo', vm.contact[0].telNo);
                     dataPostInvitation.append('right', presenterPostUser);
-                    dataPostInvitation.append('email', vm.contact[0].email);
+                    if(vm.contact[0].userMappingId!=0){
+                       dataPostInvitation.append('toUserId', vm.contact[0].userMappingId);
+                    } else {
+                        dataPostInvitation.append('email', vm.contact[0].email);
+                    }
 
                 }
                 
