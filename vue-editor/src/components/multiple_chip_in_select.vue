@@ -142,6 +142,7 @@
                             } else {
                                 vm.resourceTagItems.push({
                                     tag: serializable.data[key].tag,
+                                    tagCount: serializable.data[key].tag + ' (' + serializable.data[key].count + ')',
                                     resourceTagId: serializable.data[key].resourceTagId,
                                 })
                             }
