@@ -146,7 +146,7 @@
                                             <v-flex xs12 sm12 class="wrap_invitation">
                                                 <v-card>
                                                     <v-list class="sub-panel py-0">
-                                                        <v-list-group class="py-0" v-for="(item, index) in itemInvGroup" :value="item.active" v-bind:key="item.role.resourceInvitationId">
+                                                        <v-list-group class="group-user-unit py-0" v-for="(item, index) in itemInvGroup" :value="item.active" v-bind:key="item.role.resourceInvitationId">
                                                             <!-- Phần danh sách tổ chức/ đơn vị -->
                                                             <v-list-tile slot="item" class="px-0">
                                                                 <v-list-tile-content class="px-0">
@@ -162,11 +162,11 @@
                                                                         </v-flex>
                                                                         <v-flex xs6 sm5 lg4>
                                                                             <div class="right">
-                                                                                <v-chip v-if="stateEvent(startend_prop)==true" label outline >
+                                                                                <v-chip v-if="stateEvent(startend_prop)==true" label outline class="primary--text">
                                                                                     {{item.role.statistic.available}}/{{item.role.statistic.invitation}}
                                                                                 </v-chip>
 
-                                                                                <v-chip v-if="stateEvent(startend_prop)==false" label outline >
+                                                                                <v-chip v-if="stateEvent(startend_prop)==false" label outline class="primary--text">
                                                                                     {{item.role.statistic.checkin}}/{{item.role.statistic.invitation}}
                                                                                 </v-chip>
 
@@ -1626,11 +1626,17 @@
         display: block!important;
     }
 
-    #activity_invitation .wrap_invitation ul .list--group .list__tile{
+    #activity_invitation .group-user-unit .list--group  li{
         border-bottom: 1px dashed #ddd;
-    } 
+    }
+    #activity_invitation .group-user-unit .list--group li:nth-last-child(2){
+        border-bottom: 0px;
+    }  
     #activity_invitation .list-contact li{
         border-bottom: 1px dashed #ddd;
+    }
+    #activity_invitation .list-contact li:last-child{
+        border-bottom: 0px;
     }
     #activity_invitation .chip {
         max-height: 30px!important

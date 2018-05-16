@@ -134,7 +134,7 @@
                                             <v-flex xs12 sm12 class="wrap_invitation">
                                                 <v-card>
                                                     <v-list class="py-0">
-                                                        <v-list-group class="py-0" v-for="(item, index) in itemInvGroupTask" :value="item.active" v-bind:key="item.role.resourceInvitationId">
+                                                        <v-list-group class="group-user-unit py-0" v-for="(item, index) in itemInvGroupTask" :value="item.active" v-bind:key="item.role.resourceInvitationId">
                                                             <!-- Phần danh sách tổ chức/ đơn vị -->
                                                             <v-list-tile slot="item" class="px-0">
                                                                 <v-list-tile-content class="px-0">
@@ -150,7 +150,7 @@
                                                                         </v-flex>
                                                                         <v-flex xs6 sm5 lg4>
                                                                             <div class="right">
-                                                                                <v-chip label outline >
+                                                                                <v-chip label outline class="primary--text">
                                                                                     {{item.role.statistic.available}}/{{item.role.statistic.invitation}}
                                                                                 </v-chip>
                                                                                 
@@ -210,7 +210,7 @@
 
                                                             <!-- Phần danh sách cá nhân trong tổ chức/ đơn vị -->
                                                             <v-list-tile v-for="(subItem, index) in item.items" v-bind:key="subItem.resourceInvitationId">
-                                                                <v-list-tile-content class="mt-2">
+                                                                <v-list-tile-content >
                                                                     <v-flex xs12 class="layout wrap pl-2 pr-1" style="width: 100%!important">
                                                                         
                                                                         <v-flex class="pt-2" xs12 lg5>
@@ -1452,11 +1452,17 @@
         overflow: visible!important;
         height: auto!important;
     }
-    #activity_invitation_task .wrap_invitation ul .list--group .list__tile{
+    #activity_invitation_task .group-user-unit .list--group  li{
         border-bottom: 1px dashed #ddd;
-    } 
+    }
+    #activity_invitation_task .group-user-unit .list--group li:nth-last-child(2){
+        border-bottom: 0px;
+    }  
     #activity_invitation_task .list-contact li{
         border-bottom: 1px dashed #ddd;
+    }
+    #activity_invitation_task .list-contact li:last-child{
+        border-bottom: 0px;
     }
     #activity_invitation_task .list__tile{
         padding: 0!important;
