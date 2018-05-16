@@ -150,11 +150,11 @@
                                                                         </v-flex>
                                                                         <v-flex xs6 sm5 lg4>
                                                                             <div class="right">
-                                                                                <v-chip label outline color="primary" class="mr-2 mt-2">
+                                                                                <v-chip label outline >
                                                                                     {{item.role.statistic.available}}/{{item.role.statistic.invitation}}
                                                                                 </v-chip>
                                                                                 
-                                                                                <v-btn icon title="Xóa" class="mx-0" v-if="managerPermision(permission_prop)==true" 
+                                                                                <v-btn icon title="Xóa" class="mx-0 my-0" v-if="managerPermision(permission_prop)==true" 
                                                                                 @click.stop="updateInvitationTask('DELETE',item.role.resourceInvitationId,index,itemInvGroupTask)">
                                                                                     <v-icon color="red darken-3">clear</v-icon>
                                                                                 </v-btn> 
@@ -242,14 +242,14 @@
                                                                                     <span>{{subItem.userNote}}</span>
                                                                                 </v-tooltip>
 
-                                                                                <v-btn class="mx-0 text-white" small color="success"
+                                                                                <v-btn class="mx-0 my-0 text-white" small color="success"
                                                                                 :class="managerPermision(permission_prop)==false? pointerEvent : ''"
                                                                                 v-on:click.stop="checkAvailable('ready',subItem,item)" style="padding-left: 6px;padding-right: 6px"
                                                                                 >
                                                                                     <v-icon style="color: white" v-if="subItem.available == 1" >check</v-icon>
                                                                                     Sẵn sàng
                                                                                 </v-btn>
-                                                                                <v-btn small class="text-white mx-0" color="error"
+                                                                                <v-btn small class="text-white mx-0 my-0" color="error"
                                                                                 :class="managerPermision(permission_prop)==false? pointerEvent : ''"
                                                                                 v-on:click.stop="checkAvailable('busy',subItem,item)" 
                                                                                 >
@@ -259,7 +259,7 @@
 
                                                                                 <!-- <span style="color:green" class="mr-2" v-html="bindAvailableText(subItem.available)"></span> -->
                                                                                 
-                                                                                <v-btn v-if="managerPermision(permission_prop)==true || item.leader" icon title="Xóa" class="mx-0"
+                                                                                <v-btn v-if="managerPermision(permission_prop)==true || item.leader" icon title="Xóa" class="mx-0 my-0"
                                                                                 @click.stop="updateInvitationTask('DELETE',subItem.resourceInvitationId,index,item.items)">
                                                                                     <v-icon color="red darken-3">clear</v-icon>
                                                                                 </v-btn>
@@ -271,7 +271,7 @@
                                                                 </v-list-tile-content>  
                                                             </v-list-tile>
                                                             <!-- end -->
-                                                            <v-divider class="mt-0"></v-divider>
+                                                            <v-divider class="my-0"></v-divider>
 
                                                         </v-list-group>
                                                     </v-list>
@@ -765,7 +765,7 @@
             getEmployeesTask: function(){
                 var vm = this;
                 var paramsGetEmployee = {
-                    'class': 'employee',
+                    'clazz': 'employee',
                     'role': vm.userLogin.roleId
                 };
                 const configGetEmployee = {

@@ -1161,6 +1161,8 @@
             /** click vao lua chon: them thu muc | them file */
             menuSelect: function(id) {
               var vm = this;
+              console.log('Log vm docfile ==>>');
+              console.log(vm);
                 vm.currentListPage = true;
                 if (id === 1) {
                 	vm.khoTuLieuViewJXTitle = "Thêm mới ngăn thư mục";
@@ -2112,6 +2114,8 @@
               });
               newTree.push(item);
               vm.workspaceTree = newTree;
+              console.log('log workspaceTree -->');
+              console.log(vm.workspaceTree);
             },
             previewAttachPDFTab: function(item) {
               

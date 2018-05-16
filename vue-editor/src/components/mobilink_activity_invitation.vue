@@ -162,15 +162,15 @@
                                                                         </v-flex>
                                                                         <v-flex xs6 sm5 lg4>
                                                                             <div class="right">
-                                                                                <v-chip v-if="stateEvent(startend_prop)==true" label outline color="primary" class="mr-2 mt-2">
+                                                                                <v-chip v-if="stateEvent(startend_prop)==true" label outline >
                                                                                     {{item.role.statistic.available}}/{{item.role.statistic.invitation}}
                                                                                 </v-chip>
 
-                                                                                <v-chip v-if="stateEvent(startend_prop)==false" label outline color="primary" class="mr-2 mt-2">
+                                                                                <v-chip v-if="stateEvent(startend_prop)==false" label outline >
                                                                                     {{item.role.statistic.checkin}}/{{item.role.statistic.invitation}}
                                                                                 </v-chip>
 
-                                                                                <v-btn icon title="Xóa" class="mx-0" v-if="managerPermision(permission_prop)==true" 
+                                                                                <v-btn icon title="Xóa" class="mx-0 my-0" v-if="managerPermision(permission_prop)==true" 
                                                                                 @click.stop="updateInvitation('DELETE',item.role.resourceInvitationId,index,itemInvGroup)">
                                                                                     <v-icon color="red darken-3">clear</v-icon>
                                                                                 </v-btn> 
@@ -224,11 +224,11 @@
 
                                                             <!-- Phần danh sách cá nhân trong tổ chức/ đơn vị -->
                                                             <v-list-tile v-for="(subItem, index) in item.items" v-bind:key="subItem.resourceInvitationId">
-                                                                <v-list-tile-content class="mt-2">
+                                                                <v-list-tile-content >
                                                                     <v-flex xs12 class="layout wrap pl-2 pr-1" style="overflow: visible;width: 100%!important">
                                                                         
                                                                         <v-flex xs12 lg5>
-                                                                            <v-list-tile-title class="pt-2">
+                                                                            <v-list-tile-title class="pt-1">
                                                                                 <toggle-button class="mr-1 mt-1" 
                                                                                 @change="updatePresenterUserGroup($event,subItem.resourceInvitationId,item)"
                                                                                 :value="bindPresenter(subItem.right)"
@@ -257,7 +257,7 @@
                                                                                     <span >{{subItem.userNote}}</span>
                                                                                 </v-tooltip>
                                                                                 
-                                                                                <v-btn v-if="stateCheckin(startend_prop)==true" class="mx-0" small color="success"
+                                                                                <v-btn v-if="stateCheckin(startend_prop)==true" class="mx-0 my-0" small color="success"
                                                                                 :class="managerPermision(permission_prop)==false||activeClick? pointerEvent : ''"
                                                                                 
                                                                                 v-on:click.stop="checkAvailable('ready',subItem,item)" style="padding-left: 6px;padding-right: 6px"
@@ -265,7 +265,7 @@
                                                                                     <v-icon style="color: white" v-if="subItem.available == 1" >check</v-icon>
                                                                                     Sẵn sàng
                                                                                 </v-btn>
-                                                                                <v-btn v-if="stateCheckin(startend_prop)==true" small class="text-white mx-0" 
+                                                                                <v-btn v-if="stateCheckin(startend_prop)==true" small class="text-white mx-0 my-0" 
                                                                                 :class="managerPermision(permission_prop)==false||activeClick? pointerEvent : ''"
                                                                                 v-on:click.stop="checkAvailable('busy',subItem,item)" color="error"
                                                                                 >
@@ -283,7 +283,7 @@
                                                                                     Có mặt
                                                                                 </v-btn>
 
-                                                                                <v-btn v-if="managerPermision(permission_prop)==true ||item.leader" icon title="Xóa" class="mx-0"
+                                                                                <v-btn v-if="managerPermision(permission_prop)==true ||item.leader" icon title="Xóa" class="mx-0 my-0"
                                                                                 @click.stop="updateInvitation('DELETE',subItem.resourceInvitationId,index,item.items)">
                                                                                     <v-icon color="red darken-3">clear</v-icon>
                                                                                 </v-btn>
@@ -295,7 +295,7 @@
                                                                 </v-list-tile-content>  
                                                             </v-list-tile>
                                                             <!-- end -->
-                                                            <v-divider class="mt-0"></v-divider>
+                                                            <v-divider class="my-0"></v-divider>
 
                                                         </v-list-group>
                                                     </v-list>
@@ -506,7 +506,7 @@
                                                                                     Có mặt
                                                                                 </v-btn>
 
-                                                                                <v-btn icon title="Xóa" class="mx-0" v-if="managerPermision(permission_prop)==true"
+                                                                                <v-btn icon title="Xóa" class="mx-0 my-0" v-if="managerPermision(permission_prop)==true"
                                                                                 @click.stop="updateInvitation('DELETE',item.resourceInvitationId,index,itemInvContact)">
                                                                                     <v-icon color="red darken-3">clear</v-icon>
                                                                                 </v-btn> 
@@ -856,7 +856,7 @@
             getEmployees: function(){
                 var vm = this;
                 var paramsGetEmployee = {
-                    'class': 'employee',
+                    'clazz': 'employee',
                     'role': vm.userLogin.roleId
                 };
                 const configGetEmployee = {

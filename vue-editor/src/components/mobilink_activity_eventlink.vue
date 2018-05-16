@@ -145,7 +145,7 @@
                                 <!-- end -->
 
                                 <v-flex xs12 sm12>
-                                    <v-card style="text-align: center;">
+                                    <v-card >
                                         <v-list class="py-0">
                                             <v-list-group class="listGroup py-0" v-for="(item,index) in itemEventLink" 
                                              v-bind:key="item.eventItem.activityId">                                            
@@ -220,15 +220,12 @@
                                                             
                                                         </template>
                                                     </v-data-table>
-                                                    <p class="my-2 mx-3" v-if="item.activitySourceItems.length == 0" >
+                                                    <!-- <p class="my-2 mx-3" v-if="item.activitySourceItems.length == 0" >
                                                         <i>Không có kết luận cuộc họp</i>
-                                                    </p>
+                                                    </p> -->
                                                 </v-list-tile-content>
                                             </v-list-group>
                                         </v-list>
-                                        <p class="my-3" v-if="itemEventLink.length == 0" >
-                                            <i>Không có cuộc họp liên quan</i>
-                                        </p>
                                         
                                     </v-card>
                                 </v-flex>
