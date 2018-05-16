@@ -225,11 +225,12 @@
                     </td>
 
                     <td class="text-xs-center">
-                        <v-chip style="display: inline-block;text-align: center;width:90%;height:30px" label outline 
+                        <!-- <v-chip style="display: inline-block;text-align: center;width:90%;height:30px" label outline 
                         :color="getColor(props.item.state)">
                             <span>{{props.item.stateName}}</span>
-                        </v-chip>
-
+                        </v-chip> -->
+                        
+                        <p class="my-0" :class="getColor(props.item.state)+'--text'" style="margin-top: 12px !important;">{{props.item.stateName}}</p>
                     </td>
 
                     <td class="text-xs-center">
@@ -878,6 +879,9 @@
         align-items: center;
         width: 100%;
     }
+    #activitySearch #table_search{
+        border-left: 0px!important
+    }
     #activitySearch .row-header .input-group .input-group__input{
         background-color: #ffffff!important;
         margin-top: 0px!important;
@@ -969,15 +973,15 @@
         
     }
     body #activitySearch table.table th:nth-child(6),body #activitySearch table.table td:nth-child(6) {
-        width: 13%!important;
+        width: 15%!important;
         
     }
     body #activitySearch table.table th:nth-child(7),body #activitySearch table.table td:nth-child(7) {
-        width: 14%!important;
+        width: 12%!important;
         
     }
     body #activitySearch table.table th:nth-child(8),body #activitySearch table.table td:nth-child(8){
-        width: 3%!important;
+        width: 4%!important;
         padding-top: 10px!important;
     }
 
