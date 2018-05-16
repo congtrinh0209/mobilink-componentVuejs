@@ -214,7 +214,7 @@
                     
                     <td>
                         <div class="pt-2 pb-2">
-                            <span>{{props.item.hosting}}</span>
+                            <span :title="props.item.hosting">{{props.item.hosting}}</span>
                         </div>
                     </td>
 
@@ -957,7 +957,7 @@
         
     }
     body #activitySearch table.table th:nth-child(2),body #activitySearch table.table td:nth-child(2) {
-        width: 15%!important;
+        width: 13%!important;
         
     }
     body #activitySearch table.table th:nth-child(3),body #activitySearch table.table td:nth-child(3) {
@@ -969,7 +969,7 @@
         
     }
     body #activitySearch table.table th:nth-child(5),body #activitySearch table.table td:nth-child(5) {
-        width: 15%!important;
+        width: 17%!important;
         
     }
     body #activitySearch table.table th:nth-child(6),body #activitySearch table.table td:nth-child(6) {

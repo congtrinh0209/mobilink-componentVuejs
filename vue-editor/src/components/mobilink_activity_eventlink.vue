@@ -90,7 +90,7 @@
                                                     ></v-text-field>
                                                 </v-flex>
                                                 <v-flex xs12 sm2>
-                                                    <v-btn v-on:click.native="keywordSearch" class="px-0 primary" style="height: 30px">
+                                                    <v-btn v-on:click.native="keywordSearch" class="px-0 mt-2 primary" style="height: 30px">
                                                         Tìm kiếm
                                                     </v-btn>
                                                 </v-flex>
@@ -104,7 +104,7 @@
                                                                     <v-flex xs12 class="layout wrap">
 
                                                                         <v-flex xs2 sm1 style="text-align: center">
-                                                                            <v-btn small outline color="blue-grey" class="px-0 mx-0 primary" style="height: 30px;min-width:0px"
+                                                                            <v-btn small outline color="indigo" class="px-0 mx-0" style="height: 30px;min-width:0px"
                                                                              @click.stop="selectEventLink(item, index)"
                                                                             >
                                                                                 Chọn
@@ -632,6 +632,9 @@
     #activity_eventsource .card li {
         border-bottom: 1px dashed #ddd;
     }
+    #activity_eventsource .card li:last-child {
+        border-bottom: 0px;
+    }
     #activity_eventsource .delete_icon:hover{
         cursor: pointer;
     }
@@ -693,6 +696,7 @@
     .dialog_eventlink ul li {
         border-bottom: 1px dashed #ddd;
     }
+
     .dialog_eventlink ul li .list__tile{
         padding-left: 0px;
         padding-right: 0px
