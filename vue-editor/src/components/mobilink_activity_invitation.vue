@@ -576,7 +576,7 @@
                                             </v-btn>
                                             
                                         </v-form>
-                                        <p class="px-2 py-3 my-0" v-if="activeEdit" style="font-size: 12px;font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;">
+                                        <p class="px-2 py-3 my-0" v-if="activeEdit&&nameInv!=''" style="font-size: 12px;font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;">
                                             {{nameInv}}
                                         </p>
                                     </v-card-text>

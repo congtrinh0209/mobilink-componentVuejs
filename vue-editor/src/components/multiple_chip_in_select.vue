@@ -193,7 +193,7 @@
             searchTag: function(event){
                 var vm = this;
                 setTimeout(function(){
-                    // console.log(event.length+'--'+vm.currentSeclected)
+                    // console.log(event.length+'--'+vm.currentSeclected);
                     if(event.length>vm.currentSeclected){
                         // console.log(vm);
                         // console.log(event);
@@ -230,6 +230,8 @@
                     // setTimeout(function(){
                         vm.complete = false;
                         vm.resourceTag[vm.resourceTag.length-1] = {"resourceTagId": response.data.resourceTagId,"tag": response.data.tag};
+                        vm.currentSeclected = vm.resourceTag.length;
+                        vm.currentResourceTag = vm.resourceTag;
                         // vm.getResourseTagClassPk();
                         showMessageToastr('success', 'Thêm thẻ nhãn thành công');
                         vm.getResourseTag();
@@ -260,10 +262,13 @@
                 var urlUpdate = vm.end_point + "resourcetags/"+tagId;
                 axios.delete(urlUpdate, configDeleteResourceTag)
                 .then(function (response) {
+                    showMessageToastr('success', 'Xóa thẻ nhãn thành công');
+                    vm.currentSeclected -=1;
                     setTimeout(function(){
                         vm.complete = false;
-                        showMessageToastr('success', 'Xóa thẻ nhãn thành công');
-                        // vm.getResourseTagClassPk()
+                        // vm.getResourseTagClassPk();
+                        console.log(vm.resourceTag);
+                        vm.getResourseTag();
                     },1000)
                     
                 })
