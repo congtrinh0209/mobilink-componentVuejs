@@ -195,13 +195,13 @@
                 setTimeout(function(){
                     // console.log(event.length+'--'+vm.currentSeclected)
                     if(event.length>vm.currentSeclected){
-                        // console.log("Event Input Select");
+                        // console.log(vm);
                         // console.log(event);
                         var tagAdd = event[event.length-1];
                         if(typeof tagAdd == 'object'){
                             tagAdd = tagAdd.tag
                         }
-                        console.log("-->tag = "+tagAdd);
+                        // console.log("-->tag = "+tagAdd);
                         vm.addRessourceTag(tagAdd)
                     }
                     return false
@@ -227,12 +227,14 @@
                 var urlUpdate = vm.end_point + "resourcetags";
                 axios.post(urlUpdate, dataPostResourceTag, configPostResourceTag)
                 .then(function (response) {
-                    setTimeout(function(){
+                    // setTimeout(function(){
                         vm.complete = false;
-                        vm.getResourseTagClassPk();
-                        showMessageToastr('success', 'Thêm thẻ nhãn thành công')
-                       
-                    },1000) ;
+                        vm.resourceTag[vm.resourceTag.length-1] = {"resourceTagId": response.data.resourceTagId,"tag": response.data.tag};
+                        // vm.getResourseTagClassPk();
+                        showMessageToastr('success', 'Thêm thẻ nhãn thành công');
+                        vm.getResourseTag();
+                        
+                    // },1000) ;
                     
                 })
                 .catch(function (error) {
@@ -261,7 +263,7 @@
                     setTimeout(function(){
                         vm.complete = false;
                         showMessageToastr('success', 'Xóa thẻ nhãn thành công');
-                        vm.getResourseTagClassPk()
+                        // vm.getResourseTagClassPk()
                     },1000)
                     
                 })
@@ -279,6 +281,7 @@
                     // console.log('Event Input Chip');
                     // console.log(data);
                     data.parent.selectItem(data.item);
+                    console.log(data.item);
                     var resourceTagId = data.item.resourceTagId;
                     vm.deleteRessourceTag(resourceTagId)
                 },200)
