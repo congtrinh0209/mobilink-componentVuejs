@@ -566,13 +566,13 @@
                         color = "purple";
                         break;
                     case 3:
-                        color = "yellow";
+                        color = "orange";
                         break;
                     case 4:
                         color = "blue-grey";
                         break;
                     case 5:
-                        color = "yellow";
+                        color = "orange";
                         break;
                     case 6:
                         color = "light-blue";
@@ -587,7 +587,7 @@
                         color = "light-green";
                         break;
                     case 10:
-                        color = "yellow";
+                        color = "orange";
                         break;
                     case 11:
                         color = "deep-orange";
