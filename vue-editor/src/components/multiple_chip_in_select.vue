@@ -1,6 +1,6 @@
 <template>
 
-    <div :id="'chip-in-select'+id" class="chip-in-select">
+    <div :id="'chip-in-select'+id" class="chip-in-select" v-if="managerPermision(permission_prop)||resourceTag.length!=0">
         <!-- <v-flex xs12 sm2>
             <v-subheader class="px-0">Thẻ nhãn:</v-subheader>
         </v-flex> -->
@@ -18,7 +18,7 @@
                 hide-selected
                 @input = "searchTag($event)"
                 @keyup.delete = "keyupDelete($event)"
-                :disabled = "managerPermision(permission_prop)?false:true"
+                :disabled = "managerPermision(permission_prop)&&complete==false?false:true"
             >
                 <template slot="selection" scope="data">
                     <v-chip
@@ -27,7 +27,7 @@
                         :selected="data.selected"
                         :disabled="data.disabled"
                         :key="JSON.stringify(data.item)"
-                        close
+                        :close = "managerPermision(permission_prop)?true:false"
                     >
                         
                         {{ data.item.tag?data.item.tag:data.item}}
@@ -72,7 +72,8 @@
                 resourceTagItems: [],
                 eventSearchTag: true,
                 currentSeclected: 0,
-                currentResourceTag:[]
+                currentResourceTag:[],
+                complete: false
             }
         },
         
@@ -209,6 +210,7 @@
             },
             addRessourceTag: function(tag){
                 var vm = this;
+                vm.complete = true;
                 var dataPostResourceTag  =new URLSearchParams();
                 dataPostResourceTag.append('className', vm.class_name);
                 dataPostResourceTag.append('classPK', vm.class_pk);
@@ -226,6 +228,7 @@
                 axios.post(urlUpdate, dataPostResourceTag, configPostResourceTag)
                 .then(function (response) {
                     setTimeout(function(){
+                        vm.complete = false;
                         vm.getResourseTagClassPk();
                         showMessageToastr('success', 'Thêm thẻ nhãn thành công')
                        
@@ -233,6 +236,7 @@
                     
                 })
                 .catch(function (error) {
+                    vm.complete = false;
                     showMessageByAPICode(error.response.status, error.response.data);
                     vm.getResourseTagClassPk();
                     console.log(error.response)
@@ -241,6 +245,7 @@
             },
             deleteRessourceTag: function(tagId){
                 var vm = this;
+                vm.complete = true;
                 var paramsDeleteResourceTag = {
                     
                 };
@@ -254,12 +259,14 @@
                 axios.delete(urlUpdate, configDeleteResourceTag)
                 .then(function (response) {
                     setTimeout(function(){
+                        vm.complete = false;
                         showMessageToastr('success', 'Xóa thẻ nhãn thành công');
                         vm.getResourseTagClassPk()
                     },1000)
                     
                 })
                 .catch(function (error) {
+                    vm.complete = false;
                     vm.getResourseTagClassPk();
                     showMessageByAPICode(error.response.status, error.response.data);
                     console.log(error.response)
@@ -303,6 +310,9 @@
     }
     .chip-in-select .input-group{
         max-width: 100%!important;
+    }
+    .chip-in-select .disableClick{
+        pointer-events: none;
     }
     @media only screen and (min-width: 320px) and (max-width: 1024px) {
         

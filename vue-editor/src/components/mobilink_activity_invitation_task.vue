@@ -280,7 +280,7 @@
 
                                                         </v-list-group>
                                                     </v-list>
-                                                    <p v-if="itemInvGroupTask.length == 0" class="mt-3 ml-2">Chưa giao nhiệm vụ</p>
+                                                    
                                                 </v-card>
                                             </v-flex>
                                         </v-layout>
@@ -500,7 +500,7 @@
                                                         </v-list-tile>
                                                     </v-list>
                                                     <!-- end -->
-                                                    <p v-if="itemInvContactTask.length == 0" class="mt-3 ml-2">Chưa giao nhiệm vụ</p>
+                                                    
                                                 </v-card>
                                             </v-flex>
                                         </v-layout>

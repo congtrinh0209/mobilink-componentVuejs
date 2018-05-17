@@ -306,7 +306,7 @@
 
                                                         </v-list-group>
                                                     </v-list>
-                                                    <p v-if="itemInvGroup.length == 0" class="mt-3 ml-2">Không có giấy mời</p>
+                                                    
                                                 </v-card>
                                             </v-flex>
                                         </v-layout>
@@ -534,7 +534,7 @@
                                                         
                                                     </v-list>
                                                     <!-- end -->
-                                                    <p v-if="itemInvContact.length == 0" class="mt-3 ml-2">Không có giấy mời</p>
+                                                    
                                                 </v-card>
                                             </v-flex>
                                         </v-layout>
@@ -559,7 +559,7 @@
                                 </div>
                                 <v-card >
                                     <v-card-text class="px-0 py-0 ">
-                                        <v-form xs12 sm12 v-model="validAddInv" ref="formInvText" class="formAddInvText px-2 py-2" lazy-validation style="position: relative">
+                                        <v-form v-if="activeEdit == false" xs12 sm12 v-model="validAddInv" ref="formInvText" class="formAddInvText px-2 py-2" lazy-validation style="position: relative">
                                             <v-text-field class="py-0"
                                             placeholder="Nhập thành phần tham dự"
                                             v-model="nameInv"
@@ -576,6 +576,9 @@
                                             </v-btn>
                                             
                                         </v-form>
+                                        <p class="px-2 py-3 my-0" v-if="activeEdit" style="font-size: 12px;font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif;">
+                                            {{nameInv}}
+                                        </p>
                                     </v-card-text>
                                 </v-card>
                             </v-expansion-panel-content>
@@ -1214,7 +1217,7 @@
                 .then(function (response) {
                     var serializable = response.data
                     vm.nameInv = serializable.invitation
-
+                    vm.activeEdit = true
                 })
                 .catch(function (error) {
                     console.log(error)
