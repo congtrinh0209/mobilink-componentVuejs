@@ -486,37 +486,37 @@
                         color = "red";
                         break;
                     case 2:
-                        color = "red";
-                        break;
-                    case 3:
-                        color = "red";
-                        break;
-                    case 4:
-                        color = "blue";
-                        break;
-                    case 5:
-                        color = "blue";
-                        break;
-                    case 6:
-                        color = "teal";
-                        break;
-                    case 7:
-                        color = "amber";
-                        break;
-                    case 8:
-                        color = "grey";
-                        break;
-                    case 9:
-                        color = "pink";
-                        break;
-                    case 10:
-                        color = "cyan";
-                        break;
-                    case 11:
                         color = "purple";
                         break;
+                    case 3:
+                        color = "yellow";
+                        break;
+                    case 4:
+                        color = "blue-grey";
+                        break;
+                    case 5:
+                        color = "yellow";
+                        break;
+                    case 6:
+                        color = "light-blue";
+                        break;
+                    case 7:
+                        color = "light-green";
+                        break;
+                    case 8:
+                        color = "green";
+                        break;
+                    case 9:
+                        color = "light-green";
+                        break;
+                    case 10:
+                        color = "yellow";
+                        break;
+                    case 11:
+                        color = "deep-orange";
+                        break;
                     case 12:
-                        color = "indigo";
+                        color = "blue";
                         break;
                         
                 }

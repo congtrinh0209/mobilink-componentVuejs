@@ -85,8 +85,8 @@
                     <v-card>
                         <!-- Phần đơn vị/ Nhóm trong cơ quan-->
                         <v-expansion-panel expand class="sub-panel">
-                            <v-expansion-panel-content value="true">
-                                <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0">
+                            <v-expansion-panel-content :value="exp_1">
+                                <div slot="header" class="custome-panel-heading-with-icon mr-2 pl-0" @click="changeExp1">
                                     <div class="color-subpanel">Đơn vị/ Nhóm trong cơ quan</div>
 
                                     <v-icon class="btn-add mx-0 my-0" 
@@ -100,7 +100,9 @@
                                         do_not_disturb_on
                                     </v-icon>
                                 </div>
-                                
+                                <div slot="actions" @click="changeExp1">
+                                    <v-icon>keyboard_arrow_down</v-icon>
+                                </div>
                                 <v-card class="">
                                     <v-card-text class="px-0 py-0">
                                         <v-layout row wrap class="mx-0">
@@ -213,7 +215,7 @@
                                                                 <v-list-tile-content >
                                                                     <v-flex xs12 class="layout wrap pl-2 pr-1" style="width: 100%!important">
                                                                         
-                                                                        <v-flex class="pt-2" xs12 lg5>
+                                                                        <v-flex class="pt-2" xs12 :class="managerPermision(permission_prop)||item.leader?'lg5':'lg6'">
                                                                             <v-list-tile-title>
                                                                                 <toggle-button class="mr-1 mt-1" 
                                                                                 @change="updatePresenterUserGroupTask($event,subItem.resourceInvitationId,item)"
@@ -226,13 +228,16 @@
                                                                                 :width="50"/>
                                                                                 <v-tooltip top>
                                                                                     <span class="pt-2" slot="activator">{{ subItem.fullName }}</span>
-                                                                                    <span>Email:{{ subItem.email }} - Tel:{{ subItem.telNo }}</span>
+                                                                                    <span>
+                                                                                        <span>Họ tên: {{ subItem.fullName }}</span></br>
+                                                                                        <span>Email:{{ subItem.email }} - Tel:{{ subItem.telNo }}</span>
+                                                                                    </span>
                                                                                 </v-tooltip>
                                                                                 
                                                                             </v-list-tile-title>
                                                                         </v-flex>
 
-                                                                        <v-flex xs12 lg7>
+                                                                        <v-flex xs12 :class="managerPermision(permission_prop)||item.leader?'lg7':'lg6'">
                                                                             <div class="right">
                                                                                 <v-tooltip top :disabled="(subItem.userNote?false:true)">
                                                                                     <v-btn icon slot="activator" :class="managerPermision(permission_prop)==false? pointerEvent : ''"
@@ -287,8 +292,8 @@
 
                         <!-- Phần cá nhân theo danh bạ -->
                         <v-expansion-panel expand class="sub-panel-contact">
-                            <v-expansion-panel-content value="true">
-                                <div slot="header" class="custome-panel-heading-with-icon pl-0 mr-2">
+                            <v-expansion-panel-content :value="exp_2">
+                                <div slot="header" class="custome-panel-heading-with-icon pl-0 mr-2" @click="changeExp2">
                                     <div class="color-subpanel">Cá nhân/ Tổ chức theo danh bạ</div>
 
                                     <v-icon class="btn-add mx-0 my-0" v-on:click.stop="show_Add2Task" 
@@ -301,11 +306,13 @@
                                         do_not_disturb_on
                                     </v-icon>
                                 </div>
-                                
+                                <div slot="actions" @click="changeExp2">
+                                    <v-icon>keyboard_arrow_down</v-icon>
+                                </div>
                                 <v-card class="">
                                     <v-card-text class="px-0 py-0">
                                         <v-layout row wrap class="mx-0">
-                                            <v-flex class="layout wrap elInv pl-1 " v-if="showAdd2">
+                                            <v-flex class="layout wrap elInv pl-1 mb-2" v-if="showAdd2">
                                                 <v-flex xs12 sm8>
                                                     <v-select class="selectBoder pt-3" id="selectContact"
                                                     placeholder="Cá nhân/ tổ chức theo danh bạ"
@@ -420,15 +427,15 @@
                                             </v-flex>
                                             
                                             <v-flex xs12 sm12>
-                                                <v-card class="list-contact">
+                                                <v-card class="list-contact pl-2 pr-1">
                                                     <!-- Phần danh sách cá nhân theo danh bạ -->
                                                     <v-list class="py-0">
                                                         <v-list-tile v-for="(item,index) in itemInvContactTask" v-bind:key="item.resourceInvitationId">
                                                             <v-list-tile-content >
                                                                 <v-list-tile-title>
-                                                                    <v-flex xs12 class="layout wrap pl-2">
+                                                                    <v-flex xs12 class="layout wrap">
 
-                                                                        <v-flex class="pt-1" xs12 lg5>
+                                                                        <v-flex class="pt-1" xs12 :class="managerPermision(permission_prop)?'lg5':'lg6'">
                                                                             <v-list-tile-title>
                                                                                 <toggle-button class="mr-1 mt-1"
                                                                                 :disabled="(managerPermision(permission_prop)==true)?false:true"
@@ -441,13 +448,16 @@
                                                                                 :width="50"/>
                                                                                 <v-tooltip top>
                                                                                     <span class="pt-2" slot="activator">{{ item.fullName }}</span>
-                                                                                    <span>Email:{{ item.email }} - Tel:{{ item.telNo }}</span>
+                                                                                    <span>
+                                                                                        <span>Họ tên: {{ item.fullName }}</span></br>
+                                                                                        <span>Email:{{ item.email }} - Tel:{{ item.telNo }}</span>
+                                                                                    </span>
                                                                                 </v-tooltip>
                                                                                 
                                                                             </v-list-tile-title>
                                                                         </v-flex>
                                                                         
-                                                                        <v-flex xs12 lg7>
+                                                                        <v-flex xs12 :class="managerPermision(permission_prop)?'lg7':'lg6'">
                                                                             <div class="right">
                                                                                 <v-tooltip top :disabled="(item.userNote?false:true)">
                                                                                     <v-btn icon slot="activator" :class="managerPermision(permission_prop)==false? pointerEvent : ''"
@@ -561,6 +571,8 @@
                 dialog_add_contact: false,
                 showAdd1: false,
                 showAdd2: false,
+                exp_1: true,
+                exp_2: true,
                 disUserMail: false,
                 /**/ 
                 invitationTaskItems:[],
@@ -1263,13 +1275,26 @@
             },
             show_Add1Task: function(){
                 var vm =this;
-                vm.showAdd1 =!vm.showAdd1
+                vm.showAdd1 =!vm.showAdd1;
+                if(!vm.exp_1){
+                    vm.exp_1 = true
+                }
             },
             show_Add2Task: function(){
                 var vm =this;
-                vm.showAdd2 =!vm.showAdd2
+                vm.showAdd2 =!vm.showAdd2;
+                if(!vm.exp_2){
+                    vm.exp_2 = true
+                }
             },
-
+            changeExp1: function(){
+                var vm = this;
+                vm.exp_1 =!vm.exp_1;
+            },
+            changeExp2: function(){
+                var vm = this;
+                vm.exp_2 =!vm.exp_2;
+            },
             show_alert: function(type,text,res){
                 var vm = this;
                 if(type=='success'){

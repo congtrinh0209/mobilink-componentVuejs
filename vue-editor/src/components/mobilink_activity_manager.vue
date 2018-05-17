@@ -1,7 +1,7 @@
 <template>
 
     <div id="activity_manager">
-        <v-layout wrap class="navTable px-3 py-2">
+        <v-layout wrap class="navTable px-3">
             <v-flex xs12 sm2 lg1>
                 <v-subheader class="px-0">Từ ngày: </v-subheader>
             </v-flex>
@@ -40,7 +40,7 @@
                     return-object
                     clearable
                     item-text="fullName"
-                    item-value="employeeId"
+                    item-value="userId"
                     autocomplete
                     placeholder="Lọc theo lãnh đạo"
                     hide-selected
@@ -66,21 +66,21 @@
             
         </v-layout>
         <div id="list-content">
-            <v-layout wrap class="header-menu" >
+            <!-- <v-layout wrap class="header-menu" >
                 <div style="width:5%"><p>STT</p></div>
                 <div style="width:30%"><p>Nội dung</p></div>
                 <div style="width:20%"><p>Đơn vị chủ trì</p></div>
                 <div style="width:12%"><p>Hạn hoàn thành</p></div>
                 <div style="width:13%"><p>Trạng thái</p></div>
                 <div style="width:20%"><p>Ghi chú</p></div>
-            </v-layout>
+            </v-layout> -->
             
-            <v-expansion-panel expand class="expansion-blue" v-for="(item,index) in mainItems" :key="item.leader.employeeId">
+            <v-expansion-panel expand class="expansion-blue" v-for="(item,index) in mainItems" :key="item.leader.userId">
                 <v-expansion-panel-content :value="item==mainItems[0]">
                     <div slot="header"  @click="getListActivitySource(item.activityItems[0].activityId,index,0)" 
                     class="groupHeader mr-2 pl-0" style="width: 90%;font-family: sans-serif">
-                        <p v-if="radioGroup == 'leader'" :title="item.leader.title + item.leader.fullName + '-' + item.leader.jobTitle" class="my-0">
-                            {{item.leader.title}} {{ item.leader.fullName }} - {{ item.leader.jobTitle }}
+                        <p v-if="radioGroup == 'leader'" :title="item.leader.fullName" class="my-0">
+                            {{ item.leader.fullName }}
                         </p>
                         <p v-if="radioGroup == 'activityCat'" :title="item.leader.itemName" class="my-0">{{item.leader.itemName}}</p>
                     </div>
@@ -117,7 +117,7 @@
                                                 <!-- end -->
                                                 <v-list-tile-content>
                                                     <v-data-table id="subTableActivity"
-                                                    hide-headers
+                                                    :headers="mainHeaders"
                                                     no-data-text="Không có kết luận"
                                                     :items="item.activitySourceItems[index1]"
                                                     item-key="activityId"
@@ -126,22 +126,22 @@
                                                         <template slot="items" scope="props">
                                                             
                                                             <tr v-bind:class="{'active': props.index%2==1}">
-                                                                <td class="text-xs-center py-2" style="width: 5%">{{props.index + 1}}</td>
-                                                                <td class="py-2" style="width: 30%" :title="props.item.subject">
+                                                                <td class="text-xs-center py-2" >{{props.index + 1}}</td>
+                                                                <td class="py-2"  :title="props.item.subject">
                                                                     <a href="javascript:;" v-on:click.stop="activityDetail(props.item,props.index)">
                                                                         <span>{{ props.item.subject }}</span>
                                                                     </a>
                                                                     
                                                                 </td>
-                                                                <td class="py-2" style="width: 20%" :title="props.item.hosting ">{{ props.item.hosting }}</td>
-                                                                <td class="text-xs-center py-2" style="width: 12%">{{parseDateView(new Date(props.item.endDate))}}</td>
-                                                                <td class="text-xs-center" style="width: 13%">
-                                                                    <v-chip style="display: inline-block;text-align: center;width:90%" label outline :color="getColor(props.item.state)">
+                                                                <td class="py-2"  :title="props.item.hosting ">{{ props.item.hosting }}</td>
+                                                                <td class="text-xs-center py-2" >{{parseDateView(new Date(props.item.endDate))}}</td>
+                                                                <td class="text-xs-center" >
+                                                                    <!-- <v-chip style="display: inline-block;text-align: center;width:90%" label outline :color="getColor(props.item.state)">
                                                                         <span>{{props.item.stateName}}</span>
-                                                                    </v-chip>
-                                                                    
+                                                                    </v-chip> -->
+                                                                    <p class="my-2" :class="getColor(props.item.state)+'--text'" >{{props.item.stateName}}</p>
                                                                 </td>
-                                                                <td class="py-2" style="width: 20%" :title="props.item.resultNote">{{ props.item.resultNote }}</td>
+                                                                <td class="py-2"  :title="props.item.resultNote">{{ props.item.resultNote }}</td>
                                                             </tr>
                                                             
                                                         </template>
@@ -255,7 +255,7 @@
                 var vm = this;
                 /* Load data employees */
                 var paramsEmployees = {
-                    'active': true,
+                    'class': 'employee'
                 };
                 const configEmployees = {
                     params: paramsEmployees,
@@ -264,7 +264,7 @@
                     }
                 };
                 // 
-                axios.get( vm.end_point + 'employees', configEmployees)
+                axios.get( vm.end_point + 'users', configEmployees)
                 .then(function (response) {
                     var serializable = response.data;
                     if (serializable.hasOwnProperty('data')) {
@@ -317,8 +317,8 @@
                 /*console.log("run get getActivity");*/
                 var vm = this;
                 var date = new Date();
-                vm.timeStart = new Date(date.getFullYear(), date.getMonth(), 1);
-                vm.timeEnd = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+                vm.timeStart = new Date(date.setDate((date.getDate() -30)));
+                vm.timeEnd = new Date();
 
                 vm.activityListItems=[];
                 var paramsGetActivity = {
@@ -373,7 +373,7 @@
                 vm.mainItems =[];
 
                 var paramsGetActivity = {
-                    sort:'startDate',
+                    sort:'startDate_Number',
                     type: 'EVENT',
                     fromdate: vm.timeStart?vm.parseDateFormat(vm.timeStart):null,
                     todate: vm.timeEnd?vm.parseDateFormat(vm.timeEnd):null
@@ -431,7 +431,7 @@
             getFilterLeader: function(){
                 var vm = this;
                 setTimeout(function(){
-                    vm.paramsGet.leader  = vm.manager.employeeId;
+                    vm.paramsGet.leader  = vm.manager.userId;
                     vm.callGetActivity();
                 },200)
             },
@@ -463,7 +463,7 @@
                                 break;
                             }
                         } else if(vm.radioGroup == "leader"){
-                            if(target[key].mappingUser.userId == vm.activityListItems[index].leaderId){
+                            if(target[key].userId == vm.activityListItems[index].leaderId){
                                 vm.mainItems.push(
                                     {
                                         'leader': target[key],
@@ -490,7 +490,7 @@
                                 vm.mainItems[key].activitySourceItems.push([])
                             }
                         } else if(vm.radioGroup == "leader"&&vm.mainItems.length!=0){
-                            if(vm.activityListItems[index].leaderId == vm.mainItems[key].leader.mappingUser.userId){
+                            if(vm.activityListItems[index].leaderId == vm.mainItems[key].leader.userId){
                                 vm.mainItems[key].activityItems.push(vm.activityListItems[index]);
                                 vm.mainItems[key].activitySourceItems.push([])
                             }
@@ -534,7 +534,7 @@
                 if(radio=="activityCat"){
                     return 'itemCode'
                 } else if(radio=="leader"){
-                    return 'employeeId'
+                    return 'userId'
                 }
             },
             parseDateView : function(fullDate){
@@ -563,37 +563,37 @@
                         color = "red";
                         break;
                     case 2:
-                        color = "red";
-                        break;
-                    case 3:
-                        color = "red";
-                        break;
-                    case 4:
-                        color = "blue";
-                        break;
-                    case 5:
-                        color = "blue";
-                        break;
-                    case 6:
-                        color = "teal";
-                        break;
-                    case 7:
-                        color = "amber";
-                        break;
-                    case 8:
-                        color = "grey";
-                        break;
-                    case 9:
-                        color = "pink";
-                        break;
-                    case 10:
-                        color = "cyan";
-                        break;
-                    case 11:
                         color = "purple";
                         break;
+                    case 3:
+                        color = "yellow";
+                        break;
+                    case 4:
+                        color = "blue-grey";
+                        break;
+                    case 5:
+                        color = "yellow";
+                        break;
+                    case 6:
+                        color = "light-blue";
+                        break;
+                    case 7:
+                        color = "light-green";
+                        break;
+                    case 8:
+                        color = "green";
+                        break;
+                    case 9:
+                        color = "light-green";
+                        break;
+                    case 10:
+                        color = "yellow";
+                        break;
+                    case 11:
+                        color = "deep-orange";
+                        break;
                     case 12:
-                        color = "indigo";
+                        color = "blue";
                         break;
                         
                 }
@@ -636,14 +636,44 @@
         padding: 8px 5px!important;
     }
     #activity_manager #list-content .expansion-panel{
-        border-bottom: 2px solid #e7e7e7;
+        border-bottom: 1px solid #e7e7e7;
     }
+    
     #activity_manager #list-content table tr td{
         overflow: hidden;
         text-overflow: ellipsis; 
         white-space: nowrap;
-        border: 1px solid #ddd !important;
+        border: 1px solid #ddd;
         padding: 8px 5px!important;
+    }
+    #activity_manager table thead tr th{
+        border: 1px solid #ddd ;
+        color: #000!important;
+        padding: 0 5px!important;
+    }
+    #activity_manager table thead tr th:first-child, #activity_manager table tbody tr td:first-child{
+        border-left: 0px!important;
+    }
+    #activity_manager table thead tr th:last-child, #activity_manager table tbody tr td:last-child{
+        border-right: 0px!important;
+    }
+    #activity_manager table.table thead tr th:nth-child(1),#activity_manager table.table tbody tr td:nth-child(1) {
+        width: 4%!important;
+    }
+    #activity_manager table.table thead tr th:nth-child(2),#activity_manager table.table tbody tr td:nth-child(2) {
+        width: 28%!important;
+    }
+    #activity_manager table.table thead tr th:nth-child(3),#activity_manager table.table tbody tr td:nth-child(3) {
+        width: 20%!important;
+    }
+    #activity_manager table.table thead tr th:nth-child(4),#activity_manager table.table tbody tr td:nth-child(4) {
+        width: 10%!important;
+    }
+    #activity_manager table.table thead tr th:nth-child(5),#activity_manager table.table tbody tr td:nth-child(5) {
+        width: 12%!important;
+    }
+    #activity_manager table.table thead tr th:nth-child(6),#activity_manager table.table tbody tr td:nth-child(6) {
+        width: 26%!important;
     }
     #activity_manager .groupHeader p{
         max-width: 100%!important;
@@ -668,9 +698,11 @@
         text-overflow: ellipsis; 
         white-space: nowrap;
     }
+
     #activity_manager .expansion-panel__container{
         max-width: 100%!important
     }
+    
     #activity_manager #list-content .list--group__container{
         border: 1px solid #ddd !important;
     }
